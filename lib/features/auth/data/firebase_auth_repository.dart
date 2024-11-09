@@ -41,9 +41,18 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<AppUser?> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
+  Future<AppUser?> getCurrentUser() async {
+    final firebaseUser = firebaseAuth.currentUser;
+
+    if (firebaseUser == null) {
+      return null;
+    }
+
+    return AppUser(
+        uid: firebaseUser.uid,
+        email: firebaseUser.email!,
+        name: '',
+      );
   }
 
   @override
