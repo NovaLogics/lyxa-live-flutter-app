@@ -37,29 +37,37 @@ class LyxaApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: lightMode,
-        home: BlocConsumer<AuthCubit, AuthState>(
-            builder: (context, authState) {
-              if (kDebugMode) {
-                print(authState);
-              }
-              // Unauthenticated -> Auth Screen (Login/Register)
-              if (authState is Unauthenticated) {
-                return const AuthScreen();
-              }
-              // Authenticated -> Home Screen
-              else if (authState is Authenticated) {
-                return const HomeScreen();
-              }
-              // Loading
-              else {
-                return const Scaffold(
-                  body: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-            },
-            listener: (context, authState) {}),
+        home: BlocConsumer<AuthCubit, AuthState>(builder: (context, authState) {
+          if (kDebugMode) {
+            print(authState);
+          }
+          // Unauthenticated -> Auth Screen (Login/Register)
+          if (authState is Unauthenticated) {
+            return const AuthScreen();
+          }
+          // Authenticated -> Home Screen
+          else if (authState is Authenticated) {
+            return const HomeScreen();
+          }
+          // Loading
+          else {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        }, 
+        // Listen for errors
+        listener: (context, state) {
+          if (state is AuthError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          } 
+        }),
       ),
     );
   }
