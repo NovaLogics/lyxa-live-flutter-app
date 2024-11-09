@@ -5,6 +5,7 @@ class AppStrings {
 
   // Login Section
   static const String welcomeBackMessage = 'Welcome Back, You\'ve been missed!';
+  static const String registerNowMessage = 'Not a member? Register Now';
   static const String email = 'Email';
   static const String password = 'Password';
   static const String login = 'Login';

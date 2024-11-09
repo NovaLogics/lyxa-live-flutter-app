@@ -57,7 +57,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ButtonUnit(
                   onTap: () {},
                   text: AppStrings.login,
-                )
+                ),
+                const SpacerUnit(height: AppDimens.size52),
+                _registerLink(),
               ],
             ),
           ),
@@ -77,6 +79,16 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _titleText() {
     return Text(
       AppStrings.welcomeBackMessage,
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.primary,
+        fontSize: AppDimens.textSizeMedium,
+      ),
+    );
+  }
+
+  Widget _registerLink() {
+    return Text(
+      AppStrings.registerNowMessage,
       style: TextStyle(
         color: Theme.of(context).colorScheme.primary,
         fontSize: AppDimens.textSizeMedium,
