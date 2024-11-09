@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/constants/app_dimensions.dart';
 import 'package:lyxa_live/constants/app_strings.dart';
+import 'package:lyxa_live/features/auth/presentation/components/button_unit.dart';
 import 'package:lyxa_live/features/auth/presentation/components/spacer_unit.dart';
 import 'package:lyxa_live/features/auth/presentation/components/text_field_unit.dart';
 
@@ -35,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding:
                 const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _loginIcon(),
                 const SpacerUnit(height: AppDimens.size52),
@@ -52,6 +54,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: true,
                 ),
                 const SpacerUnit(height: AppDimens.size24),
+                ButtonUnit(
+                  onTap: () {},
+                  text: AppStrings.login,
+                )
               ],
             ),
           ),

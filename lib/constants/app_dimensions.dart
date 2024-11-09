@@ -32,7 +32,8 @@ class AppDimens {
   // Corner Radius
   static const double radiusXSmall = 2.0;
   static const double radiusSmall = 4.0;
-  static const double radiusMedium = 8.0;
+  static const double radiusRegular = 8.0;
+  static const double radiusMedium = 12.0;
   static const double radiusLarge = 16.0;
 
   // Icon Sizes
