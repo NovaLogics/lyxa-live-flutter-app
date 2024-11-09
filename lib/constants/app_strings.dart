@@ -20,4 +20,6 @@ class AppStrings {
   static const String loginNow = 'Login Now';
   static const String name = 'Name';
   static const String signUp = 'SignUp';
+  static const String registerErrorMessage = 'Please complete all fields';
+  static const String passwordNotMatchError = 'Passwords do not match!';
 }
