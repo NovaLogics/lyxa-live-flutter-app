@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _logInButton(Function()? onTap) {
     return ButtonUnit(
       onTap: onTap,
-      text: AppStrings.signUp,
+      text: AppStrings.login,
     );
   }
 

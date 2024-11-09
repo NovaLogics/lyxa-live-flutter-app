@@ -4,12 +4,10 @@ import 'package:lyxa_live/app.dart';
 import 'package:lyxa_live/firebase_options.dart';
 
 void main() async {
-  //Firebase setup
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  //run app
-  runApp(const LyxaApp());
+  runApp(LyxaApp());
 }
-
