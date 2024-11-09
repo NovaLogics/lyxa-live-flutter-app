@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/features/auth/presentation/screens/login_screen.dart';
 import 'package:lyxa_live/firebase_options.dart';
+import 'package:lyxa_live/themes/light_mode.dart';
 
 void main() async {
   //Firebase setup
@@ -19,8 +20,9 @@ class LyxaApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: lightMode,
       home: LoginScreen(),
     );
   }
