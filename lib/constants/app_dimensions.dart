@@ -41,6 +41,7 @@ class AppDimens {
   static const double iconSizeMedium = 32.0;
   static const double iconSizeLarge = 48.0;
   static const double iconSizeXLarge = 64.0;
+  static const double iconSize2XLarge = 72.0;
 
   // General Sizes for custom components
   static const double sizeXSmall = 8.0;

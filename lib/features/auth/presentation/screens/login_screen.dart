@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/constants/app_dimensions.dart';
+import 'package:lyxa_live/constants/app_strings.dart';
 import 'package:lyxa_live/features/auth/presentation/components/spacer_unit.dart';
 import 'package:lyxa_live/features/auth/presentation/components/text_field_unit.dart';
 
@@ -32,12 +34,12 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: [
               _loginIcon(),
-              const SpacerUnit(height: 50),
+              const SpacerUnit(height: AppDimens.size52),
               _titleText(),
-              const SpacerUnit(height: 25),
+              const SpacerUnit(height: AppDimens.size24),
               TextFieldUnit(
                 controller: emailController,
-                hintText: 'Email',
+                hintText: AppStrings.email,
                 obscureText: false,
               )
             ],
@@ -50,17 +52,17 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _loginIcon() {
     return Icon(
       Icons.lock_open_rounded,
-      size: 72,
+      size: AppDimens.iconSize2XLarge,
       color: Theme.of(context).colorScheme.primary,
     );
   }
 
   Widget _titleText() {
     return Text(
-      "Welcome back, you've been missed!",
+      AppStrings.welcomeBackMessage,
       style: TextStyle(
         color: Theme.of(context).colorScheme.primary,
-        fontSize: 16,
+        fontSize: AppDimens.textSizeMedium,
       ),
     );
   }
