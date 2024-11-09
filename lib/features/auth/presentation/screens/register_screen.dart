@@ -13,9 +13,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-    final nameController = TextEditingController();
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,24 +33,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SpacerUnit(height: AppDimens.size52),
                 _titleText(),
                 const SpacerUnit(height: AppDimens.size24),
-                TextFieldUnit(
-                  controller: emailController,
-                  hintText: AppStrings.email,
-                  obscureText: false,
+                _nameTextField(
+                  nameController,
                 ),
                 const SpacerUnit(height: AppDimens.size12),
-                TextFieldUnit(
-                  controller: passwordController,
-                  hintText: AppStrings.password,
-                  obscureText: true,
+                _emailTextField(
+                  emailController,
+                ),
+                const SpacerUnit(height: AppDimens.size12),
+                _passwordTextField(
+                  passwordController,
+                ),
+                const SpacerUnit(height: AppDimens.size12),
+                _confirmPasswordTextField(
+                  confirmPasswordController,
                 ),
                 const SpacerUnit(height: AppDimens.size24),
-                ButtonUnit(
-                  onTap: () {},
-                  text: AppStrings.login,
+                _signUpButton(
+                  () {},
                 ),
                 const SpacerUnit(height: AppDimens.size52),
-                _registerLink(),
+                _loginLink(),
               ],
             ),
           ),
@@ -68,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _titleText() {
     return Text(
-      AppStrings.welcomeBackMessage,
+      AppStrings.createAccountMessage,
       style: TextStyle(
         color: Theme.of(context).colorScheme.primary,
         fontSize: AppDimens.textSizeMedium,
@@ -76,9 +80,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _registerLink() {
+  Widget _nameTextField(TextEditingController controller) {
+    return TextFieldUnit(
+      controller: controller,
+      hintText: AppStrings.name,
+      obscureText: false,
+    );
+  }
+
+  Widget _emailTextField(TextEditingController controller) {
+    return TextFieldUnit(
+      controller: controller,
+      hintText: AppStrings.email,
+      obscureText: false,
+    );
+  }
+
+  Widget _passwordTextField(TextEditingController controller) {
+    return TextFieldUnit(
+      controller: controller,
+      hintText: AppStrings.password,
+      obscureText: true,
+    );
+  }
+
+  Widget _confirmPasswordTextField(TextEditingController controller) {
+    return TextFieldUnit(
+      controller: controller,
+      hintText: AppStrings.confirmPassword,
+      obscureText: true,
+    );
+  }
+
+  Widget _signUpButton(Function()? onTap) {
+    return ButtonUnit(
+      onTap: onTap,
+      text: AppStrings.signUp,
+    );
+  }
+
+  Widget _loginLink() {
     return Text(
-      AppStrings.registerNowMessage,
+      AppStrings.loginNowMessage,
       style: TextStyle(
         color: Theme.of(context).colorScheme.primary,
         fontSize: AppDimens.textSizeMedium,
