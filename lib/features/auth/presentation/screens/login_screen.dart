@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/constants/app_dimensions.dart';
 import 'package:lyxa_live/constants/app_strings.dart';
 import 'package:lyxa_live/features/auth/presentation/components/button_unit.dart';
 import 'package:lyxa_live/features/auth/presentation/components/spacer_unit.dart';
 import 'package:lyxa_live/features/auth/presentation/components/text_field_unit.dart';
+import 'package:lyxa_live/features/auth/presentation/cubits/auth_cubit.dart';
 
 /*
 LOGIN SCREEN
@@ -43,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _loginIcon(),
+                _loginScreenIcon(),
                 const SpacerUnit(height: AppDimens.size52),
                 _titleText(),
                 const SpacerUnit(height: AppDimens.size24),
@@ -56,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SpacerUnit(height: AppDimens.size24),
                 _logInButton(
-                  () {},
+                  _login,
                 ),
                 const SpacerUnit(height: AppDimens.size52),
                 _registerLink(),
@@ -68,7 +70,28 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _loginIcon() {
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void _login() {
+    final String email = emailController.text;
+    final String password = passwordController.text;
+
+    final authCubit = context.read<AuthCubit>();
+
+    if (email.isNotEmpty && password.isNotEmpty) {
+      authCubit.login(email, password);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text(AppStrings.loginErrorMessage)));
+    }
+  }
+
+  Widget _loginScreenIcon() {
     return Icon(
       Icons.lock_open_rounded,
       size: AppDimens.iconSize2XLarge,
