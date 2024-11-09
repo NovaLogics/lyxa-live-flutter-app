@@ -22,4 +22,6 @@ class AppStrings {
   static const String signUp = 'SignUp';
   static const String registerErrorMessage = 'Please complete all fields';
   static const String passwordNotMatchError = 'Passwords do not match!';
+
+
 }
