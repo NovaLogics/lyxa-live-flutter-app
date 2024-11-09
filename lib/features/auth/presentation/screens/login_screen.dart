@@ -26,23 +26,31 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: Column(
             children: [
-              // Logo
-              Icon(
-                Icons.lock_open_rounded,
-                size: 72,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              spacing(height: 50),
-              Text(
-                "Welcome back, you've been missed!",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 16,
-                ),
-              )
+              _loginIcon(),
+              _spacing(height: 50),
+              _titleText(),
+              _spacing(height: 25),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _loginIcon() {
+    return Icon(
+      Icons.lock_open_rounded,
+      size: 72,
+      color: Theme.of(context).colorScheme.primary,
+    );
+  }
+
+  Widget _titleText() {
+    return Text(
+      "Welcome back, you've been missed!",
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.primary,
+        fontSize: 16,
       ),
     );
   }
@@ -51,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
 /// Returns a [SizedBox]
 /// with a specified [height] and [width]
 /// to create space between widgets.
-Widget spacing({double height = 0.0, double width = 0.0}) {
+Widget _spacing({double height = 0.0, double width = 0.0}) {
   return SizedBox(
     height: height,
     width: width,
