@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/features/auth/presentation/screens/login_screen.dart';
 import 'package:lyxa_live/firebase_options.dart';
 
 void main() async {
@@ -8,7 +9,7 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-//run app
+  //run app
   runApp(const LyxaApp());
 }
 
@@ -20,7 +21,7 @@ class LyxaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(),
+      home: LoginScreen(),
     );
   }
 }
