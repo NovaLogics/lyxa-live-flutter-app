@@ -21,6 +21,39 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              // Logo
+              Icon(
+                Icons.lock_open_rounded,
+                size: 72,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              spacing(height: 50),
+              Text(
+                "Welcome back, you've been missed!",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 16,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
+}
+
+/// Returns a [SizedBox]
+/// with a specified [height] and [width]
+/// to create space between widgets.
+Widget spacing({double height = 0.0, double width = 0.0}) {
+  return SizedBox(
+    height: height,
+    width: width,
+  );
 }
