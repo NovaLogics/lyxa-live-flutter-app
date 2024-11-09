@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/features/auth/presentation/screens/auth_screen.dart';
 import 'package:lyxa_live/features/auth/presentation/screens/login_screen.dart';
 import 'package:lyxa_live/firebase_options.dart';
 import 'package:lyxa_live/themes/light_mode.dart';
@@ -23,7 +24,7 @@ class LyxaApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightMode,
-      home: LoginScreen(),
+      home: AuthScreen(),
     );
   }
 }

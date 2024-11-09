@@ -17,7 +17,12 @@ LOGIN SCREEN
 */
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final void Function()? toggleScreens;
+
+  const LoginScreen({
+    super.key,
+    required this.toggleScreens,
+  });
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -42,21 +47,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SpacerUnit(height: AppDimens.size52),
                 _titleText(),
                 const SpacerUnit(height: AppDimens.size24),
-                TextFieldUnit(
-                  controller: emailController,
-                  hintText: AppStrings.email,
-                  obscureText: false,
+                _emailTextField(
+                  emailController,
                 ),
                 const SpacerUnit(height: AppDimens.size12),
-                TextFieldUnit(
-                  controller: passwordController,
-                  hintText: AppStrings.password,
-                  obscureText: true,
+                _passwordTextField(
+                  passwordController,
                 ),
                 const SpacerUnit(height: AppDimens.size24),
-                ButtonUnit(
-                  onTap: () {},
-                  text: AppStrings.login,
+                _logInButton(
+                  () {},
                 ),
                 const SpacerUnit(height: AppDimens.size52),
                 _registerLink(),
@@ -86,13 +86,51 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Widget _emailTextField(TextEditingController controller) {
+    return TextFieldUnit(
+      controller: controller,
+      hintText: AppStrings.email,
+      obscureText: false,
+    );
+  }
+
+  Widget _passwordTextField(TextEditingController controller) {
+    return TextFieldUnit(
+      controller: controller,
+      hintText: AppStrings.password,
+      obscureText: true,
+    );
+  }
+
+  Widget _logInButton(Function()? onTap) {
+    return ButtonUnit(
+      onTap: onTap,
+      text: AppStrings.signUp,
+    );
+  }
+
   Widget _registerLink() {
-    return Text(
-      AppStrings.registerNowMessage,
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
-        fontSize: AppDimens.textSizeMedium,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          AppStrings.notAMember,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontSize: AppDimens.textSizeMedium,
+          ),
+        ),
+        GestureDetector(
+          onTap: widget.toggleScreens,
+          child: Text(
+            AppStrings.registerNow,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                fontSize: AppDimens.textSizeMedium,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
     );
   }
 }

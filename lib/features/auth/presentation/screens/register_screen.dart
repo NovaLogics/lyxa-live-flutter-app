@@ -6,7 +6,12 @@ import 'package:lyxa_live/features/auth/presentation/components/spacer_unit.dart
 import 'package:lyxa_live/features/auth/presentation/components/text_field_unit.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  final void Function()? toggleScreens;
+
+  const RegisterScreen({
+    super.key,
+    required this.toggleScreens,
+  });
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -120,12 +125,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _loginLink() {
-    return Text(
-      AppStrings.loginNowMessage,
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
-        fontSize: AppDimens.textSizeMedium,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          AppStrings.alreadyAMember,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontSize: AppDimens.textSizeMedium,
+          ),
+        ),
+        GestureDetector(
+          onTap: widget.toggleScreens,
+          child: Text(
+            AppStrings.loginNow,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              fontSize: AppDimens.textSizeMedium,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

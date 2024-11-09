@@ -5,7 +5,8 @@ class AppStrings {
 
   // Login Section
   static const String welcomeBackMessage = 'Welcome Back, You\'ve been missed!';
-  static const String registerNowMessage = 'Not a member? Register Now';
+  static const String notAMember = 'Not a member?';
+  static const String registerNow = 'Register Now';
   static const String email = 'Email';
   static const String password = 'Password';
   static const String confirmPassword = 'Confirm Password';
@@ -13,7 +14,8 @@ class AppStrings {
 
   // Register Section
   static const String createAccountMessage = 'Let\'s create an account for you';
-  static const String loginNowMessage = 'Already a member? Login Now';
+  static const String alreadyAMember = 'Already a member?';
+    static const String loginNow = 'Login Now';
   static const String name = 'Name';
   static const String signUp = 'SignUp';
 }
