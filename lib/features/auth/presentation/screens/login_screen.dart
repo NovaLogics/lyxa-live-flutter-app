@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/features/auth/presentation/components/spacer_unit.dart';
+import 'package:lyxa_live/features/auth/presentation/components/text_field_unit.dart';
 
 /*
 LOGIN SCREEN
@@ -19,6 +21,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,9 +32,14 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: [
               _loginIcon(),
-              _spacing(height: 50),
+              const SpacerUnit(height: 50),
               _titleText(),
-              _spacing(height: 25),
+              const SpacerUnit(height: 25),
+              TextFieldUnit(
+                controller: emailController,
+                hintText: 'Email',
+                obscureText: false,
+              )
             ],
           ),
         ),
@@ -54,14 +64,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-}
-
-/// Returns a [SizedBox]
-/// with a specified [height] and [width]
-/// to create space between widgets.
-Widget _spacing({double height = 0.0, double width = 0.0}) {
-  return SizedBox(
-    height: height,
-    width: width,
-  );
 }
