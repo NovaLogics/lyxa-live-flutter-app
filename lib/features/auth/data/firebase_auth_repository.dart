@@ -17,15 +17,14 @@ class FirebaseAuthRepository implements AuthRepository {
         email: email,
         name: '',
       );
-
     } catch (error) {
       throw Exception('Login Failed: ${error.toString()}');
     }
   }
-  
+
   @override
   Future<AppUser?> registerWithEmailPassword(
-      String name, String email, String password) async{
+      String name, String email, String password) async {
     try {
       //Attempt sign up
       UserCredential userCredential = await firebaseAuth
@@ -36,12 +35,10 @@ class FirebaseAuthRepository implements AuthRepository {
         email: email,
         name: name,
       );
-
     } catch (error) {
       throw Exception('Login Failed: ${error.toString()}');
     }
   }
-
 
   @override
   Future<AppUser?> getCurrentUser() {
@@ -50,10 +47,7 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
+  Future<void> logout() async {
+    firebaseAuth.signOut();
   }
-
-
 }
