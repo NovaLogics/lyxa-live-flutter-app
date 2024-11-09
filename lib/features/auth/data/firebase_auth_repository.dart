@@ -12,17 +12,36 @@ class FirebaseAuthRepository implements AuthRepository {
       UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
 
-      AppUser user = AppUser(
+      return AppUser(
         uid: userCredential.user!.uid,
         email: email,
         name: '',
       );
 
-      return user;
     } catch (error) {
       throw Exception('Login Failed: ${error.toString()}');
     }
   }
+  
+  @override
+  Future<AppUser?> registerWithEmailPassword(
+      String name, String email, String password) async{
+    try {
+      //Attempt sign up
+      UserCredential userCredential = await firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      return AppUser(
+        uid: userCredential.user!.uid,
+        email: email,
+        name: name,
+      );
+
+    } catch (error) {
+      throw Exception('Login Failed: ${error.toString()}');
+    }
+  }
+
 
   @override
   Future<AppUser?> getCurrentUser() {
@@ -36,10 +55,5 @@ class FirebaseAuthRepository implements AuthRepository {
     throw UnimplementedError();
   }
 
-  @override
-  Future<AppUser?> registerWithEmailPassword(
-      String name, String email, String password) {
-    // TODO: implement registerWithEmailPassword
-    throw UnimplementedError();
-  }
+
 }
