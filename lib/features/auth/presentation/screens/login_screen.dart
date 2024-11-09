@@ -31,18 +31,29 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Column(
-            children: [
-              _loginIcon(),
-              const SpacerUnit(height: AppDimens.size52),
-              _titleText(),
-              const SpacerUnit(height: AppDimens.size24),
-              TextFieldUnit(
-                controller: emailController,
-                hintText: AppStrings.email,
-                obscureText: false,
-              )
-            ],
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
+            child: Column(
+              children: [
+                _loginIcon(),
+                const SpacerUnit(height: AppDimens.size52),
+                _titleText(),
+                const SpacerUnit(height: AppDimens.size24),
+                TextFieldUnit(
+                  controller: emailController,
+                  hintText: AppStrings.email,
+                  obscureText: false,
+                ),
+                const SpacerUnit(height: AppDimens.size12),
+                TextFieldUnit(
+                  controller: passwordController,
+                  hintText: AppStrings.password,
+                  obscureText: true,
+                ),
+                const SpacerUnit(height: AppDimens.size24),
+              ],
+            ),
           ),
         ),
       ),
