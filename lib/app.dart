@@ -5,7 +5,9 @@ import 'package:lyxa_live/features/auth/data/firebase_auth_repository.dart';
 import 'package:lyxa_live/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/features/auth/presentation/cubits/auth_state.dart';
 import 'package:lyxa_live/features/auth/presentation/screens/auth_screen.dart';
-import 'package:lyxa_live/features/post/presentation/screens/home_screen.dart';
+import 'package:lyxa_live/features/home/presentation/screens/home_screen.dart';
+import 'package:lyxa_live/features/profile/data/firebase_profile_repository.dart';
+import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:lyxa_live/themes/light_mode.dart';
 
 /*
@@ -25,15 +27,26 @@ APP - Root Level
 
 class LyxaApp extends StatelessWidget {
   final authRepository = FirebaseAuthRepository();
+  final profileRepository = FirebaseProfileRepository();
 
   LyxaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     // Provide Cubit to the App
-    return BlocProvider(
-      create: (context) =>
-          AuthCubit(authRepository: authRepository)..checkAuth(),
+    return MultiBlocProvider(
+      providers: [
+        // Auth cubit
+        BlocProvider<AuthCubit>(
+          create: (context) =>
+              AuthCubit(authRepository: authRepository)..checkAuth(),
+        ),
+        // Profile cubit
+        BlocProvider<ProfileCubit>(
+          create: (context) =>
+              ProfileCubit(profileRepository: profileRepository),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: lightMode,
@@ -57,16 +70,16 @@ class LyxaApp extends StatelessWidget {
               ),
             );
           }
-        }, 
-        // Listen for errors
-        listener: (context, state) {
+        },
+            // Listen for errors
+            listener: (context, state) {
           if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
               ),
             );
-          } 
+          }
         }),
       ),
     );

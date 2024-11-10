@@ -6,6 +6,7 @@ class TextFieldUnit extends StatelessWidget {
   final bool obscureText;
 
   const TextFieldUnit({
+    super.key,
     required this.controller,
     required this.hintText,
     required this.obscureText,

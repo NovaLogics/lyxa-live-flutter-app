@@ -5,7 +5,7 @@ class SpacerUnit extends StatelessWidget {
   final double height;
   final double width;
 
-  const SpacerUnit({this.height = 0.0, this.width = 0.0, Key? key}) : super(key: key);
+  const SpacerUnit({this.height = 0.0, this.width = 0.0, super.key});
 
   @override
   Widget build(BuildContext context) {

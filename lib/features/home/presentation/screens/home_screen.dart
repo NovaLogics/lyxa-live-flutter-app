@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/constants/app_strings.dart';
-import 'package:lyxa_live/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:lyxa_live/features/home/presentation/components/drawer_unit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,15 +14,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.appName),
-        actions: [
-          IconButton(
-              onPressed: () {
-                context.read<AuthCubit>().logout();
-              },
-              icon: const Icon(Icons.logout))
-        ],
+        title: const Text(
+          AppStrings.appName,
+        ),
       ),
+      drawer: const DrawerUnit(),
     );
   }
 }
