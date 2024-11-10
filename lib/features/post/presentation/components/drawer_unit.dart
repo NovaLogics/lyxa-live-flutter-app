@@ -50,6 +50,7 @@ class DrawerUnit extends StatelessWidget {
               icon: Icons.settings,
               onTap: () {},
             ),
+            const Spacer(),
             DrawerTitleUnit(
               title: "L O G O U T",
               icon: Icons.login,
