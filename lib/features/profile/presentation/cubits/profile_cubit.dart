@@ -1,11 +1,19 @@
+import 'dart:typed_data';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/constants/app_strings.dart';
 import 'package:lyxa_live/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_state.dart';
+import 'package:lyxa_live/features/storage/domain/storage_repository.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   final ProfileRepository profileRepository;
-  ProfileCubit({required this.profileRepository}) : super(ProfileInitial());
+  final StorageRepository storageRepository;
+
+  ProfileCubit({
+    required this.profileRepository,
+    required this.storageRepository,
+  }) : super(ProfileInitial());
 
   // Fetch user profile using repository
   Future<void> fetchUserProfile(String uid) async {
@@ -27,6 +35,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateProfile({
     required String uid,
     String? newBio,
+    String? imageMobilePath,
+    Uint8List? imageWebBytes,
   }) async {
     try {
       emit(ProfileLoading());
@@ -39,10 +49,34 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
 
       // Profile picture update
+      String? imageDownloadUrl;
+
+      // Ensure there is an image
+      if (imageMobilePath != null || imageWebBytes != null) {
+        // Mobile
+        if (imageMobilePath != null) {
+          // Upload
+          imageDownloadUrl = await storageRepository.uploadProfileImageMobile(
+              imageMobilePath, uid);
+        }
+        // Web
+        else if (imageWebBytes != null) {
+          // Upload
+          imageDownloadUrl =
+              await storageRepository.uploadProfileImageWeb(imageWebBytes, uid);
+        }
+
+        if (imageDownloadUrl == null) {
+          emit(ProfileError('Failed to upload image'));
+          return;
+        }
+      }
 
       // Update new profile
-      final updatedProfile =
-          currentUser.copyWith(newBio: newBio ?? currentUser.bio);
+      final updatedProfile = currentUser.copyWith(
+        newBio: newBio ?? currentUser.bio,
+        newProfileImageUrl: imageDownloadUrl ?? currentUser.profileImageUrl,
+      );
 
       // Update in Repository
       await profileRepository.updateProfile(updatedProfile);
