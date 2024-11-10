@@ -27,19 +27,7 @@ class DrawerUnit extends StatelessWidget {
               icon: Icons.home,
               onTap: () => Navigator.of(context).pop(),
             ),
-            DrawerTitleUnit(
-              title: AppStrings.titleProfile,
-              icon: Icons.person,
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProfileScreen(),
-                  ),
-                );
-              },
-            ),
+            _profileSection(context),
             DrawerTitleUnit(
               title: AppStrings.titleSearch,
               icon: Icons.search,
@@ -70,6 +58,27 @@ class DrawerUnit extends StatelessWidget {
         size: AppDimens.size72,
         color: Theme.of(context).colorScheme.primary,
       ),
+    );
+  }
+
+  Widget _profileSection(BuildContext context) {
+    final user = context.read<AuthCubit>().currentUser;
+    String? uid = user!.uid;
+
+    return DrawerTitleUnit(
+      title: AppStrings.titleProfile,
+      icon: Icons.person,
+      onTap: () {
+        Navigator.of(context).pop();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfileScreen(
+              uid: uid,
+            ),
+          ),
+        );
+      },
     );
   }
 }

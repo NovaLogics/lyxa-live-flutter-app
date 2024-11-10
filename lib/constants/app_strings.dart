@@ -23,9 +23,9 @@ class AppStrings {
   static const String registerErrorMessage = 'Please complete all fields';
   static const String passwordNotMatchError = 'Passwords do not match!';
 
-// Profile Section
+  // Profile Section
   static const String userNotFoundError = 'User not found';
-
+  static const String failedToFetchUserError = 'Failed to fetch user for profile update';
 
   static const String titleHome = "H O M E";
   static const String titleProfile = "P R O F I L E";

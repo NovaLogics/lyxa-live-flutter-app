@@ -4,7 +4,9 @@ import 'package:lyxa_live/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/features/auth/presentation/cubits/auth_cubit.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final String uid;
+
+  const ProfileScreen({super.key, required this.uid});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -22,6 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(currentUser!.email),
+        foregroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }
