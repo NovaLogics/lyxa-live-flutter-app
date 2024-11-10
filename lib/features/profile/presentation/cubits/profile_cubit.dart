@@ -15,8 +15,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       if (user != null) {
         emit(ProfileLoaded(user));
-      }
-      else{
+      } else {
         emit(ProfileError(AppStrings.userNotFoundError));
       }
     } catch (error) {
@@ -25,4 +24,33 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   // Update bio / profile picture
+  Future<void> updateProfile({
+    required String uid,
+    String? newBio,
+  }) async {
+    try {
+      emit(ProfileLoading());
+      // Fetch current user profile
+      final currentUser = await profileRepository.fetchUserProfile(uid);
+
+      if (currentUser == null) {
+        emit(ProfileError(AppStrings.failedToFetchUserError));
+        return;
+      }
+
+      // Profile picture update
+
+      // Update new profile
+      final updatedProfile =
+          currentUser.copyWith(newBio: newBio ?? currentUser.bio);
+
+      // Update in Repository
+      await profileRepository.updateProfile(updatedProfile);
+
+      // Re-fetch updated profile
+      await fetchUserProfile(uid);
+    } catch (error) {
+      emit(ProfileError('Error updating profile: ${error.toString()}'));
+    }
+  }
 }
