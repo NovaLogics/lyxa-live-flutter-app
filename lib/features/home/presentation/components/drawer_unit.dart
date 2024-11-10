@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/constants/app_dimensions.dart';
-import 'package:lyxa_live/features/post/presentation/components/drawer_title_unit.dart';
+import 'package:lyxa_live/constants/app_strings.dart';
+import 'package:lyxa_live/features/home/presentation/components/drawer_title_unit.dart';
 
 class DrawerUnit extends StatelessWidget {
   const DrawerUnit({super.key});
@@ -14,51 +15,58 @@ class DrawerUnit extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 25.0),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50.0),
-              child: Icon(
-                Icons.person,
-                size: AppDimens.size72,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
+            _drawerIcon(context),
             Divider(
               color: Theme.of(context).colorScheme.secondary,
             ),
             DrawerTitleUnit(
-              title: "H O M E",
+              title: AppStrings.titleHome,
               icon: Icons.home,
-              onTap: () {},
+              onTap: () => Navigator.of(context).pop(),
             ),
             DrawerTitleUnit(
-              title: "P R O F I L E",
+              title: AppStrings.titleProfile,
               icon: Icons.person,
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => ProfileScreen(),
+                //   ),
+                // );
+              },
             ),
             DrawerTitleUnit(
-              title: "P R O F I L E",
-              icon: Icons.person,
-              onTap: () {},
-            ),
-            DrawerTitleUnit(
-              title: "S E A R C H",
+              title: AppStrings.titleSearch,
               icon: Icons.search,
               onTap: () {},
             ),
             DrawerTitleUnit(
-              title: "S E T T I N G S",
+              title: AppStrings.titleSettings,
               icon: Icons.settings,
               onTap: () {},
             ),
             const Spacer(),
             DrawerTitleUnit(
-              title: "L O G O U T",
+              title: AppStrings.titleLogout,
               icon: Icons.login,
               onTap: () {},
             ),
           ],
         ),
       )),
+    );
+  }
+
+  Widget _drawerIcon(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 50.0),
+      child: Icon(
+        Icons.person,
+        size: AppDimens.size72,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 }

@@ -23,5 +23,9 @@ class AppStrings {
   static const String registerErrorMessage = 'Please complete all fields';
   static const String passwordNotMatchError = 'Passwords do not match!';
 
-
+  static const String titleHome = "H O M E";
+  static const String titleProfile = "P R O F I L E";
+  static const String titleSearch = "S E A R C H";
+  static const String titleSettings = "S E T T I N G S";
+  static const String titleLogout = "L O G O U T";
 }
