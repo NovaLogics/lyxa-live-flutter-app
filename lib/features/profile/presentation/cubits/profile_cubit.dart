@@ -8,7 +8,21 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit({required this.profileRepository}) : super(ProfileInitial());
 
   // Fetch user profile using repository
- 
+  Future<void> fetchUserProfile(String uid) async {
+    try {
+      emit(ProfileLoading());
+      final user = await profileRepository.fetchUserProfile(uid);
+
+      if (user != null) {
+        emit(ProfileLoaded(user));
+      }
+      else{
+        emit(ProfileError(AppStrings.userNotFoundError));
+      }
+    } catch (error) {
+      emit(ProfileError(error.toString()));
+    }
+  }
 
   // Update bio / profile picture
 }
