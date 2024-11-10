@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/constants/app_dimensions.dart';
 import 'package:lyxa_live/constants/app_strings.dart';
+import 'package:lyxa_live/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/features/home/presentation/components/drawer_title_unit.dart';
+import 'package:lyxa_live/features/profile/presentation/screens/profile_screen.dart';
 
 class DrawerUnit extends StatelessWidget {
   const DrawerUnit({super.key});
@@ -29,12 +32,12 @@ class DrawerUnit extends StatelessWidget {
               icon: Icons.person,
               onTap: () {
                 Navigator.of(context).pop();
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => ProfileScreen(),
-                //   ),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileScreen(),
+                  ),
+                );
               },
             ),
             DrawerTitleUnit(
@@ -51,7 +54,7 @@ class DrawerUnit extends StatelessWidget {
             DrawerTitleUnit(
               title: AppStrings.titleLogout,
               icon: Icons.login,
-              onTap: () {},
+              onTap: () => context.read<AuthCubit>().logout(),
             ),
           ],
         ),
