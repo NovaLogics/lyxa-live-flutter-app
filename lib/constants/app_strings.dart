@@ -23,6 +23,10 @@ class AppStrings {
   static const String registerErrorMessage = 'Please complete all fields';
   static const String passwordNotMatchError = 'Passwords do not match!';
 
+// Profile Section
+  static const String userNotFoundError = 'User not found';
+
+
   static const String titleHome = "H O M E";
   static const String titleProfile = "P R O F I L E";
   static const String titleSearch = "S E A R C H";
