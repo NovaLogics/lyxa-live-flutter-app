@@ -18,6 +18,7 @@ dependencies:
   firebase_auth: ^5.3.2
   flutter_bloc: ^8.1.6
   cloud_firestore: ^5.4.5
+  firebase_storage: ^12.3.5
 
 
 dev_dependencies:
