@@ -2,20 +2,19 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:lyxa_live/constants/constants.dart';
 import 'package:lyxa_live/features/storage/domain/storage_repository.dart';
 
 class FirebaseStorageRepository implements StorageRepository {
   final FirebaseStorage storage = FirebaseStorage.instance;
   @override
   Future<String?> uploadProfileImageMobile(String path, String fileName) {
-    // TODO: implement uploadProfileImageMobile
-    throw UnimplementedError();
+    return _uploadFile(path, fileName, STORAGE_PATH_PROFILE_IMAGES);
   }
 
   @override
-  Future<String?> uploadProfileImageWeb(String fileBytes, String fileName) {
-    // TODO: implement uploadProfileImageWeb
-    throw UnimplementedError();
+  Future<String?> uploadProfileImageWeb(Uint8List fileBytes, String fileName) {
+    return _uploadFileBytes(fileBytes, fileName, STORAGE_PATH_PROFILE_IMAGES);
   }
 
   // Helper methods : to upload files to storage
@@ -46,7 +45,6 @@ class FirebaseStorageRepository implements StorageRepository {
   Future<String?> _uploadFileBytes(
       Uint8List fileBytes, String fileName, String folder) async {
     try {
-
       // Find place to store
       final storageRef = storage.ref().child('$folder/$fileName');
 

@@ -45,7 +45,7 @@ class FirebaseAuthRepository implements AuthRepository {
 
       // Save user data in firestore
       await firebaseFirestore
-          .collection(dbPathUsers)
+          .collection(FIRESTORE_COLLECTION_USERS)
           .doc(user.uid)
           .set(user.toJson());
 
