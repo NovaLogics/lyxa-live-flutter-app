@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/constants/app_strings.dart';
+import 'package:lyxa_live/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_state.dart';
 import 'package:lyxa_live/features/storage/domain/storage_repository.dart';
@@ -15,7 +16,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     required this.storageRepository,
   }) : super(ProfileInitial());
 
-  // Fetch user profile using repository
+  // Fetch user profile using repository -> useful for loading profile pages
   Future<void> fetchUserProfile(String uid) async {
     try {
       emit(ProfileLoading());
@@ -29,6 +30,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     } catch (error) {
       emit(ProfileError(error.toString()));
     }
+  }
+
+  // Return user profile given uid -> useful for loading many profiles for posts
+  Future<ProfileUser?> getUserProfile(String uid) async {
+    final user = await profileRepository.fetchUserProfile(uid);
+    return user;
   }
 
   // Update bio / profile picture
