@@ -157,6 +157,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 size: 72,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
+
+                              errorListener: (value) =>
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(value.toString()))),
+
                               // Loaded
                               imageBuilder: (context, imageProvider) => Image(
                                 image: imageProvider,
@@ -175,6 +181,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
           ),
           // Bio section
+          const SizedBox(height: 25),
           const Text("Bio"),
           const SizedBox(height: 25),
           Padding(
