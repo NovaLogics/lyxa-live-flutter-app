@@ -20,9 +20,12 @@ class FirebasePostRepository implements PostRepository {
   }
 
   @override
-  Future<void> deletePost(String postId) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<void> deletePost(String postId) async{
+    try {
+      await postCollection.doc(postId).delete();
+    } catch (error) {
+      throw Exception('Error deleting post ${error.toString()}');
+    }
   }
 
   @override
