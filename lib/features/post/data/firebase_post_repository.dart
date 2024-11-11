@@ -35,7 +35,7 @@ class FirebasePostRepository implements PostRepository {
       final postSnapshot =
           await postCollection.orderBy('timestamp', descending: true).get();
 
-      // Convert each firestore document from json -> list of post
+      // Convert each firestore document from json -> list of posts
       final List<Post> allPosts = postSnapshot.docs
           .map((doc) => Post.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
@@ -47,8 +47,20 @@ class FirebasePostRepository implements PostRepository {
   }
 
   @override
-  Future<List<Post>> fetchPostsByUserId(String userId) {
-    // TODO: implement fetchPostsByUserId
-    throw UnimplementedError();
+  Future<List<Post>> fetchPostsByUserId(String userId) async {
+    try {
+      // Fetch posts snapshot with this uid
+      final postSnapshot =
+          await postCollection.where('userId', isEqualTo: userId).get();
+
+      // Convert each firestore document from json -> list of posts
+      final List<Post> userPosts = postSnapshot.docs
+          .map((doc) => Post.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+
+      return userPosts;
+    } catch (error) {
+      throw Exception('Error fetching posts by user : ${error.toString()}');
+    }
   }
 }
