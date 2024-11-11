@@ -39,7 +39,18 @@ class PostCubit extends Cubit<PostState> {
       // Create post in the backend
       postRepository.createPost(newPost);
     } catch (error) {
-      throw Exception('Failed to create post : ${error.toString()}');
+      emit(PostError('Failed to create post : ${error.toString()}'));
+    }
+  }
+
+  // Fetch all posts
+  Future<void> fetchAllPosts() async {
+    try {
+      emit(PostLoading());
+      final posts = await postRepository.fetchAllPosts();
+      emit(PostLoaded(posts));
+    } catch (error) {
+      emit(PostError('Failed to fetch posts : ${error.toString()}'));
     }
   }
 }
