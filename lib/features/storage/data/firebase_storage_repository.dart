@@ -7,6 +7,9 @@ import 'package:lyxa_live/features/storage/domain/storage_repository.dart';
 
 class FirebaseStorageRepository implements StorageRepository {
   final FirebaseStorage storage = FirebaseStorage.instance;
+
+  // Profile Pictures
+  //-> upload profile pictures to storage
   @override
   Future<String?> uploadProfileImageMobile(String path, String fileName) {
     return _uploadFile(path, fileName, STORAGE_PATH_PROFILE_IMAGES);
@@ -17,7 +20,20 @@ class FirebaseStorageRepository implements StorageRepository {
     return _uploadFileBytes(fileBytes, fileName, STORAGE_PATH_PROFILE_IMAGES);
   }
 
-  // Helper methods : to upload files to storage
+  // Post Pictures
+  //-> upload post pictures to storage
+  @override
+  Future<String?> uploadPostImageMobile(String path, String fileName) {
+    return _uploadFile(path, fileName, STORAGE_PATH_POST_IMAGES);
+  }
+
+  @override
+  Future<String?> uploadPostImageWeb(Uint8List fileBytes, String fileName) {
+    return _uploadFileBytes(fileBytes, fileName, STORAGE_PATH_POST_IMAGES);
+  }
+
+  // Helper Methods
+  //-> to upload files to storage
 
   // Mobile platforms (file)
   Future<String?> _uploadFile(
