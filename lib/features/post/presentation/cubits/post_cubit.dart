@@ -23,8 +23,8 @@ class PostCubit extends Cubit<PostState> {
       // Handle image upload for mobile platforms (Using file path)
       if (imagePath != null) {
         emit(PostUploading());
-        imageUrl = await storageRepository.uploadPostImageMobile(
-            imagePath, post.id);
+        imageUrl =
+            await storageRepository.uploadPostImageMobile(imagePath, post.id);
       }
       // Handle image upload for web platforms (Using file bytes)
       else if (imageBytes != null) {
@@ -63,6 +63,15 @@ class PostCubit extends Cubit<PostState> {
       await postRepository.deletePost(postId);
     } catch (error) {
       emit(PostError('Failed to delete post : ${error.toString()}'));
+    }
+  }
+
+  // Toggle like on a post
+  Future<void> toggleLikePost(String postId, String userId) async {
+    try {
+      await postRepository.toggleLikePost(postId, userId);
+    } catch (error) {
+      emit(PostError('Failed to toggle like: ${error.toString()}'));
     }
   }
 }
