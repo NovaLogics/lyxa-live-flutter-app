@@ -14,23 +14,33 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = JavaVersion.VERSION_17
     }
 
-    defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "novalogics.flutter.lyxa_live"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+   defaultConfig {
+    // Specify a unique Application ID.
+    applicationId = "novalogics.flutter.lyxa_live"
+    
+    // Define SDK versions with defaults if not specified in local properties.
+    def flutterMinSdkVersion = 24
+    // if(localProperties.getProperty('flutter.minSdkVersion') != null){
+    //     flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion').toInteger()
+    // }
+
+    def flutterTargetSdkVersion = 34
+    //  if(localProperties.getProperty('flutter.targetSdkVersion') != null){
+    //     flutterTargetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion').toInteger()
+    // }
+
+    minSdk = flutterMinSdkVersion
+    targetSdk = flutterTargetSdkVersion
+    versionCode = flutter.versionCode
+    versionName = flutter.versionName
     }
 
     buildTypes {

@@ -10,8 +10,10 @@ class FirebaseProfileRepository implements ProfileRepository {
   Future<ProfileUser?> fetchUserProfile(String uid) async {
     try {
       // Get user document from Firestore
-      final userDoc =
-          await firebaseFirestore.collection(dbPathUsers).doc(uid).get();
+      final userDoc = await firebaseFirestore
+          .collection(FIRESTORE_COLLECTION_USERS)
+          .doc(uid)
+          .get();
 
       if (userDoc.exists) {
         final userData = userDoc.data();
@@ -21,7 +23,7 @@ class FirebaseProfileRepository implements ProfileRepository {
             uid: uid,
             email: userData['email'],
             name: userData['name'],
-            bio: userData['bio']  ?? '',
+            bio: userData['bio'] ?? '',
             profileImageUrl: userData['profileImageUrl'].toString(),
           );
         }
@@ -37,7 +39,7 @@ class FirebaseProfileRepository implements ProfileRepository {
     try {
       // Convert update profile to json to store in Firestore
       await firebaseFirestore
-          .collection(dbPathUsers)
+          .collection(FIRESTORE_COLLECTION_USERS)
           .doc(updatedProfile.uid)
           .update({
         'bio': updatedProfile.bio,

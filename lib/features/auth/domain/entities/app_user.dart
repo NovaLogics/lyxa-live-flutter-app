@@ -26,4 +26,9 @@ class AppUser {
       name: user['name'],
     );
   }
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

@@ -1,0 +1,11 @@
+// {
+//     "version": "0.2.0",
+//     "configurations": [
+//         {
+//             "type": "msedge",
+//             "request": "launch",
+//             "name": "Launch my cool app",
+//             "port": 9222
+//         }
+//     ]
+// }

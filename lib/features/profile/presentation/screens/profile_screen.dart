@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/features/auth/domain/entities/app_user.dart';
@@ -40,10 +42,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         // Loaded
         if (state is ProfileLoaded) {
           final user = state.profileUser;
+          if (kDebugMode) {
+            print(user);
+          }
 
           return Scaffold(
             appBar: AppBar(
-              title: Text(user.name),
+              title: Center(child: Text(user.name)),
               foregroundColor: Theme.of(context).colorScheme.primary,
               actions: [
                 IconButton(
@@ -68,19 +73,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 25),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.circular(12),
+                CachedNetworkImage(
+                  imageUrl: user.profileImageUrl,
+                  // Loading
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                  // Error -> Failed to load
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.person,
+                    size: 72,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                  height: 120,
-                  width: 120,
-                  padding: const EdgeInsets.all(25),
-                  child: Center(
-                    child: Icon(
-                      Icons.person,
-                      size: 72,
-                      color: Theme.of(context).colorScheme.primary,
+
+                  errorListener: (value) => ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(value.toString()))),
+
+                  // Loaded
+                  imageBuilder: (context, imageProvider) => Container(
+                    height: 160,
+                    width: 160,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

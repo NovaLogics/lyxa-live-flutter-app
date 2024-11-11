@@ -6,8 +6,11 @@ import 'package:lyxa_live/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/features/auth/presentation/cubits/auth_state.dart';
 import 'package:lyxa_live/features/auth/presentation/screens/auth_screen.dart';
 import 'package:lyxa_live/features/home/presentation/screens/home_screen.dart';
+import 'package:lyxa_live/features/post/data/firebase_post_repository.dart';
+import 'package:lyxa_live/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/features/profile/data/firebase_profile_repository.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
+import 'package:lyxa_live/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/themes/light_mode.dart';
 
 /*
@@ -26,8 +29,10 @@ APP - Root Level
 */
 
 class LyxaApp extends StatelessWidget {
-  final authRepository = FirebaseAuthRepository();
-  final profileRepository = FirebaseProfileRepository();
+  final firebaseAuthRepository = FirebaseAuthRepository();
+  final firebaseProfileRepository = FirebaseProfileRepository();
+  final firebaseStorageRepository = FirebaseStorageRepository();
+  final firebasePostRepository = FirebasePostRepository();
 
   LyxaApp({super.key});
 
@@ -38,13 +43,25 @@ class LyxaApp extends StatelessWidget {
       providers: [
         // Auth cubit
         BlocProvider<AuthCubit>(
-          create: (context) =>
-              AuthCubit(authRepository: authRepository)..checkAuth(),
+          create: (context) => AuthCubit(
+            authRepository: firebaseAuthRepository,
+          )..checkAuth(),
         ),
+
         // Profile cubit
         BlocProvider<ProfileCubit>(
-          create: (context) =>
-              ProfileCubit(profileRepository: profileRepository),
+          create: (context) => ProfileCubit(
+            profileRepository: firebaseProfileRepository,
+            storageRepository: firebaseStorageRepository,
+          ),
+        ),
+
+        // Post cubit
+        BlocProvider<PostCubit>(
+          create: (context) => PostCubit(
+            postRepository: firebasePostRepository,
+            storageRepository: firebaseStorageRepository,
+          ),
         ),
       ],
       child: MaterialApp(
