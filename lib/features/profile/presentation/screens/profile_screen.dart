@@ -9,6 +9,7 @@ import 'package:lyxa_live/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/features/post/presentation/cubits/post_state.dart';
 import 'package:lyxa_live/features/profile/presentation/components/bio_box_unit.dart';
 import 'package:lyxa_live/features/profile/presentation/components/follow_button_unit.dart';
+import 'package:lyxa_live/features/profile/presentation/components/profile_stats_unit.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_state.dart';
 import 'package:lyxa_live/features/profile/presentation/screens/edit_profile_screen.dart';
@@ -146,6 +147,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 25),
+
+                // Profile stats
+                ProfileStatsUnit(
+                  postCount: postCount,
+                  followerCount: user.followers.length,
+                  followingCount: user.following.length,
+                ),
 
                 // Follow button
                 if (!isOwnProfile)
