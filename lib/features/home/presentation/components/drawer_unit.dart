@@ -5,6 +5,7 @@ import 'package:lyxa_live/constants/app_strings.dart';
 import 'package:lyxa_live/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/features/home/presentation/components/drawer_title_unit.dart';
 import 'package:lyxa_live/features/profile/presentation/screens/profile_screen.dart';
+import 'package:lyxa_live/features/search/presentation/screens/search_screen.dart';
 
 class DrawerUnit extends StatelessWidget {
   const DrawerUnit({super.key});
@@ -31,7 +32,12 @@ class DrawerUnit extends StatelessWidget {
             DrawerTitleUnit(
               title: AppStrings.titleSearch,
               icon: Icons.search,
-              onTap: () {},
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchScreen(),
+                ),
+              ),
             ),
             DrawerTitleUnit(
               title: AppStrings.titleSettings,
