@@ -13,6 +13,7 @@ import 'package:lyxa_live/features/profile/presentation/components/profile_stats
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_state.dart';
 import 'package:lyxa_live/features/profile/presentation/screens/edit_profile_screen.dart';
+import 'package:lyxa_live/features/profile/presentation/screens/follower_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -153,6 +154,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   postCount: postCount,
                   followerCount: user.followers.length,
                   followingCount: user.following.length,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FollowerScreen(
+                        followers: user.followers,
+                        following: user.following,
+                      ),
+                    ),
+                  ),
                 ),
 
                 // Follow button
