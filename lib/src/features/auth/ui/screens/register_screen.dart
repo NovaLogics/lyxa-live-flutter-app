@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/button_unit.dart';
-import 'package:lyxa_live/src/features/auth/ui/components/spacer_unit.dart';
-import 'package:lyxa_live/src/features/auth/ui/components/text_field_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
