@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/constants/constants.dart';
+import 'package:lyxa_live/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/features/post/domain/repositories/post_repository.dart';
 
@@ -61,6 +62,83 @@ class FirebasePostRepository implements PostRepository {
       return userPosts;
     } catch (error) {
       throw Exception('Error fetching posts by user : ${error.toString()}');
+    }
+  }
+
+  @override
+  Future<void> toggleLikePost(String postId, String userId) async {
+    try {
+      // Get the post document from firestore
+      final postDoc = await postCollection.doc(postId).get();
+
+      if (postDoc.exists) {
+        final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
+
+        // Check if user has already like this post
+        final hasLiked = post.likes.contains(userId);
+
+        // Update the likes list
+        if (hasLiked) {
+          post.likes.remove(userId); // Unlike
+        } else {
+          post.likes.add(userId); // Like
+        }
+
+        // Update the post document with the new like list
+        await postCollection.doc(postId).update({'likes': post.likes});
+      } else {
+        throw Exception('Post not found');
+      }
+    } catch (error) {
+      throw Exception('Error toggling like: ${error.toString()}');
+    }
+  }
+
+  @override
+  Future<void> addComment(String postId, Comment comment) async {
+    try {
+      // Get the post document from firestore
+      final postDoc = await postCollection.doc(postId).get();
+
+      if (postDoc.exists) {
+        final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
+
+        // Add the new comment
+        post.comments.add(comment);
+
+        // Update the post document with the new comment
+        await postCollection.doc(postId).update({
+          'comments': post.comments.map((comment) => comment.toJson()).toList()
+        });
+      } else {
+        throw Exception('Post not found');
+      }
+    } catch (error) {
+      throw Exception('Error adding comment: ${error.toString()}');
+    }
+  }
+
+  @override
+  Future<void> deleteComment(String postId, String commentId) async {
+    try {
+      // Get the post document from firestore
+      final postDoc = await postCollection.doc(postId).get();
+
+      if (postDoc.exists) {
+        final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
+
+        // Remove the comment
+        post.comments.removeWhere((comment) => comment.id == commentId);
+
+        // Update the post document with the new comment
+        await postCollection.doc(postId).update({
+          'comments': post.comments.map((comment) => comment.toJson()).toList()
+        });
+      } else {
+        throw Exception('Post not found');
+      }
+    } catch (error) {
+      throw Exception('Error deleting comment: ${error.toString()}');
     }
   }
 }

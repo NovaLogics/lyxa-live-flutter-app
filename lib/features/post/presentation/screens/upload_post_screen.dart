@@ -89,6 +89,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       text: text,
       imageUrl: '',
       timestamp: DateTime.now(),
+      likes: [],
+      comments: [],
     );
 
     // PostCubit
