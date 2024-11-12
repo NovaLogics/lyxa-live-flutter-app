@@ -7,6 +7,7 @@ import 'package:lyxa_live/features/profile/domain/repositories/profile_repositor
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_state.dart';
 import 'package:lyxa_live/features/storage/domain/storage_repository.dart';
 
+// PROFILE STATE MANAGEMENT
 class ProfileCubit extends Cubit<ProfileState> {
   final ProfileRepository profileRepository;
   final StorageRepository storageRepository;
@@ -92,6 +93,17 @@ class ProfileCubit extends Cubit<ProfileState> {
       await fetchUserProfile(uid);
     } catch (error) {
       emit(ProfileError('Error updating profile: ${error.toString()}'));
+    }
+  }
+
+  // Toggle follow/unfollow
+  Future<void> toggleFollow(String currentUid, String targetUid) async {
+    try {
+      await profileRepository.toggleFollow(currentUid, targetUid);
+
+      await fetchUserProfile(targetUid);
+    } catch (error) {
+         emit(ProfileError('Error toggling follow: ${error.toString()}'));
     }
   }
 }
