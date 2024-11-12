@@ -5,7 +5,7 @@ import 'package:lyxa_live/src/app.dart';
 import 'package:lyxa_live/src/features/profile/presentation/components/user_tile_unit.dart';
 import 'package:lyxa_live/src/features/search/presentation/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/search/presentation/cubits/search_state.dart';
-import 'package:lyxa_live/src/responsive/constrained_scaffold.dart';
+import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});

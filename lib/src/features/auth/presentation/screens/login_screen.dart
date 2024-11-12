@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/constants/app_dimensions.dart';
-import 'package:lyxa_live/src/constants/app_strings.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/presentation/components/button_unit.dart';
 import 'package:lyxa_live/src/features/auth/presentation/components/spacer_unit.dart';
 import 'package:lyxa_live/src/features/auth/presentation/components/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
-import 'package:lyxa_live/src/responsive/constrained_scaffold.dart';
+import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 /*
 LOGIN SCREEN

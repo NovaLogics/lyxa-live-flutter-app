@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lyxa_live/src/constants/constants.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/search/domain/search_repository.dart';
 

@@ -14,7 +14,7 @@ import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_cubit
 import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_state.dart';
 import 'package:lyxa_live/src/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:lyxa_live/src/features/profile/presentation/screens/follower_screen.dart';
-import 'package:lyxa_live/src/responsive/constrained_scaffold.dart';
+import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lyxa_live/src/constants/constants.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 

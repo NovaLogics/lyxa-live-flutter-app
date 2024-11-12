@@ -12,7 +12,7 @@ import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart'
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/presentation/cubits/post_state.dart';
-import 'package:lyxa_live/src/responsive/constrained_scaffold.dart';
+import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class UploadPostScreen extends StatefulWidget {
   const UploadPostScreen({super.key});

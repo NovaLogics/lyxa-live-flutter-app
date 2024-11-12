@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/constants/app_strings.dart';
+import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_state.dart';

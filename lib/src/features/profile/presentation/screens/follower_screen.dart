@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/features/profile/presentation/components/user_tile_unit.dart';
 import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/presentation/screens/profile_screen.dart';
-import 'package:lyxa_live/src/responsive/constrained_scaffold.dart';
+import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class FollowerScreen extends StatelessWidget {
   final List<String> followers;

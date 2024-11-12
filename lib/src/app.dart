@@ -13,7 +13,7 @@ import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_cubit
 import 'package:lyxa_live/src/features/search/data/firebase_search_repository.dart';
 import 'package:lyxa_live/src/features/search/presentation/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
-import 'package:lyxa_live/src/themes/theme_cubit.dart';
+import 'package:lyxa_live/src/core/themes/theme_cubit.dart';
 
 /*
 APP - Root Level

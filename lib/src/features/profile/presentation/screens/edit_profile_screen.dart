@@ -10,7 +10,7 @@ import 'package:lyxa_live/src/features/auth/presentation/components/text_field_u
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_state.dart';
-import 'package:lyxa_live/src/responsive/constrained_scaffold.dart';
+import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final ProfileUser user;

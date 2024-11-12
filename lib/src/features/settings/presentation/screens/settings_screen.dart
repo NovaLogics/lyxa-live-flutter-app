@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/app.dart';
-import 'package:lyxa_live/src/responsive/constrained_scaffold.dart';
-import 'package:lyxa_live/src/themes/theme_cubit.dart';
+import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
+import 'package:lyxa_live/src/core/themes/theme_cubit.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
