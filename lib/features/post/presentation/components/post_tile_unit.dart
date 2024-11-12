@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/features/auth/presentation/components/text_field_unit.dart';
 import 'package:lyxa_live/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:lyxa_live/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/features/profile/domain/entities/profile_user.dart';
@@ -35,6 +37,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
   // Post user
   ProfileUser? postUser;
 
+  // Comment text controller
+  final commentTextController = TextEditingController();
+
   // On startup
   @override
   void initState() {
@@ -60,7 +65,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
   }
 
   // LIKES
-  //-> User tapped like button
+  //------> User tapped like button
   void toggleLikePost() {
     // Current like status
     final isLiked = widget.post.likes.contains(currentUser!.uid);
@@ -91,6 +96,63 @@ class _PostTileUnitState extends State<PostTileUnit> {
         }
       });
     });
+  }
+
+  // COMMENTS
+  //------> Open comment box -> Type new comment
+  void openNewCommentBox() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Add a new comment"),
+        content: TextFieldUnit(
+          controller: commentTextController,
+          hintText: "Type a comment",
+          obscureText: false,
+        ),
+        actions: [
+          // Cancel button
+          TextButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop('dialog');
+            },
+            child: const Text("Cancel"),
+          ),
+          // Save button
+          TextButton(
+            onPressed: () {
+              addComment();
+              Navigator.of(context).pop();
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //------> Add Comment
+  void addComment() {
+    final comment = commentTextController.text;
+    // Create a new comment
+    final newComment = Comment(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      postId: widget.post.id,
+      userId: widget.post.userId,
+      userName: widget.post.userName,
+      text: comment,
+      timestamp: DateTime.now(),
+    );
+
+    if (comment.isNotEmpty) {
+      postCubit.addComment(widget.post.id, newComment);
+    }
+  }
+
+  @override
+  void dispose() {
+    commentTextController.dispose();
+    super.dispose();
   }
 
   // Show options for deletion
