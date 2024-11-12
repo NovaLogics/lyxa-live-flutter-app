@@ -149,20 +149,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 25),
 
-                // Profile stats
-                ProfileStatsUnit(
-                  postCount: postCount,
-                  followerCount: user.followers.length,
-                  followingCount: user.following.length,
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FollowerScreen(
-                        followers: user.followers,
-                        following: user.following,
-                      ),
-                    ),
-                  ),
+                BlocBuilder<PostCubit, PostState>(
+                  builder: (context, state) {
+                    // Posts Loaded
+                    if (state is PostLoaded) {
+                      // Filter posts by the user id
+                      final userPosts = state.posts
+                          .where((post) => post.userId == widget.uid)
+                          .toList();
+
+                      postCount = userPosts.length;
+
+                      // Profile stats
+                      return ProfileStatsUnit(
+                        postCount: postCount,
+                        followerCount: user.followers.length,
+                        followingCount: user.following.length,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FollowerScreen(
+                              followers: user.followers,
+                              following: user.following,
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      // Profile stats
+                      return ProfileStatsUnit(
+                        postCount: postCount,
+                        followerCount: user.followers.length,
+                        followingCount: user.following.length,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FollowerScreen(
+                              followers: user.followers,
+                              following: user.following,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
 
                 // Follow button
