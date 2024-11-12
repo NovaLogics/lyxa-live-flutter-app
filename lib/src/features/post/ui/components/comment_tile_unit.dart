@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
-import 'package:lyxa_live/src/features/post/presentation/cubits/post_cubit.dart';
+import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 
 class CommentTileUnit extends StatefulWidget {
   final Comment comment;

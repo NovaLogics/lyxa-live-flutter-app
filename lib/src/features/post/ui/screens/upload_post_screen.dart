@@ -10,8 +10,8 @@ import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
-import 'package:lyxa_live/src/features/post/presentation/cubits/post_cubit.dart';
-import 'package:lyxa_live/src/features/post/presentation/cubits/post_state.dart';
+import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
+import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class UploadPostScreen extends StatefulWidget {
