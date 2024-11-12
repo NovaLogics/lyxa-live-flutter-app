@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
 
 class FirebaseStorageRepository implements StorageRepository {
