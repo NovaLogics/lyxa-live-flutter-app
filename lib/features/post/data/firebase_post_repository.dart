@@ -120,8 +120,25 @@ class FirebasePostRepository implements PostRepository {
 
   @override
   Future<void> deleteComment(String postId, String commentId) async {
-    try {} catch (error) {
-      throw Exception('Error toggling like: ${error.toString()}');
+    try {
+      // Get the post document from firestore
+      final postDoc = await postCollection.doc(postId).get();
+
+      if (postDoc.exists) {
+        final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
+
+        // Remove the comment
+        post.comments.removeWhere((comment) => comment.id == commentId);
+
+        // Update the post document with the new comment
+        await postCollection.doc(postId).update({
+          'comments': post.comments.map((comment) => comment.toJson()).toList()
+        });
+      } else {
+        throw Exception('Post not found');
+      }
+    } catch (error) {
+      throw Exception('Error deleting comment: ${error.toString()}');
     }
   }
 }
