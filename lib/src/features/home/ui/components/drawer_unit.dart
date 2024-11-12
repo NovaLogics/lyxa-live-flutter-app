@@ -6,7 +6,7 @@ import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_title_unit.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
-import 'package:lyxa_live/src/features/settings/presentation/screens/settings_screen.dart';
+import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
 
 class DrawerUnit extends StatelessWidget {
   const DrawerUnit({super.key});
