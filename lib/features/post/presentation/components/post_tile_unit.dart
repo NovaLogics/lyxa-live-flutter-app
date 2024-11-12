@@ -6,7 +6,9 @@ import 'package:lyxa_live/features/auth/presentation/components/text_field_unit.
 import 'package:lyxa_live/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/features/post/domain/entities/post.dart';
+import 'package:lyxa_live/features/post/presentation/components/comment_tile_unit.dart';
 import 'package:lyxa_live/features/post/presentation/cubits/post_cubit.dart';
+import 'package:lyxa_live/features/post/presentation/cubits/post_state.dart';
 import 'package:lyxa_live/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
 
@@ -138,8 +140,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
     final newComment = Comment(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       postId: widget.post.id,
-      userId: widget.post.userId,
-      userName: widget.post.userName,
+      userId: currentUser!.uid,
+      userName: currentUser!.name,
       text: comment,
       timestamp: DateTime.now(),
     );
@@ -333,8 +335,84 @@ class _PostTileUnitState extends State<PostTileUnit> {
           ),
 
           // Caption
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: Row(
+              children: [
+                // Username
+                Text(
+                  widget.post.userName,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                // Text
+                Text(
+                  widget.post.text,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ],
+            ),
+          ),
 
           // Comment Section
+          BlocBuilder<PostCubit, PostState>(
+            builder: (context, state) {
+              // Loaded
+              if (state is PostLoaded) {
+                // Final individual post
+                final post = state.posts
+                    .firstWhere((post) => (post.id == widget.post.id));
+
+                if (post.comments.isNotEmpty) {
+                  // How many comments to show
+                  int showCommentCount = post.comments.length;
+
+                  // Comment section
+                  return ListView.builder(
+                    itemCount: showCommentCount,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      // Get individual comment
+                      final comment = post.comments[index];
+
+                      // Comment tile UI
+                      return CommentTileUnit(
+                        comment: comment,
+                      );
+                    },
+                  );
+                }
+              }
+
+              // Loading
+              if (state is PostLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              // Error
+              else if (state is PostError) {
+                return Center(
+                  child: Text(state.message),
+                );
+              } else {
+                return const Center(
+                  child: SizedBox(),
+                );
+              }
+            },
+          ),
         ],
       ),
     );
