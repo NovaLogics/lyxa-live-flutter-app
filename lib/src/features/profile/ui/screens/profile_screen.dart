@@ -7,13 +7,13 @@ import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/ui/components/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
-import 'package:lyxa_live/src/features/profile/presentation/components/bio_box_unit.dart';
-import 'package:lyxa_live/src/features/profile/presentation/components/follow_button_unit.dart';
-import 'package:lyxa_live/src/features/profile/presentation/components/profile_stats_unit.dart';
-import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_state.dart';
-import 'package:lyxa_live/src/features/profile/presentation/screens/edit_profile_screen.dart';
-import 'package:lyxa_live/src/features/profile/presentation/screens/follower_screen.dart';
+import 'package:lyxa_live/src/features/profile/ui/components/bio_box_unit.dart';
+import 'package:lyxa_live/src/features/profile/ui/components/follow_button_unit.dart';
+import 'package:lyxa_live/src/features/profile/ui/components/profile_stats_unit.dart';
+import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
+import 'package:lyxa_live/src/features/profile/ui/screens/edit_profile_screen.dart';
+import 'package:lyxa_live/src/features/profile/ui/screens/follower_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {

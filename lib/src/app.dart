@@ -9,7 +9,7 @@ import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
 import 'package:lyxa_live/src/features/post/data/firebase_post_repository.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/profile/data/firebase_profile_repository.dart';
-import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/search/data/firebase_search_repository.dart';
 import 'package:lyxa_live/src/features/search/presentation/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';

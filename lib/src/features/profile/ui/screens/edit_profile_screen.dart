@@ -8,8 +8,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/text_field_unit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
-import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_state.dart';
+import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class EditProfileScreen extends StatefulWidget {

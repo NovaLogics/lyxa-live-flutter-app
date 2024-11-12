@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
-import 'package:lyxa_live/src/features/profile/presentation/screens/profile_screen.dart';
+import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 
 class UserTileUnit extends StatelessWidget {
   final ProfileUser user;

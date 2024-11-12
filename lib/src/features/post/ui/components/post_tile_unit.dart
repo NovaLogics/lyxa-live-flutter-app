@@ -10,8 +10,8 @@ import 'package:lyxa_live/src/features/post/ui/components/comment_tile_unit.dart
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
-import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/presentation/screens/profile_screen.dart';
+import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 
 class PostTileUnit extends StatefulWidget {
   final Post post;
