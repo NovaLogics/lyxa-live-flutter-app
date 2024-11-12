@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ProfileStatsUnit extends StatelessWidget {
@@ -11,7 +10,7 @@ class ProfileStatsUnit extends StatelessWidget {
     super.key,
     required this.postCount,
     required this.followerCount,
-    required this.followingCount, 
+    required this.followingCount,
     required this.onTap,
   });
 
@@ -51,7 +50,7 @@ class ProfileStatsUnit extends StatelessWidget {
               ],
             ),
           ),
-      
+
           // Followers
           SizedBox(
             width: 100,
@@ -68,7 +67,7 @@ class ProfileStatsUnit extends StatelessWidget {
               ],
             ),
           ),
-      
+
           // Following
           SizedBox(
             width: 100,
