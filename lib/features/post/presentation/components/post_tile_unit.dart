@@ -11,6 +11,7 @@ import 'package:lyxa_live/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/features/post/presentation/cubits/post_state.dart';
 import 'package:lyxa_live/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
+import 'package:lyxa_live/features/profile/presentation/screens/profile_screen.dart';
 
 class PostTileUnit extends StatefulWidget {
   final Post post;
@@ -192,54 +193,63 @@ class _PostTileUnitState extends State<PostTileUnit> {
       child: Column(
         children: [
           // Top section
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Profile Pic
-                postUser?.profileImageUrl != null
-                    ? CachedNetworkImage(
-                        imageUrl: postUser!.profileImageUrl,
-                        errorWidget: (context, url, error) => Icon(
-                              Icons.person,
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary,
-                            ),
-                        imageBuilder: (context, imageProvider) => Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                ),
+          GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfileScreen(uid: widget.post.userId),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Profile Pic
+                  postUser?.profileImageUrl != null
+                      ? CachedNetworkImage(
+                          imageUrl: postUser!.profileImageUrl,
+                          errorWidget: (context, url, error) => Icon(
+                                Icons.person,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
                               ),
-                            ))
-                    : const Icon(Icons.person),
-                const SizedBox(width: 12),
-                //Name
-                Text(
-                  widget.post.userName,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Spacer(),
-                // Delete button
-                if (isOwnPost)
-                  GestureDetector(
-                    onTap: showOptions,
-                    child: AbsorbPointer(
-                      child: Icon(
-                        Icons.delete,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                          imageBuilder: (context, imageProvider) => Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ))
+                      : const Icon(Icons.person),
+                  const SizedBox(width: 12),
+                  //Name
+                  Text(
+                    widget.post.userName,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-              ],
+                  const Spacer(),
+                  // Delete button
+                  if (isOwnPost)
+                    GestureDetector(
+                      onTap: showOptions,
+                      child: AbsorbPointer(
+                        child: Icon(
+                          Icons.delete,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
 
