@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
-import 'package:lyxa_live/src/features/home/presentation/components/drawer_unit.dart';
+import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/post/presentation/components/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/presentation/cubits/post_state.dart';

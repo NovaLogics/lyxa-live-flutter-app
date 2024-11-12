@@ -5,7 +5,7 @@ import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/auth_screen.dart';
-import 'package:lyxa_live/src/features/home/presentation/screens/home_screen.dart';
+import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
 import 'package:lyxa_live/src/features/post/data/firebase_post_repository.dart';
 import 'package:lyxa_live/src/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/profile/data/firebase_profile_repository.dart';
