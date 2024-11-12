@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
-import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/presentation/components/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/presentation/cubits/post_state.dart';

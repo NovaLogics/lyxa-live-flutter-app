@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
-import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_state.dart';
+import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 
 /*
 Auth Cubit: State Management

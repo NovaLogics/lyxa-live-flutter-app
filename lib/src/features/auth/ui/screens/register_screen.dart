@@ -2,38 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
-import 'package:lyxa_live/src/features/auth/presentation/components/button_unit.dart';
-import 'package:lyxa_live/src/features/auth/presentation/components/spacer_unit.dart';
-import 'package:lyxa_live/src/features/auth/presentation/components/text_field_unit.dart';
-import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/button_unit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/spacer_unit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/text_field_unit.dart';
+import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
-/*
-LOGIN SCREEN
-: On this screen > An existing user can login with their > email & password
-
--> Once the user successfully logs in, 
-    thery will be redirected to the Home Screen
-
--> If user doesn't have an account yet, 
-    they can go to Register Screen from here to create one.
-*/
-
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   final void Function()? toggleScreens;
 
-  const LoginScreen({
+  const RegisterScreen({
     super.key,
     required this.toggleScreens,
   });
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +37,14 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _loginScreenIcon(),
+                _registerScreenIcon(),
                 const SpacerUnit(height: AppDimens.size52),
                 _titleText(),
                 const SpacerUnit(height: AppDimens.size24),
+                _nameTextField(
+                  nameController,
+                ),
+                const SpacerUnit(height: AppDimens.size12),
                 _emailTextField(
                   emailController,
                 ),
@@ -57,12 +52,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 _passwordTextField(
                   passwordController,
                 ),
+                const SpacerUnit(height: AppDimens.size12),
+                _confirmPasswordTextField(
+                  confirmPasswordController,
+                ),
                 const SpacerUnit(height: AppDimens.size24),
-                _logInButton(
-                  _login,
+                _signUpButton(
+                  _register,
                 ),
                 const SpacerUnit(height: AppDimens.size52),
-                _registerLink(),
+                _loginLink(),
               ],
             ),
           ),
@@ -73,26 +72,38 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
+    nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 
-  void _login() {
+  void _register() {
+    final String name = nameController.text;
     final String email = emailController.text;
     final String password = passwordController.text;
+    final String confirmPassword = confirmPasswordController.text;
 
     final authCubit = context.read<AuthCubit>();
 
-    if (email.isNotEmpty && password.isNotEmpty) {
-      authCubit.login(email, password);
+    if (name.isNotEmpty &&
+        email.isNotEmpty &&
+        password.isNotEmpty &&
+        confirmPassword.isNotEmpty) {
+      if (password == confirmPassword) {
+        authCubit.register(name, email, password);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text(AppStrings.passwordNotMatchError)));
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text(AppStrings.loginErrorMessage)));
+          const SnackBar(content: Text(AppStrings.registerErrorMessage)));
     }
   }
 
-  Widget _loginScreenIcon() {
+  Widget _registerScreenIcon() {
     return Icon(
       Icons.lock_open_rounded,
       size: AppDimens.iconSize2XLarge,
@@ -102,11 +113,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _titleText() {
     return Text(
-      AppStrings.welcomeBackMessage,
+      AppStrings.createAccountMessage,
       style: TextStyle(
         color: Theme.of(context).colorScheme.primary,
         fontSize: AppDimens.textSizeMedium,
       ),
+    );
+  }
+
+  Widget _nameTextField(TextEditingController controller) {
+    return TextFieldUnit(
+      controller: controller,
+      hintText: AppStrings.name,
+      obscureText: false,
     );
   }
 
@@ -126,19 +145,27 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _logInButton(Function()? onTap) {
-    return ButtonUnit(
-      onTap: onTap,
-      text: AppStrings.login,
+  Widget _confirmPasswordTextField(TextEditingController controller) {
+    return TextFieldUnit(
+      controller: controller,
+      hintText: AppStrings.confirmPassword,
+      obscureText: true,
     );
   }
 
-  Widget _registerLink() {
+  Widget _signUpButton(Function()? onTap) {
+    return ButtonUnit(
+      onTap: onTap,
+      text: AppStrings.signUp,
+    );
+  }
+
+  Widget _loginLink() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          AppStrings.notAMember,
+          AppStrings.alreadyAMember,
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
             fontSize: AppDimens.textSizeMedium,
@@ -147,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
         GestureDetector(
           onTap: widget.toggleScreens,
           child: Text(
-            AppStrings.registerNow,
+            AppStrings.loginNow,
             style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 fontSize: AppDimens.textSizeMedium,

@@ -2,29 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
-import 'package:lyxa_live/src/features/auth/presentation/components/button_unit.dart';
-import 'package:lyxa_live/src/features/auth/presentation/components/spacer_unit.dart';
-import 'package:lyxa_live/src/features/auth/presentation/components/text_field_unit.dart';
-import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/button_unit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/spacer_unit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/text_field_unit.dart';
+import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
-class RegisterScreen extends StatefulWidget {
+/*
+LOGIN SCREEN
+: On this screen > An existing user can login with their > email & password
+
+-> Once the user successfully logs in, 
+    thery will be redirected to the Home Screen
+
+-> If user doesn't have an account yet, 
+    they can go to Register Screen from here to create one.
+*/
+
+class LoginScreen extends StatefulWidget {
   final void Function()? toggleScreens;
 
-  const RegisterScreen({
+  const LoginScreen({
     super.key,
     required this.toggleScreens,
   });
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final nameController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +46,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _registerScreenIcon(),
+                _loginScreenIcon(),
                 const SpacerUnit(height: AppDimens.size52),
                 _titleText(),
                 const SpacerUnit(height: AppDimens.size24),
-                _nameTextField(
-                  nameController,
-                ),
-                const SpacerUnit(height: AppDimens.size12),
                 _emailTextField(
                   emailController,
                 ),
@@ -52,16 +57,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 _passwordTextField(
                   passwordController,
                 ),
-                const SpacerUnit(height: AppDimens.size12),
-                _confirmPasswordTextField(
-                  confirmPasswordController,
-                ),
                 const SpacerUnit(height: AppDimens.size24),
-                _signUpButton(
-                  _register,
+                _logInButton(
+                  _login,
                 ),
                 const SpacerUnit(height: AppDimens.size52),
-                _loginLink(),
+                _registerLink(),
               ],
             ),
           ),
@@ -72,38 +73,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
-    nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
-    confirmPasswordController.dispose();
     super.dispose();
   }
 
-  void _register() {
-    final String name = nameController.text;
+  void _login() {
     final String email = emailController.text;
     final String password = passwordController.text;
-    final String confirmPassword = confirmPasswordController.text;
 
     final authCubit = context.read<AuthCubit>();
 
-    if (name.isNotEmpty &&
-        email.isNotEmpty &&
-        password.isNotEmpty &&
-        confirmPassword.isNotEmpty) {
-      if (password == confirmPassword) {
-        authCubit.register(name, email, password);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text(AppStrings.passwordNotMatchError)));
-      }
+    if (email.isNotEmpty && password.isNotEmpty) {
+      authCubit.login(email, password);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text(AppStrings.registerErrorMessage)));
+          const SnackBar(content: Text(AppStrings.loginErrorMessage)));
     }
   }
 
-  Widget _registerScreenIcon() {
+  Widget _loginScreenIcon() {
     return Icon(
       Icons.lock_open_rounded,
       size: AppDimens.iconSize2XLarge,
@@ -113,19 +102,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _titleText() {
     return Text(
-      AppStrings.createAccountMessage,
+      AppStrings.welcomeBackMessage,
       style: TextStyle(
         color: Theme.of(context).colorScheme.primary,
         fontSize: AppDimens.textSizeMedium,
       ),
-    );
-  }
-
-  Widget _nameTextField(TextEditingController controller) {
-    return TextFieldUnit(
-      controller: controller,
-      hintText: AppStrings.name,
-      obscureText: false,
     );
   }
 
@@ -145,27 +126,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _confirmPasswordTextField(TextEditingController controller) {
-    return TextFieldUnit(
-      controller: controller,
-      hintText: AppStrings.confirmPassword,
-      obscureText: true,
-    );
-  }
-
-  Widget _signUpButton(Function()? onTap) {
+  Widget _logInButton(Function()? onTap) {
     return ButtonUnit(
       onTap: onTap,
-      text: AppStrings.signUp,
+      text: AppStrings.login,
     );
   }
 
-  Widget _loginLink() {
+  Widget _registerLink() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          AppStrings.alreadyAMember,
+          AppStrings.notAMember,
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
             fontSize: AppDimens.textSizeMedium,
@@ -174,7 +147,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         GestureDetector(
           onTap: widget.toggleScreens,
           child: Text(
-            AppStrings.loginNow,
+            AppStrings.registerNow,
             style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 fontSize: AppDimens.textSizeMedium,
