@@ -8,6 +8,7 @@ import 'package:lyxa_live/features/post/presentation/components/post_tile_unit.d
 import 'package:lyxa_live/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/features/post/presentation/cubits/post_state.dart';
 import 'package:lyxa_live/features/profile/presentation/components/bio_box_unit.dart';
+import 'package:lyxa_live/features/profile/presentation/components/follow_button_unit.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_state.dart';
 import 'package:lyxa_live/features/profile/presentation/screens/edit_profile_screen.dart';
@@ -41,8 +42,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
     profileCubit.fetchUserProfile(widget.uid);
   }
 
+  void followButtonPressed() {
+    final profileState = profileCubit.state;
+    if (profileState is! ProfileLoaded) {
+      return; // return if profile is not loaded
+    }
+
+    final profileUser = profileState.profileUser;
+    final isFollowing = profileUser.followers.contains(currentUser!.uid);
+
+    // Optimistically update UI
+    setState(() {
+      // Unfollow
+      if (isFollowing) {
+        profileUser.followers.remove(currentUser!.uid);
+      } else {
+        // Follow
+        profileUser.followers.add(currentUser!.uid);
+      }
+    });
+
+    // Perform actual toggle in cubit
+    profileCubit.toggleFollow(currentUser!.uid, widget.uid).catchError((error) {
+      // Revert update changes if there is an error
+      if (isFollowing) {
+        // Unfollow
+        profileUser.followers.add(currentUser!.uid);
+      } else {
+        // Follow
+        profileUser.followers.remove(currentUser!.uid);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool isOwnProfile = (widget.uid == currentUser!.uid);
+
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         // Loaded
@@ -57,7 +93,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: Center(child: Text(user.name)),
               foregroundColor: Theme.of(context).colorScheme.primary,
               actions: [
-                IconButton(
+                if (isOwnProfile)
+                  IconButton(
                     onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -66,7 +103,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ))),
                     icon: const Icon(
                       Icons.settings,
-                    ))
+                    ),
+                  ),
               ],
             ),
             body: ListView(
@@ -108,6 +146,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 25),
+
+                // Follow button
+                if (!isOwnProfile)
+                  FollowButtonUnit(
+                    onPressed: followButtonPressed,
+                    isFollowing: user.followers.contains(currentUser!.uid),
+                  ),
+
+                const SizedBox(height: 25),
+
+                // Bio Box
                 Padding(
                   padding: const EdgeInsets.only(left: 25.0),
                   child: Row(
@@ -115,7 +164,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Text(
                         'Bio',
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ],
                   ),
