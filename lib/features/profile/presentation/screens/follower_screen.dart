@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/features/profile/presentation/components/user_tile_unit.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:lyxa_live/features/profile/presentation/screens/profile_screen.dart';
+import 'package:lyxa_live/responsive/constrained_scaffold.dart';
 
 class FollowerScreen extends StatelessWidget {
   final List<String> followers;
@@ -19,7 +20,7 @@ class FollowerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
+      child: ConstrainedScaffold(
         //App Bar
         appBar: AppBar(
           // Tab Bar

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/app.dart';
+import 'package:lyxa_live/responsive/constrained_scaffold.dart';
 import 'package:lyxa_live/themes/theme_cubit.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -13,7 +14,7 @@ class SettingsScreen extends StatelessWidget {
 
     bool isDarkMode = themeCubit.isDarkMode;
 
-    return Scaffold(
+    return ConstrainedScaffold(
       appBar: AppBar(
         title: const Text("Settings"),
       ),

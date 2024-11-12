@@ -12,6 +12,7 @@ import 'package:lyxa_live/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/features/post/presentation/cubits/post_state.dart';
+import 'package:lyxa_live/responsive/constrained_scaffold.dart';
 
 class UploadPostScreen extends StatefulWidget {
   const UploadPostScreen({super.key});
@@ -147,7 +148,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   }
 
   Widget _buildUploadPage() {
-    return Scaffold(
+    return ConstrainedScaffold(
       // App Bar
       appBar: AppBar(
         foregroundColor: Theme.of(context).colorScheme.primary,

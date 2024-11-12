@@ -14,6 +14,7 @@ import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dar
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_state.dart';
 import 'package:lyxa_live/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:lyxa_live/features/profile/presentation/screens/follower_screen.dart';
+import 'package:lyxa_live/responsive/constrained_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -90,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             print(user);
           }
 
-          return Scaffold(
+          return ConstrainedScaffold(
             appBar: AppBar(
               title: Center(child: Text(user.name)),
               foregroundColor: Theme.of(context).colorScheme.primary,

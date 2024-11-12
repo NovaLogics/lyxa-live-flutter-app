@@ -5,6 +5,7 @@ import 'package:lyxa_live/app.dart';
 import 'package:lyxa_live/features/profile/presentation/components/user_tile_unit.dart';
 import 'package:lyxa_live/features/search/presentation/cubits/search_cubit.dart';
 import 'package:lyxa_live/features/search/presentation/cubits/search_state.dart';
+import 'package:lyxa_live/responsive/constrained_scaffold.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -38,7 +39,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     // Scaffold
-    return Scaffold(
+    return ConstrainedScaffold(
       // App Bar
       appBar: AppBar(
         // Search text field
