@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/features/profile/presentation/components/user_tile_unit.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:lyxa_live/features/profile/presentation/screens/profile_screen.dart';
 
@@ -59,9 +60,7 @@ class FollowerScreen extends StatelessWidget {
                   // User loaded
                   if (snapshot.hasData) {
                     final user = snapshot.data!;
-                    return ListTile(
-                      title: Text(user.name),
-                    );
+                    return UserTileUnit(user: user);
                   }
                   // Loading
                   else if (snapshot.connectionState ==
