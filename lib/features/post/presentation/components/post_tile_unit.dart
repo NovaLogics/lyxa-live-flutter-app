@@ -299,11 +299,21 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 ),
 
                 // Comment
-                Icon(Icons.comment),
+                GestureDetector(
+                  onTap: openNewCommentBox,
+                  child: AbsorbPointer(
+                    child: Icon(
+                      Icons.comment,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ),
+
                 Text(
-                  '0',
+                  widget.post.comments.length.toString(),
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary,
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 12,
                     fontWeight: FontWeight.normal,
                   ),
                 ),
@@ -321,6 +331,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
               ],
             ),
           ),
+
+          // Caption
+
+          // Comment Section
         ],
       ),
     );
