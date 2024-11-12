@@ -10,6 +10,7 @@ import 'package:lyxa_live/features/auth/presentation/components/text_field_unit.
 import 'package:lyxa_live/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_state.dart';
+import 'package:lyxa_live/responsive/constrained_scaffold.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final ProfileUser user;
@@ -111,7 +112,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Widget _buildEditScreen() {
-    return Scaffold(
+    return ConstrainedScaffold(
       appBar: AppBar(
         title: const Text("Edit Profile"),
         foregroundColor: Theme.of(context).colorScheme.primary,

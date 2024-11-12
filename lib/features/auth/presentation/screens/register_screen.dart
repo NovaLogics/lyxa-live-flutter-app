@@ -6,6 +6,7 @@ import 'package:lyxa_live/features/auth/presentation/components/button_unit.dart
 import 'package:lyxa_live/features/auth/presentation/components/spacer_unit.dart';
 import 'package:lyxa_live/features/auth/presentation/components/text_field_unit.dart';
 import 'package:lyxa_live/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:lyxa_live/responsive/constrained_scaffold.dart';
 
 class RegisterScreen extends StatefulWidget {
   final void Function()? toggleScreens;
@@ -27,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConstrainedScaffold(
       body: SafeArea(
         child: Center(
           child: Padding(

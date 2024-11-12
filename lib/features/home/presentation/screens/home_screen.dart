@@ -6,6 +6,7 @@ import 'package:lyxa_live/features/post/presentation/components/post_tile_unit.d
 import 'package:lyxa_live/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/features/post/presentation/cubits/post_state.dart';
 import 'package:lyxa_live/features/post/presentation/screens/upload_post_screen.dart';
+import 'package:lyxa_live/responsive/constrained_scaffold.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConstrainedScaffold(
       // App bar
       appBar: AppBar(
         foregroundColor: Theme.of(context).colorScheme.primary,

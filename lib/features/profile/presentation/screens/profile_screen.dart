@@ -13,6 +13,8 @@ import 'package:lyxa_live/features/profile/presentation/components/profile_stats
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_state.dart';
 import 'package:lyxa_live/features/profile/presentation/screens/edit_profile_screen.dart';
+import 'package:lyxa_live/features/profile/presentation/screens/follower_screen.dart';
+import 'package:lyxa_live/responsive/constrained_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -89,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             print(user);
           }
 
-          return Scaffold(
+          return ConstrainedScaffold(
             appBar: AppBar(
               title: Center(child: Text(user.name)),
               foregroundColor: Theme.of(context).colorScheme.primary,
@@ -148,11 +150,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 25),
 
-                // Profile stats
-                ProfileStatsUnit(
-                  postCount: postCount,
-                  followerCount: user.followers.length,
-                  followingCount: user.following.length,
+                BlocBuilder<PostCubit, PostState>(
+                  builder: (context, state) {
+                    // Posts Loaded
+                    if (state is PostLoaded) {
+                      // Filter posts by the user id
+                      final userPosts = state.posts
+                          .where((post) => post.userId == widget.uid)
+                          .toList();
+
+                      postCount = userPosts.length;
+
+                      // Profile stats
+                      return ProfileStatsUnit(
+                        postCount: postCount,
+                        followerCount: user.followers.length,
+                        followingCount: user.following.length,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FollowerScreen(
+                              followers: user.followers,
+                              following: user.following,
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      // Profile stats
+                      return ProfileStatsUnit(
+                        postCount: postCount,
+                        followerCount: user.followers.length,
+                        followingCount: user.following.length,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FollowerScreen(
+                              followers: user.followers,
+                              following: user.following,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
 
                 // Follow button

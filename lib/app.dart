@@ -10,8 +10,10 @@ import 'package:lyxa_live/features/post/data/firebase_post_repository.dart';
 import 'package:lyxa_live/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/features/profile/data/firebase_profile_repository.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
+import 'package:lyxa_live/features/search/data/firebase_search_repository.dart';
+import 'package:lyxa_live/features/search/presentation/cubits/search_cubit.dart';
 import 'package:lyxa_live/features/storage/data/firebase_storage_repository.dart';
-import 'package:lyxa_live/themes/light_mode.dart';
+import 'package:lyxa_live/themes/theme_cubit.dart';
 
 /*
 APP - Root Level
@@ -33,6 +35,7 @@ class LyxaApp extends StatelessWidget {
   final firebaseProfileRepository = FirebaseProfileRepository();
   final firebaseStorageRepository = FirebaseStorageRepository();
   final firebasePostRepository = FirebasePostRepository();
+  final firebaseSearchRepository = FirebaseSearchRepository();
 
   LyxaApp({super.key});
 
@@ -63,41 +66,56 @@ class LyxaApp extends StatelessWidget {
             storageRepository: firebaseStorageRepository,
           ),
         ),
+
+        // Search cubit
+        BlocProvider<SearchCubit>(
+          create: (context) => SearchCubit(
+            searchRepository: firebaseSearchRepository,
+          ),
+        ),
+
+        // Theme cubit
+        BlocProvider<ThemeCubit>(
+          create: (context) => ThemeCubit(),
+        ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: lightMode,
-        home: BlocConsumer<AuthCubit, AuthState>(builder: (context, authState) {
-          if (kDebugMode) {
-            print(authState);
-          }
-          // Unauthenticated -> Auth Screen (Login/Register)
-          if (authState is Unauthenticated) {
-            return const AuthScreen();
-          }
-          // Authenticated -> Home Screen
-          else if (authState is Authenticated) {
-            return const HomeScreen();
-          }
-          // Loading
-          else {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-        },
-            // Listen for errors
-            listener: (context, state) {
-          if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
-          }
-        }),
+      child: BlocBuilder<ThemeCubit, ThemeData>(
+        builder: (context, currentTheme) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: currentTheme,
+          home:
+              BlocConsumer<AuthCubit, AuthState>(builder: (context, authState) {
+            if (kDebugMode) {
+              print(authState);
+            }
+            // Unauthenticated -> Auth Screen (Login/Register)
+            if (authState is Unauthenticated) {
+              return const AuthScreen();
+            }
+            // Authenticated -> Home Screen
+            else if (authState is Authenticated) {
+              return const HomeScreen();
+            }
+            // Loading
+            else {
+              return const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+          },
+                  // Listen for errors
+                  listener: (context, state) {
+            if (state is AuthError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            }
+          }),
+        ),
       ),
     );
   }
