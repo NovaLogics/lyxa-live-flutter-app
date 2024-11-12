@@ -10,6 +10,8 @@ import 'package:lyxa_live/features/post/data/firebase_post_repository.dart';
 import 'package:lyxa_live/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/features/profile/data/firebase_profile_repository.dart';
 import 'package:lyxa_live/features/profile/presentation/cubits/profile_cubit.dart';
+import 'package:lyxa_live/features/search/data/firebase_search_repository.dart';
+import 'package:lyxa_live/features/search/presentation/cubits/search_cubit.dart';
 import 'package:lyxa_live/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/themes/light_mode.dart';
 
@@ -33,6 +35,7 @@ class LyxaApp extends StatelessWidget {
   final firebaseProfileRepository = FirebaseProfileRepository();
   final firebaseStorageRepository = FirebaseStorageRepository();
   final firebasePostRepository = FirebasePostRepository();
+  final firebaseSearchRepository = FirebaseSearchRepository();
 
   LyxaApp({super.key});
 
@@ -61,6 +64,13 @@ class LyxaApp extends StatelessWidget {
           create: (context) => PostCubit(
             postRepository: firebasePostRepository,
             storageRepository: firebaseStorageRepository,
+          ),
+        ),
+
+        // Search cubit
+        BlocProvider<SearchCubit>(
+          create: (context) => SearchCubit(
+            searchRepository: firebaseSearchRepository,
           ),
         ),
       ],
