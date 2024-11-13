@@ -6,7 +6,7 @@ class AppStrings {
   // Login Section
   static const String welcomeBack = 'Welcome Back';
   static const String itsTimeToShareYourStory =
-      'It\'s time to share your story.';
+      'It\'s time to share your story';
   static const String notAMember = 'Not a member yet?';
   static const String registerNow = 'Register now!';
   static const String email = 'Email';

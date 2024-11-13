@@ -1,11 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
-import 'package:lyxa_live/src/features/auth/ui/components/button_unit.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold%20.dart';
 import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -38,7 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedScaffold(
+    return Scaffold(
+      appBar: null,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -48,30 +50,24 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 _buildBackgroundCircles(),
                 _buildBackdropFilter(),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildLoginIcon(),
-                    const SpacerUnit(height: AppDimens.size8),
-                    _buildTitleText(),
-                    const SpacerUnit(height: AppDimens.size24),
-                    _buildEmailTextField(),
-                    const SpacerUnit(height: AppDimens.size12),
-                    _buildPasswordTextField(),
-                    const SpacerUnit(height: AppDimens.size24),
-                    _buildLoginButton(),
-                    const SpacerUnit(height: AppDimens.size28),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: AppDimens.size24, right: AppDimens.size24),
-                      child: Divider(
-                        height: 1,
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
-                    ),
-                    const SpacerUnit(height: AppDimens.size24),
-                    _buildRegisterLink(),
-                  ],
+                ScrollableScaffold(
+                  body: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SpacerUnit(height: AppDimens.size24),
+                      _buildLoginIcon(),
+                      const SpacerUnit(height: AppDimens.size8),
+                      _buildTitleText(),
+                      const SpacerUnit(height: AppDimens.size24),
+                      _buildEmailTextField(),
+                      const SpacerUnit(height: AppDimens.size12),
+                      _buildPasswordTextField(),
+                      const SpacerUnit(height: AppDimens.size24),
+                      _buildLoginButton(),
+                      const Spacer(),
+                      _buildRegisterLink(),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -193,8 +189,8 @@ class _LoginScreenState extends State<LoginScreen> {
           // ),
           Image.asset(
         "assets/images/lyxa_banner.png",
-        height: 260.0,
-        width: 260.0,
+        height: 220.0,
+        width: 220.0,
       ),
     );
   }
@@ -209,6 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Theme.of(context).colorScheme.inversePrimary,
             fontSize: AppDimens.textSizeXLarge,
             fontWeight: FontWeight.bold,
+            fontFamily: 'Raleway',
           ),
         ),
         Text(
@@ -216,6 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
             fontSize: AppDimens.textSizeMedium,
+            fontFamily: 'Raleway',
           ),
         ),
       ],
@@ -228,6 +226,11 @@ class _LoginScreenState extends State<LoginScreen> {
       controller: _emailController,
       hintText: AppStrings.email,
       obscureText: false,
+      prefixIcon: Icon(
+        Icons.email_outlined,
+        size: 22,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 
@@ -237,6 +240,11 @@ class _LoginScreenState extends State<LoginScreen> {
       controller: _passwordController,
       hintText: AppStrings.password,
       obscureText: true,
+      prefixIcon: Icon(
+        Icons.lock_outlined,
+        size: 22,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 
@@ -255,31 +263,37 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// Displays a registration link for new users
   Widget _buildRegisterLink() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          AppStrings.notAMember,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontSize: AppDimens.textSizeMedium,
-          ),
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-        GestureDetector(
-          onTap: widget.toggleScreens,
-          child: Text(
-            AppStrings.registerNow,
+    return Padding(
+      padding: const EdgeInsets.only(
+          bottom: AppDimens.size48, top: AppDimens.size32),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            AppStrings.notAMember,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.inversePrimary,
+              color: Theme.of(context).colorScheme.primary,
               fontSize: AppDimens.textSizeMedium,
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Raleway',
             ),
           ),
-        ),
-      ],
+          const SizedBox(
+            width: 8,
+          ),
+          GestureDetector(
+            onTap: widget.toggleScreens,
+            child: Text(
+              AppStrings.registerNow,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                fontSize: AppDimens.textSizeMedium,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Raleway',
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
