@@ -4,6 +4,12 @@ import 'package:json_annotation/json_annotation.dart';
 ///cmd-> flutter packages pub run build_runner build
 part 'app_user.g.dart';
 
+class AppUserFields {
+  static const uid = 'uid';
+  static const email = 'email';
+  static const name = 'name';
+}
+
 @JsonSerializable()
 class AppUser {
   final String uid;
