@@ -46,13 +46,13 @@ class LyxaApp extends StatelessWidget {
 
   /// Define BLoC Providers for Dependency Injection
   /// & State management [Auth, Profile, Post, Search, Theme]
-  /// -> 
+  /// ->
   List<BlocProvider> _buildProviders() {
     return [
       // Authentication Cubit
       BlocProvider<AuthCubit>(
         create: (context) =>
-            AuthCubit(authRepository: _authRepository)..checkAuth(),
+            AuthCubit(authRepository: _authRepository)..checkAuthentication(),
       ),
 
       // Profile Cubit
