@@ -15,108 +15,101 @@ import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/core/themes/theme_cubit.dart';
 
-/*
-APP - Root Level
-:Tasks > Init | Impl:
-
--> Repositories > For database
-  [Firebase]
-
--> BLoC Providers > For state management
-  [Auth, Profile, Post, Search, Theme]
-
--> Check Auth State
-  [Unauthenticated  > Auth screen (Login/Register) ]
-  [Authenticated    > Home Screen ]
-*/
-
+/// Main Application Entry Point for LyxaApp
+/// Root Level ->
 class LyxaApp extends StatelessWidget {
-  final firebaseAuthRepository = FirebaseAuthRepository();
-  final firebaseProfileRepository = FirebaseProfileRepository();
-  final firebaseStorageRepository = FirebaseStorageRepository();
-  final firebasePostRepository = FirebasePostRepository();
-  final firebaseSearchRepository = FirebaseSearchRepository();
+  /// Define Repositories (Database > Firebase)
+  /// ->
+  final FirebaseAuthRepository _authRepository = FirebaseAuthRepository();
+  final FirebaseProfileRepository _profileRepository =
+      FirebaseProfileRepository();
+  final FirebaseStorageRepository _storageRepository =
+      FirebaseStorageRepository();
+  final FirebasePostRepository _postRepository = FirebasePostRepository();
+  final FirebaseSearchRepository _searchRepository = FirebaseSearchRepository();
 
   LyxaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Provide Cubit to the App
     return MultiBlocProvider(
-      providers: [
-        // Auth cubit
-        BlocProvider<AuthCubit>(
-          create: (context) => AuthCubit(
-            authRepository: firebaseAuthRepository,
-          )..checkAuth(),
-        ),
-
-        // Profile cubit
-        BlocProvider<ProfileCubit>(
-          create: (context) => ProfileCubit(
-            profileRepository: firebaseProfileRepository,
-            storageRepository: firebaseStorageRepository,
-          ),
-        ),
-
-        // Post cubit
-        BlocProvider<PostCubit>(
-          create: (context) => PostCubit(
-            postRepository: firebasePostRepository,
-            storageRepository: firebaseStorageRepository,
-          ),
-        ),
-
-        // Search cubit
-        BlocProvider<SearchCubit>(
-          create: (context) => SearchCubit(
-            searchRepository: firebaseSearchRepository,
-          ),
-        ),
-
-        // Theme cubit
-        BlocProvider<ThemeCubit>(
-          create: (context) => ThemeCubit(),
-        ),
-      ],
+      providers: _buildProviders(),
       child: BlocBuilder<ThemeCubit, ThemeData>(
         builder: (context, currentTheme) => MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: currentTheme,
-          home:
-              BlocConsumer<AuthCubit, AuthState>(builder: (context, authState) {
-            if (kDebugMode) {
-              print(authState);
-            }
-            // Unauthenticated -> Auth Screen (Login/Register)
-            if (authState is Unauthenticated) {
-              return const AuthScreen();
-            }
-            // Authenticated -> Home Screen
-            else if (authState is Authenticated) {
-              return const HomeScreen();
-            }
-            // Loading
-            else {
-              return const Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-          },
-                  // Listen for errors
-                  listener: (context, state) {
-            if (state is AuthError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                ),
-              );
-            }
-          }),
+          home: _buildHomeScreen(context),
         ),
       ),
+    );
+  }
+
+  /// Define BLoC Providers for Dependency Injection
+  /// & State management [Auth, Profile, Post, Search, Theme]
+  /// ->
+  List<BlocProvider> _buildProviders() {
+    return [
+      // Authentication Cubit
+      BlocProvider<AuthCubit>(
+        create: (context) =>
+            AuthCubit(authRepository: _authRepository)..checkAuthentication(),
+      ),
+
+      // Profile Cubit
+      BlocProvider<ProfileCubit>(
+        create: (context) => ProfileCubit(
+          profileRepository: _profileRepository,
+          storageRepository: _storageRepository,
+        ),
+      ),
+
+      // Post Cubit
+      BlocProvider<PostCubit>(
+        create: (context) => PostCubit(
+          postRepository: _postRepository,
+          storageRepository: _storageRepository,
+        ),
+      ),
+
+      // Search Cubit
+      BlocProvider<SearchCubit>(
+        create: (context) => SearchCubit(searchRepository: _searchRepository),
+      ),
+
+      // Theme Cubit
+      BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
+    ];
+  }
+
+  /// Displays the appropriate screen based on the user's authentication status.
+  Widget _buildHomeScreen(BuildContext context) {
+    return BlocConsumer<AuthCubit, AuthState>(
+      builder: (context, authState) {
+        if (kDebugMode) print(authState);
+
+        if (authState is Unauthenticated) {
+          // Show Authentication Screen
+          return const AuthScreen();
+        } else if (authState is Authenticated) {
+          // Show Main Home Screen
+          return const HomeScreen();
+        } else {
+          // Show Loading Indicator
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
+      listener: (context, state) {
+        // Show error messages if authentication fails
+        if (state is AuthError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
     );
   }
 }

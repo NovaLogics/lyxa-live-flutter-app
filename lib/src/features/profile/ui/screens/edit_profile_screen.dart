@@ -191,6 +191,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               controller: bioTextController,
               hintText: widget.user.bio,
               obscureText: false,
+              prefixIcon: null,
             ),
           )
         ],

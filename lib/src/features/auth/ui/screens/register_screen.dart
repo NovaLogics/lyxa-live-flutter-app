@@ -126,6 +126,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: controller,
       hintText: AppStrings.name,
       obscureText: false,
+    prefixIcon: null,
     );
   }
 
@@ -134,6 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: controller,
       hintText: AppStrings.email,
       obscureText: false,
+    prefixIcon: null,
     );
   }
 
@@ -142,6 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: controller,
       hintText: AppStrings.password,
       obscureText: true,
+     prefixIcon: null,
     );
   }
 
@@ -150,6 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: controller,
       hintText: AppStrings.confirmPassword,
       obscureText: true,
+      prefixIcon: null,
     );
   }
 

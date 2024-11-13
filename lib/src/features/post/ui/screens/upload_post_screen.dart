@@ -184,6 +184,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
               controller: textController,
               hintText: 'Caption',
               obscureText: false,
+            prefixIcon: null,
             ),
           ],
         ),

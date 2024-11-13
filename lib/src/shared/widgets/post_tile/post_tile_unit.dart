@@ -112,6 +112,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           controller: commentTextController,
           hintText: "Type a comment",
           obscureText: false,
+          prefixIcon: null,
         ),
         actions: [
           // Cancel button

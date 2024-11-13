@@ -1,26 +1,28 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
-import 'package:lyxa_live/src/features/auth/ui/components/button_unit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold%20.dart';
 import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 /*
-LOGIN SCREEN
-: On this screen > An existing user can login with their > email & password
+LOGIN SCREEN:
+Allows existing users to log in with email and password. 
 
--> Once the user successfully logs in, 
-    thery will be redirected to the Home Screen
+-> After successful login, users are redirected to the Home Screen.
 
--> If user doesn't have an account yet, 
-    they can go to Register Screen from here to create one.
+-> New users can navigate to the Register Screen.
 */
 
 class LoginScreen extends StatefulWidget {
-  final void Function()? toggleScreens;
+  final VoidCallback? toggleScreens;
 
   const LoginScreen({
     super.key,
@@ -32,37 +34,41 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedScaffold(
+    return Scaffold(
+      appBar: null,
       body: SafeArea(
         child: Center(
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
               children: [
-                _loginScreenIcon(),
-                const SpacerUnit(height: AppDimens.size52),
-                _titleText(),
-                const SpacerUnit(height: AppDimens.size24),
-                _emailTextField(
-                  emailController,
+                _buildBackgroundCircles(),
+                _buildBackdropFilter(),
+                ScrollableScaffold(
+                  body: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SpacerUnit(height: AppDimens.size24),
+                      _buildLoginIcon(),
+                      const SpacerUnit(height: AppDimens.size8),
+                      _buildTitleText(),
+                      const SpacerUnit(height: AppDimens.size24),
+                      _buildEmailTextField(),
+                      const SpacerUnit(height: AppDimens.size12),
+                      _buildPasswordTextField(),
+                      const SpacerUnit(height: AppDimens.size24),
+                      _buildLoginButton(),
+                      const Spacer(),
+                      _buildRegisterLink(),
+                    ],
+                  ),
                 ),
-                const SpacerUnit(height: AppDimens.size12),
-                _passwordTextField(
-                  passwordController,
-                ),
-                const SpacerUnit(height: AppDimens.size24),
-                _logInButton(
-                  _login,
-                ),
-                const SpacerUnit(height: AppDimens.size52),
-                _registerLink(),
               ],
             ),
           ),
@@ -73,14 +79,68 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
+  Widget _buildBackdropFilter() {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
+      child: Container(
+        decoration: const BoxDecoration(color: Colors.transparent),
+      ),
+    );
+  }
+
+  Widget _buildBackgroundCircles() {
+    return Stack(
+      children: [
+        _buildCircle(const AlignmentDirectional(3, -0.3), Colors.deepPurple),
+        _buildCircle(const AlignmentDirectional(-3, -0.3), Colors.deepPurple),
+        _buildRectangle(
+          const AlignmentDirectional(0, -1.2),
+          Colors.amber[200] ?? Colors.orangeAccent,
+          300,
+          200,
+        ),
+        _buildRectangle(
+          const AlignmentDirectional(-0.3, 1.5),
+          Colors.blueGrey[900] ?? Colors.orangeAccent,
+          250,
+          300,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCircle(AlignmentDirectional alignment, Color color) {
+    return Align(
+      alignment: alignment,
+      child: Container(
+        height: 300,
+        width: 300,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+      ),
+    );
+  }
+
+  Widget _buildRectangle(AlignmentDirectional alignment, Color color,
+      double height, double width) {
+    return Align(
+      alignment: alignment,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(color: color),
+      ),
+    );
+  }
+
+  /// Handles login action and displays a message if fields are empty
   void _login() {
-    final String email = emailController.text;
-    final String password = passwordController.text;
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
 
     final authCubit = context.read<AuthCubit>();
 
@@ -88,73 +148,152 @@ class _LoginScreenState extends State<LoginScreen> {
       authCubit.login(email, password);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text(AppStrings.loginErrorMessage)));
+        const SnackBar(content: Text(AppStrings.loginErrorMessage)),
+      );
     }
   }
 
-  Widget _loginScreenIcon() {
-    return Icon(
-      Icons.lock_open_rounded,
-      size: AppDimens.iconSize2XLarge,
-      color: Theme.of(context).colorScheme.primary,
-    );
-  }
+  /// Builds the icon displayed on the login screen
+  Widget _buildLoginIcon() {
+    return
+        // Icon(
+        //   Icons.lock_open_rounded,
+        //   size: AppDimens.iconSize2XLarge,
+        //   color: Theme.of(context).colorScheme.primary,
+        // );
 
-  Widget _titleText() {
-    return Text(
-      AppStrings.welcomeBackMessage,
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
-        fontSize: AppDimens.textSizeMedium,
+        //     Center(
+        //   child: ClipRRect(
+        //     borderRadius: BorderRadius.circular(8.0),
+        //     child: Image.asset(
+        //       "assets/images/lyxa_banner.png",
+        //       height: 256.0,
+        //       width: 256.0,
+        //     ),
+        //   ),
+        // );
+
+        Center(
+      child:
+          // Card(
+          //   elevation: 12.0,
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(15.0),
+          //   ),
+          //   clipBehavior: Clip.hardEdge,
+          //   child: Image.asset(
+          //     "assets/images/lyxa_banner.png",
+          //     height: 256.0,
+          //     width: 256.0,
+          //   ),
+          // ),
+          Image.asset(
+        "assets/images/lyxa_banner.png",
+        height: 220.0,
+        width: 220.0,
       ),
     );
   }
 
-  Widget _emailTextField(TextEditingController controller) {
-    return TextFieldUnit(
-      controller: controller,
-      hintText: AppStrings.email,
-      obscureText: false,
-    );
-  }
-
-  Widget _passwordTextField(TextEditingController controller) {
-    return TextFieldUnit(
-      controller: controller,
-      hintText: AppStrings.password,
-      obscureText: true,
-    );
-  }
-
-  Widget _logInButton(Function()? onTap) {
-    return ButtonUnit(
-      onTap: onTap,
-      text: AppStrings.login,
-    );
-  }
-
-  Widget _registerLink() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+  /// Displays the title text welcoming the user back
+  Widget _buildTitleText() {
+    return Column(
       children: [
         Text(
-          AppStrings.notAMember,
+          AppStrings.welcomeBack.toUpperCase(),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.inversePrimary,
+            fontSize: AppDimens.textSizeXLarge,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Raleway',
+          ),
+        ),
+        Text(
+          AppStrings.itsTimeToShareYourStory,
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
             fontSize: AppDimens.textSizeMedium,
-          ),
-        ),
-        GestureDetector(
-          onTap: widget.toggleScreens,
-          child: Text(
-            AppStrings.registerNow,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
-                fontSize: AppDimens.textSizeMedium,
-                fontWeight: FontWeight.bold),
+            fontFamily: 'Raleway',
           ),
         ),
       ],
+    );
+  }
+
+  /// Builds the email text field for user input
+  Widget _buildEmailTextField() {
+    return TextFieldUnit(
+      controller: _emailController,
+      hintText: AppStrings.email,
+      obscureText: false,
+      prefixIcon: Icon(
+        Icons.email_outlined,
+        size: 22,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+    );
+  }
+
+  /// Builds the password text field for user input
+  Widget _buildPasswordTextField() {
+    return TextFieldUnit(
+      controller: _passwordController,
+      hintText: AppStrings.password,
+      obscureText: true,
+      prefixIcon: Icon(
+        Icons.lock_outlined,
+        size: 22,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+    );
+  }
+
+  /// Builds the login button, initiating the login process when tapped
+  Widget _buildLoginButton() {
+    return
+        // ButtonUnit(
+        //   onTap: _login,
+        //   text: AppStrings.login,
+        // );
+        GradientButton(
+      text: AppStrings.login,
+      onPressed: _login,
+    );
+  }
+
+  /// Displays a registration link for new users
+  Widget _buildRegisterLink() {
+    return Padding(
+      padding: const EdgeInsets.only(
+          bottom: AppDimens.size48, top: AppDimens.size32),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            AppStrings.notAMember,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontSize: AppDimens.textSizeMedium,
+              fontFamily: 'Raleway',
+            ),
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          GestureDetector(
+            onTap: widget.toggleScreens,
+            child: Text(
+              AppStrings.registerNow,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                fontSize: AppDimens.textSizeMedium,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Raleway',
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

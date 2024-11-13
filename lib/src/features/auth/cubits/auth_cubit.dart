@@ -1,21 +1,22 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/utils/helper/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 
-/*
-Auth Cubit: State Management
-*/
-
+/// AuthCubit: Handles authentication state management
+/// ->
 class AuthCubit extends Cubit<AuthState> {
-  final AuthRepository authRepository;
+  final AuthRepository _authRepository;
   AppUser? _currentUser;
 
-  AuthCubit({required this.authRepository}) : super(AuthInitial());
+  AuthCubit({required AuthRepository authRepository})
+      : _authRepository = authRepository,
+        super(AuthInitial());
 
-  // Check user already authenticated
-  void checkAuth() async {
-    final AppUser? user = await authRepository.getCurrentUser();
+  /// Checks if a user is already authenticated
+  Future<void> checkAuthentication() async {
+    final AppUser? user = await _authRepository.getCurrentUser();
 
     if (user != null) {
       _currentUser = user;
@@ -25,15 +26,16 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // Get current user
+  /// Retrieves the current authenticated user.
   AppUser? get currentUser => _currentUser;
 
-  // Login with email & password
+  /// Logs in with email and password.
   Future<void> login(String email, String password) async {
     try {
       emit(AuthLoading());
 
-      final user = await authRepository.loginWithEmailPassword(email, password);
+      final user =
+          await _authRepository.loginWithEmailPassword(email, password);
 
       if (user != null) {
         _currentUser = user;
@@ -42,18 +44,17 @@ class AuthCubit extends Cubit<AuthState> {
         emit(Unauthenticated());
       }
     } catch (error) {
-      emit(AuthError(error.toString()));
-      emit(Unauthenticated());
+      _handleAuthError(error);
     }
   }
 
-  // Register with email & password
+  /// Registers a new user with email and password.
   Future<void> register(String name, String email, String password) async {
     try {
       emit(AuthLoading());
 
-      final user =
-          await authRepository.registerWithEmailPassword(name, email, password);
+      final user = await _authRepository.registerWithEmailPassword(
+          name, email, password);
 
       if (user != null) {
         _currentUser = user;
@@ -62,14 +63,22 @@ class AuthCubit extends Cubit<AuthState> {
         emit(Unauthenticated());
       }
     } catch (error) {
-      emit(AuthError(error.toString()));
-      emit(Unauthenticated());
+      _handleAuthError(error);
     }
   }
 
-  // Logout
+  /// Logs out the current user.
   Future<void> logout() async {
-    authRepository.logout();
+    await _authRepository.logout();
+    _currentUser = null;
     emit(Unauthenticated());
+  }
+
+  /// Helper ->
+  /// Handles authentication errors by emitting an error state
+  void _handleAuthError(dynamic error) {
+    emit(AuthError(error.toString()));
+    emit(Unauthenticated());
+    Logger.logError(error.toString());
   }
 }
