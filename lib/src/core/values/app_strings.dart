@@ -4,9 +4,11 @@ class AppStrings {
   static const String errorMessage = 'Something went wrong';
 
   // Login Section
-  static const String welcomeBackMessage = 'Welcome Back, You\'ve been missed!';
-  static const String notAMember = 'Not a member? ';
-  static const String registerNow = 'Register Now';
+  static const String welcomeBack = 'Welcome Back';
+  static const String itsTimeToShareYourStory =
+      'It\'s time to share your story.';
+  static const String notAMember = 'Not a member yet?';
+  static const String registerNow = 'Register now!';
   static const String email = 'Email';
   static const String password = 'Password';
   static const String confirmPassword = 'Confirm Password';
