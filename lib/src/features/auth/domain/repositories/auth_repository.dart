@@ -1,20 +1,12 @@
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 
-/*
-Auth Repository : Outlines the possible auth operations for this app
-*/
-
+/// Defines authentication operations for the app
+/// ->
 abstract class AuthRepository {
-  Future<AppUser?> loginWithEmailPassword(
-    String email,
-    String password,
-  );
+  Future<AppUser?> loginWithEmailPassword(String email, String password);
 
   Future<AppUser?> registerWithEmailPassword(
-    String name,
-    String email,
-    String password,
-  );
+      String name, String email, String password);
 
   Future<void> logout();
 
