@@ -14,6 +14,11 @@ class AppStrings {
   static const String loginErrorMessage =
       'Please enter both email and password';
 
+  // Authentication error messages
+  static const String loginFailedError = 'Login Failed: ';
+  static const String registrationFailedError = 'Registration Failed: ';
+  static const String generalError = 'An error occurred: ';
+
   // Register Section
   static const String createAccountMessage = 'Let\'s create an account for you';
   static const String alreadyAMember = 'Already a member? ';
@@ -25,7 +30,8 @@ class AppStrings {
 
   // Profile Section
   static const String userNotFoundError = 'User not found';
-  static const String failedToFetchUserError = 'Failed to fetch user for profile update';
+  static const String failedToFetchUserError =
+      'Failed to fetch user for profile update';
 
   static const String titleHome = "H O M E";
   static const String titleProfile = "P R O F I L E";
