@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/button_unit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -41,20 +44,35 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
               children: [
-                _buildLoginIcon(),
-                const SpacerUnit(height: AppDimens.size24),
-                _buildTitleText(),
-                const SpacerUnit(height: AppDimens.size24),
-                _buildEmailTextField(),
-                const SpacerUnit(height: AppDimens.size12),
-                _buildPasswordTextField(),
-                const SpacerUnit(height: AppDimens.size24),
-                _buildLoginButton(),
-                const SpacerUnit(height: AppDimens.size52),
-                _buildRegisterLink(),
+                _buildBackgroundCircles(),
+                _buildBackdropFilter(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildLoginIcon(),
+                    const SpacerUnit(height: AppDimens.size8),
+                    _buildTitleText(),
+                    const SpacerUnit(height: AppDimens.size24),
+                    _buildEmailTextField(),
+                    const SpacerUnit(height: AppDimens.size12),
+                    _buildPasswordTextField(),
+                    const SpacerUnit(height: AppDimens.size24),
+                    _buildLoginButton(),
+                    const SpacerUnit(height: AppDimens.size28),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: AppDimens.size24, right: AppDimens.size24),
+                      child: Divider(
+                        height: 1,
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
+                    const SpacerUnit(height: AppDimens.size24),
+                    _buildRegisterLink(),
+                  ],
+                ),
               ],
             ),
           ),
@@ -68,6 +86,59 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Widget _buildBackdropFilter() {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
+      child: Container(
+        decoration: const BoxDecoration(color: Colors.transparent),
+      ),
+    );
+  }
+
+  Widget _buildBackgroundCircles() {
+    return Stack(
+      children: [
+        _buildCircle(const AlignmentDirectional(3, -0.3), Colors.deepPurple),
+        _buildCircle(const AlignmentDirectional(-3, -0.3), Colors.deepPurple),
+        _buildRectangle(
+          const AlignmentDirectional(0, -1.2),
+          Colors.amber[200] ?? Colors.orangeAccent,
+          300,
+          200,
+        ),
+        _buildRectangle(
+          const AlignmentDirectional(-0.3, 1.5),
+          Colors.blueGrey[900] ?? Colors.orangeAccent,
+          250,
+          300,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCircle(AlignmentDirectional alignment, Color color) {
+    return Align(
+      alignment: alignment,
+      child: Container(
+        height: 300,
+        width: 300,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+      ),
+    );
+  }
+
+  Widget _buildRectangle(AlignmentDirectional alignment, Color color,
+      double height, double width) {
+    return Align(
+      alignment: alignment,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(color: color),
+      ),
+    );
   }
 
   /// Handles login action and displays a message if fields are empty
@@ -122,20 +193,32 @@ class _LoginScreenState extends State<LoginScreen> {
           // ),
           Image.asset(
         "assets/images/lyxa_banner.png",
-        height: 300.0,
-        width: 300.0,
+        height: 260.0,
+        width: 260.0,
       ),
     );
   }
 
   /// Displays the title text welcoming the user back
   Widget _buildTitleText() {
-    return Text(
-      AppStrings.welcomeBackMessage,
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
-        fontSize: AppDimens.textSizeMedium,
-      ),
+    return Column(
+      children: [
+        Text(
+          AppStrings.welcomeBack.toUpperCase(),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.inversePrimary,
+            fontSize: AppDimens.textSizeXLarge,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          AppStrings.itsTimeToShareYourStory,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontSize: AppDimens.textSizeMedium,
+          ),
+        ),
+      ],
     );
   }
 
@@ -159,9 +242,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// Builds the login button, initiating the login process when tapped
   Widget _buildLoginButton() {
-    return ButtonUnit(
-      onTap: _login,
+    return
+        // ButtonUnit(
+        //   onTap: _login,
+        //   text: AppStrings.login,
+        // );
+        GradientButton(
       text: AppStrings.login,
+      onPressed: _login,
     );
   }
 
@@ -176,6 +264,9 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Theme.of(context).colorScheme.primary,
             fontSize: AppDimens.textSizeMedium,
           ),
+        ),
+        const SizedBox(
+          width: 8,
         ),
         GestureDetector(
           onTap: widget.toggleScreens,
