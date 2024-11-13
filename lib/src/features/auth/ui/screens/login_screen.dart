@@ -39,12 +39,13 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
+            padding:
+                const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildLoginIcon(),
-                const SpacerUnit(height: AppDimens.size52),
+                const SpacerUnit(height: AppDimens.size24),
                 _buildTitleText(),
                 const SpacerUnit(height: AppDimens.size24),
                 _buildEmailTextField(),
@@ -87,10 +88,43 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// Builds the icon displayed on the login screen
   Widget _buildLoginIcon() {
-    return Icon(
-      Icons.lock_open_rounded,
-      size: AppDimens.iconSize2XLarge,
-      color: Theme.of(context).colorScheme.primary,
+    return
+        // Icon(
+        //   Icons.lock_open_rounded,
+        //   size: AppDimens.iconSize2XLarge,
+        //   color: Theme.of(context).colorScheme.primary,
+        // );
+
+        //     Center(
+        //   child: ClipRRect(
+        //     borderRadius: BorderRadius.circular(8.0),
+        //     child: Image.asset(
+        //       "assets/images/lyxa_banner.png",
+        //       height: 256.0,
+        //       width: 256.0,
+        //     ),
+        //   ),
+        // );
+
+        Center(
+      child:
+          // Card(
+          //   elevation: 12.0,
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(15.0),
+          //   ),
+          //   clipBehavior: Clip.hardEdge,
+          //   child: Image.asset(
+          //     "assets/images/lyxa_banner.png",
+          //     height: 256.0,
+          //     width: 256.0,
+          //   ),
+          // ),
+          Image.asset(
+        "assets/images/lyxa_banner.png",
+        height: 300.0,
+        width: 300.0,
+      ),
     );
   }
 
@@ -158,4 +192,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
