@@ -35,6 +35,12 @@ class AppStrings {
   static const String failedToFetchUserError =
       'Failed to fetch user for profile update';
 
+// Hint Text Section
+  static const String hintEmail = 'Email (e.g., name@address.com)';
+  static const String hintUsername = 'Username (e.g., User_Name)';
+  static const String hintPassword = 'Password (e.g., P@ssw0rd)';
+  static const String hintConfirmPassword = 'Confirm Password (e.g., P@ssw0rd)';
+
   static const String titleHome = "H O M E";
   static const String titleProfile = "P R O F I L E";
   static const String titleSearch = "S E A R C H";
