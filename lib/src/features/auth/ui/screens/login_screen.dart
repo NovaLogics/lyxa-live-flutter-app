@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
   /// Builds the login button, initiating the login process when tapped
   Widget _buildLoginButton() {
     return GradientButton(
-      text: AppStrings.login,
+      text: AppStrings.login.toUpperCase(),
       onPressed: _login,
     );
   }

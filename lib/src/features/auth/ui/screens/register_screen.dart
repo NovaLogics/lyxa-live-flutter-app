@@ -132,7 +132,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: controller,
       hintText: AppStrings.name,
       obscureText: false,
-      prefixIcon: null,
+      prefixIcon: Icon(
+        Icons.person_outline,
+        size: AppDimens.prefixIconSizeMedium,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 
@@ -141,7 +145,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: controller,
       hintText: AppStrings.email,
       obscureText: false,
-      prefixIcon: null,
+      prefixIcon: Icon(
+        Icons.email_outlined,
+        size: AppDimens.prefixIconSizeMedium,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 
@@ -150,7 +158,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: controller,
       hintText: AppStrings.password,
       obscureText: true,
-      prefixIcon: null,
+      prefixIcon: Icon(
+        Icons.lock_outlined,
+        size: AppDimens.prefixIconSizeMedium,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 
@@ -159,13 +171,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: controller,
       hintText: AppStrings.confirmPassword,
       obscureText: true,
-      prefixIcon: null,
+      prefixIcon: Icon(
+        Icons.lock_outlined,
+        size: AppDimens.prefixIconSizeMedium,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 
   Widget _signUpButton(Function() onTap) {
     return GradientButton(
-      text: AppStrings.signUp,
+      text: AppStrings.signUp.toUpperCase(),
       onPressed: onTap,
     );
   }
