@@ -44,6 +44,8 @@ class AppDimens {
   static const double iconSizeXLarge = 64.0;
   static const double iconSize2XLarge = 72.0;
 
+  static const double prefixIconSizeMedium = 22.0;
+
   // General Sizes for custom components
   static const double sizeXSmall = 8.0;
   static const double sizeSmall = 24.0;
@@ -53,8 +55,12 @@ class AppDimens {
   static const double size2XLarge = 96.0;
   static const double size3XLarge = 128.0;
 
+  static const double bannerSizeMedium = 220.0;
 
- // Custom Sizes
+  static const double containerSize400 = 400.0;
+  static const double containerSize430 = 430.0;
+
+  // Custom Sizes
   static const double size4 = 4.0;
   static const double size8 = 8.0;
   static const double size12 = 12.0;
