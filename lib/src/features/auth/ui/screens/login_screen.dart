@@ -43,38 +43,34 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: null,
-      body: SafeArea(
-        child: Center(
-          child: Stack(
-            children: [
-              _buildGradientBackground(),
-              //  _buildBackdropFilter(),
-              ScrollableScaffold(
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimens.paddingLarge),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SpacerUnit(height: AppDimens.size24),
-                      _buildLoginIcon(),
-                      const SpacerUnit(height: AppDimens.size8),
-                      _buildTitleText(),
-                      const SpacerUnit(height: AppDimens.size24),
-                      _buildEmailTextField(),
-                      const SpacerUnit(height: AppDimens.size12),
-                      _buildPasswordTextField(),
-                      const SpacerUnit(height: AppDimens.size24),
-                      _buildLoginButton(),
-                      const Spacer(),
-                      _buildRegisterLink(),
-                    ],
-                  ),
-                ),
+      body: Stack(
+        children: [
+          _buildGradientBackground(),
+          ScrollableScaffold(
+            body: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimens.paddingLarge,
               ),
-            ],
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SpacerUnit(height: AppDimens.size24),
+                  _buildLoginIcon(),
+                  const SpacerUnit(height: AppDimens.size8),
+                  _buildTitleText(),
+                  const SpacerUnit(height: AppDimens.size24),
+                  _buildEmailTextField(),
+                  const SpacerUnit(height: AppDimens.size12),
+                  _buildPasswordTextField(),
+                  const SpacerUnit(height: AppDimens.size24),
+                  _buildLoginButton(),
+                  const Spacer(),
+                  _buildRegisterLink(),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -86,41 +82,37 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Widget _buildBackdropFilter() {
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
-      child: Container(
-        decoration: const BoxDecoration(color: Colors.transparent),
-      ),
-    );
-  }
-
   Widget _buildGradientBackground() {
-    return Stack(
-      children: [
-        _buildCircle(const AlignmentDirectional(3, -0.3),
-            Colors.deepPurple[700] ?? Colors.deepPurple),
-        _buildCircle(const AlignmentDirectional(-3, -0.3),
-            Colors.deepPurple[700] ?? Colors.deepPurple),
-        _buildCircle(
-          const AlignmentDirectional(0, -1.2),
-          Colors.blueGrey[900] ?? Colors.blueGrey,
-          height: 300,
-          width: 250,
+    return Center(
+      child: SizedBox(
+        width: 400,
+        child: Stack(
+          children: [
+            _buildCircle(const AlignmentDirectional(3, -0.3),
+                Colors.deepPurple[700] ?? Colors.deepPurple),
+            _buildCircle(const AlignmentDirectional(-3, -0.3),
+                Colors.deepPurple[700] ?? Colors.deepPurple),
+            _buildCircle(
+              const AlignmentDirectional(0, -1.2),
+              Colors.blueGrey[900] ?? Colors.blueGrey,
+              height: 300,
+              width: 250,
+            ),
+            _buildCircle(
+              const AlignmentDirectional(-0.3, 1.5),
+              Colors.blueGrey[900] ?? Colors.blueGrey,
+              height: 250,
+              width: 300,
+            ),
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
+              child: Container(
+                decoration: const BoxDecoration(color: Colors.transparent),
+              ),
+            ),
+          ],
         ),
-        _buildCircle(
-          const AlignmentDirectional(-0.3, 1.5),
-          Colors.blueGrey[900] ?? Colors.blueGrey,
-          height: 250,
-          width: 300,
-        ),
-        BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
-          child: Container(
-            decoration: const BoxDecoration(color: Colors.transparent),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -136,18 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
         height: height,
         width: width,
         decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-      ),
-    );
-  }
-
-  Widget _buildRectangle(AlignmentDirectional alignment, Color color,
-      double height, double width) {
-    return Align(
-      alignment: alignment,
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(color: color),
       ),
     );
   }
