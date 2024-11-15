@@ -23,7 +23,7 @@ class AppStrings {
 
   // Register Section
   static const String createAccountMessage = 'Let\'s create an account for you';
-  static const String alreadyAMember = 'Already a member? ';
+  static const String alreadyAMember = 'Already a member?';
   static const String loginNow = 'Login Now';
   static const String name = 'Name';
   static const String signUp = 'SignUp';

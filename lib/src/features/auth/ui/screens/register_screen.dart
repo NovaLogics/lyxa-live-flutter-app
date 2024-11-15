@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
-import 'package:lyxa_live/src/features/auth/ui/components/button_unit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
@@ -29,7 +30,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return ScrollableScaffold(
       body: SafeArea(
         child: Padding(
@@ -39,7 +39,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _registerScreenIcon(),
+              const SpacerUnit(height: AppDimens.size12),
+              _buildTopBanner(),
               const SpacerUnit(height: AppDimens.size52),
               _titleText(),
               const SpacerUnit(height: AppDimens.size24),
@@ -104,11 +105,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  Widget _registerScreenIcon() {
-    return Icon(
-      Icons.lock_open_rounded,
-      size: AppDimens.iconSize2XLarge,
-      color: Theme.of(context).colorScheme.primary,
+  /// Builds the logo displayed on the register screen
+  Widget _buildTopBanner() {
+    return Center(
+      child: Image.asset(
+        IMAGE_PATH_LYXA_BANNER,
+        height: AppDimens.size3XLarge,
+        width: AppDimens.size3XLarge,
+      ),
     );
   }
 
@@ -117,7 +121,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       AppStrings.createAccountMessage,
       style: TextStyle(
         color: Theme.of(context).colorScheme.primary,
-        fontSize: AppDimens.textSizeMedium,
+        fontSize: AppDimens.textSizeLarge,
+        fontFamily: FONT_RALEWAY,
       ),
     );
   }
@@ -158,35 +163,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _signUpButton(Function()? onTap) {
-    return ButtonUnit(
-      onTap: onTap,
+  Widget _signUpButton(Function() onTap) {
+    return GradientButton(
       text: AppStrings.signUp,
+      onPressed: onTap,
     );
   }
 
   Widget _loginLink() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          AppStrings.alreadyAMember,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontSize: AppDimens.textSizeMedium,
-          ),
-        ),
-        GestureDetector(
-          onTap: widget.onToggle,
-          child: Text(
-            AppStrings.loginNow,
+    return Padding(
+      padding: const EdgeInsets.only(
+        bottom: AppDimens.size48,
+        top: AppDimens.size32,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            AppStrings.alreadyAMember,
             style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontSize: AppDimens.textSizeMedium,
+              fontFamily: FONT_RALEWAY,
+            ),
+          ),
+          const SizedBox(
+            width: AppDimens.size8,
+          ),
+          GestureDetector(
+            onTap: widget.onToggle,
+            child: Text(
+              AppStrings.loginNow,
+              style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 fontSize: AppDimens.textSizeMedium,
-                fontWeight: FontWeight.bold),
+                fontWeight: FontWeight.bold,
+                fontFamily: FONT_RALEWAY,
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
