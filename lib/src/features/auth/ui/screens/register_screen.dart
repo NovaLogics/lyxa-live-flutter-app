@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/button_unit.dart';
-import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold%20.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
-import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class RegisterScreen extends StatefulWidget {
-  final void Function()? toggleScreens;
+  final void Function()? onToggle;
 
   const RegisterScreen({
     super.key,
-    required this.toggleScreens,
+    required this.onToggle,
   });
 
   @override
@@ -31,14 +29,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        // Transparent status bar
-        statusBarColor: Colors.transparent,
-        // Dark text for status bar
-        statusBarBrightness: Brightness.dark,
-      ),
-    );
 
     return ScrollableScaffold(
       body: SafeArea(
@@ -187,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
         GestureDetector(
-          onTap: widget.toggleScreens,
+          onTap: widget.onToggle,
           child: Text(
             AppStrings.loginNow,
             style: TextStyle(

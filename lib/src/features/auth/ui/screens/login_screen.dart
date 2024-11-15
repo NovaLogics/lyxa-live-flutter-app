@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
-import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold%20.dart';
-import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -19,11 +16,11 @@ Allows existing users to log in with email and password.
 */
 
 class LoginScreen extends StatefulWidget {
-  final VoidCallback? toggleScreens;
+  final VoidCallback? onToggle;
 
   const LoginScreen({
     super.key,
-    required this.toggleScreens,
+    required this.onToggle,
   });
 
   @override
@@ -36,46 +33,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        // Transparent status bar
-        statusBarColor: Colors.transparent,
-        // Dark text for status bar
-        statusBarBrightness: Brightness.dark,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimens.paddingLarge,
       ),
-    );
-
-    return Scaffold(
-      appBar: null,
-      body: Stack(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const GradientBackgroundUnit(
-            width: AppDimens.containerSize400,
-          ),
-          ScrollableScaffold(
-            body: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimens.paddingLarge,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SpacerUnit(height: AppDimens.size24),
-                  _buildTopBanner(),
-                  const SpacerUnit(height: AppDimens.size8),
-                  _buildTitleText(),
-                  const SpacerUnit(height: AppDimens.size24),
-                  _buildEmailTextField(),
-                  const SpacerUnit(height: AppDimens.size12),
-                  _buildPasswordTextField(),
-                  const SpacerUnit(height: AppDimens.size24),
-                  _buildLoginButton(),
-                  const Spacer(),
-                  _buildRegisterLink(),
-                ],
-              ),
-            ),
-          ),
+          const SpacerUnit(height: AppDimens.size64),
+          _buildTopBanner(),
+          const SpacerUnit(height: AppDimens.size8),
+          _buildTitleText(),
+          const SpacerUnit(height: AppDimens.size24),
+          _buildEmailTextField(),
+          const SpacerUnit(height: AppDimens.size12),
+          _buildPasswordTextField(),
+          const SpacerUnit(height: AppDimens.size24),
+          _buildLoginButton(),
+          const Spacer(),
+          _buildRegisterLink(),
         ],
       ),
     );
@@ -198,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
             width: AppDimens.size8,
           ),
           GestureDetector(
-            onTap: widget.toggleScreens,
+            onTap: widget.onToggle,
             child: Text(
               AppStrings.registerNow,
               style: TextStyle(
