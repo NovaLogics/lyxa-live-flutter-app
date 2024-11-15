@@ -29,8 +29,8 @@ class Validator {
       return "Username cannot be empty";
     } else if (value.length < 3) {
       return "Username should be at least 3 characters long";
-    } else if (value.length > 15) {
-      return "Username should not be greater than 15 characters";
+    } else if (value.length > 30) {
+      return "Username should not be greater than 30 characters";
     } else if (!RegExp(r"^[a-zA-Z0-9_]+$").hasMatch(value)) {
       return "Username can only contain letters, numbers, and underscores";
     } else {
