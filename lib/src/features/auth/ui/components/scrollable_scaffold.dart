@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 
 class ScrollableScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
@@ -24,7 +25,7 @@ class ScrollableScaffold extends StatelessWidget {
             child: SingleChildScrollView(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxWidth: 430,
+                  maxWidth: AppDimens.containerSize430,
                   minHeight: constraints.maxHeight,
                 ),
                 child: IntrinsicHeight(
