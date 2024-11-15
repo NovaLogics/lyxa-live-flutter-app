@@ -19,7 +19,11 @@ class Authenticated extends AuthState {
 }
 
 // UNAUTHENTICATED STATE -> indicating that the user is not authenticated
-class Unauthenticated extends AuthState {}
+class Unauthenticated extends AuthState {
+    final AppUser? user;
+
+  Unauthenticated(this.user);
+}
 
 // ERROR STATE -> containing an error message when authentication fails
 class AuthError extends AuthState {
