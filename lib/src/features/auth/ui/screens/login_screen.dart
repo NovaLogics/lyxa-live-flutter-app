@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/helper/validator.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
@@ -28,6 +29,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -37,22 +39,25 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimens.paddingLarge,
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SpacerUnit(height: AppDimens.size64),
-          _buildTopBanner(),
-          const SpacerUnit(height: AppDimens.size8),
-          _buildTitleText(),
-          const SpacerUnit(height: AppDimens.size24),
-          _buildEmailTextField(),
-          const SpacerUnit(height: AppDimens.size12),
-          _buildPasswordTextField(),
-          const SpacerUnit(height: AppDimens.size24),
-          _buildLoginButton(),
-          const Spacer(),
-          _buildRegisterLink(),
-        ],
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SpacerUnit(height: AppDimens.size64),
+            _buildTopBanner(),
+            const SpacerUnit(height: AppDimens.size8),
+            _buildTitleText(),
+            const SpacerUnit(height: AppDimens.size24),
+            _buildEmailTextField(),
+            const SpacerUnit(height: AppDimens.size12),
+            _buildPasswordTextField(),
+            const SpacerUnit(height: AppDimens.size24),
+            _buildLoginButton(),
+            const Spacer(),
+            _buildRegisterLink(),
+          ],
+        ),
       ),
     );
   }
@@ -69,15 +74,17 @@ class _LoginScreenState extends State<LoginScreen> {
     final String email = _emailController.text;
     final String password = _passwordController.text;
 
-    final authCubit = context.read<AuthCubit>();
-
-    if (email.isNotEmpty && password.isNotEmpty) {
+    if (_formKey.currentState?.validate() ?? false) {
+      final authCubit = context.read<AuthCubit>();
       authCubit.login(email, password);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text(AppStrings.loginErrorMessage)),
-      );
     }
+
+    // if (email.isNotEmpty && password.isNotEmpty) {
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text(AppStrings.loginErrorMessage)),
+    //   );
+    // }
   }
 
   /// Builds the icon displayed on the login screen
@@ -127,6 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
         size: AppDimens.prefixIconSizeMedium,
         color: Theme.of(context).colorScheme.primary,
       ),
+      validator: (value) => Validator.validateEmail(value),
     );
   }
 
@@ -141,6 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
         size: AppDimens.prefixIconSizeMedium,
         color: Theme.of(context).colorScheme.primary,
       ),
+      validator: (value) => Validator.validatePassword(value),
     );
   }
 
