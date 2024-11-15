@@ -36,10 +36,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, // Transparent status bar
-      statusBarBrightness: Brightness.dark, // Dark text for status bar
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        // Transparent status bar
+        statusBarColor: Colors.transparent,
+        // Dark text for status bar
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
 
     return Scaffold(
       appBar: null,

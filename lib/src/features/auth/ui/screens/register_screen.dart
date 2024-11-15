@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
@@ -21,13 +22,21 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+       SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        // Transparent status bar
+        statusBarColor: Colors.transparent,
+        // Dark text for status bar
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
     return ConstrainedScaffold(
       body: SafeArea(
         child: Center(
@@ -42,19 +51,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 _titleText(),
                 const SpacerUnit(height: AppDimens.size24),
                 _nameTextField(
-                  nameController,
+                  _nameController,
                 ),
                 const SpacerUnit(height: AppDimens.size12),
                 _emailTextField(
-                  emailController,
+                  _emailController,
                 ),
                 const SpacerUnit(height: AppDimens.size12),
                 _passwordTextField(
-                  passwordController,
+                  _passwordController,
                 ),
                 const SpacerUnit(height: AppDimens.size12),
                 _confirmPasswordTextField(
-                  confirmPasswordController,
+                  _confirmPasswordController,
                 ),
                 const SpacerUnit(height: AppDimens.size24),
                 _signUpButton(
@@ -72,18 +81,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
-    nameController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
   void _register() {
-    final String name = nameController.text;
-    final String email = emailController.text;
-    final String password = passwordController.text;
-    final String confirmPassword = confirmPasswordController.text;
+    final String name = _nameController.text;
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+    final String confirmPassword = _confirmPasswordController.text;
 
     final authCubit = context.read<AuthCubit>();
 
