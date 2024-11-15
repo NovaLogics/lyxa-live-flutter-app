@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/helper/validator.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
@@ -11,10 +13,12 @@ import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 
 class RegisterScreen extends StatefulWidget {
   final void Function()? onToggle;
+  final AppUser? authUser;
 
   const RegisterScreen({
     super.key,
     required this.onToggle,
+    this.authUser,
   });
 
   @override
@@ -22,6 +26,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -36,36 +41,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
           padding: const EdgeInsets.symmetric(
             horizontal: AppDimens.paddingLarge,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SpacerUnit(height: AppDimens.size12),
-              _buildTopBanner(),
-              const SpacerUnit(height: AppDimens.size24),
-              _buildTitleText(),
-              const SpacerUnit(height: AppDimens.size24),
-              _buildNameTextField(
-                _nameController,
-              ),
-              const SpacerUnit(height: AppDimens.size12),
-              _buildEmailTextField(
-                _emailController,
-              ),
-              const SpacerUnit(height: AppDimens.size12),
-              _buildPasswordTextField(
-                _passwordController,
-              ),
-              const SpacerUnit(height: AppDimens.size12),
-              _buildConfirmPasswordTextField(
-                _confirmPasswordController,
-              ),
-              const SpacerUnit(height: AppDimens.size24),
-              _buildSignUpButton(
-                _register,
-              ),
-              const SpacerUnit(height: AppDimens.size52),
-              _buildLoginLink(),
-            ],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SpacerUnit(height: AppDimens.size12),
+                _buildTopBanner(),
+                const SpacerUnit(height: AppDimens.size24),
+                _buildTitleText(),
+                const SpacerUnit(height: AppDimens.size24),
+                _buildNameTextField(
+                  _nameController,
+                ),
+                const SpacerUnit(height: AppDimens.size12),
+                _buildEmailTextField(
+                  _emailController,
+                ),
+                const SpacerUnit(height: AppDimens.size12),
+                _buildPasswordTextField(
+                  _passwordController,
+                ),
+                const SpacerUnit(height: AppDimens.size12),
+                _buildConfirmPasswordTextField(
+                  _confirmPasswordController,
+                ),
+                const SpacerUnit(height: AppDimens.size24),
+                _buildSignUpButton(
+                  _register,
+                ),
+                const SpacerUnit(height: AppDimens.size52),
+                _buildLoginLink(),
+              ],
+            ),
           ),
         ),
       ),
@@ -81,27 +89,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = widget.authUser?.name ?? "";
+    _emailController.text = widget.authUser?.email ?? "";
+    _passwordController.text = widget.authUser?.password ?? "";
+    _confirmPasswordController.text = widget.authUser?.password ?? "";
+  }
+
   void _register() {
-    final String name = _nameController.text;
-    final String email = _emailController.text;
-    final String password = _passwordController.text;
-    final String confirmPassword = _confirmPasswordController.text;
+    final String name = _nameController.text.trim();
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
+    final String confirmPassword = _confirmPasswordController.text.trim();
 
-    final authCubit = context.read<AuthCubit>();
-
-    if (name.isNotEmpty &&
-        email.isNotEmpty &&
-        password.isNotEmpty &&
-        confirmPassword.isNotEmpty) {
-      if (password == confirmPassword) {
-        authCubit.register(name, email, password);
+    if (_formKey.currentState?.validate() ?? false) {
+      final authCubit = context.read<AuthCubit>();
+  
+      if (name.isNotEmpty &&
+          email.isNotEmpty &&
+          password.isNotEmpty &&
+          confirmPassword.isNotEmpty) {
+        if (password == confirmPassword) {
+          authCubit.register(name, email, password);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text(AppStrings.passwordNotMatchError)));
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text(AppStrings.passwordNotMatchError)));
+            const SnackBar(content: Text(AppStrings.registerErrorMessage)));
       }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text(AppStrings.registerErrorMessage)));
     }
   }
 
@@ -137,6 +156,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         size: AppDimens.prefixIconSizeMedium,
         color: Theme.of(context).colorScheme.primary,
       ),
+      validator: (value) => Validator.validateUsername(value),
     );
   }
 
@@ -150,6 +170,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         size: AppDimens.prefixIconSizeMedium,
         color: Theme.of(context).colorScheme.primary,
       ),
+      validator: (value) => Validator.validateEmail(value),
     );
   }
 
@@ -163,6 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         size: AppDimens.prefixIconSizeMedium,
         color: Theme.of(context).colorScheme.primary,
       ),
+      validator: (value) => Validator.validatePassword(value),
     );
   }
 
@@ -176,6 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         size: AppDimens.prefixIconSizeMedium,
         color: Theme.of(context).colorScheme.primary,
       ),
+      validator: (value) => Validator.validatePassword(value),
     );
   }
 
