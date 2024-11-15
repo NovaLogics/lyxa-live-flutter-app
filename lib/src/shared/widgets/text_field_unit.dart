@@ -6,6 +6,7 @@ class TextFieldUnit extends StatefulWidget {
   final String hintText;
   final bool obscureText;
   final Widget? prefixIcon;
+  final String? Function(String?)? validator; 
 
   const TextFieldUnit({
     super.key,
@@ -13,6 +14,7 @@ class TextFieldUnit extends StatefulWidget {
     required this.hintText,
     this.obscureText = false,
     this.prefixIcon,
+    this.validator,
   });
 
   @override
@@ -30,7 +32,7 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: widget.controller,
       obscureText: widget.obscureText && !isPasswordVisible,
       style: TextStyle(
@@ -69,6 +71,7 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
               )
             : null,
       ),
+      validator: widget.validator, 
     );
   }
 }
