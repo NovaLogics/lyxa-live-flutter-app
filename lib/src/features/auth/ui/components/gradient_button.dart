@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 
 class GradientButton extends StatefulWidget {
   final String text;
@@ -24,6 +25,7 @@ class _GradientButtonState extends State<GradientButton>
       lowerBound: 0.95,
       upperBound: 1.0,
     );
+    _controller.forward();
   }
 
   @override
@@ -56,14 +58,14 @@ class _GradientButtonState extends State<GradientButton>
       child: ScaleTransition(
         scale: _controller,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 100.0),
+          padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 90.0),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.blueAccent, Colors.purpleAccent],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(24.0),
             boxShadow: [
               BoxShadow(
                 color: Colors.purpleAccent.withOpacity(0.3),
@@ -82,6 +84,8 @@ class _GradientButtonState extends State<GradientButton>
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,
+                  letterSpacing: 1.2,
+                  fontFamily: FONT_RALEWAY,
                 ),
               ),
               SizedBox(width: 10.0),
