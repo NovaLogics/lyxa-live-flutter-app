@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/button_unit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold%20.dart';
 import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -25,11 +26,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-       SystemChrome.setSystemUIOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         // Transparent status bar
         statusBarColor: Colors.transparent,
@@ -37,42 +39,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
         statusBarBrightness: Brightness.dark,
       ),
     );
-    return ConstrainedScaffold(
+
+    return ScrollableScaffold(
       body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _registerScreenIcon(),
-                const SpacerUnit(height: AppDimens.size52),
-                _titleText(),
-                const SpacerUnit(height: AppDimens.size24),
-                _nameTextField(
-                  _nameController,
-                ),
-                const SpacerUnit(height: AppDimens.size12),
-                _emailTextField(
-                  _emailController,
-                ),
-                const SpacerUnit(height: AppDimens.size12),
-                _passwordTextField(
-                  _passwordController,
-                ),
-                const SpacerUnit(height: AppDimens.size12),
-                _confirmPasswordTextField(
-                  _confirmPasswordController,
-                ),
-                const SpacerUnit(height: AppDimens.size24),
-                _signUpButton(
-                  _register,
-                ),
-                const SpacerUnit(height: AppDimens.size52),
-                _loginLink(),
-              ],
-            ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimens.paddingLarge,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _registerScreenIcon(),
+              const SpacerUnit(height: AppDimens.size52),
+              _titleText(),
+              const SpacerUnit(height: AppDimens.size24),
+              _nameTextField(
+                _nameController,
+              ),
+              const SpacerUnit(height: AppDimens.size12),
+              _emailTextField(
+                _emailController,
+              ),
+              const SpacerUnit(height: AppDimens.size12),
+              _passwordTextField(
+                _passwordController,
+              ),
+              const SpacerUnit(height: AppDimens.size12),
+              _confirmPasswordTextField(
+                _confirmPasswordController,
+              ),
+              const SpacerUnit(height: AppDimens.size24),
+              _signUpButton(
+                _register,
+              ),
+              const SpacerUnit(height: AppDimens.size52),
+              _loginLink(),
+            ],
           ),
         ),
       ),
@@ -135,7 +137,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: controller,
       hintText: AppStrings.name,
       obscureText: false,
-    prefixIcon: null,
+      prefixIcon: null,
     );
   }
 
@@ -144,7 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: controller,
       hintText: AppStrings.email,
       obscureText: false,
-    prefixIcon: null,
+      prefixIcon: null,
     );
   }
 
@@ -153,7 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: controller,
       hintText: AppStrings.password,
       obscureText: true,
-     prefixIcon: null,
+      prefixIcon: null,
     );
   }
 
