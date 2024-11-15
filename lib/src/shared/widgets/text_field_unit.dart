@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 
-class TextFieldUnit extends StatelessWidget {
+class TextFieldUnit extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
@@ -10,18 +11,32 @@ class TextFieldUnit extends StatelessWidget {
     super.key,
     required this.controller,
     required this.hintText,
-    required this.obscureText,
-    required this.prefixIcon,
+    this.obscureText = false,
+    this.prefixIcon,
   });
+
+  @override
+  State<TextFieldUnit> createState() => _TextFieldUnitState();
+}
+
+class _TextFieldUnitState extends State<TextFieldUnit> {
+  late bool isPasswordVisible;
+
+  @override
+  void initState() {
+    super.initState();
+    isPasswordVisible = !widget.obscureText;
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: controller,
-      obscureText: obscureText,
+      controller: widget.controller,
+      obscureText: widget.obscureText && !isPasswordVisible,
       style: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
-        fontFamily: 'Raleway',
+        color: Theme.of(context).colorScheme.inversePrimary,
+        fontFamily: FONT_RALEWAY,
+        fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
@@ -32,11 +47,27 @@ class TextFieldUnit extends StatelessWidget {
           borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
           borderRadius: BorderRadius.circular(12),
         ),
-        hintText: hintText,
-        hintStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
-        fillColor: Theme.of(context).colorScheme.secondary,
+        hintText: widget.hintText,
+        hintStyle: TextStyle(
+          color: Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.normal,
+        ),
+        fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
         filled: true,
-        prefixIcon: prefixIcon,
+        prefixIcon: widget.prefixIcon,
+        suffixIcon: widget.obscureText
+            ? IconButton(
+                icon: Icon(
+                  isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isPasswordVisible = !isPasswordVisible;
+                  });
+                },
+              )
+            : null,
       ),
     );
   }
