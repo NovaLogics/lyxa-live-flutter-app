@@ -24,7 +24,32 @@ class FirebaseErrorUtil {
       case "invalid-email":
         return "Email address is invalid.";
       default:
-        return "Login failed. Please try again.";
+        return "Login Failed. Please try again.";
+    }
+  }
+
+  static String getMessage(String errorCode) {
+    switch (errorCode) {
+      case 'invalid-credential':
+        return 'The credential provided is invalid or has expired. Please try again.';
+      case 'email-already-in-use':
+        return 'The email address is already in use by another account.';
+      case 'wrong-password':
+        return 'The password is invalid. Please try again.';
+      case 'user-not-found':
+        return 'No user found for this email. Please register first.';
+      case 'user-disabled':
+        return 'This user account has been disabled. Contact support.';
+      case 'too-many-requests':
+        return 'Too many attempts. Try again later.';
+      case 'operation-not-allowed':
+        return 'Email/password accounts are not enabled.';
+      case 'invalid-email':
+        return 'The email address is not valid.';
+      case 'weak-password':
+        return 'The password is too weak. Please choose a stronger password.';
+      default:
+        return 'An unknown error occurred. Please try again.';
     }
   }
 }
