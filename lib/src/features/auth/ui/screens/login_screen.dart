@@ -40,14 +40,14 @@ class _LoginScreenState extends State<LoginScreen> {
       statusBarColor: Colors.transparent, // Transparent status bar
       statusBarBrightness: Brightness.dark, // Dark text for status bar
     ));
-    
+
     return Scaffold(
       appBar: null,
       body: SafeArea(
         child: Center(
           child: Stack(
             children: [
-              _buildBackgroundCircles(),
+              _buildGradientBackground(),
               //  _buildBackdropFilter(),
               ScrollableScaffold(
                 body: Padding(
@@ -95,18 +95,24 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildBackgroundCircles() {
+  Widget _buildGradientBackground() {
     return Stack(
       children: [
-        _buildCircle(const AlignmentDirectional(3, -0.3), Colors.deepPurple),
-        _buildCircle(const AlignmentDirectional(-3, -0.3), Colors.deepPurple),
+        _buildCircle(const AlignmentDirectional(3, -0.3),
+            Colors.deepPurple[700] ?? Colors.deepPurple),
+        _buildCircle(const AlignmentDirectional(-3, -0.3),
+            Colors.deepPurple[700] ?? Colors.deepPurple),
         _buildCircle(
           const AlignmentDirectional(0, -1.2),
-          Colors.amber[200] ?? Colors.orangeAccent,
+          Colors.blueGrey[900] ?? Colors.blueGrey,
+          height: 300,
+          width: 250,
         ),
         _buildCircle(
           const AlignmentDirectional(-0.3, 1.5),
           Colors.blueGrey[900] ?? Colors.blueGrey,
+          height: 250,
+          width: 300,
         ),
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
@@ -118,12 +124,17 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildCircle(AlignmentDirectional alignment, Color color) {
+  Widget _buildCircle(
+    AlignmentDirectional alignment,
+    Color color, {
+    double height = 300,
+    double width = 300,
+  }) {
     return Align(
       alignment: alignment,
       child: Container(
-        height: 300,
-        width: 300,
+        height: height,
+        width: width,
         decoration: BoxDecoration(shape: BoxShape.circle, color: color),
       ),
     );
