@@ -106,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (_formKey.currentState?.validate() ?? false) {
       final authCubit = context.read<AuthCubit>();
-  
+
       if (name.isNotEmpty &&
           email.isNotEmpty &&
           password.isNotEmpty &&
@@ -149,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildNameTextField(TextEditingController controller) {
     return TextFieldUnit(
       controller: controller,
-      hintText: AppStrings.name,
+      hintText: AppStrings.hintUsername,
       obscureText: false,
       prefixIcon: Icon(
         Icons.person_outline,
@@ -157,13 +157,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         color: Theme.of(context).colorScheme.primary,
       ),
       validator: (value) => Validator.validateUsername(value),
+      maxLength: MAX_LENGTH_USERNAME_FIELD,
     );
   }
 
   Widget _buildEmailTextField(TextEditingController controller) {
     return TextFieldUnit(
       controller: controller,
-      hintText: AppStrings.email,
+      hintText: AppStrings.hintEmail,
       obscureText: false,
       prefixIcon: Icon(
         Icons.email_outlined,
@@ -171,13 +172,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         color: Theme.of(context).colorScheme.primary,
       ),
       validator: (value) => Validator.validateEmail(value),
+      maxLength: MAX_LENGTH_EMAIL_FIELD,
     );
   }
 
   Widget _buildPasswordTextField(TextEditingController controller) {
     return TextFieldUnit(
       controller: controller,
-      hintText: AppStrings.password,
+      hintText: AppStrings.hintPassword,
       obscureText: true,
       prefixIcon: Icon(
         Icons.lock_outlined,
@@ -185,13 +187,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         color: Theme.of(context).colorScheme.primary,
       ),
       validator: (value) => Validator.validatePassword(value),
+      maxLength: MAX_LENGTH_PASSWORD_FIELD,
     );
   }
 
   Widget _buildConfirmPasswordTextField(TextEditingController controller) {
     return TextFieldUnit(
       controller: controller,
-      hintText: AppStrings.confirmPassword,
+      hintText: AppStrings.hintConfirmPassword,
       obscureText: true,
       prefixIcon: Icon(
         Icons.lock_outlined,
@@ -199,6 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         color: Theme.of(context).colorScheme.primary,
       ),
       validator: (value) => Validator.validatePassword(value),
+      maxLength: MAX_LENGTH_PASSWORD_FIELD,
     );
   }
 
