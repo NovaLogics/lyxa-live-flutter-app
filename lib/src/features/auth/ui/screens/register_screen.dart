@@ -41,30 +41,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               const SpacerUnit(height: AppDimens.size12),
               _buildTopBanner(),
-              const SpacerUnit(height: AppDimens.size52),
-              _titleText(),
               const SpacerUnit(height: AppDimens.size24),
-              _nameTextField(
+              _buildTitleText(),
+              const SpacerUnit(height: AppDimens.size24),
+              _buildNameTextField(
                 _nameController,
               ),
               const SpacerUnit(height: AppDimens.size12),
-              _emailTextField(
+              _buildEmailTextField(
                 _emailController,
               ),
               const SpacerUnit(height: AppDimens.size12),
-              _passwordTextField(
+              _buildPasswordTextField(
                 _passwordController,
               ),
               const SpacerUnit(height: AppDimens.size12),
-              _confirmPasswordTextField(
+              _buildConfirmPasswordTextField(
                 _confirmPasswordController,
               ),
               const SpacerUnit(height: AppDimens.size24),
-              _signUpButton(
+              _buildSignUpButton(
                 _register,
               ),
               const SpacerUnit(height: AppDimens.size52),
-              _loginLink(),
+              _buildLoginLink(),
             ],
           ),
         ),
@@ -116,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _titleText() {
+  Widget _buildTitleText() {
     return Text(
       AppStrings.createAccountMessage,
       style: TextStyle(
@@ -127,7 +127,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _nameTextField(TextEditingController controller) {
+  Widget _buildNameTextField(TextEditingController controller) {
     return TextFieldUnit(
       controller: controller,
       hintText: AppStrings.name,
@@ -140,7 +140,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _emailTextField(TextEditingController controller) {
+  Widget _buildEmailTextField(TextEditingController controller) {
     return TextFieldUnit(
       controller: controller,
       hintText: AppStrings.email,
@@ -153,7 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _passwordTextField(TextEditingController controller) {
+  Widget _buildPasswordTextField(TextEditingController controller) {
     return TextFieldUnit(
       controller: controller,
       hintText: AppStrings.password,
@@ -166,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _confirmPasswordTextField(TextEditingController controller) {
+  Widget _buildConfirmPasswordTextField(TextEditingController controller) {
     return TextFieldUnit(
       controller: controller,
       hintText: AppStrings.confirmPassword,
@@ -179,14 +179,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _signUpButton(Function() onTap) {
+  Widget _buildSignUpButton(Function() onTap) {
     return GradientButton(
       text: AppStrings.signUp.toUpperCase(),
       onPressed: onTap,
+      textStyle: TextStyle(
+        color: Theme.of(context).colorScheme.inversePrimary,
+        fontWeight: FontWeight.bold,
+        fontSize: AppDimens.textSizeMedium,
+        letterSpacing: AppDimens.letterSpaceMedium,
+        fontFamily: FONT_RALEWAY,
+      ),
+      icon: Icon(
+        Icons.arrow_forward_ios_sharp,
+        color: Theme.of(context).colorScheme.inversePrimary,
+      ),
     );
   }
 
-  Widget _loginLink() {
+  Widget _buildLoginLink() {
     return Padding(
       padding: const EdgeInsets.only(
         bottom: AppDimens.size48,

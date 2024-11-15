@@ -149,6 +149,17 @@ class _LoginScreenState extends State<LoginScreen> {
     return GradientButton(
       text: AppStrings.login.toUpperCase(),
       onPressed: _login,
+      textStyle: TextStyle(
+        color: Theme.of(context).colorScheme.inversePrimary,
+        fontWeight: FontWeight.bold,
+        fontSize: AppDimens.textSizeMedium,
+        letterSpacing: AppDimens.letterSpaceMedium,
+        fontFamily: FONT_RALEWAY,
+      ),
+      icon: Icon(
+        Icons.arrow_forward_outlined,
+        color: Theme.of(context).colorScheme.inversePrimary,
+      ),
     );
   }
 

@@ -15,6 +15,8 @@ class AppDimens {
   static const double spaceLarge = 24.0;
   static const double spaceXLarge = 32.0;
 
+   static const double letterSpaceMedium = 1.2;
+
   // Text Sizes
   static const double textSizeXSmall = 10.0;
   static const double textSizeSmall = 12.0;
