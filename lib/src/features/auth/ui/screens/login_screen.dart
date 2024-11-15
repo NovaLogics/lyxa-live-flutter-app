@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +5,7 @@ import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold%20.dart';
+import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -45,7 +44,9 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: null,
       body: Stack(
         children: [
-          _buildGradientBackground(),
+          const GradientBackgroundUnit(
+            width: 400,
+          ),
           ScrollableScaffold(
             body: Padding(
               padding: const EdgeInsets.symmetric(
@@ -80,56 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  Widget _buildGradientBackground() {
-    return Center(
-      child: SizedBox(
-        width: 400,
-        child: Stack(
-          children: [
-            _buildCircle(const AlignmentDirectional(3, -0.3),
-                Colors.deepPurple[700] ?? Colors.deepPurple),
-            _buildCircle(const AlignmentDirectional(-3, -0.3),
-                Colors.deepPurple[700] ?? Colors.deepPurple),
-            _buildCircle(
-              const AlignmentDirectional(0, -1.2),
-              Colors.blueGrey[900] ?? Colors.blueGrey,
-              height: 300,
-              width: 250,
-            ),
-            _buildCircle(
-              const AlignmentDirectional(-0.3, 1.5),
-              Colors.blueGrey[900] ?? Colors.blueGrey,
-              height: 250,
-              width: 300,
-            ),
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
-              child: Container(
-                decoration: const BoxDecoration(color: Colors.transparent),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCircle(
-    AlignmentDirectional alignment,
-    Color color, {
-    double height = 300,
-    double width = 300,
-  }) {
-    return Align(
-      alignment: alignment,
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-      ),
-    );
   }
 
   /// Handles login action and displays a message if fields are empty
