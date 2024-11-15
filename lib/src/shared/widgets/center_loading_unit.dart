@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 
 class CenterLoadingUnit extends StatelessWidget {
   final String message;
 
-  const CenterLoadingUnit({super.key, this.message = "Loading..."});
+  const CenterLoadingUnit({super.key, this.message = "Please wait..."});
 
   @override
   Widget build(BuildContext context) {
@@ -11,22 +12,26 @@ class CenterLoadingUnit extends StatelessWidget {
       backgroundColor: Colors.black.withOpacity(0.5),
       body: Center(
         child: Card(
-          color: Colors.black.withOpacity(0.5), // Background semi-transparent
+          color: Color(0xFFEEEEEE), // Background semi-transparent
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(
-            padding: const EdgeInsets.all(80.0),
+            padding: const EdgeInsets.all(54.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CircularProgressIndicator(), // Loading indicator
-                const SizedBox(height: 12.0),
+                const CircularProgressIndicator(
+                  color: Colors.deepPurple,
+                ), // Loading indicator
+                const SizedBox(height: 24.0),
                 Text(
                   message,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
+                    letterSpacing: 1.1,
+                    fontFamily: FONT_RALEWAY,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Color(0xFF4527A0),
                   ),
                 ),
               ],
