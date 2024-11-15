@@ -10,14 +10,11 @@ import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold%20
 import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
-import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 /*
 LOGIN SCREEN:
 Allows existing users to log in with email and password. 
-
 -> After successful login, users are redirected to the Home Screen.
-
 -> New users can navigate to the Register Screen.
 */
 
@@ -39,19 +36,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, // Transparent status bar
+      statusBarBrightness: Brightness.dark, // Dark text for status bar
+    ));
+    
     return Scaffold(
       appBar: null,
       body: SafeArea(
         child: Center(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
-            child: Stack(
-              children: [
-                _buildBackgroundCircles(),
-                _buildBackdropFilter(),
-                ScrollableScaffold(
-                  body: Column(
+          child: Stack(
+            children: [
+              _buildBackgroundCircles(),
+              //  _buildBackdropFilter(),
+              ScrollableScaffold(
+                body: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimens.paddingLarge),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SpacerUnit(height: AppDimens.size24),
@@ -69,8 +71,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -98,17 +100,19 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         _buildCircle(const AlignmentDirectional(3, -0.3), Colors.deepPurple),
         _buildCircle(const AlignmentDirectional(-3, -0.3), Colors.deepPurple),
-        _buildRectangle(
+        _buildCircle(
           const AlignmentDirectional(0, -1.2),
           Colors.amber[200] ?? Colors.orangeAccent,
-          300,
-          200,
         ),
-        _buildRectangle(
+        _buildCircle(
           const AlignmentDirectional(-0.3, 1.5),
-          Colors.blueGrey[900] ?? Colors.orangeAccent,
-          250,
-          300,
+          Colors.blueGrey[900] ?? Colors.blueGrey,
+        ),
+        BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
+          child: Container(
+            decoration: const BoxDecoration(color: Colors.transparent),
+          ),
         ),
       ],
     );
