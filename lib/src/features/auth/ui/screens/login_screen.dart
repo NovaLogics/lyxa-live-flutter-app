@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildEmailTextField() {
     return TextFieldUnit(
       controller: _emailController,
-      hintText: AppStrings.email,
+      hintText: AppStrings.hintEmail,
       obscureText: false,
       prefixIcon: Icon(
         Icons.email_outlined,
@@ -145,6 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
         color: Theme.of(context).colorScheme.primary,
       ),
       validator: (value) => Validator.validateEmail(value),
+      maxLength: MAX_LENGTH_EMAIL_FIELD,
     );
   }
 
@@ -152,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildPasswordTextField() {
     return TextFieldUnit(
       controller: _passwordController,
-      hintText: AppStrings.password,
+      hintText: AppStrings.hintPassword,
       obscureText: true,
       prefixIcon: Icon(
         Icons.lock_outlined,
@@ -160,6 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
         color: Theme.of(context).colorScheme.primary,
       ),
       validator: (value) => Validator.validatePassword(value),
+      maxLength: MAX_LENGTH_PASSWORD_FIELD,
     );
   }
 
