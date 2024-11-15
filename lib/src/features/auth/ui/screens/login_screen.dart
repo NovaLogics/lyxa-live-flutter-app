@@ -4,6 +4,7 @@ import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/helper/validator.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
@@ -18,10 +19,12 @@ Allows existing users to log in with email and password.
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback? onToggle;
+  final AppUser? authUser;
 
   const LoginScreen({
     super.key,
     required this.onToggle,
+    this.authUser,
   });
 
   @override
@@ -63,6 +66,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _emailController.text = widget.authUser?.email ?? "";
+    _passwordController.text = widget.authUser?.password ?? "";
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -71,8 +81,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// Handles login action and displays a message if fields are empty
   void _login() {
-    final String email = _emailController.text;
-    final String password = _passwordController.text;
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
 
     if (_formKey.currentState?.validate() ?? false) {
       final authCubit = context.read<AuthCubit>();
