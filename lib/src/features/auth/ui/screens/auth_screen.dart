@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/login_screen.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/register_screen.dart';
+import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
-/*
-AUTH SCREEN
-: This screen determines whether to show the login or register page
-*/
-
+/// AuthScreen: 
+/// -> Displays either the Login or Register page with the ability to toggle between them
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
 
@@ -15,24 +16,40 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  bool showLoginPage = true;
+  bool _isLoginPage = true;
 
-  void toggleScreens() {
+  /// Toggles between the login and register pages
+  void _toggleAuthenticationPage() {
     setState(() {
-      showLoginPage = !showLoginPage;
+      _isLoginPage = !_isLoginPage;
     });
+  }
+
+    /// Set status bar color styles
+  void _setStatusBarStyle() {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (showLoginPage) {
-      return LoginScreen(
-        toggleScreens: toggleScreens,
-      );
-    } else {
-      return RegisterScreen(
-        toggleScreens: toggleScreens,
-      );
-    }
+    _setStatusBarStyle();
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          const GradientBackgroundUnit(width: AppDimens.containerSize400), 
+          ScrollableScaffold(
+            body: _isLoginPage
+                ? LoginScreen(onToggle: _toggleAuthenticationPage)
+                : RegisterScreen(onToggle: _toggleAuthenticationPage),
+          ),
+        ],
+      ),
+    );
   }
 }
