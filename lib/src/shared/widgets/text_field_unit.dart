@@ -5,8 +5,9 @@ class TextFieldUnit extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
+  final int maxLength;
   final Widget? prefixIcon;
-  final String? Function(String?)? validator; 
+  final String? Function(String?)? validator;
 
   const TextFieldUnit({
     super.key,
@@ -15,6 +16,7 @@ class TextFieldUnit extends StatefulWidget {
     this.obscureText = false,
     this.prefixIcon,
     this.validator,
+    this.maxLength = 45,
   });
 
   @override
@@ -34,6 +36,7 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
+      maxLength: widget.maxLength,
       obscureText: widget.obscureText && !isPasswordVisible,
       style: TextStyle(
         color: Theme.of(context).colorScheme.inversePrimary,
@@ -71,7 +74,7 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
               )
             : null,
       ),
-      validator: widget.validator, 
+      validator: widget.validator,
     );
   }
 }
