@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           const GradientBackgroundUnit(
-            width: 400,
+            width: AppDimens.containerSize400,
           ),
           ScrollableScaffold(
             body: Padding(
@@ -56,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SpacerUnit(height: AppDimens.size24),
-                  _buildLoginIcon(),
+                  _buildTopBanner(),
                   const SpacerUnit(height: AppDimens.size8),
                   _buildTitleText(),
                   const SpacerUnit(height: AppDimens.size24),
@@ -100,43 +101,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   /// Builds the icon displayed on the login screen
-  Widget _buildLoginIcon() {
-    return
-        // Icon(
-        //   Icons.lock_open_rounded,
-        //   size: AppDimens.iconSize2XLarge,
-        //   color: Theme.of(context).colorScheme.primary,
-        // );
-
-        //     Center(
-        //   child: ClipRRect(
-        //     borderRadius: BorderRadius.circular(8.0),
-        //     child: Image.asset(
-        //       "assets/images/lyxa_banner.png",
-        //       height: 256.0,
-        //       width: 256.0,
-        //     ),
-        //   ),
-        // );
-
-        Center(
-      child:
-          // Card(
-          //   elevation: 12.0,
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(15.0),
-          //   ),
-          //   clipBehavior: Clip.hardEdge,
-          //   child: Image.asset(
-          //     "assets/images/lyxa_banner.png",
-          //     height: 256.0,
-          //     width: 256.0,
-          //   ),
-          // ),
-          Image.asset(
-        "assets/images/lyxa_banner.png",
-        height: 220.0,
-        width: 220.0,
+  Widget _buildTopBanner() {
+    return Center(
+      child: Image.asset(
+        IMAGE_PATH_LYXA_BANNER,
+        height: AppDimens.bannerSizeMedium,
+        width: AppDimens.bannerSizeMedium,
       ),
     );
   }
@@ -151,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Theme.of(context).colorScheme.inversePrimary,
             fontSize: AppDimens.textSizeXLarge,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Raleway',
+            fontFamily: FONT_RALEWAY,
           ),
         ),
         Text(
@@ -159,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
             fontSize: AppDimens.textSizeMedium,
-            fontFamily: 'Raleway',
+            fontFamily: FONT_RALEWAY,
           ),
         ),
       ],
@@ -174,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
       obscureText: false,
       prefixIcon: Icon(
         Icons.email_outlined,
-        size: 22,
+        size: AppDimens.prefixIconSizeMedium,
         color: Theme.of(context).colorScheme.primary,
       ),
     );
@@ -188,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
       obscureText: true,
       prefixIcon: Icon(
         Icons.lock_outlined,
-        size: 22,
+        size: AppDimens.prefixIconSizeMedium,
         color: Theme.of(context).colorScheme.primary,
       ),
     );
@@ -196,12 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// Builds the login button, initiating the login process when tapped
   Widget _buildLoginButton() {
-    return
-        // ButtonUnit(
-        //   onTap: _login,
-        //   text: AppStrings.login,
-        // );
-        GradientButton(
+    return GradientButton(
       text: AppStrings.login,
       onPressed: _login,
     );
@@ -211,7 +176,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildRegisterLink() {
     return Padding(
       padding: const EdgeInsets.only(
-          bottom: AppDimens.size48, top: AppDimens.size32),
+        bottom: AppDimens.size48,
+        top: AppDimens.size32,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -220,11 +187,11 @@ class _LoginScreenState extends State<LoginScreen> {
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontSize: AppDimens.textSizeMedium,
-              fontFamily: 'Raleway',
+              fontFamily: FONT_RALEWAY,
             ),
           ),
           const SizedBox(
-            width: 8,
+            width: AppDimens.size8,
           ),
           GestureDetector(
             onTap: widget.toggleScreens,
@@ -234,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: Theme.of(context).colorScheme.inversePrimary,
                 fontSize: AppDimens.textSizeMedium,
                 fontWeight: FontWeight.bold,
-                fontFamily: 'Raleway',
+                fontFamily: FONT_RALEWAY,
               ),
             ),
           ),
