@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
+import 'package:lyxa_live/src/core/utils/helper/logger.dart';
 import 'package:lyxa_live/src/core/utils/helper/validator.dart';
 import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
@@ -20,12 +24,10 @@ Allows existing users to log in with email and password.
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback? onToggle;
-  final AppUser? authUser;
 
   const LoginScreen({
     super.key,
     required this.onToggle,
-    this.authUser,
   });
 
   @override
@@ -34,6 +36,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final HiveHelper hiveHelper = HiveHelper();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -69,8 +72,26 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _emailController.text = widget.authUser?.email ?? "";
-    _passwordController.text = widget.authUser?.password ?? "";
+
+    String? loginData = hiveHelper.get<String>(HiveKeys.loginDataKey);
+
+    if (loginData != null && loginData.isNotEmpty) {
+      Logger.logDebug(loginData);
+      try {
+        // Convert the JSON string back to a Map
+        final Map<String, dynamic> jsonData = Map<String, dynamic>.from(
+          jsonDecode(loginData),
+        );
+
+        // Deserialize the map into an AppUser object
+        AppUser user = AppUser.fromJson(jsonData);
+
+        // Populate the email controller
+        _emailController.text = user.email;
+      } catch (error) {
+        Logger.logError(error.toString());
+      }
+    }
   }
 
   @override
@@ -86,6 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final String password = _passwordController.text.trim();
 
     if (_formKey.currentState?.validate() ?? false) {
+      _saveUser();
       final authCubit = context.read<AuthCubit>();
       authCubit.login(email, password);
     }
@@ -96,6 +118,13 @@ class _LoginScreenState extends State<LoginScreen> {
     //     const SnackBar(content: Text(AppStrings.loginErrorMessage)),
     //   );
     // }
+  }
+
+  Future<void> _saveUser() async {
+    final String email = _emailController.text.trim();
+    AppUser user = AppUser(uid: "", email: email, name: "");
+    String jsonString = jsonEncode(user.toJson());
+    await hiveHelper.save(HiveKeys.loginDataKey, jsonString);
   }
 
   /// Builds the icon displayed on the login screen
@@ -229,7 +258,10 @@ class _LoginScreenState extends State<LoginScreen> {
             width: AppDimens.size8,
           ),
           GestureDetector(
-            onTap: widget.onToggle,
+            onTap: () {
+              widget.onToggle?.call();
+              _saveUser();
+            },
             child: const Text(
               AppStrings.registerNow,
               style: TextStyle(
