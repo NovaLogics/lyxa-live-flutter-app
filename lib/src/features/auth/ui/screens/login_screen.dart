@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/helper/validator.dart';
+import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
@@ -49,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             const SpacerUnit(height: AppDimens.size64),
             _buildTopBanner(),
-            const SpacerUnit(height: AppDimens.size8),
+            //const SpacerUnit(height: AppDimens.size8),
             _buildTitleText(),
             const SpacerUnit(height: AppDimens.size24),
             _buildEmailTextField(),
@@ -110,23 +111,38 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// Displays the title text welcoming the user back
   Widget _buildTitleText() {
-    return Column(
+    return const Column(
       children: [
         Text(
-          AppStrings.welcomeBack.toUpperCase(),
+          AppStrings.welcomeBack,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.inversePrimary,
-            fontSize: AppDimens.textSizeXLarge,
-            fontWeight: FontWeight.bold,
-            fontFamily: FONT_RALEWAY,
+            color: AppColors.whiteShade50,
+            fontSize: AppDimens.textSizeTitleLarge,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.1,
+            fontFamily: FONT_DYNALIGHT,
+            shadows: <Shadow>[
+              Shadow(
+                offset: Offset(1, 1),
+                blurRadius: 1.0,
+                color: Color.fromARGB(255, 0, 0, 0),
+              ),
+            ],
           ),
         ),
         Text(
           AppStrings.itsTimeToShareYourStory,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontSize: AppDimens.textSizeMedium,
+            color: AppColors.blueGreyShade50,
+            fontSize: AppDimens.textSizeLarge,
             fontFamily: FONT_RALEWAY,
+            shadows: <Shadow>[
+              Shadow(
+                offset: Offset(1, 1),
+                blurRadius: 1.0,
+                color: Color.fromARGB(255, 0, 0, 0),
+              ),
+            ],
           ),
         ),
       ],
@@ -194,12 +210,19 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             AppStrings.notAMember,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
+              color: AppColors.blueGreyShade50,
               fontSize: AppDimens.textSizeMedium,
               fontFamily: FONT_RALEWAY,
+              shadows: <Shadow>[
+                Shadow(
+                  offset: Offset(1, 1),
+                  blurRadius: 1.0,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+              ],
             ),
           ),
           const SizedBox(
@@ -207,13 +230,21 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           GestureDetector(
             onTap: widget.onToggle,
-            child: Text(
+            child: const Text(
               AppStrings.registerNow,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
+                color: AppColors.whiteShade50,
                 fontSize: AppDimens.textSizeMedium,
                 fontWeight: FontWeight.bold,
                 fontFamily: FONT_RALEWAY,
+                letterSpacing: 0.7,
+                shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(1, 1),
+                    blurRadius: 1.0,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                  ),
+                ],
               ),
             ),
           ),
