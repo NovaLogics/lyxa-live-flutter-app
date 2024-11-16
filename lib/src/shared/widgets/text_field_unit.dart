@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 
 class TextFieldUnit extends StatefulWidget {
   final TextEditingController controller;
@@ -39,10 +40,10 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
       maxLength: widget.maxLength,
       obscureText: widget.obscureText && !isPasswordVisible,
       style: TextStyle(
-        color: Theme.of(context).colorScheme.inversePrimary,
-        fontFamily: FONT_RALEWAY,
-        fontWeight: FontWeight.w500,
-      ),
+          color: Theme.of(context).colorScheme.inversePrimary,
+          fontFamily: FONT_RALEWAY,
+          fontWeight: FontWeight.w500,
+          fontSize: AppDimens.textSizeMedium),
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary),
@@ -56,6 +57,7 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
         hintStyle: TextStyle(
           color: Theme.of(context).colorScheme.primary,
           fontWeight: FontWeight.normal,
+          fontSize: AppDimens.textSizeRegular,
         ),
         fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
         filled: true,
