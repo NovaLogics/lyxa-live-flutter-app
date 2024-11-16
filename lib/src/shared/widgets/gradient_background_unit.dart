@@ -34,17 +34,17 @@ class GradientBackgroundUnit extends StatelessWidget {
       ),
       _buildCircle(
         const AlignmentDirectional(-3, -0.3),
-        AppColors.deepPurpleShade700,
+        AppColors.deepPurpleShade500,
       ),
       _buildCircle(
-        const AlignmentDirectional(0, -1.2),
-        AppColors.blueGreyShade900,
-        height: 300,
-        width: 250,
+        const AlignmentDirectional(0, -0.9),
+        AppColors.blueGreyShade900X,
+        height: 400,
+        width: 260,
       ),
       _buildCircle(
         const AlignmentDirectional(-0.3, 1.5),
-        AppColors.blueGreyShade900,
+        AppColors.blueGreyShade900Y,
         height: 250,
         width: 300,
       ),
