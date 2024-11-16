@@ -22,7 +22,7 @@ class AuthCubit extends Cubit<AuthState> {
       _currentUser = user;
       emit(Authenticated(user));
     } else {
-      emit(Unauthenticated());
+      emit(Unauthenticated(null));
     }
   }
 
@@ -41,10 +41,10 @@ class AuthCubit extends Cubit<AuthState> {
         _currentUser = user;
         emit(Authenticated(user));
       } else {
-        emit(Unauthenticated());
+        emit(Unauthenticated(user));
       }
     } catch (error) {
-      _handleAuthError(error);
+      _handleAuthError(error, AppUser(uid: "", email: email, name: "",password: password));
     }
   }
 
@@ -60,10 +60,10 @@ class AuthCubit extends Cubit<AuthState> {
         _currentUser = user;
         emit(Authenticated(user));
       } else {
-        emit(Unauthenticated());
+        emit(Unauthenticated(user));
       }
     } catch (error) {
-      _handleAuthError(error);
+      _handleAuthError(error, AppUser(uid: "", email: email, name: name));
     }
   }
 
@@ -71,14 +71,14 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> logout() async {
     await _authRepository.logout();
     _currentUser = null;
-    emit(Unauthenticated());
+    emit(Unauthenticated(null));
   }
 
   /// Helper ->
   /// Handles authentication errors by emitting an error state
-  void _handleAuthError(dynamic error) {
-    emit(AuthError(error.toString()));
-    emit(Unauthenticated());
+  void _handleAuthError(dynamic error, AppUser user) {
+    emit(AuthError(error.toString().replaceFirst('Exception: ', '')));
+    emit(Unauthenticated(user));
     Logger.logError(error.toString());
   }
 }

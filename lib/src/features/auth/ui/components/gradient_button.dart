@@ -1,94 +1,122 @@
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/src/core/utils/constants/constants.dart'; 
+
+// Constants for consistent styling
+const double _buttonVerticalPadding = 12.0;
+const double _buttonHorizontalPadding = 90.0;
+const double _buttonBorderRadius = 24.0;
+const double _buttonSpreadRadius = 2.0;
+const double _buttonBlurRadius = 10.0;
+const Offset _buttonShadowOffset = Offset(0, 5);
+const Duration _animationDuration = Duration(milliseconds: 100);
 
 class GradientButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
+  final TextStyle? textStyle; 
+  final Widget? icon;
 
-  const GradientButton({Key? key, required this.text, required this.onPressed})
-      : super(key: key);
+  const GradientButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.textStyle,
+    this.icon,
+  });
 
   @override
-  _GradientButtonState createState() => _GradientButtonState();
+  State<GradientButton> createState() => _GradientButtonState();
 }
 
 class _GradientButtonState extends State<GradientButton>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  late AnimationController _scaleController;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _scaleController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 100),
+      duration: _animationDuration,
       lowerBound: 0.95,
       upperBound: 1.0,
     );
+    _scaleController.forward();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _scaleController.dispose();
     super.dispose();
   }
 
-  void _onTapDown(TapDownDetails details) {
-    _controller.reverse(); // Shrinks the button on tap
+  // Shrinks the button on tap
+  void _onButtonTapDown(TapDownDetails details) {
+    _scaleController.reverse();
   }
 
-  void _onTapUp(TapUpDetails details) {
-    _controller.forward(); // Returns to normal size when tap is released
+  // Returns to normal size when the tap is released
+  void _onButtonTapUp(TapUpDetails details) {
+    _scaleController.forward();
+    widget.onPressed();
   }
 
-  void _onTapCancel() {
-    _controller.forward(); // Returns to normal size if tap is canceled
+  // Returns to normal size if the tap is canceled
+  void _onButtonTapCancel() {
+    _scaleController.forward();
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: _onTapDown,
-      onTapUp: (details) {
-        _onTapUp(details);
-        widget.onPressed(); // Trigger the button's action on tap up
-      },
-      onTapCancel: _onTapCancel,
+      onTapDown: _onButtonTapDown,
+      onTapUp: _onButtonTapUp,
+      onTapCancel: _onButtonTapCancel,
       child: ScaleTransition(
-        scale: _controller,
+        scale: _scaleController,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 100.0),
+          padding: const EdgeInsets.symmetric(
+            vertical: _buttonVerticalPadding,
+            horizontal: _buttonHorizontalPadding,
+          ),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               colors: [Colors.blueAccent, Colors.purpleAccent],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(_buttonBorderRadius),
             boxShadow: [
               BoxShadow(
                 color: Colors.purpleAccent.withOpacity(0.3),
-                spreadRadius: 2,
-                blurRadius: 10,
-                offset: Offset(0, 5),
+                spreadRadius: _buttonSpreadRadius,
+                blurRadius: _buttonBlurRadius,
+                offset: _buttonShadowOffset,
               ),
             ],
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Customizable Text
               Text(
                 widget.text,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
+                style: widget.textStyle ??
+                    const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                      letterSpacing: 1.2,
+                      fontFamily: FONT_RALEWAY,
+                    ),
               ),
-              SizedBox(width: 10.0),
-              Icon(
-                Icons.arrow_forward,
-                color: Colors.white,
-              ),
+              const SizedBox(width: 10.0),
+              // Customizable Icon
+              widget.icon ??
+                  const Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                  ),
             ],
           ),
         ),

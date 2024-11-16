@@ -15,13 +15,17 @@ class AppDimens {
   static const double spaceLarge = 24.0;
   static const double spaceXLarge = 32.0;
 
+  static const double letterSpaceMedium = 1.2;
+
   // Text Sizes
   static const double textSizeXSmall = 10.0;
   static const double textSizeSmall = 12.0;
+  static const double textSizeRegular = 14.0;
   static const double textSizeMedium = 16.0;
   static const double textSizeLarge = 18.0;
   static const double textSizeXLarge = 24.0;
   static const double textSizeTitle = 32.0;
+  static const double textSizeTitleLarge = 42.0;
 
   // Elevations
   static const double elevationSmall = 2.0;
@@ -44,6 +48,8 @@ class AppDimens {
   static const double iconSizeXLarge = 64.0;
   static const double iconSize2XLarge = 72.0;
 
+  static const double prefixIconSizeMedium = 22.0;
+
   // General Sizes for custom components
   static const double sizeXSmall = 8.0;
   static const double sizeSmall = 24.0;
@@ -53,8 +59,12 @@ class AppDimens {
   static const double size2XLarge = 96.0;
   static const double size3XLarge = 128.0;
 
+  static const double bannerSizeMedium = 200.0;
 
- // Custom Sizes
+  static const double containerSize400 = 400.0;
+  static const double containerSize430 = 430.0;
+
+  // Custom Sizes
   static const double size4 = 4.0;
   static const double size8 = 8.0;
   static const double size12 = 12.0;

@@ -41,5 +41,8 @@ flutter:
     - family: Raleway
       fonts:
         - asset: assets/fonts/raleway_regular.ttf
+    - family: Dynalight
+      fonts:
+        - asset: assets/fonts/dynalight_regular.ttf
 
 

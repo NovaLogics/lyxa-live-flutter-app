@@ -4,7 +4,7 @@ class AppStrings {
   static const String errorMessage = 'Something went wrong';
 
   // Login Section
-  static const String welcomeBack = 'Welcome Back';
+  static const String welcomeBack = 'Hey! Welcome Back';
   static const String itsTimeToShareYourStory =
       'It\'s time to share your story';
   static const String notAMember = 'Not a member yet?';
@@ -23,10 +23,10 @@ class AppStrings {
 
   // Register Section
   static const String createAccountMessage = 'Let\'s create an account for you';
-  static const String alreadyAMember = 'Already a member? ';
+  static const String alreadyAMember = 'Already a member?';
   static const String loginNow = 'Login Now';
   static const String name = 'Name';
-  static const String signUp = 'SignUp';
+  static const String signUp = 'Sign Up';
   static const String registerErrorMessage = 'Please complete all fields';
   static const String passwordNotMatchError = 'Passwords do not match!';
 
@@ -34,6 +34,12 @@ class AppStrings {
   static const String userNotFoundError = 'User not found';
   static const String failedToFetchUserError =
       'Failed to fetch user for profile update';
+
+// Hint Text Section
+  static const String hintEmail = 'Email (e.g., name@address.com)';
+  static const String hintUsername = 'Username (e.g., User_Name)';
+  static const String hintPassword = 'Password (e.g., P@ssw0rd)';
+  static const String hintConfirmPassword = 'Confirm Password (e.g., P@ssw0rd)';
 
   static const String titleHome = "H O M E";
   static const String titleProfile = "P R O F I L E";

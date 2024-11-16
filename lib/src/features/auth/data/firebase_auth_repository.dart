@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/helper/firebase_error_util.dart';
 import 'package:lyxa_live/src/core/utils/helper/logger.dart';
-import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 
@@ -37,10 +37,11 @@ class FirebaseAuthRepository implements AuthRepository {
       );
 
       return user;
-    } catch (error) {
-      final errorMessage = "${AppStrings.loginFailedError} ${error.toString()}";
-      Logger.logError(errorMessage);
-      throw Exception(errorMessage);
+    } on FirebaseAuthException catch (error) {
+      final errorData = FirebaseErrorUtil.getMessage(error.code);
+      Logger.logError(error.code);
+      Logger.logError(errorData);
+      throw Exception(errorData);
     }
   }
 
@@ -71,11 +72,11 @@ class FirebaseAuthRepository implements AuthRepository {
           .set(user.toJson());
 
       return user;
-    } catch (error) {
-      final errorMessage =
-          "${AppStrings.registrationFailedError} ${error.toString()}";
-      Logger.logError(errorMessage);
-      throw Exception(errorMessage);
+    } on FirebaseAuthException catch (error) {
+      final errorData = FirebaseErrorUtil.getMessage(error.code);
+      Logger.logError(error.code);
+      Logger.logError(errorData);
+      throw Exception(errorData);
     }
   }
 
