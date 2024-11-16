@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/helper/validator.dart';
+import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
@@ -48,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 const SpacerUnit(height: AppDimens.size12),
                 _buildTopBanner(),
-                const SpacerUnit(height: AppDimens.size24),
+                const SpacerUnit(height: AppDimens.size12),
                 _buildTitleText(),
                 const SpacerUnit(height: AppDimens.size24),
                 _buildNameTextField(
@@ -136,12 +137,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _buildTitleText() {
-    return Text(
+    return const Text(
       AppStrings.createAccountMessage,
       style: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
-        fontSize: AppDimens.textSizeLarge,
+        color: AppColors.whiteShade100,
+        fontSize: AppDimens.textSizeXLarge,
         fontFamily: FONT_RALEWAY,
+        shadows: <Shadow>[
+          Shadow(
+            offset: Offset(1, 1),
+            blurRadius: 1.0,
+            color: Color.fromARGB(255, 0, 0, 0),
+          ),
+        ],
       ),
     );
   }
@@ -233,12 +241,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             AppStrings.alreadyAMember,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
+              color: AppColors.blueGreyShade50,
               fontSize: AppDimens.textSizeMedium,
               fontFamily: FONT_RALEWAY,
+              shadows: <Shadow>[
+                Shadow(
+                  offset: Offset(1, 1),
+                  blurRadius: 1.0,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+              ],
             ),
           ),
           const SizedBox(
@@ -246,13 +261,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           GestureDetector(
             onTap: widget.onToggle,
-            child: Text(
+            child: const Text(
               AppStrings.loginNow,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
+                color: AppColors.whiteShade50,
                 fontSize: AppDimens.textSizeMedium,
                 fontWeight: FontWeight.bold,
                 fontFamily: FONT_RALEWAY,
+                letterSpacing: 0.7,
+                shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(1, 1),
+                    blurRadius: 1.0,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                  ),
+                ],
               ),
             ),
           ),
