@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
+import 'package:lyxa_live/src/core/utils/helper/logger.dart';
 import 'package:lyxa_live/src/core/utils/helper/validator.dart';
 import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
@@ -14,12 +18,10 @@ import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 
 class RegisterScreen extends StatefulWidget {
   final void Function()? onToggle;
-  final AppUser? authUser;
 
   const RegisterScreen({
     super.key,
     required this.onToggle,
-    this.authUser,
   });
 
   @override
@@ -28,6 +30,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final HiveHelper hiveHelper = HiveHelper();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -93,10 +96,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController.text = widget.authUser?.name ?? "";
-    _emailController.text = widget.authUser?.email ?? "";
-    _passwordController.text = widget.authUser?.password ?? "";
-    _confirmPasswordController.text = widget.authUser?.password ?? "";
+
+    String? loginData = hiveHelper.get<String>(HiveKeys.signUpDataKey);
+
+    if (loginData != null && loginData.isNotEmpty) {
+      Logger.logDebug(loginData);
+      try {
+        // Convert the JSON string back to a Map
+        final Map<String, dynamic> jsonData = Map<String, dynamic>.from(
+          jsonDecode(loginData),
+        );
+
+        // Deserialize the map into an AppUser object
+        AppUser user = AppUser.fromJson(jsonData);
+
+        // Populate the email controller
+        _nameController.text = user.name;
+        _emailController.text = user.email;
+      } catch (error) {
+        Logger.logError(error.toString());
+      }
+    }
   }
 
   void _register() {
@@ -113,6 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           password.isNotEmpty &&
           confirmPassword.isNotEmpty) {
         if (password == confirmPassword) {
+          _saveUser();
           authCubit.register(name, email, password);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -123,6 +144,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SnackBar(content: Text(AppStrings.registerErrorMessage)));
       }
     }
+  }
+
+  Future<void> _saveUser() async {
+    final String name = _nameController.text.trim();
+    final String email = _emailController.text.trim();
+    AppUser user = AppUser(uid: "", email: email, name: name);
+    String jsonString = jsonEncode(user.toJson());
+    await hiveHelper.save(HiveKeys.signUpDataKey, jsonString);
   }
 
   /// Builds the logo displayed on the register screen
@@ -260,7 +289,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             width: AppDimens.size8,
           ),
           GestureDetector(
-            onTap: widget.onToggle,
+            onTap: () {
+              widget.onToggle?.call();
+              _saveUser();
+            },
             child: const Text(
               AppStrings.loginNow,
               style: TextStyle(
