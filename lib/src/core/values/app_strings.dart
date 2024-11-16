@@ -4,7 +4,7 @@ class AppStrings {
   static const String errorMessage = 'Something went wrong';
 
   // Login Section
-  static const String welcomeBack = 'Welcome Back';
+  static const String welcomeBack = 'Hey! Welcome Back';
   static const String itsTimeToShareYourStory =
       'It\'s time to share your story';
   static const String notAMember = 'Not a member yet?';
