@@ -10,6 +10,8 @@ const String IMAGE_PATH_LYXA_BANNER = 'assets/images/lyxa_banner.png';
 const String FONT_RALEWAY = 'Raleway';
 const String FONT_DYNALIGHT = 'Dynalight';
 
+const String HIVE_BOX_LYXA = 'lyxaAppBox';
+
 const int MAX_LENGTH_EMAIL_FIELD = 128;
 const int MAX_LENGTH_USERNAME_FIELD = 30;
 const int MAX_LENGTH_PASSWORD_FIELD = 15;
