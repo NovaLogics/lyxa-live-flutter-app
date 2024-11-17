@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/shared/widgets/custom_toast.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
@@ -28,36 +30,33 @@ class PostTileUnit extends StatefulWidget {
 }
 
 class _PostTileUnitState extends State<PostTileUnit> {
-  // Cubits
-  late final postCubit = context.read<PostCubit>();
-  late final profileCubit = context.read<ProfileCubit>();
+  // Cubits for state management
+  late final PostCubit postCubit = context.read<PostCubit>();
+  late final ProfileCubit profileCubit = context.read<ProfileCubit>();
 
-  bool isOwnPost = false;
+  bool isOwnPost = false; // Determines if the post belongs to the current user
 
-  // Current user
-  AppUser? currentUser;
+  AppUser? currentUser; // Stores the current logged-in user
+  ProfileUser? postUser; // Stores the user who created the post
 
-  // Post user
-  ProfileUser? postUser;
-
-  // Comment text controller
+  // Text controller for handling the comment input
   final commentTextController = TextEditingController();
 
-  // On startup
   @override
   void initState() {
     super.initState();
-
     getCurrentUser();
     fetchPostUser();
   }
 
+  // Fetch the current logged-in user
   void getCurrentUser() {
     final authCubit = context.read<AuthCubit>();
     currentUser = authCubit.currentUser;
-    isOwnPost = (widget.post.userId == currentUser!.uid);
+    isOwnPost = widget.post.userId == currentUser!.uid;
   }
 
+  // Fetch the profile user for the post
   void fetchPostUser() async {
     final fetchedUser = await profileCubit.getUserProfile(widget.post.userId);
     if (fetchedUser != null) {
@@ -67,42 +66,34 @@ class _PostTileUnitState extends State<PostTileUnit> {
     }
   }
 
-  // LIKES
-  //------> User tapped like button
+  // Handle the logic for liking/unliking a post
   void toggleLikePost() {
-    // Current like status
     final isLiked = widget.post.likes.contains(currentUser!.uid);
 
-    // Optimistically like & update UI
+    // Optimistically update the UI
     setState(() {
       if (isLiked) {
-        // Unlike
-        widget.post.likes.remove(currentUser!.uid);
+        widget.post.likes.remove(currentUser!.uid); // Unlike
       } else {
-        // Like
-        widget.post.likes.add(currentUser!.uid);
+        widget.post.likes.add(currentUser!.uid); // Like
       }
     });
 
-    // Update like
+    // Update like status in the backend
     postCubit
         .toggleLikePost(widget.post.id, currentUser!.uid)
         .catchError((error) {
-      // If there's and error, revert back to original values
       setState(() {
         if (isLiked) {
-          // Revert unlike
-          widget.post.likes.add(currentUser!.uid);
+          widget.post.likes.add(currentUser!.uid); // Revert the unlike
         } else {
-          // Revert like
-          widget.post.likes.remove(currentUser!.uid);
+          widget.post.likes.remove(currentUser!.uid); // Revert the like
         }
       });
     });
   }
 
-  // COMMENTS
-  //------> Open comment box -> Type new comment
+  // Opens a dialog for adding a new comment
   void openNewCommentBox() {
     showDialog(
       context: context,
@@ -118,11 +109,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
           // Cancel button
           TextButton(
             onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop('dialog');
+              Navigator.of(context, rootNavigator: true).pop();
             },
             child: const Text("Cancel"),
           ),
-          // Save button
+          // Save button to submit the comment
           TextButton(
             onPressed: () {
               addComment();
@@ -135,20 +126,18 @@ class _PostTileUnitState extends State<PostTileUnit> {
     );
   }
 
-  //------> Add Comment
+  // Adds a new comment to the post
   void addComment() {
     final comment = commentTextController.text;
-    // Create a new comment
-    final newComment = Comment(
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
-      postId: widget.post.id,
-      userId: currentUser!.uid,
-      userName: currentUser!.name,
-      text: comment,
-      timestamp: DateTime.now(),
-    );
-
     if (comment.isNotEmpty) {
+      final newComment = Comment(
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        postId: widget.post.id,
+        userId: currentUser!.uid,
+        userName: currentUser!.name,
+        text: comment,
+        timestamp: DateTime.now(),
+      );
       postCubit.addComment(widget.post.id, newComment);
     }
   }
@@ -159,8 +148,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
     super.dispose();
   }
 
-  // Show options for deletion
-  void showOptions() {
+  // Show confirmation dialog for post deletion
+  void showDeleteOptions() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -169,11 +158,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
           // Cancel button
           TextButton(
             onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop('dialog');
+              Navigator.of(context, rootNavigator: true).pop();
             },
             child: const Text("Cancel"),
           ),
-          // Delete button
+          // Confirm Delete button
           TextButton(
             onPressed: () {
               widget.onDeletePressed!();
@@ -186,160 +175,134 @@ class _PostTileUnitState extends State<PostTileUnit> {
     );
   }
 
-  // Build UI
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.secondary,
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
       child: Column(
         children: [
-          // Top section
+          // User profile header
           GestureDetector(
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProfileScreen(uid: widget.post.userId),
-              ),
+                  builder: (context) => ProfileScreen(uid: widget.post.userId)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Profile Pic
+                  // Profile picture
                   postUser?.profileImageUrl != null
                       ? CachedNetworkImage(
-                          imageUrl: postUser!.profileImageUrl,
+                          imageUrl: postUser!.profileImageUrl!,
                           errorWidget: (context, url, error) => Icon(
-                                Icons.person,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
-                              ),
+                              Icons.person,
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary),
+                          errorListener: (value) => CustomToast.showToast(
+                            context: context,
+                            message: "Error loading image..",
+                            icon: Icons.check_circle,
+                            backgroundColor: AppColors.deepPurpleShade900,
+                            textColor: Colors.white,
+                            shadowColor: Colors.black,
+                            duration: const Duration(seconds: 4),
+                          ),
                           imageBuilder: (context, imageProvider) => Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ))
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover)),
+                          ),
+                        )
                       : const Icon(Icons.person),
                   const SizedBox(width: 12),
-                  //Name
+                  // User name
                   Text(
                     widget.post.userName,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
-                  // Delete button
+                  // Delete option if it's the user's post
                   if (isOwnPost)
                     GestureDetector(
-                      onTap: showOptions,
-                      child: AbsorbPointer(
-                        child: Icon(
-                          Icons.delete,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
+                      onTap: showDeleteOptions,
+                      child: Icon(Icons.delete,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                 ],
               ),
             ),
           ),
 
-          // Image
+          // Post image
           CachedNetworkImage(
             imageUrl: widget.post.imageUrl,
             height: 430,
             width: double.infinity,
             fit: BoxFit.cover,
-            // Loading
-            placeholder: (context, url) => const SizedBox(
-              height: 430,
-            ),
-            // Error -> Failed to load
-            errorWidget: (context, url, error) => Icon(
-              Icons.error,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-
-            errorListener: (value) => ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(value.toString()))),
+            placeholder: (context, url) => const SizedBox(height: 430),
+            errorWidget: (context, url, error) =>
+                Icon(Icons.error, color: Theme.of(context).colorScheme.primary),
           ),
 
-          // Buttons -> Like, Comment, Timestamp
+          // Interaction buttons (Like, Comment, Timestamp)
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                // Like
+                // Like button
                 SizedBox(
                   width: 50,
                   child: Row(
                     children: [
                       GestureDetector(
                         onTap: toggleLikePost,
-                        child: AbsorbPointer(
-                          child: Icon(
-                            widget.post.likes.contains(currentUser!.uid)
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: widget.post.likes.contains(currentUser!.uid)
-                                ? Colors.redAccent
-                                : Theme.of(context).colorScheme.primary,
-                          ),
+                        child: Icon(
+                          widget.post.likes.contains(currentUser!.uid)
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: widget.post.likes.contains(currentUser!.uid)
+                              ? Colors.redAccent
+                              : Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       const SizedBox(width: 5),
-                      // Like Count
+                      // Like count
                       Text(
                         widget.post.likes.length.toString(),
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal,
-                        ),
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 12),
                       ),
                     ],
                   ),
                 ),
-
-                // Comment
+                // Comment button
                 GestureDetector(
                   onTap: openNewCommentBox,
-                  child: AbsorbPointer(
-                    child: Icon(
-                      Icons.comment,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
+                  child: Icon(Icons.comment,
+                      color: Theme.of(context).colorScheme.primary),
                 ),
-
                 Text(
                   widget.post.comments.length.toString(),
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                  ),
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 12),
                 ),
-
                 const Spacer(),
-
                 // Timestamp
                 Text(
                   widget.post.timestamp.toString(),
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    fontWeight: FontWeight.normal,
-                  ),
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontWeight: FontWeight.normal),
                 ),
               ],
             ),
@@ -351,77 +314,48 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             child: Row(
               children: [
-                // Username
                 Text(
                   widget.post.userName,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 10),
-                // Text
                 Text(
                   widget.post.text,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                  ),
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 12),
                 ),
               ],
             ),
           ),
 
-          // Comment Section
+          // Comments section
           BlocBuilder<PostCubit, PostState>(
             builder: (context, state) {
-              // Loaded
               if (state is PostLoaded) {
-                // Final individual post
-                final post = state.posts
-                    .firstWhere((post) => (post.id == widget.post.id));
-
-                if (post.comments.isNotEmpty) {
-                  // How many comments to show
-                  int showCommentCount = post.comments.length;
-
-                  // Comment section
-                  return ListView.builder(
-                    itemCount: showCommentCount,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      // Get individual comment
-                      final comment = post.comments[index];
-
-                      // Comment tile UI
-                      return CommentTileUnit(
-                        comment: comment,
-                      );
-                    },
-                  );
-                }
+                final post =
+                    state.posts.firstWhere((p) => p.id == widget.post.id);
+                return ListView.builder(
+                  itemCount: post.comments.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) =>
+                      CommentTileUnit(comment: post.comments[index]),
+                );
               }
 
-              // Loading
               if (state is PostLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               }
 
-              // Error
-              else if (state is PostError) {
-                return Center(
-                  child: Text(state.message),
-                );
-              } else {
-                return const Center(
-                  child: SizedBox(),
-                );
+              if (state is PostError) {
+                return Center(child: Text(state.message));
               }
+
+              return const Center(child: SizedBox());
             },
           ),
         ],
