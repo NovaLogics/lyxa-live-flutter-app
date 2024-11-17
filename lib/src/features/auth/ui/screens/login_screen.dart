@@ -6,8 +6,9 @@ import 'package:lyxa_live/src/core/utils/helper/validator.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
-import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 
 /*
@@ -34,12 +35,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  late final authCubit = context.read<AuthCubit>();
+  late final AuthCubit _authCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _authCubit = context.read<AuthCubit>();
+    _initializeEmailField();
+  }
 
   @override
   Widget build(BuildContext context) {
-    _initFields();
-
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimens.paddingLarge,
@@ -59,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _buildPasswordTextField(),
             const SizedBox(height: AppDimens.size24),
             _buildLoginButton(),
-            const Spacer(),
+            const SizedBox(height: AppDimens.size48),
             _buildRegisterLink(),
           ],
         ),
@@ -74,29 +80,25 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _initFields() async {
-    final AppUser? savedUser = await authCubit.getSavedUser();
-    _emailController.text = savedUser?.email ?? '';
-  }
-
-  /// Handles login action and displays a message if fields are empty
-  void _login() {
-    final String email = _emailController.text.trim();
-    final String password = _passwordController.text.trim();
-
-    if (_formKey.currentState?.validate() ?? false) {
-      _saveUser();
-
-      authCubit.login(email, password);
+  void _initializeEmailField() async {
+    final savedUser = await _authCubit.getSavedUser();
+    if (savedUser != null) {
+      _emailController.text = savedUser.email;
     }
   }
 
-  Future<void> _saveUser() async {
-    AppUser user = AppUser.createWith(email: _emailController.text.trim());
-    await authCubit.saveUser(user);
+  void _login() {
+    if (_formKey.currentState?.validate() ?? false) {
+      final String email = _emailController.text.trim();
+      final String password = _passwordController.text.trim();
+
+      AppUser cachedUser = AppUser.createWith(email: email);
+
+      _authCubit.saveUser(cachedUser);
+      _authCubit.login(email, password);
+    }
   }
 
-  /// Builds the icon displayed on the login screen
   Widget _buildTopBanner() {
     return Image.asset(
       IMAGE_PATH_LYXA_BANNER,
@@ -105,7 +107,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  /// Displays the title text welcoming the user back
   Widget _buildHeadingText() {
     return const Text(
       AppStrings.welcomeBack,
@@ -120,39 +121,20 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  /// Builds the email text field for user input
   Widget _buildEmailTextField() {
-    return TextFieldUnit(
-      controller: _emailController,
-      hintText: AppStrings.hintEmail,
-      obscureText: false,
-      prefixIcon: Icon(
-        Icons.email_outlined,
-        size: AppDimens.prefixIconSizeMedium,
-        color: Theme.of(context).colorScheme.primary,
-      ),
-      validator: (value) => Validator.validateEmail(value),
-      maxLength: MAX_LENGTH_EMAIL_FIELD,
+    return EmailFieldUnit(
+      emailTextController: _emailController,
     );
   }
 
-  /// Builds the password text field for user input
   Widget _buildPasswordTextField() {
-    return TextFieldUnit(
-      controller: _passwordController,
+    return PasswordFieldUnit(
+      passwordTextController: _passwordController,
       hintText: AppStrings.hintPassword,
-      obscureText: true,
-      prefixIcon: Icon(
-        Icons.lock_outlined,
-        size: AppDimens.prefixIconSizeMedium,
-        color: Theme.of(context).colorScheme.primary,
-      ),
-      validator: (value) => Validator.validatePassword(value),
-      maxLength: MAX_LENGTH_PASSWORD_FIELD,
+      passwordValidator: Validator.validatePassword,
     );
   }
 
-  /// Builds the login button, initiating the login process when tapped
   Widget _buildLoginButton() {
     return GradientButton(
       text: AppStrings.login.toUpperCase(),
@@ -167,7 +149,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  /// Displays a registration link for new users
   Widget _buildRegisterLink() {
     return Padding(
       padding: const EdgeInsets.only(
@@ -185,7 +166,10 @@ class _LoginScreenState extends State<LoginScreen> {
           GestureDetector(
             onTap: () {
               widget.onToggle?.call();
-              _saveUser();
+
+              _authCubit.saveUser(
+                AppUser.createWith(email: _emailController.text.trim()),
+              );
             },
             child: const Text(
               AppStrings.registerNow,
