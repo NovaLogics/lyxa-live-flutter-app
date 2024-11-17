@@ -11,4 +11,8 @@ abstract class AuthRepository {
   Future<void> logout();
 
   Future<AppUser?> getCurrentUser();
+
+  Future<AppUser?> getSavedUser();
+  
+  Future<void> saveUser(AppUser user);
 }
