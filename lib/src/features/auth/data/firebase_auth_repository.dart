@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/helper/firebase_error_util.dart';
+import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/helper/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 
 class FirebaseAuthRepository implements AuthRepository {
+  final HiveHelper hiveHelper = getIt<HiveHelper>();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
@@ -109,5 +112,24 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   Future<void> logout() async {
     await firebaseAuth.signOut();
+  }
+
+  @override
+  Future<AppUser?> getSavedUser() async {
+    final String loginData =
+        hiveHelper.getValue<String>(HiveKeys.loginDataKey, '');
+    if (loginData.isNotEmpty) {
+      try {
+        return AppUser.fromJsonString(loginData);
+      } catch (e) {
+        Logger.logError(e.toString());
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<void> saveUser(AppUser user) async {
+    await hiveHelper.save(HiveKeys.loginDataKey, user.toJsonString());
   }
 }
