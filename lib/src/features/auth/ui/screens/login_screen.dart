@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
-import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
-import 'package:lyxa_live/src/core/utils/helper/logger.dart';
 import 'package:lyxa_live/src/core/utils/helper/validator.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
-import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 
@@ -35,12 +31,15 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final HiveHelper hiveHelper = getIt<HiveHelper>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  late final authCubit = context.read<AuthCubit>();
+
   @override
   Widget build(BuildContext context) {
+    _initFields();
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimens.paddingLarge,
@@ -50,14 +49,15 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SpacerUnit(height: AppDimens.size64),
+            const SizedBox(height: AppDimens.size64),
             _buildTopBanner(),
-            _buildTitleText(),
-            const SpacerUnit(height: AppDimens.size24),
+            _buildHeadingText(),
+            _buildSubheadingText(),
+            const SizedBox(height: AppDimens.size24),
             _buildEmailTextField(),
-            const SpacerUnit(height: AppDimens.size12),
+            const SizedBox(height: AppDimens.size12),
             _buildPasswordTextField(),
-            const SpacerUnit(height: AppDimens.size24),
+            const SizedBox(height: AppDimens.size24),
             _buildLoginButton(),
             const Spacer(),
             _buildRegisterLink(),
@@ -68,27 +68,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    String loginData = hiveHelper.getValue<String>(HiveKeys.loginDataKey, '');
-
-    if (loginData.isNotEmpty) {
-      Logger.logDebug(loginData);
-      try {
-        AppUser user = AppUser.fromJsonString(loginData);
-        _emailController.text = user.email;
-      } catch (error) {
-        Logger.logError(error.toString());
-      }
-    }
-  }
-
-  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _initFields() async {
+    final AppUser? savedUser = await authCubit.getSavedUser();
+    _emailController.text = savedUser?.email ?? '';
   }
 
   /// Handles login action and displays a message if fields are empty
@@ -98,40 +86,37 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (_formKey.currentState?.validate() ?? false) {
       _saveUser();
-      final authCubit = context.read<AuthCubit>();
+
       authCubit.login(email, password);
     }
   }
 
   Future<void> _saveUser() async {
     AppUser user = AppUser.createWith(email: _emailController.text.trim());
-    await hiveHelper.save(HiveKeys.loginDataKey, user.toJsonString());
+    await authCubit.saveUser(user);
   }
 
   /// Builds the icon displayed on the login screen
   Widget _buildTopBanner() {
-    return Center(
-      child: Image.asset(
-        IMAGE_PATH_LYXA_BANNER,
-        height: AppDimens.bannerSizeMedium,
-        width: AppDimens.bannerSizeMedium,
-      ),
+    return Image.asset(
+      IMAGE_PATH_LYXA_BANNER,
+      height: AppDimens.bannerSizeMedium,
+      width: AppDimens.bannerSizeMedium,
     );
   }
 
   /// Displays the title text welcoming the user back
-  Widget _buildTitleText() {
-    return const Column(
-      children: [
-        Text(
-          AppStrings.welcomeBack,
-          style: AppTextStyles.headingPrimary,
-        ),
-        Text(
-          AppStrings.itsTimeToShareYourStory,
-          style: AppTextStyles.headingSecondary,
-        ),
-      ],
+  Widget _buildHeadingText() {
+    return const Text(
+      AppStrings.welcomeBack,
+      style: AppTextStyles.headingPrimary,
+    );
+  }
+
+  Widget _buildSubheadingText() {
+    return const Text(
+      AppStrings.itsTimeToShareYourStory,
+      style: AppTextStyles.headingSecondary,
     );
   }
 
@@ -196,9 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
             AppStrings.notAMember,
             style: AppTextStyles.subtitleSecondary,
           ),
-          const SizedBox(
-            width: AppDimens.size8,
-          ),
+          const SizedBox(width: AppDimens.size8),
           GestureDetector(
             onTap: () {
               widget.onToggle?.call();
