@@ -35,6 +35,10 @@ class HiveHelper {
     return _box.get(key) as T?;
   }
 
+  T getValue<T>(String key, T defaultValue) {
+    return (_box.get(key) as T) ?? defaultValue;
+  }
+
   /// Delete a key
   Future<void> delete(String key) async {
     await _box.delete(key);
