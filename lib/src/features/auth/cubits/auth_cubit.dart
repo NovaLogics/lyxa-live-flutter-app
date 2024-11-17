@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/helper/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
@@ -74,12 +75,13 @@ class AuthCubit extends Cubit<AuthState> {
     emit(Unauthenticated());
   }
 
-  Future<AppUser?> getSavedUser() async {
-    return await _authRepository.getSavedUser();
+  Future<AppUser?> getSavedUser({String key = HiveKeys.loginDataKey}) async {
+    return await _authRepository.getSavedUser(key: key);
   }
 
-  Future<void> saveUser(AppUser user) async {
-    await _authRepository.saveUser(user);
+  Future<void> saveUser(AppUser user,
+      {String key = HiveKeys.loginDataKey}) async {
+    await _authRepository.saveUser(user, key: key);
   }
 
   /// Helper ->
