@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
@@ -11,9 +9,9 @@ import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
-import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold.dart';
-import 'package:lyxa_live/src/shared/widgets/spacer_unit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 
@@ -31,54 +29,50 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final HiveHelper hiveHelper = HiveHelper();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
+  late final AuthCubit _authCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _authCubit = context.read<AuthCubit>();
+    _initializeFields();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ScrollableScaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppDimens.paddingLarge,
-          ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SpacerUnit(height: AppDimens.size12),
-                _buildTopBanner(),
-                const SpacerUnit(height: AppDimens.size12),
-                _buildTitleText(),
-                const SpacerUnit(height: AppDimens.size24),
-                _buildNameTextField(
-                  _nameController,
-                ),
-                const SpacerUnit(height: AppDimens.size12),
-                _buildEmailTextField(
-                  _emailController,
-                ),
-                const SpacerUnit(height: AppDimens.size12),
-                _buildPasswordTextField(
-                  _passwordController,
-                ),
-                const SpacerUnit(height: AppDimens.size12),
-                _buildConfirmPasswordTextField(
-                  _confirmPasswordController,
-                ),
-                const SpacerUnit(height: AppDimens.size24),
-                _buildSignUpButton(
-                  _register,
-                ),
-                const SpacerUnit(height: AppDimens.size52),
-                _buildLoginLink(),
-              ],
-            ),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimens.paddingLarge,
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: AppDimens.size12),
+              _buildTopBanner(),
+              const SizedBox(height: AppDimens.size12),
+              _buildHeadingText(),
+              const SizedBox(height: AppDimens.size24),
+              _buildNameTextField(),
+              const SizedBox(height: AppDimens.size12),
+              _buildEmailTextField(),
+              const SizedBox(height: AppDimens.size12),
+              _buildPasswordTextField(),
+              const SizedBox(height: AppDimens.size12),
+              _buildConfirmPasswordTextField(),
+              const SizedBox(height: AppDimens.size24),
+              _buildSignUpButton(),
+              const SizedBox(height: AppDimens.size52),
+              _buildLoginLink(),
+            ],
           ),
         ),
       ),
@@ -94,79 +88,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    String? loginData = hiveHelper.get<String>(HiveKeys.signUpDataKey);
-
-    if (loginData != null && loginData.isNotEmpty) {
-      Logger.logDebug(loginData);
-      try {
-        // Convert the JSON string back to a Map
-        final Map<String, dynamic> jsonData = Map<String, dynamic>.from(
-          jsonDecode(loginData),
-        );
-
-        // Deserialize the map into an AppUser object
-        AppUser user = AppUser.fromJson(jsonData);
-
-        // Populate the email controller
-        _nameController.text = user.name;
-        _emailController.text = user.email;
-      } catch (error) {
-        Logger.logError(error.toString());
-      }
+  void _initializeFields() async {
+    final savedUser =
+        await _authCubit.getSavedUser(key: HiveKeys.signUpDataKey);
+    if (savedUser != null) {
+      Logger.logDebug(savedUser.toString());
+      _nameController.text = savedUser.name;
+      _emailController.text = savedUser.email;
     }
   }
 
   void _register() {
-    final String name = _nameController.text.trim();
-    final String email = _emailController.text.trim();
-    final String password = _passwordController.text.trim();
-    final String confirmPassword = _confirmPasswordController.text.trim();
-
     if (_formKey.currentState?.validate() ?? false) {
-      final authCubit = context.read<AuthCubit>();
+      final String name = _nameController.text.trim();
+      final String email = _emailController.text.trim();
+      final String password = _passwordController.text.trim();
 
-      if (name.isNotEmpty &&
-          email.isNotEmpty &&
-          password.isNotEmpty &&
-          confirmPassword.isNotEmpty) {
-        if (password == confirmPassword) {
-          _saveUser();
-          authCubit.register(name, email, password);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text(AppStrings.passwordNotMatchError)));
-        }
-      } else {
+      try {
+        AppUser cachedUser = AppUser.createWith(name: name, email: email);
+
+        _authCubit.saveUser(cachedUser, key: HiveKeys.signUpDataKey);
+        _authCubit.register(name, email, password);
+      } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text(AppStrings.registerErrorMessage)));
       }
     }
   }
 
-  Future<void> _saveUser() async {
-    final String name = _nameController.text.trim();
-    final String email = _emailController.text.trim();
-    AppUser user = AppUser(uid: "", email: email, name: name);
-    String jsonString = jsonEncode(user.toJson());
-    await hiveHelper.save(HiveKeys.signUpDataKey, jsonString);
-  }
-
-  /// Builds the logo displayed on the register screen
-  Widget _buildTopBanner() {
-    return Center(
-      child: Image.asset(
-        IMAGE_PATH_LYXA_BANNER,
-        height: AppDimens.size3XLarge,
-        width: AppDimens.size3XLarge,
-      ),
+  String? _validateMainPassword(String? value) {
+    return Validator.validatePasswordFileds(
+      value,
+      _confirmPasswordController.text.trim(),
     );
   }
 
-  Widget _buildTitleText() {
+  String? _validateConfirmPassword(String? value) {
+    return Validator.validatePasswordFileds(
+      value,
+      _passwordController.text.trim(),
+    );
+  }
+
+  Widget _buildTopBanner() {
+    return Image.asset(
+      IMAGE_PATH_LYXA_BANNER,
+      height: AppDimens.size3XLarge,
+      width: AppDimens.size3XLarge,
+    );
+  }
+
+  Widget _buildHeadingText() {
     return Text(
       AppStrings.createAccountMessage,
       style: AppTextStyles.headingSecondary.copyWith(
@@ -176,9 +148,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildNameTextField(TextEditingController controller) {
+  Widget _buildNameTextField() {
     return TextFieldUnit(
-      controller: controller,
+      controller: _nameController,
       hintText: AppStrings.hintUsername,
       obscureText: false,
       prefixIcon: Icon(
@@ -191,55 +163,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildEmailTextField(TextEditingController controller) {
-    return TextFieldUnit(
-      controller: controller,
-      hintText: AppStrings.hintEmail,
-      obscureText: false,
-      prefixIcon: Icon(
-        Icons.email_outlined,
-        size: AppDimens.prefixIconSizeMedium,
-        color: Theme.of(context).colorScheme.primary,
-      ),
-      validator: (value) => Validator.validateEmail(value),
-      maxLength: MAX_LENGTH_EMAIL_FIELD,
+  Widget _buildEmailTextField() {
+    return EmailFieldUnit(
+      emailTextController: _emailController,
     );
   }
 
-  Widget _buildPasswordTextField(TextEditingController controller) {
-    return TextFieldUnit(
-      controller: controller,
+  Widget _buildPasswordTextField() {
+    return PasswordFieldUnit(
+      passwordTextController: _passwordController,
       hintText: AppStrings.hintPassword,
-      obscureText: true,
-      prefixIcon: Icon(
-        Icons.lock_outlined,
-        size: AppDimens.prefixIconSizeMedium,
-        color: Theme.of(context).colorScheme.primary,
-      ),
-      validator: (value) => Validator.validatePassword(value),
-      maxLength: MAX_LENGTH_PASSWORD_FIELD,
+      passwordValidator: _validateMainPassword,
     );
   }
 
-  Widget _buildConfirmPasswordTextField(TextEditingController controller) {
-    return TextFieldUnit(
-      controller: controller,
+  Widget _buildConfirmPasswordTextField() {
+    return PasswordFieldUnit(
+      passwordTextController: _confirmPasswordController,
       hintText: AppStrings.hintConfirmPassword,
-      obscureText: true,
-      prefixIcon: Icon(
-        Icons.lock_outlined,
-        size: AppDimens.prefixIconSizeMedium,
-        color: Theme.of(context).colorScheme.primary,
-      ),
-      validator: (value) => Validator.validatePassword(value),
-      maxLength: MAX_LENGTH_PASSWORD_FIELD,
+      passwordValidator: _validateConfirmPassword,
     );
   }
 
-  Widget _buildSignUpButton(Function() onTap) {
+  Widget _buildSignUpButton() {
     return GradientButton(
       text: AppStrings.signUp.toUpperCase(),
-      onPressed: onTap,
+      onPressed: _register,
       textStyle: AppTextStyles.buttonTextPrimary.copyWith(
         color: Theme.of(context).colorScheme.inversePrimary,
       ),
@@ -269,7 +218,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           GestureDetector(
             onTap: () {
               widget.onToggle?.call();
-              _saveUser();
+
+              _authCubit.saveUser(
+                AppUser.createWith(
+                  name: _nameController.text.trim(),
+                  email: _emailController.text.trim(),
+                ),
+                key: HiveKeys.signUpDataKey,
+              );
             },
             child: const Text(
               AppStrings.loginNow,

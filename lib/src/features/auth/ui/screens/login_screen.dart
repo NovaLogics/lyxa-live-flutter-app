@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/helper/logger.dart';
 import 'package:lyxa_live/src/core/utils/helper/validator.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
@@ -83,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _initializeEmailField() async {
     final savedUser = await _authCubit.getSavedUser();
     if (savedUser != null) {
+      Logger.logDebug(savedUser.toString());
       _emailController.text = savedUser.email;
     }
   }
