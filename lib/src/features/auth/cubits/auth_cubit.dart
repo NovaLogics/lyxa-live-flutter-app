@@ -74,6 +74,14 @@ class AuthCubit extends Cubit<AuthState> {
     emit(Unauthenticated());
   }
 
+  Future<AppUser?> getSavedUser() async {
+    return await _authRepository.getSavedUser();
+  }
+
+  Future<void> saveUser(AppUser user) async {
+    await _authRepository.saveUser(user);
+  }
+
   /// Helper ->
   /// Handles authentication errors by emitting an error state
   void _handleAuthError(dynamic error) {
