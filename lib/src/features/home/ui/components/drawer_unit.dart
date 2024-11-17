@@ -16,55 +16,48 @@ class DrawerUnit extends StatelessWidget {
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-        child: Column(
-          children: [
-            _drawerIcon(context),
-            Divider(
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            DrawerTitleUnit(
-              title: AppStrings.titleHome,
-              icon: Icons.home,
-              onTap: () => Navigator.of(context).pop(),
-            ),
-            _profileSection(context),
-            DrawerTitleUnit(
-              title: AppStrings.titleSearch,
-              icon: Icons.search,
-              onTap: () => Navigator.push(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
+          child: Column(
+            children: [
+              _buildDrawerIcon(context),
+              const Divider(),
+              _buildDrawerItem(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchScreen(),
-                ),
+                title: AppStrings.titleHome,
+                icon: Icons.home,
+                onTap: () => Navigator.of(context).pop(),
               ),
-            ),
-            DrawerTitleUnit(
-              title: AppStrings.titleSettings,
-              icon: Icons.settings,
-              onTap: () => Navigator.push(
+              _buildProfileSection(context),
+              _buildDrawerItem(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const SettingsScreen(),
-                ),
+                title: AppStrings.titleSearch,
+                icon: Icons.search,
+                onTap: () => _navigateToSearchScreen(context),
               ),
-            ),
-            const Spacer(),
-            DrawerTitleUnit(
-              title: AppStrings.titleLogout,
-              icon: Icons.login,
-              onTap: () => context.read<AuthCubit>().logout(),
-            ),
-          ],
+              _buildDrawerItem(
+                context,
+                title: AppStrings.titleSettings,
+                icon: Icons.settings,
+                onTap: () => _navigateToSettingsScreen(context),
+              ),
+              const Spacer(),
+              _buildDrawerItem(
+                context,
+                title: AppStrings.titleLogout,
+                icon: Icons.login,
+                onTap: () => _logout(context),
+              ),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 
-  Widget _drawerIcon(BuildContext context) {
+  Widget _buildDrawerIcon(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50.0),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size48),
       child: Icon(
         Icons.person,
         size: AppDimens.size72,
@@ -73,24 +66,60 @@ class DrawerUnit extends StatelessWidget {
     );
   }
 
-  Widget _profileSection(BuildContext context) {
+  Widget _buildProfileSection(BuildContext context) {
     final user = context.read<AuthCubit>().currentUser;
-    String? uid = user!.uid;
+    final uid = user?.uid;
 
-    return DrawerTitleUnit(
+    return _buildDrawerItem(
+      context,
       title: AppStrings.titleProfile,
       icon: Icons.person,
       onTap: () {
         Navigator.of(context).pop();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProfileScreen(
-              uid: uid,
-            ),
-          ),
-        );
+        if (uid != null) {
+          _navigateToProfileScreen(context, uid);
+        }
       },
     );
+  }
+
+  Widget _buildDrawerItem(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return DrawerTitleUnit(
+      title: title,
+      icon: icon,
+      onTap: onTap,
+    );
+  }
+
+  void _navigateToSearchScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SearchScreen()),
+    );
+  }
+
+  void _navigateToSettingsScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SettingsScreen()),
+    );
+  }
+
+  void _navigateToProfileScreen(BuildContext context, String uid) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileScreen(uid: uid),
+      ),
+    );
+  }
+
+  void _logout(BuildContext context) {
+    context.read<AuthCubit>().logout();
   }
 }
