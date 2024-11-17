@@ -36,7 +36,11 @@ class HiveHelper {
   }
 
   T getValue<T>(String key, T defaultValue) {
-    return (_box.get(key) as T) ?? defaultValue;
+    final value = _box.get(key);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value as T;
   }
 
   /// Delete a key
