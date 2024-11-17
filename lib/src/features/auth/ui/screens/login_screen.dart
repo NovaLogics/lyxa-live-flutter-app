@@ -1,13 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
+import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/helper/logger.dart';
 import 'package:lyxa_live/src/core/utils/helper/validator.dart';
-import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
@@ -54,7 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             const SpacerUnit(height: AppDimens.size64),
             _buildTopBanner(),
-            //const SpacerUnit(height: AppDimens.size8),
             _buildTitleText(),
             const SpacerUnit(height: AppDimens.size24),
             _buildEmailTextField(),
@@ -74,20 +71,12 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
 
-    String? loginData = hiveHelper.get<String>(HiveKeys.loginDataKey);
+    String loginData = hiveHelper.getValue<String>(HiveKeys.loginDataKey, '');
 
-    if (loginData != null && loginData.isNotEmpty) {
+    if (loginData.isNotEmpty) {
       Logger.logDebug(loginData);
       try {
-        // Convert the JSON string back to a Map
-        final Map<String, dynamic> jsonData = Map<String, dynamic>.from(
-          jsonDecode(loginData),
-        );
-
-        // Deserialize the map into an AppUser object
-        AppUser user = AppUser.fromJson(jsonData);
-
-        // Populate the email controller
+        AppUser user = AppUser.fromJsonString(loginData);
         _emailController.text = user.email;
       } catch (error) {
         Logger.logError(error.toString());
@@ -112,20 +101,11 @@ class _LoginScreenState extends State<LoginScreen> {
       final authCubit = context.read<AuthCubit>();
       authCubit.login(email, password);
     }
-
-    // if (email.isNotEmpty && password.isNotEmpty) {
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text(AppStrings.loginErrorMessage)),
-    //   );
-    // }
   }
 
   Future<void> _saveUser() async {
-    final String email = _emailController.text.trim();
-    AppUser user = AppUser(uid: "", email: email, name: "");
-    String jsonString = jsonEncode(user.toJson());
-    await hiveHelper.save(HiveKeys.loginDataKey, jsonString);
+    AppUser user = AppUser.createWith(email: _emailController.text.trim());
+    await hiveHelper.save(HiveKeys.loginDataKey, user.toJsonString());
   }
 
   /// Builds the icon displayed on the login screen
@@ -145,35 +125,11 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         Text(
           AppStrings.welcomeBack,
-          style: TextStyle(
-            color: AppColors.whiteShade50,
-            fontSize: AppDimens.textSizeTitleLarge,
-            fontWeight: FontWeight.w500,
-            letterSpacing: 0.1,
-            fontFamily: FONT_DYNALIGHT,
-            shadows: <Shadow>[
-              Shadow(
-                offset: Offset(1, 1),
-                blurRadius: 1.0,
-                color: Color.fromARGB(255, 0, 0, 0),
-              ),
-            ],
-          ),
+          style: AppTextStyles.headingPrimary,
         ),
         Text(
           AppStrings.itsTimeToShareYourStory,
-          style: TextStyle(
-            color: AppColors.blueGreyShade50,
-            fontSize: AppDimens.textSizeLarge,
-            fontFamily: FONT_RALEWAY,
-            shadows: <Shadow>[
-              Shadow(
-                offset: Offset(1, 1),
-                blurRadius: 1.0,
-                color: Color.fromARGB(255, 0, 0, 0),
-              ),
-            ],
-          ),
+          style: AppTextStyles.headingSecondary,
         ),
       ],
     );
@@ -216,12 +172,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return GradientButton(
       text: AppStrings.login.toUpperCase(),
       onPressed: _login,
-      textStyle: TextStyle(
+      textStyle: AppTextStyles.buttonTextPrimary.copyWith(
         color: Theme.of(context).colorScheme.inversePrimary,
-        fontWeight: FontWeight.bold,
-        fontSize: AppDimens.textSizeMedium,
-        letterSpacing: AppDimens.letterSpaceMedium,
-        fontFamily: FONT_RALEWAY,
       ),
       icon: Icon(
         Icons.arrow_forward_outlined,
@@ -242,18 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           const Text(
             AppStrings.notAMember,
-            style: TextStyle(
-              color: AppColors.blueGreyShade50,
-              fontSize: AppDimens.textSizeMedium,
-              fontFamily: FONT_RALEWAY,
-              shadows: <Shadow>[
-                Shadow(
-                  offset: Offset(1, 1),
-                  blurRadius: 1.0,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-              ],
-            ),
+            style: AppTextStyles.subtitleSecondary,
           ),
           const SizedBox(
             width: AppDimens.size8,
@@ -265,20 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             child: const Text(
               AppStrings.registerNow,
-              style: TextStyle(
-                color: AppColors.whiteShade50,
-                fontSize: AppDimens.textSizeMedium,
-                fontWeight: FontWeight.bold,
-                fontFamily: FONT_RALEWAY,
-                letterSpacing: 0.7,
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1, 1),
-                    blurRadius: 1.0,
-                    color: Color.fromARGB(255, 0, 0, 0),
-                  ),
-                ],
-              ),
+              style: AppTextStyles.subtitlePrimary,
             ),
           ),
         ],
