@@ -12,7 +12,7 @@ class CenterLoadingUnit extends StatelessWidget {
       backgroundColor: Colors.black.withOpacity(0.5),
       body: Center(
         child: Card(
-          color: Color(0xFFEEEEEE), // Background semi-transparent
+          color: const Color(0xFFEEEEEE), // Background semi-transparent
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(

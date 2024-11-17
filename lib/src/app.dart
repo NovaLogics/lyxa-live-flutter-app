@@ -51,7 +51,7 @@ class LyxaApp extends StatelessWidget {
     return [
       // Authentication Cubit
       BlocProvider<AuthCubit>(
-        create: (context) =>
+        create: (context) => 
             AuthCubit(authRepository: _authRepository)..checkAuthentication(),
       ),
 
@@ -89,11 +89,13 @@ class LyxaApp extends StatelessWidget {
 
         if (authState is Unauthenticated) {
           // Show Authentication Screen
-          return AuthScreen(authUser: authState.user,);
+          return const AuthScreen();
         } else if (authState is AuthLoading) {
           // Show Authentication Screen with loading
-          return const AuthScreen(isLoading: true,);
-        }else if (authState is Authenticated) {
+          return const AuthScreen(
+            isLoading: true,
+          );
+        } else if (authState is Authenticated) {
           // Show Main Home Screen
           return const HomeScreen();
         } else {

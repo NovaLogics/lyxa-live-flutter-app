@@ -1,3 +1,4 @@
+import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 
 /// Defines authentication operations for the app
@@ -11,4 +12,8 @@ abstract class AuthRepository {
   Future<void> logout();
 
   Future<AppUser?> getCurrentUser();
+
+  Future<AppUser?> getSavedUser({String key = HiveKeys.loginDataKey});
+  
+  Future<void> saveUser(AppUser user,{String key = HiveKeys.loginDataKey});
 }

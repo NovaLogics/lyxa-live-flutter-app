@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/helper/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
@@ -22,7 +23,7 @@ class AuthCubit extends Cubit<AuthState> {
       _currentUser = user;
       emit(Authenticated(user));
     } else {
-      emit(Unauthenticated(null));
+      emit(Unauthenticated());
     }
   }
 
@@ -41,10 +42,10 @@ class AuthCubit extends Cubit<AuthState> {
         _currentUser = user;
         emit(Authenticated(user));
       } else {
-        emit(Unauthenticated(user));
+        emit(Unauthenticated());
       }
     } catch (error) {
-      _handleAuthError(error, AppUser(uid: "", email: email, name: "",password: password));
+      _handleAuthError(error);
     }
   }
 
@@ -60,10 +61,10 @@ class AuthCubit extends Cubit<AuthState> {
         _currentUser = user;
         emit(Authenticated(user));
       } else {
-        emit(Unauthenticated(user));
+        emit(Unauthenticated());
       }
     } catch (error) {
-      _handleAuthError(error, AppUser(uid: "", email: email, name: name));
+      _handleAuthError(error);
     }
   }
 
@@ -71,14 +72,23 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> logout() async {
     await _authRepository.logout();
     _currentUser = null;
-    emit(Unauthenticated(null));
+    emit(Unauthenticated());
+  }
+
+  Future<AppUser?> getSavedUser({String key = HiveKeys.loginDataKey}) async {
+    return await _authRepository.getSavedUser(key: key);
+  }
+
+  Future<void> saveUser(AppUser user,
+      {String key = HiveKeys.loginDataKey}) async {
+    await _authRepository.saveUser(user, key: key);
   }
 
   /// Helper ->
   /// Handles authentication errors by emitting an error state
-  void _handleAuthError(dynamic error, AppUser user) {
+  void _handleAuthError(dynamic error) {
     emit(AuthError(error.toString().replaceFirst('Exception: ', '')));
-    emit(Unauthenticated(user));
+    emit(Unauthenticated());
     Logger.logError(error.toString());
   }
 }
