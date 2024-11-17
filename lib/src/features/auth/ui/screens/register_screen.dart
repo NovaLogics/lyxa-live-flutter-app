@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/helper/logger.dart';
@@ -166,19 +167,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _buildTitleText() {
-    return const Text(
+    return Text(
       AppStrings.createAccountMessage,
-      style: TextStyle(
+      style: AppTextStyles.headingSecondary.copyWith(
         color: AppColors.whiteShade100,
         fontSize: AppDimens.textSizeXLarge,
-        fontFamily: FONT_RALEWAY,
-        shadows: <Shadow>[
-          Shadow(
-            offset: Offset(1, 1),
-            blurRadius: 1.0,
-            color: Color.fromARGB(255, 0, 0, 0),
-          ),
-        ],
       ),
     );
   }
@@ -247,12 +240,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return GradientButton(
       text: AppStrings.signUp.toUpperCase(),
       onPressed: onTap,
-      textStyle: TextStyle(
+      textStyle: AppTextStyles.buttonTextPrimary.copyWith(
         color: Theme.of(context).colorScheme.inversePrimary,
-        fontWeight: FontWeight.bold,
-        fontSize: AppDimens.textSizeMedium,
-        letterSpacing: AppDimens.letterSpaceMedium,
-        fontFamily: FONT_RALEWAY,
       ),
       icon: Icon(
         Icons.arrow_forward_ios_sharp,
@@ -272,18 +261,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: [
           const Text(
             AppStrings.alreadyAMember,
-            style: TextStyle(
-              color: AppColors.blueGreyShade50,
-              fontSize: AppDimens.textSizeMedium,
-              fontFamily: FONT_RALEWAY,
-              shadows: <Shadow>[
-                Shadow(
-                  offset: Offset(1, 1),
-                  blurRadius: 1.0,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-              ],
-            ),
+            style: AppTextStyles.subtitleSecondary,
           ),
           const SizedBox(
             width: AppDimens.size8,
@@ -295,20 +273,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             },
             child: const Text(
               AppStrings.loginNow,
-              style: TextStyle(
-                color: AppColors.whiteShade50,
-                fontSize: AppDimens.textSizeMedium,
-                fontWeight: FontWeight.bold,
-                fontFamily: FONT_RALEWAY,
-                letterSpacing: 0.7,
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1, 1),
-                    blurRadius: 1.0,
-                    color: Color.fromARGB(255, 0, 0, 0),
-                  ),
-                ],
-              ),
+              style: AppTextStyles.subtitlePrimary,
             ),
           ),
         ],
