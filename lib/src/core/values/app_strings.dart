@@ -1,5 +1,5 @@
 class AppStrings {
-  static const String appName = 'LYXA Live';
+  static const String appName = 'Lyxa Zone';
   static const String welcomeMessage = 'Welcome to LYXA Live';
   static const String errorMessage = 'Something went wrong';
 
@@ -35,7 +35,13 @@ class AppStrings {
   static const String failedToFetchUserError =
       'Failed to fetch user for profile update';
 
-// Hint Text Section
+  // Home Section
+  static const String noPostAvailableError = 'No posts available';
+
+  // Common
+  static const String pleaseWaitMessage = 'Please wait...';
+
+  // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
   static const String hintUsername = 'Username (e.g., User_Name)';
   static const String hintPassword = 'Password (e.g., P@ssw0rd)';
