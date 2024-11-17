@@ -12,6 +12,7 @@ import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/custom_toast.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 
@@ -110,8 +111,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _authCubit.saveUser(cachedUser, key: HiveKeys.signUpDataKey);
         _authCubit.register(name, email, password);
       } catch (error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text(AppStrings.registerErrorMessage)));
+        CustomToast.showToast(
+          context: context,
+          message: AppStrings.registerErrorMessage,
+          icon: Icons.error,
+          backgroundColor: AppColors.deepPurpleShade900,
+          textColor: Colors.white,
+          shadowColor: Colors.black,
+          duration: const Duration(seconds: 5),
+        );
       }
     }
   }
