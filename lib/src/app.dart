@@ -51,7 +51,7 @@ class LyxaApp extends StatelessWidget {
     return [
       // Authentication Cubit
       BlocProvider<AuthCubit>(
-        create: (context) =>
+        create: (context) => 
             AuthCubit(authRepository: _authRepository)..checkAuthentication(),
       ),
 

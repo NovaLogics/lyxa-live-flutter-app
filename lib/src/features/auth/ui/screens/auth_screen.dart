@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/login_screen.dart';
@@ -48,7 +49,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          const GradientBackgroundUnit(width: AppDimens.containerSize400),
+          getIt<GradientBackgroundUnit>(param1: AppDimens.containerSize400),
           ScrollableScaffold(
             body: _isLoginPage
                 ? LoginScreen(
