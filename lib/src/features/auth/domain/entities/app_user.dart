@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 ///Generated file
@@ -28,6 +30,18 @@ class AppUser {
 
   // Converts the `AppUser` instance into a JSON map.
   Map<String, dynamic> toJson() => _$AppUserToJson(this);
+
+  // Convert AppUser to JSON string
+  String toJsonString() => jsonEncode(toJson());
+
+  // Create AppUser from JSON string
+  factory AppUser.fromJsonString(String jsonString) {
+    return AppUser.fromJson(jsonDecode(jsonString) as Map<String, dynamic>);
+  }
+
+  static createWith({String uid = "", String email = "", String name = ""}) {
+    return AppUser(uid: uid, email: email, name: name);
+  }
 
   // Returns a string representation of the `AppUser` instance.
   @override
