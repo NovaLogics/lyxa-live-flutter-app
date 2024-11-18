@@ -47,11 +47,15 @@ flutter:
     - family: Raleway
       fonts:
         - asset: assets/fonts/raleway_regular.ttf
+        - asset: assets/fonts/raleway_semi_bold.ttf
+          weight: 600
     - family: Dynalight
       fonts:
         - asset: assets/fonts/dynalight_regular.ttf
     - family: Montserrat
       fonts:
         - asset: assets/fonts/montserrat_regular.ttf
+        - asset: assets/fonts/montserrat_medium.ttf
+          weight: 600
 
 
