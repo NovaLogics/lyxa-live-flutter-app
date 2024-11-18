@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/utils/helper/date_time_util.dart';
 import 'package:lyxa_live/src/core/values/app_colors.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/shared/widgets/custom_toast.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
@@ -178,7 +180,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
       child: Column(
         children: [
           // User profile header
@@ -225,8 +227,21 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   Text(
                     widget.post.userName,
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontWeight: FontWeight.bold),
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: AppDimens.textSizeRegular,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    DateTimeUtil.datetimeAgo(
+                      widget.post.timestamp,
+                    ),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                      fontWeight: FontWeight.normal,
+                      fontSize: AppDimens.textSizeSmall,
+                    ),
                   ),
                   const Spacer(),
                   // Delete option if it's the user's post
@@ -244,12 +259,26 @@ class _PostTileUnitState extends State<PostTileUnit> {
           // Post image
           CachedNetworkImage(
             imageUrl: widget.post.imageUrl,
-            height: 430,
-            width: double.infinity,
-            fit: BoxFit.cover,
-            placeholder: (context, url) => const SizedBox(height: 430),
-            errorWidget: (context, url, error) =>
-                Icon(Icons.error, color: Theme.of(context).colorScheme.primary),
+            placeholder: (context, url) => const AspectRatio(
+              aspectRatio:
+                  1.5, // Default aspect ratio for placeholder (e.g., 3:2)
+              child: SizedBox(),
+            ),
+            errorWidget: (context, url, error) => Icon(
+              Icons.error,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            imageBuilder: (context, imageProvider) {
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  return Image(
+                    image: imageProvider,
+                    width: constraints.maxWidth,
+                    fit: BoxFit.cover,
+                  );
+                },
+              );
+            },
           ),
 
           // Interaction buttons (Like, Comment, Timestamp)
@@ -269,7 +298,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: widget.post.likes.contains(currentUser!.uid)
-                              ? Colors.redAccent
+                              ? Colors.red[700]
                               : Theme.of(context).colorScheme.primary,
                         ),
                       ),
@@ -287,7 +316,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 // Comment button
                 GestureDetector(
                   onTap: openNewCommentBox,
-                  child: Icon(Icons.comment,
+                  child: Icon(Icons.comment_outlined,
                       color: Theme.of(context).colorScheme.primary),
                 ),
                 Text(
@@ -299,7 +328,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 const Spacer(),
                 // Timestamp
                 Text(
-                  widget.post.timestamp.toString(),
+                  DateTimeUtil.formatDate(widget.post.timestamp,
+                      format: DateTimeStyles.customShortDate),
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.inversePrimary,
                       fontWeight: FontWeight.normal),
@@ -358,6 +388,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
               return const Center(child: SizedBox());
             },
           ),
+          const Divider(
+            height: 2,
+            color: AppColors.blueGreyShade100,
+          )
         ],
       ),
     );
