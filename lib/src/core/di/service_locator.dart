@@ -8,8 +8,8 @@ final GetIt getIt = GetIt.instance;
 void setupServiceLocator() {
   getIt.registerFactory(() => HiveHelper());
 
-  getIt.registerFactoryParam<GradientBackgroundUnit, double, void>(
-    (widthSize, _) => GradientBackgroundUnit(width: widthSize),
+  getIt.registerFactoryParam<GradientBackgroundUnit, double, BackgroundStyle>(
+    (widthSize, style) => GradientBackgroundUnit(width: widthSize, style: style,),
   );
 
   getIt.registerFactoryParam<CenterLoadingUnit, String, void>(
