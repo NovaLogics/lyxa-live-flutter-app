@@ -9,6 +9,7 @@ const String IMAGE_PATH_LYXA_BANNER = 'assets/images/lyxa_banner.png';
 
 const String FONT_RALEWAY = 'Raleway';
 const String FONT_DYNALIGHT = 'Dynalight';
+const String FONT_MONTSERRAT = 'Montserrat';
 
 const String HIVE_BOX_LYXA = 'lyxaAppBox';
 
