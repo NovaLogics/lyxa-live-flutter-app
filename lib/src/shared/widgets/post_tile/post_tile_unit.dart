@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/utils/helper/date_time_util.dart';
 import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
@@ -198,7 +200,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   // Profile picture
                   postUser?.profileImageUrl != null
                       ? CachedNetworkImage(
-                          imageUrl: postUser!.profileImageUrl!,
+                          imageUrl: postUser!.profileImageUrl,
                           errorWidget: (context, url, error) => Icon(
                               Icons.person,
                               color:
@@ -222,27 +224,35 @@ class _PostTileUnitState extends State<PostTileUnit> {
                           ),
                         )
                       : const Icon(Icons.person),
-                  const SizedBox(width: 12),
-                  // User name
-                  Text(
-                    widget.post.userName,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: AppDimens.textSizeRegular,
-                    ),
+                  const SizedBox(width: 8),
+                  Column(
+                    children: [
+                      // User name
+                      Text(
+                        widget.post.userName.toString().trim(),
+                        style: AppTextStyles.subtitleSecondary.copyWith(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: AppDimens.textSizeRegular,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 1),
+                        child: Text(
+                          DateTimeUtil.datetimeAgo(
+                            widget.post.timestamp,
+                          ),
+                          style: AppTextStyles.subtitleSecondary.copyWith(
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            fontSize: AppDimens.textSizeSmall,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+
                   const SizedBox(width: 12),
-                  Text(
-                    DateTimeUtil.datetimeAgo(
-                      widget.post.timestamp,
-                    ),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSecondary,
-                      fontWeight: FontWeight.normal,
-                      fontSize: AppDimens.textSizeSmall,
-                    ),
-                  ),
+
                   const Spacer(),
                   // Delete option if it's the user's post
                   if (isOwnPost)
@@ -293,22 +303,32 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     children: [
                       GestureDetector(
                         onTap: toggleLikePost,
-                        child: Icon(
+                        child: SvgPicture.asset(
                           widget.post.likes.contains(currentUser!.uid)
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: widget.post.likes.contains(currentUser!.uid)
-                              ? Colors.red[700]
-                              : Theme.of(context).colorScheme.primary,
+                              ? 'assets/icons/ic_heart_filled.svg'
+                              : 'assets/icons/ic_heart_border.svg',
+                          color: (widget.post.likes.contains(currentUser!.uid)
+                              ? Theme.of(context).colorScheme.secondaryContainer
+                              : Theme.of(context).colorScheme.primary),
+                          width: 24,
+                          height: 24,
                         ),
+                        // Icon(
+                        //   widget.post.likes.contains(currentUser!.uid)
+                        //       ? Icons.favorite
+                        //       : Icons.favorite_border,
+                        //   color: widget.post.likes.contains(currentUser!.uid)
+                        //       ? Colors.red[700]
+                        //       : Theme.of(context).colorScheme.primary,
+                        // ),
                       ),
-                      const SizedBox(width: 5),
+                      const SizedBox(width: 3),
                       // Like count
                       Text(
                         widget.post.likes.length.toString(),
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
-                            fontSize: 12),
+                            fontSize: 14),
                       ),
                     ],
                   ),
@@ -316,23 +336,30 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 // Comment button
                 GestureDetector(
                   onTap: openNewCommentBox,
-                  child: Icon(Icons.comment_outlined,
-                      color: Theme.of(context).colorScheme.primary),
+                  child: SvgPicture.asset(
+                    'assets/icons/ic_comment.svg',
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 22,
+                    height: 22,
+                  ),
                 ),
+                const SizedBox(width: 2),
                 Text(
                   widget.post.comments.length.toString(),
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
-                      fontSize: 12),
+                      fontSize: 14),
                 ),
                 const Spacer(),
                 // Timestamp
                 Text(
                   DateTimeUtil.formatDate(widget.post.timestamp,
                       format: DateTimeStyles.customShortDate),
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      fontWeight: FontWeight.normal),
+                  style: AppTextStyles.subtitleSecondary.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.normal,
+                    fontSize: AppDimens.textSizeRegular,
+                  ),
                 ),
               ],
             ),
@@ -388,9 +415,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
               return const Center(child: SizedBox());
             },
           ),
-          const Divider(
-            height: 2,
-            color: AppColors.blueGreyShade100,
+          Divider(
+            height: 1,
+            color: AppColors.blueGreyShade100.withOpacity(0.1),
           )
         ],
       ),
