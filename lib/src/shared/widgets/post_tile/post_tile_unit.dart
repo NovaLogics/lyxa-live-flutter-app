@@ -367,27 +367,38 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
           // Caption
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
             child: Row(
               children: [
                 Text(
                   widget.post.userName,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold),
+                  style: AppTextStyles.subtitleSecondary.copyWith(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: AppDimens.textSizeSmall,
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Text(
                   widget.post.text,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 12),
+                  style: AppTextStyles.subtitleSecondary.copyWith(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                    fontWeight: FontWeight.normal,
+                    fontSize: AppDimens.textSizeSmall,
+                  ),
                 ),
               ],
             ),
           ),
+
+          if (widget.post.comments.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(right: 200),
+              child: Divider(
+                height: 1,
+                color: AppColors.blueGreyShade100.withOpacity(0.1),
+              ),
+            ),
 
           // Comments section
           BlocBuilder<PostCubit, PostState>(
@@ -395,12 +406,15 @@ class _PostTileUnitState extends State<PostTileUnit> {
               if (state is PostLoaded) {
                 final post =
                     state.posts.firstWhere((p) => p.id == widget.post.id);
-                return ListView.builder(
-                  itemCount: post.comments.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) =>
-                      CommentTileUnit(comment: post.comments[index]),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: ListView.builder(
+                    itemCount: post.comments.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) =>
+                        CommentTileUnit(comment: post.comments[index]),
+                  ),
                 );
               }
 
