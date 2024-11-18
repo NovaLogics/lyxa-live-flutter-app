@@ -50,5 +50,8 @@ flutter:
     - family: Dynalight
       fonts:
         - asset: assets/fonts/dynalight_regular.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/montserrat_regular.ttf
 
 
