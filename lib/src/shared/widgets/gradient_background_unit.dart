@@ -3,10 +3,17 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/values/app_colors.dart';
 
+enum BackgroundStyle { home, auth }
+
 class GradientBackgroundUnit extends StatelessWidget {
   final double width;
+  final BackgroundStyle style;
 
-  const GradientBackgroundUnit({super.key, this.width = 400});
+  const GradientBackgroundUnit({
+    super.key,
+    this.width = 400,
+    required this.style,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +22,7 @@ class GradientBackgroundUnit extends StatelessWidget {
         width: width,
         child: Stack(
           children: [
-            ..._buildGradientCircles(),
+            ..._buildGradientCircles(context),
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
               child: const SizedBox.expand(), // Simplified decoration
@@ -26,25 +33,27 @@ class GradientBackgroundUnit extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildGradientCircles() {
+  List<Widget> _buildGradientCircles(BuildContext context) {
+    final colors = _getStyleColors(context); // Get colors based on style
+
     return [
       _buildCircle(
         const AlignmentDirectional(3, -0.3),
-        AppColors.deepPurpleShade700,
+        colors[0], // First color
       ),
       _buildCircle(
         const AlignmentDirectional(-3, -0.3),
-        AppColors.deepPurpleShade500,
+        colors[1], // Second color
       ),
       _buildCircle(
         const AlignmentDirectional(0, -0.9),
-        AppColors.blueGreyShade900X,
+        colors[2], // Third color
         height: 400,
         width: 260,
       ),
       _buildCircle(
         const AlignmentDirectional(-0.3, 1.5),
-        AppColors.blueGreyShade900Y,
+        colors[3], // Fourth color
         height: 250,
         width: 300,
       ),
@@ -68,5 +77,25 @@ class GradientBackgroundUnit extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Returns the list of colors based on the selected style
+  List<Color> _getStyleColors(BuildContext context) {
+    switch (style) {
+      case BackgroundStyle.home:
+        return [ 
+          Theme.of(context).colorScheme.surfaceContainerLow,
+          Theme.of(context).colorScheme.surfaceContainerLowest,
+           Theme.of(context).colorScheme.surfaceContainerHighest,
+          Theme.of(context).colorScheme.surfaceContainerHigh,
+        ];
+      case BackgroundStyle.auth:
+        return [
+          AppColors.deepPurpleShade700,
+          AppColors.deepPurpleShade500,
+          AppColors.blueGreyShade900X,
+          AppColors.blueGreyShade900Y,
+        ];
+    }
   }
 }

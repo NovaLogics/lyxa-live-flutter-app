@@ -40,13 +40,27 @@ class AppTextStyles {
     shadows: shadowStyle1,
   );
 
+  static const TextStyle textStylePost = TextStyle(
+    color: AppColors.blueGreyShade50,
+    fontSize: AppDimens.textSizeRegular,
+    fontWeight: FontWeight.w600,
+    fontFamily: FONT_RALEWAY,
+  );
+
+  static const TextStyle textStylePostWithNumbers = TextStyle(
+    color: AppColors.blueGreyShade50,
+    fontSize: AppDimens.textSizeRegular,
+    fontWeight: FontWeight.w600,
+    fontFamily: FONT_MONTSERRAT,
+    letterSpacing: 0.5,
+  );
+
   /// Button Text
   /// ->
   static const TextStyle buttonTextPrimary = TextStyle(
     color: AppColors.blueGreyShade50,
     fontWeight: FontWeight.bold,
     fontSize: AppDimens.textSizeMedium,
-    letterSpacing: AppDimens.letterSpaceMedium,
     fontFamily: FONT_RALEWAY,
   );
 
@@ -57,6 +71,14 @@ class AppTextStyles {
       offset: Offset(1, 1),
       blurRadius: 1.0,
       color: Colors.black,
+    ),
+  ];
+
+  static const List<Shadow> shadowStyle2 = [
+    Shadow(
+      offset: Offset(0.5, 0.5),
+      blurRadius: 1,
+      color: Colors.grey,
     ),
   ];
 }

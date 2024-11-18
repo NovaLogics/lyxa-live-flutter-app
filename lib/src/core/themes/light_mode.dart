@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/src/core/values/app_colors.dart';
 
 ThemeData lightMode = ThemeData(
   colorScheme: lightColorScheme,
@@ -52,7 +53,13 @@ const ColorScheme lightColorScheme = ColorScheme.light(
   onInverseSurface: Colors.white,
   // Tint for elevated surfaces
   surfaceTint: Color(0xFF673AB7),
+
+ surfaceContainerLowest:   AppColors.deepPurpleShade100,
+    surfaceContainerLow: AppColors.deepPurpleShade100,
+    surfaceContainerHigh:   AppColors.blueGreyShade100,
+    surfaceContainerHighest: AppColors.blueGreyShade100,
 );
+
 
 
 // const ColorScheme oldTheme = ColorScheme.light(

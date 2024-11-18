@@ -1,7 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/utils/helper/date_time_util.dart';
+import 'package:lyxa_live/src/core/values/app_colors.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/shared/widgets/custom_toast.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
@@ -28,36 +34,33 @@ class PostTileUnit extends StatefulWidget {
 }
 
 class _PostTileUnitState extends State<PostTileUnit> {
-  // Cubits
-  late final postCubit = context.read<PostCubit>();
-  late final profileCubit = context.read<ProfileCubit>();
+  // Cubits for state management
+  late final PostCubit postCubit = context.read<PostCubit>();
+  late final ProfileCubit profileCubit = context.read<ProfileCubit>();
 
-  bool isOwnPost = false;
+  bool isOwnPost = false; // Determines if the post belongs to the current user
 
-  // Current user
-  AppUser? currentUser;
+  AppUser? currentUser; // Stores the current logged-in user
+  ProfileUser? postUser; // Stores the user who created the post
 
-  // Post user
-  ProfileUser? postUser;
-
-  // Comment text controller
+  // Text controller for handling the comment input
   final commentTextController = TextEditingController();
 
-  // On startup
   @override
   void initState() {
     super.initState();
-
     getCurrentUser();
     fetchPostUser();
   }
 
+  // Fetch the current logged-in user
   void getCurrentUser() {
     final authCubit = context.read<AuthCubit>();
     currentUser = authCubit.currentUser;
-    isOwnPost = (widget.post.userId == currentUser!.uid);
+    isOwnPost = widget.post.userId == currentUser!.uid;
   }
 
+  // Fetch the profile user for the post
   void fetchPostUser() async {
     final fetchedUser = await profileCubit.getUserProfile(widget.post.userId);
     if (fetchedUser != null) {
@@ -67,42 +70,34 @@ class _PostTileUnitState extends State<PostTileUnit> {
     }
   }
 
-  // LIKES
-  //------> User tapped like button
+  // Handle the logic for liking/unliking a post
   void toggleLikePost() {
-    // Current like status
     final isLiked = widget.post.likes.contains(currentUser!.uid);
 
-    // Optimistically like & update UI
+    // Optimistically update the UI
     setState(() {
       if (isLiked) {
-        // Unlike
-        widget.post.likes.remove(currentUser!.uid);
+        widget.post.likes.remove(currentUser!.uid); // Unlike
       } else {
-        // Like
-        widget.post.likes.add(currentUser!.uid);
+        widget.post.likes.add(currentUser!.uid); // Like
       }
     });
 
-    // Update like
+    // Update like status in the backend
     postCubit
         .toggleLikePost(widget.post.id, currentUser!.uid)
         .catchError((error) {
-      // If there's and error, revert back to original values
       setState(() {
         if (isLiked) {
-          // Revert unlike
-          widget.post.likes.add(currentUser!.uid);
+          widget.post.likes.add(currentUser!.uid); // Revert the unlike
         } else {
-          // Revert like
-          widget.post.likes.remove(currentUser!.uid);
+          widget.post.likes.remove(currentUser!.uid); // Revert the like
         }
       });
     });
   }
 
-  // COMMENTS
-  //------> Open comment box -> Type new comment
+  // Opens a dialog for adding a new comment
   void openNewCommentBox() {
     showDialog(
       context: context,
@@ -118,11 +113,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
           // Cancel button
           TextButton(
             onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop('dialog');
+              Navigator.of(context, rootNavigator: true).pop();
             },
             child: const Text("Cancel"),
           ),
-          // Save button
+          // Save button to submit the comment
           TextButton(
             onPressed: () {
               addComment();
@@ -135,20 +130,18 @@ class _PostTileUnitState extends State<PostTileUnit> {
     );
   }
 
-  //------> Add Comment
+  // Adds a new comment to the post
   void addComment() {
     final comment = commentTextController.text;
-    // Create a new comment
-    final newComment = Comment(
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
-      postId: widget.post.id,
-      userId: currentUser!.uid,
-      userName: currentUser!.name,
-      text: comment,
-      timestamp: DateTime.now(),
-    );
-
     if (comment.isNotEmpty) {
+      final newComment = Comment(
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        postId: widget.post.id,
+        userId: currentUser!.uid,
+        userName: currentUser!.name,
+        text: comment,
+        timestamp: DateTime.now(),
+      );
       postCubit.addComment(widget.post.id, newComment);
     }
   }
@@ -159,8 +152,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
     super.dispose();
   }
 
-  // Show options for deletion
-  void showOptions() {
+  // Show confirmation dialog for post deletion
+  void showDeleteOptions() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -169,11 +162,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
           // Cancel button
           TextButton(
             onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop('dialog');
+              Navigator.of(context, rootNavigator: true).pop();
             },
             child: const Text("Cancel"),
           ),
-          // Delete button
+          // Confirm Delete button
           TextButton(
             onPressed: () {
               widget.onDeletePressed!();
@@ -186,159 +179,187 @@ class _PostTileUnitState extends State<PostTileUnit> {
     );
   }
 
-  // Build UI
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.secondary,
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
       child: Column(
         children: [
-          // Top section
+          // User profile header
           GestureDetector(
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProfileScreen(uid: widget.post.userId),
-              ),
+                  builder: (context) => ProfileScreen(uid: widget.post.userId)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Profile Pic
+                  // Profile picture
                   postUser?.profileImageUrl != null
                       ? CachedNetworkImage(
                           imageUrl: postUser!.profileImageUrl,
                           errorWidget: (context, url, error) => Icon(
-                                Icons.person,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
-                              ),
+                              Icons.person,
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary),
+                          errorListener: (value) => CustomToast.showToast(
+                            context: context,
+                            message: "Error loading image..",
+                            icon: Icons.check_circle,
+                            backgroundColor: AppColors.deepPurpleShade900,
+                            textColor: Colors.white,
+                            shadowColor: Colors.black,
+                            duration: const Duration(seconds: 4),
+                          ),
                           imageBuilder: (context, imageProvider) => Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ))
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover)),
+                          ),
+                        )
                       : const Icon(Icons.person),
-                  const SizedBox(width: 12),
-                  //Name
-                  Text(
-                    widget.post.userName,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Spacer(),
-                  // Delete button
-                  if (isOwnPost)
-                    GestureDetector(
-                      onTap: showOptions,
-                      child: AbsorbPointer(
-                        child: Icon(
-                          Icons.delete,
-                          color: Theme.of(context).colorScheme.primary,
+                  const SizedBox(width: 8),
+                  Column(
+                    children: [
+                      // User name
+                      Text(
+                        widget.post.userName.toString().trim(),
+                        style: AppTextStyles.textStylePost.copyWith(
+                          color: Theme.of(context).colorScheme.inversePrimary,
                         ),
                       ),
+                      // Time Ago text
+                      Padding(
+                        padding: const EdgeInsets.only(left: 1),
+                        child: Text(
+                          DateTimeUtil.datetimeAgo(
+                            widget.post.timestamp,
+                          ),
+                          style:
+                              AppTextStyles.textStylePostWithNumbers.copyWith(
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            fontSize: AppDimens.textSizeSmall,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  const Spacer(),
+                  // Delete option if it's the user's post
+                  if (isOwnPost)
+                    GestureDetector(
+                      onTap: showDeleteOptions,
+                      child: Icon(Icons.delete,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                 ],
               ),
             ),
           ),
 
-          // Image
+          // Post image
           CachedNetworkImage(
             imageUrl: widget.post.imageUrl,
-            height: 430,
-            width: double.infinity,
-            fit: BoxFit.cover,
-            // Loading
-            placeholder: (context, url) => const SizedBox(
-              height: 430,
+            placeholder: (context, url) => const AspectRatio(
+              aspectRatio:
+                  1.5, // Default aspect ratio for placeholder (e.g., 3:2)
+              child: SizedBox(),
             ),
-            // Error -> Failed to load
             errorWidget: (context, url, error) => Icon(
               Icons.error,
               color: Theme.of(context).colorScheme.primary,
             ),
-
-            errorListener: (value) => ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(value.toString()))),
+            imageBuilder: (context, imageProvider) {
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  return Image(
+                    image: imageProvider,
+                    width: constraints.maxWidth,
+                    fit: BoxFit.cover,
+                  );
+                },
+              );
+            },
           ),
 
-          // Buttons -> Like, Comment, Timestamp
+          // Interaction buttons (Like, Comment, Timestamp)
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                // Like
+                // Like button
                 SizedBox(
                   width: 50,
                   child: Row(
                     children: [
                       GestureDetector(
                         onTap: toggleLikePost,
-                        child: AbsorbPointer(
-                          child: Icon(
-                            widget.post.likes.contains(currentUser!.uid)
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: widget.post.likes.contains(currentUser!.uid)
-                                ? Colors.redAccent
-                                : Theme.of(context).colorScheme.primary,
-                          ),
+                        child: SvgPicture.asset(
+                          widget.post.likes.contains(currentUser!.uid)
+                              ? 'assets/icons/ic_heart_filled.svg'
+                              : 'assets/icons/ic_heart_border.svg',
+                          color: (widget.post.likes.contains(currentUser!.uid)
+                              ? Theme.of(context).colorScheme.secondaryContainer
+                              : Theme.of(context).colorScheme.primary),
+                          width: 24,
+                          height: 24,
                         ),
+                        // Icon(
+                        //   widget.post.likes.contains(currentUser!.uid)
+                        //       ? Icons.favorite
+                        //       : Icons.favorite_border,
+                        //   color: widget.post.likes.contains(currentUser!.uid)
+                        //       ? Colors.red[700]
+                        //       : Theme.of(context).colorScheme.primary,
+                        // ),
                       ),
-                      const SizedBox(width: 5),
-                      // Like Count
+                      const SizedBox(width: 3),
+                      // Like count
                       Text(
                         widget.post.likes.length.toString(),
-                        style: TextStyle(
+                        style: AppTextStyles.textStylePostWithNumbers.copyWith(
                           color: Theme.of(context).colorScheme.primary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal,
                         ),
                       ),
                     ],
                   ),
                 ),
-
-                // Comment
+                // Comment button
                 GestureDetector(
                   onTap: openNewCommentBox,
-                  child: AbsorbPointer(
-                    child: Icon(
-                      Icons.comment,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  child: SvgPicture.asset(
+                    'assets/icons/ic_comment.svg',
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 22,
+                    height: 22,
                   ),
                 ),
-
+                const SizedBox(width: 2),
                 Text(
                   widget.post.comments.length.toString(),
-                  style: TextStyle(
+                  style: AppTextStyles.textStylePostWithNumbers.copyWith(
                     color: Theme.of(context).colorScheme.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
                   ),
                 ),
-
                 const Spacer(),
-
                 // Timestamp
                 Text(
-                  widget.post.timestamp.toString(),
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    fontWeight: FontWeight.normal,
+                  DateTimeUtil.formatDate(widget.post.timestamp,
+                      format: DateTimeStyles.customShortDate),
+                  style: AppTextStyles.textStylePostWithNumbers.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
@@ -347,83 +368,79 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
           // Caption
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
             child: Row(
               children: [
-                // Username
                 Text(
                   widget.post.userName,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+                  style: AppTextStyles.textStylePost.copyWith(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    fontSize: AppDimens.textSizeSmall,
                   ),
                 ),
                 const SizedBox(width: 10),
-                // Text
                 Text(
                   widget.post.text,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
+                  style: AppTextStyles.textStylePost.copyWith(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                    fontSize: AppDimens.textSizeSmall,
+                    letterSpacing: 0.7,
+                    shadows: AppTextStyles.shadowStyle2,
                   ),
                 ),
               ],
             ),
           ),
 
-          // Comment Section
+          if (widget.post.comments.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(right: 200, left: 8.0),
+              child: Divider(
+                height: 1,
+                color: Theme.of(context)
+                    .colorScheme
+                    .inversePrimary
+                    .withOpacity(0.1),
+              ),
+            ),
+
+          // Comments section
           BlocBuilder<PostCubit, PostState>(
             builder: (context, state) {
-              // Loaded
               if (state is PostLoaded) {
-                // Final individual post
-                final post = state.posts
-                    .firstWhere((post) => (post.id == widget.post.id));
-
-                if (post.comments.isNotEmpty) {
-                  // How many comments to show
-                  int showCommentCount = post.comments.length;
-
-                  // Comment section
-                  return ListView.builder(
-                    itemCount: showCommentCount,
+                final post =
+                    state.posts.firstWhere((p) => p.id == widget.post.id);
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: ListView.builder(
+                    itemCount: post.comments.length,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      // Get individual comment
-                      final comment = post.comments[index];
-
-                      // Comment tile UI
-                      return CommentTileUnit(
-                        comment: comment,
-                      );
-                    },
-                  );
-                }
+                    itemBuilder: (context, index) =>
+                        CommentTileUnit(comment: post.comments[index]),
+                  ),
+                );
               }
 
-              // Loading
               if (state is PostLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               }
 
-              // Error
-              else if (state is PostError) {
-                return Center(
-                  child: Text(state.message),
-                );
-              } else {
-                return const Center(
-                  child: SizedBox(),
-                );
+              if (state is PostError) {
+                return Center(child: Text(state.message));
               }
+
+              return const Center(child: SizedBox());
             },
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Divider(
+              height: 1,
+              color:
+                  Theme.of(context).colorScheme.inversePrimary.withOpacity(0.1),
+            ),
+          )
         ],
       ),
     );

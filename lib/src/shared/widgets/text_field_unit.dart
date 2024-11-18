@@ -59,7 +59,10 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
           fontWeight: FontWeight.normal,
           fontSize: AppDimens.textSizeRegular,
         ),
-        fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
+        fillColor: Theme.of(context)
+            .colorScheme
+            .surfaceContainerHighest
+            .withOpacity(0.7),
         filled: true,
         prefixIcon: widget.prefixIcon,
         suffixIcon: widget.obscureText

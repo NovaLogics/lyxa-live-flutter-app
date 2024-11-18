@@ -28,7 +28,7 @@ dependencies:
   path_provider: ^2.0.11
   get_it: ^7.6.0
   injectable: ^2.2.0
-
+  flutter_svg: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -42,12 +42,20 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icons/
   fonts:
     - family: Raleway
       fonts:
         - asset: assets/fonts/raleway_regular.ttf
+        - asset: assets/fonts/raleway_medium.ttf
+          weight: 600
     - family: Dynalight
       fonts:
         - asset: assets/fonts/dynalight_regular.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/montserrat_regular.ttf
+        - asset: assets/fonts/montserrat_medium.ttf
+          weight: 600
 
 
