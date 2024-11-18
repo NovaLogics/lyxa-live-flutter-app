@@ -230,21 +230,23 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       // User name
                       Text(
                         widget.post.userName.toString().trim(),
-                        style: AppTextStyles.subtitleSecondary.copyWith(
+                        style: AppTextStyles.textStylePost.copyWith(
                           color: Theme.of(context).colorScheme.inversePrimary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: AppDimens.textSizeRegular,
                         ),
                       ),
+                      // Time Ago text
                       Padding(
                         padding: const EdgeInsets.only(left: 1),
                         child: Text(
                           DateTimeUtil.datetimeAgo(
                             widget.post.timestamp,
                           ),
-                          style: AppTextStyles.subtitleSecondary.copyWith(
+                          style:
+                              AppTextStyles.textStylePostWithNumbers.copyWith(
                             color: Theme.of(context).colorScheme.onSecondary,
                             fontSize: AppDimens.textSizeSmall,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.1,
                           ),
                         ),
                       ),
@@ -326,9 +328,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       // Like count
                       Text(
                         widget.post.likes.length.toString(),
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 14),
+                        style: AppTextStyles.textStylePostWithNumbers.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ],
                   ),
@@ -346,19 +348,18 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 const SizedBox(width: 2),
                 Text(
                   widget.post.comments.length.toString(),
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 14),
+                  style: AppTextStyles.textStylePostWithNumbers.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
                 const Spacer(),
                 // Timestamp
                 Text(
                   DateTimeUtil.formatDate(widget.post.timestamp,
                       format: DateTimeStyles.customShortDate),
-                  style: AppTextStyles.subtitleSecondary.copyWith(
+                  style: AppTextStyles.textStylePostWithNumbers.copyWith(
                     color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.normal,
-                    fontSize: AppDimens.textSizeRegular,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
@@ -372,19 +373,19 @@ class _PostTileUnitState extends State<PostTileUnit> {
               children: [
                 Text(
                   widget.post.userName,
-                  style: AppTextStyles.subtitleSecondary.copyWith(
+                  style: AppTextStyles.textStylePost.copyWith(
                     color: Theme.of(context).colorScheme.onSecondary,
-                    fontWeight: FontWeight.bold,
                     fontSize: AppDimens.textSizeSmall,
                   ),
                 ),
                 const SizedBox(width: 10),
                 Text(
                   widget.post.text,
-                  style: AppTextStyles.subtitleSecondary.copyWith(
+                  style: AppTextStyles.textStylePost.copyWith(
                     color: Theme.of(context).colorScheme.inversePrimary,
-                    fontWeight: FontWeight.normal,
                     fontSize: AppDimens.textSizeSmall,
+                    letterSpacing: 0.7,
+                    shadows: AppTextStyles.shadowStyle2,
                   ),
                 ),
               ],
@@ -393,10 +394,13 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
           if (widget.post.comments.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.only(right: 200),
+              padding: const EdgeInsets.only(right: 200, left: 8.0),
               child: Divider(
                 height: 1,
-                color: AppColors.blueGreyShade100.withOpacity(0.1),
+                color: Theme.of(context)
+                    .colorScheme
+                    .inversePrimary
+                    .withOpacity(0.1),
               ),
             ),
 
@@ -429,9 +433,13 @@ class _PostTileUnitState extends State<PostTileUnit> {
               return const Center(child: SizedBox());
             },
           ),
-          Divider(
-            height: 1,
-            color: AppColors.blueGreyShade100.withOpacity(0.1),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Divider(
+              height: 1,
+              color:
+                  Theme.of(context).colorScheme.inversePrimary.withOpacity(0.1),
+            ),
           )
         ],
       ),
