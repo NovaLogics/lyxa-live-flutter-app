@@ -50,7 +50,10 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          getIt<GradientBackgroundUnit>(param1: AppDimens.containerSize400),
+          getIt<GradientBackgroundUnit>(
+            param1: AppDimens.containerSize400,
+            param2: BackgroundStyle.auth,
+          ),
           ScrollableScaffold(
             body: _isLoginPage
                 ? LoginScreen(
