@@ -78,7 +78,7 @@ class AppTextStyles {
     Shadow(
       offset: Offset(0.5, 0.5),
       blurRadius: 1,
-      color: Colors.grey,
+      color: Colors.white30,
     ),
   ];
 }
