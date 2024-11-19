@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
+import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
@@ -37,7 +40,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _profileCubit = context.read<ProfileCubit>();
     _currentUser = _authCubit.currentUser;
 
-    // Fetch user profile data
     _profileCubit.fetchUserProfile(widget.uid);
   }
 
@@ -81,12 +83,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (state is ProfileLoaded) {
           return _buildProfileContent(context, state.profileUser, isOwnProfile);
         } else if (state is ProfileLoading) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
+          return getIt<CenterLoadingUnit>(param1: AppStrings.pleaseWaitMessage);
         } else {
           return const Scaffold(
-            body: Center(child: Text("Profile not found.")),
+            body: Center(child: Text(AppStrings.profileNotFoundError)),
           );
         }
       },
