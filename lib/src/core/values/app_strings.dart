@@ -49,6 +49,7 @@ class AppStrings {
   static const String unfollowUpperCase = 'UNFOLLOW';
   static const String emptyStoryLineMessage = 'Empty story line...';
   static const String storyline = 'Storyline';
+    static const String storylineBio = 'Storyline / Bio';
   static const String followersTabTitle = 'Followers';
   static const String followingTabTitle = 'Following';
   static const String noFollowersMessage = 'No followers';

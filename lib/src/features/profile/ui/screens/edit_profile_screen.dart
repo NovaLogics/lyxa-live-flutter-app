@@ -6,6 +6,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
@@ -112,7 +116,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Widget _buildEditScreen() {
-    return ConstrainedScaffold(
+    return ScrollableScaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: const Text("Edit Profile"),
         foregroundColor: Theme.of(context).colorScheme.primary,
@@ -125,10 +130,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
       body: Column(
         children: [
+          const SizedBox(height: 25),
           Center(
             child: Container(
-              height: 200,
-              width: 200,
+              height: 160,
+              width: 160,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.secondary,
                 shape: BoxShape.circle,
@@ -183,15 +189,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           // Bio section
           const SizedBox(height: 25),
-          const Text("Bio"),
+          const Text(AppStrings.storylineBio),
           const SizedBox(height: 25),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextFieldUnit(
+            child: MultilineTextFieldUnit(
               controller: bioTextController,
               hintText: widget.user.bio,
-              obscureText: false,
-              prefixIcon: null,
+              maxLength: MAX_LENGTH_BIO_DESCRIPTION_FIELD,
             ),
           )
         ],
