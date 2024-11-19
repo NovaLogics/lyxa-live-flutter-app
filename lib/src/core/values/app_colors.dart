@@ -11,6 +11,9 @@ class AppColors {
   static const Color bluePurpleShade700 = Color(0xFF303F9F);
   static const Color bluePurpleShade800 = Color(0xFF283593);
   static const Color bluePurpleShade900 = Color(0xFF1A237E);
+  static const Color bluePurpleShade900X = Color.fromARGB(255, 61, 31, 109);
+  static const Color bluePurpleShade900Y = Color.fromARGB(255, 41, 20, 73);
+  static const Color bluePurpleShade900Z = Color.fromARGB(255, 27, 10, 52);
 
   static const Color deepPurpleShade50 = Color(0xFFEDE7F6);
   static const Color deepPurpleShade100 = Color(0xFFD1C4E9);
