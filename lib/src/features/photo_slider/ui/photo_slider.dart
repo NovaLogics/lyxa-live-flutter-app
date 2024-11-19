@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/values/app_colors.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 
 class PhotoSlider extends StatefulWidget {
@@ -45,7 +47,7 @@ class _PhotoSliderState extends State<PhotoSlider> {
           icon: const Icon(
             Icons.close_sharp,
             color: Colors.grey,
-            size: 30,
+            size: AppDimens.size28,
           ),
           onPressed: () {
             context.read<SliderCubit>().hideSlider();
@@ -90,22 +92,26 @@ class _PhotoSliderState extends State<PhotoSlider> {
               },
             ),
           ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: map<Widget>(widget.listImagesModel, (index, _) {
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                width: 10.0,
-                height: 10.0,
-                margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: (_current == index) ? Colors.redAccent : Colors.grey,
-                ),
-              );
-            }),
-          ),
+          const SizedBox(height: AppDimens.size12),
+          if (widget.listImagesModel.length > 1)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: map<Widget>(widget.listImagesModel, (index, _) {
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  width: AppDimens.size8,
+                  height: AppDimens.size8,
+                  margin: const EdgeInsets.symmetric(horizontal: AppDimens.size4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: (_current == index)
+                        ? AppColors.goldShade400
+                        : AppColors.goldShade50,
+                  ),
+                );
+              }),
+            ),
+          const SizedBox(height: AppDimens.size48),
         ],
       ),
     );
