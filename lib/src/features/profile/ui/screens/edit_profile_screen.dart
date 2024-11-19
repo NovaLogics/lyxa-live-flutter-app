@@ -116,6 +116,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Widget _buildEditScreen() {
+    bioTextController.text = widget.user.bio;
     return ScrollableScaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
@@ -189,13 +190,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           // Bio section
           const SizedBox(height: 25),
-          const Text(AppStrings.storylineBio),
+          const Text(AppStrings.storyline),
           const SizedBox(height: 25),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
             child: MultilineTextFieldUnit(
               controller: bioTextController,
-              hintText: widget.user.bio,
+              hintText: AppStrings.storylineBio,
               maxLength: MAX_LENGTH_BIO_DESCRIPTION_FIELD,
             ),
           )
