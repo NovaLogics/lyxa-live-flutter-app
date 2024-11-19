@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  static const Color bluePurpleShade50 = Color.fromARGB(255, 247, 248, 254);
+  static const Color bluePurpleShade100 = Color(0xFFC5CAE9);
+  static const Color bluePurpleShade200 = Color(0xFF9FA8DA);
+  static const Color bluePurpleShade300 = Color(0xFF7986CB);
+  static const Color bluePurpleShade400 = Color(0xFF5C6BC0);
+  static const Color bluePurpleShade500 = Color(0xFF3F51B5);
+  static const Color bluePurpleShade600 = Color(0xFF3949AB);
+  static const Color bluePurpleShade700 = Color(0xFF303F9F);
+  static const Color bluePurpleShade800 = Color(0xFF283593);
+  static const Color bluePurpleShade900 = Color(0xFF1A237E);
+
   static const Color deepPurpleShade50 = Color(0xFFEDE7F6);
   static const Color deepPurpleShade100 = Color(0xFFD1C4E9);
   static const Color deepPurpleShade200 = Color(0xFFB39DDB);
