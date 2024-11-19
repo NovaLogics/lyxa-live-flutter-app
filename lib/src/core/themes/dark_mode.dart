@@ -23,7 +23,7 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
   // Text/Icon color on primary
   onPrimary: bluePurpleShade400,
   // Darker shade of primary
-  primaryContainer: Color(0xFF512DA8),
+  primaryContainer: AppColors.blueGreyShade900X,
   // Text/Icon color on primary container
   onPrimaryContainer: bluePurpleShade50,
   // Secondary color for accents

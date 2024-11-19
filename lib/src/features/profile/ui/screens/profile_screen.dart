@@ -110,8 +110,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildProfileHeader(user),
           const SizedBox(height: AppDimens.size8),
           _buildProfileStats(user),
+          if (!isOwnProfile) const SizedBox(height: AppDimens.size8),
           if (!isOwnProfile) _buildFollowActionSection(user),
-          const SizedBox(height: AppDimens.size24),
+          const SizedBox(height: AppDimens.size16),
           _buildStoryLineSection(user.bio),
           const SizedBox(height: AppDimens.size24),
           _buildPostSection(context),
@@ -225,23 +226,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildStoryLineSection(String bio) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Storyline',
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppDimens.size32),
+          child: Text(
+            AppStrings.storyline,
             style: AppTextStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.normal,
               shadows: AppTextStyles.shadowStyle2,
             ),
           ),
-          const SizedBox(height: AppDimens.size12),
-          StoryLineUnit(text: bio),
-        ],
-      ),
+        ),
+        const SizedBox(height: AppDimens.size12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
+          child: StoryLineUnit(text: bio),
+        ),
+      ],
     );
   }
 

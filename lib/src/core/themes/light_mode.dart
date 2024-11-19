@@ -25,7 +25,7 @@ const ColorScheme lightColorScheme = ColorScheme.light(
   // Text/Icon color on primary
   onPrimary: bluePurpleShade900X,
   // Darker shade of primary
-  primaryContainer: Color(0xFFD1C4E9),
+  primaryContainer: bluePurpleShade50,
   // Text/Icon color on primary container
   onPrimaryContainer: Color(0xFF311B92),
   // Secondary color for accents
