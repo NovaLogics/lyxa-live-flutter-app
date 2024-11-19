@@ -57,8 +57,8 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
 
   surfaceContainer: AppColors.blueGreyShade900X,
 
-  surfaceContainerLowest: AppColors.deepPurpleShade500,
-  surfaceContainerLow: AppColors.deepPurpleShade700,
+  surfaceContainerLowest: AppColors.bluePurpleShade900Z,
+  surfaceContainerLow: AppColors.bluePurpleShade900Z,
   surfaceContainerHigh: AppColors.blueGreyShade900Y,
   surfaceContainerHighest: AppColors.blueGreyShade900X,
 );
