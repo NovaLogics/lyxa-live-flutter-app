@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/shared/widgets/user_tile_unit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
-// Constants for strings
-const String followersTabTitle = 'Followers';
-const String followingTabTitle = 'Following';
-const String noFollowersMessage = 'No followers';
-const String noFollowingMessage = 'No following';
-const String loadingMessage = 'Loading...';
-const String userNotFoundMessage = 'User not found';
 
 class FollowerScreen extends StatelessWidget {
   final List<String> followers;
@@ -32,11 +27,11 @@ class FollowerScreen extends StatelessWidget {
           children: [
             UserListView(
               uids: followers,
-              emptyMessage: noFollowersMessage,
+              emptyMessage: AppStrings.noFollowersMessage,
             ),
             UserListView(
               uids: following,
-              emptyMessage: noFollowingMessage,
+              emptyMessage: AppStrings.noFollowingMessage,
             ),
           ],
         ),
@@ -46,17 +41,17 @@ class FollowerScreen extends StatelessWidget {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(70), // Adjust height if needed
+      preferredSize: const Size.fromHeight(AppDimens.size72), 
       child: AppBar(
-        centerTitle: true, // Centers the title
+        centerTitle: true, 
         automaticallyImplyLeading:
-            false, // Remove default back button if needed
+            false, 
         title: SizedBox(
-          width: 430, // Use 80% of screen width (responsive width)
+          width: AppDimens.containerSize430, 
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 24),
+              const SizedBox(height: AppDimens.size24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -64,7 +59,7 @@ class FollowerScreen extends StatelessWidget {
                     onTap: () => Navigator.of(context).pop(),
                     child: const Icon(
                       Icons.arrow_back_outlined,
-                      size: 16,
+                      size: AppDimens.size16,
                     ),
                   ),
                 ],
@@ -84,8 +79,8 @@ class FollowerScreen extends StatelessWidget {
       labelColor: Theme.of(context).colorScheme.inversePrimary,
       indicatorColor: Theme.of(context).colorScheme.primary,
       tabs: const [
-        Tab(text: 'Followers'),
-        Tab(text: 'Following'),
+        Tab(text: AppStrings.followersTabTitle),
+        Tab(text: AppStrings.followingTabTitle),
       ],
     );
   }
@@ -118,12 +113,12 @@ class UserListView extends StatelessWidget {
           future: context.read<ProfileCubit>().getUserProfile(uid),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const ListTile(title: Text(loadingMessage));
+              return const ListTile(title: Text(AppStrings.loadingMessage));
             } else if (snapshot.hasData) {
               final user = snapshot.data!;
               return UserTileUnit(user: user);
             } else {
-              return const ListTile(title: Text(userNotFoundMessage));
+              return const ListTile(title: Text(AppStrings.userNotFoundMessage));
             }
           },
         );

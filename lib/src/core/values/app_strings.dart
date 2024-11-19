@@ -49,6 +49,12 @@ class AppStrings {
   static const String unfollowUpperCase = 'UNFOLLOW';
   static const String emptyStoryLineMessage = 'Empty story line...';
   static const String storyline = 'Storyline';
+  static const String followersTabTitle = 'Followers';
+  static const String followingTabTitle = 'Following';
+  static const String noFollowersMessage = 'No followers';
+  static const String noFollowingMessage = 'No following';
+  static const String loadingMessage = 'Loading...';
+  static const String userNotFoundMessage = 'User not found';
 
   // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
