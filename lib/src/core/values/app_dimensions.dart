@@ -65,6 +65,7 @@ class AppDimens {
   static const double containerSize430 = 430.0;
 
   // Custom Sizes
+  static const double size0 = 0.0;
   static const double size4 = 4.0;
   static const double size8 = 8.0;
   static const double size12 = 12.0;
