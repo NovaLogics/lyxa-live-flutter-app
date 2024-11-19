@@ -7,8 +7,8 @@ import 'package:lyxa_live/src/core/utils/helper/date_time_util.dart';
 import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/custom_toast.dart';
-import 'package:lyxa_live/src/features/slider_images/ui/slider_full_images.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
@@ -275,10 +275,12 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
           // Post image
           GestureDetector(
-            onTap: () => SliderFullImages(
-              listImagesModel: [widget.post.imageUrl],
-              current: 0,
-            ),
+            onTap: () =>  context.read<SliderCubit>().showSlider([widget.post.imageUrl], 0),
+            
+            // SliderFullImages(
+            //   listImagesModel: [widget.post.imageUrl],
+            //   current: 0,
+            // ),
             onDoubleTap: toggleLikePost,
             child: CachedNetworkImage(
               imageUrl: widget.post.imageUrl,
