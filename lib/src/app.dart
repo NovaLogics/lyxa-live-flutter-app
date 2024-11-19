@@ -12,6 +12,9 @@ import 'package:lyxa_live/src/features/profile/data/firebase_profile_repository.
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/search/data/firebase_search_repository.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
+import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
+import 'package:lyxa_live/src/features/photo_slider/cubits/slider_state.dart';
+import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/core/themes/theme_cubit.dart';
 
@@ -38,9 +41,38 @@ class LyxaApp extends StatelessWidget {
         builder: (context, currentTheme) => MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: currentTheme,
-          home: _buildHomeScreen(context),
+          home: Stack(
+            children: [
+              _buildHomeScreen(),
+              _buildPhotoSliderScreen(),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildPhotoSliderScreen() {
+    return BlocConsumer<SliderCubit, SliderState>(
+      builder: (context, state) {
+        if (kDebugMode) print(state);
+
+        if (state is SliderLoaded) {
+          return PhotoSlider(
+            listImagesModel: state.images,
+            current: state.currentIndex,
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+      listener: (context, state) {
+        if (state is SliderError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
     );
   }
 
@@ -51,7 +83,7 @@ class LyxaApp extends StatelessWidget {
     return [
       // Authentication Cubit
       BlocProvider<AuthCubit>(
-        create: (context) => 
+        create: (context) =>
             AuthCubit(authRepository: _authRepository)..checkAuthentication(),
       ),
 
@@ -78,11 +110,14 @@ class LyxaApp extends StatelessWidget {
 
       // Theme Cubit
       BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
+
+      // Image Slider Cubit
+      BlocProvider<SliderCubit>(create: (context) => SliderCubit()),
     ];
   }
 
   /// Displays the appropriate screen based on the user's authentication status.
-  Widget _buildHomeScreen(BuildContext context) {
+  Widget _buildHomeScreen() {
     return BlocConsumer<AuthCubit, AuthState>(
       builder: (context, authState) {
         if (kDebugMode) print(authState);
