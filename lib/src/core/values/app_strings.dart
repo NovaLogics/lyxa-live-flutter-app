@@ -45,6 +45,9 @@ class AppStrings {
   static const String postsUpperCase = 'POSTS';
   static const String followersUpperCase = 'FOLLOWERS';
   static const String followingUpperCase = 'FOLLOWING';
+  static const String followUpperCase = 'FOLLOW';
+    static const String unfollowUpperCase = 'UNFOLLOW';
+
 
   // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
