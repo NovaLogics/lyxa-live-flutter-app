@@ -33,7 +33,7 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
   //text/Icon color on secondary container
   secondaryContainer: Color(0xFF673AB7),
 
-  onTertiary: bluePurpleShade400,
+  onTertiary: bluePurpleShade100,
   // Error color
   error: Colors.red,
   // Text/Icon color on error

@@ -36,6 +36,8 @@ const ColorScheme lightColorScheme = ColorScheme.light(
   secondaryContainer: Color(0xFFEDE7F6),
   // Text/Icon color on secondary container
   onSecondaryContainer: Color(0xFF311B92),
+
+  onTertiary: bluePurpleShade700,
   // Error color
   error: Colors.red,
   // Text/Icon color on error
@@ -55,7 +57,7 @@ const ColorScheme lightColorScheme = ColorScheme.light(
   // Tint for elevated surfaces
   surfaceTint: Color(0xFF673AB7),
   inversePrimary: Colors.black,
-    surfaceContainer: AppColors.blueGreyShade900Y,
+  surfaceContainer: AppColors.blueGreyShade900Y,
 
   surfaceContainerLowest: AppColors.deepPurpleShade100,
   surfaceContainerLow: AppColors.deepPurpleShade100,

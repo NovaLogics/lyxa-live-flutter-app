@@ -20,18 +20,6 @@ class ProfileStatsUnit extends StatelessWidget {
 // Build UI
   @override
   Widget build(BuildContext context) {
-    var textStyleForCount = TextStyle(
-      color: Theme.of(context).colorScheme.inversePrimary,
-      fontWeight: FontWeight.normal,
-      fontSize: 20,
-    );
-
-    var textStyleForText = TextStyle(
-      color: Theme.of(context).colorScheme.primary,
-      fontWeight: FontWeight.normal,
-      fontSize: 16,
-    );
-
     return GestureDetector(
       onTap: onTap,
       child: Row(
@@ -55,62 +43,83 @@ class ProfileStatsUnit extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.all(4.0), // Inner padding
-              child: SizedBox(
-                width: 100,
-                child: Column(
-                  children: [
-                    Text(
-                      postCount.toString(),
-                      style: AppTextStyles.textStylePostWithNumbers.copyWith(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: AppDimens.textSizeMedium,
-                      ),
+              child: Row(
+                children: [
+                  //Posts
+                  SizedBox(
+                    width: 100,
+                    child: Column(
+                      children: [
+                        Text(
+                          postCount.toString(),
+                          style:
+                              AppTextStyles.textStylePostWithNumbers.copyWith(
+                            color: Theme.of(context).colorScheme.onTertiary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDimens.textSizeMedium,
+                          ),
+                        ),
+                        Text(
+                          AppStrings.postsUpperCase,
+                          style: AppTextStyles.textStylePost.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      AppStrings.postsUpperCase,
-                      style: AppTextStyles.textStylePost.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  ),
+                  // Followers
+                  SizedBox(
+                    width: 100,
+                    child: Column(
+                      children: [
+                        Text(
+                          followerCount.toString(),
+                          style:
+                              AppTextStyles.textStylePostWithNumbers.copyWith(
+                            color: Theme.of(context).colorScheme.onTertiary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDimens.textSizeMedium,
+                          ),
+                        ),
+                        Text(
+                          AppStrings.followersUpperCase,
+                          style: AppTextStyles.textStylePost.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+
+                  // Following
+                  SizedBox(
+                    width: 100,
+                    child: Column(
+                      children: [
+                        Text(
+                          followingCount.toString(),
+                          style:
+                              AppTextStyles.textStylePostWithNumbers.copyWith(
+                            color: Theme.of(context).colorScheme.onTertiary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDimens.textSizeMedium,
+                          ),
+                        ),
+                        Text(
+                          AppStrings.followingUpperCase,
+                          style: AppTextStyles.textStylePost.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ),
-
-          // Followers
-          SizedBox(
-            width: 100,
-            child: Column(
-              children: [
-                Text(
-                  followerCount.toString(),
-                  style: textStyleForCount,
-                ),
-                Text(
-                  "Followers",
-                  style: textStyleForText,
-                ),
-              ],
-            ),
-          ),
-
-          // Following
-          SizedBox(
-            width: 100,
-            child: Column(
-              children: [
-                Text(
-                  followingCount.toString(),
-                  style: textStyleForCount,
-                ),
-                Text(
-                  "Following",
-                  style: textStyleForText,
-                ),
-              ],
             ),
           ),
         ],

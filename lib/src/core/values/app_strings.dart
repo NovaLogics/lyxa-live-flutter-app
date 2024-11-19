@@ -41,8 +41,10 @@ class AppStrings {
   // Common
   static const String pleaseWaitMessage = 'Please wait...';
   static const String imageLoadError = 'Error loading image..';
-    static const String profileNotFoundError = 'Error profile not found..';
-      static const String postsUpperCase = 'POSTS';
+  static const String profileNotFoundError = 'Error profile not found..';
+  static const String postsUpperCase = 'POSTS';
+  static const String followersUpperCase = 'FOLLOWERS';
+  static const String followingUpperCase = 'FOLLOWING';
 
   // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
