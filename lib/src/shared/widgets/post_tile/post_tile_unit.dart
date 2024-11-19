@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/helper/date_time_util.dart';
 import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/custom_toast.dart';
@@ -194,7 +196,12 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   builder: (context) => ProfileScreen(uid: widget.post.userId)),
             ),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0.0, 12.0),
+              padding: const EdgeInsets.fromLTRB(
+                AppDimens.size12,
+                AppDimens.size12,
+                AppDimens.size0,
+                AppDimens.size12,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -208,7 +215,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                                   Theme.of(context).colorScheme.inversePrimary),
                           errorListener: (value) => CustomToast.showToast(
                             context: context,
-                            message: "Error loading image..",
+                            message: AppStrings.imageLoadError,
                             icon: Icons.check_circle,
                             backgroundColor: AppColors.deepPurpleShade900,
                             textColor: Colors.white,
@@ -216,19 +223,22 @@ class _PostTileUnitState extends State<PostTileUnit> {
                             duration: const Duration(seconds: 4),
                           ),
                           imageBuilder: (context, imageProvider) => Container(
-                            height: 40,
-                            width: 40,
+                            height: AppDimens.size36,
+                            width: AppDimens.size36,
                             decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: imageProvider, fit: BoxFit.cover)),
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         )
                       : const Icon(Icons.person),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: AppDimens.size8),
                   Column(
                     children: [
-                      // User name
+                      // Username
                       Text(
                         widget.post.userName.toString().trim(),
                         style: AppTextStyles.textStylePost.copyWith(
@@ -239,9 +249,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       Padding(
                         padding: const EdgeInsets.only(left: 1),
                         child: Text(
-                          DateTimeUtil.datetimeAgo(
-                            widget.post.timestamp,
-                          ),
+                          DateTimeUtil.datetimeAgo(widget.post.timestamp),
                           style:
                               AppTextStyles.textStylePostWithNumbers.copyWith(
                             color: Theme.of(context).colorScheme.primary,
@@ -254,7 +262,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     ],
                   ),
 
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimens.size12),
 
                   const Spacer(),
                   // Delete option if it's the user's post
@@ -262,10 +270,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     GestureDetector(
                       onTap: showDeleteOptions,
                       child: SvgPicture.asset(
-                        'assets/icons/ic_settings_style_1.svg',
+                        ICON_SETTINGS_STYLE_1,
                         color: Theme.of(context).colorScheme.primary,
-                        width: 48,
-                        height: 48,
+                        width: AppDimens.size48,
+                        height: AppDimens.size48,
                       ),
                     ),
                 ],
@@ -275,18 +283,14 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
           // Post image
           GestureDetector(
-            onTap: () =>  context.read<SliderCubit>().showSlider([widget.post.imageUrl], 0),
-            
-            // SliderFullImages(
-            //   listImagesModel: [widget.post.imageUrl],
-            //   current: 0,
-            // ),
+            onTap: () => context
+                .read<SliderCubit>()
+                .showSlider([widget.post.imageUrl], 0),
             onDoubleTap: toggleLikePost,
             child: CachedNetworkImage(
               imageUrl: widget.post.imageUrl,
               placeholder: (context, url) => const AspectRatio(
-                aspectRatio:
-                    1.5, // Default aspect ratio for placeholder (e.g., 3:2)
+                aspectRatio: 1.5, // or 3:2
                 child: SizedBox(),
               ),
               errorWidget: (context, url, error) => Icon(
@@ -309,19 +313,23 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
           // Interaction buttons (Like, Comment, Timestamp)
           Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+            padding: const EdgeInsets.fromLTRB(
+              AppDimens.size16,
+              AppDimens.size16,
+              AppDimens.size16,
+              AppDimens.size8,
+            ),
             child: Row(
               children: [
                 // Like button
                 SizedBox(
-                  width: 50,
                   child: Row(
                     children: [
                       GestureDetector(
                         onTap: toggleLikePost,
                         child: PhysicalModel(
                           color: Colors.transparent,
-                          elevation: 6.0,
+                          elevation: AppDimens.elevationLarge,
                           shape: BoxShape.rectangle,
                           shadowColor: Theme.of(context)
                               .colorScheme
@@ -329,25 +337,17 @@ class _PostTileUnitState extends State<PostTileUnit> {
                               .withOpacity(0.4),
                           child: SvgPicture.asset(
                             widget.post.likes.contains(currentUser!.uid)
-                                ? 'assets/icons/ic_heart_filled.svg'
-                                : 'assets/icons/ic_heart_border.svg',
+                                ? ICON_HEART_FILLED
+                                : ICON_HEART_BORDER,
                             color: (widget.post.likes.contains(currentUser!.uid)
                                 ? Theme.of(context).colorScheme.primary
                                 : Theme.of(context).colorScheme.onPrimary),
-                            width: 24,
-                            height: 24,
+                            width: AppDimens.size24,
+                            height: AppDimens.size24,
                           ),
                         ),
-                        // Icon(
-                        //   widget.post.likes.contains(currentUser!.uid)
-                        //       ? Icons.favorite
-                        //       : Icons.favorite_border,
-                        //   color: widget.post.likes.contains(currentUser!.uid)
-                        //       ? Colors.red[700]
-                        //       : Theme.of(context).colorScheme.primary,
-                        // ),
                       ),
-                      const SizedBox(width: 3),
+                      const SizedBox(width: AppDimens.size4),
                       // Like count
                       Text(
                         widget.post.likes.length.toString(),
@@ -358,19 +358,20 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     ],
                   ),
                 ),
+                const SizedBox(width: AppDimens.size12),
                 // Comment button
                 GestureDetector(
                   onTap: openNewCommentBox,
                   child: PhysicalModel(
                     color: Colors.transparent,
-                    elevation: 6.0,
+                    elevation: AppDimens.elevationLarge,
                     shape: BoxShape.rectangle,
                     shadowColor:
                         Theme.of(context).colorScheme.surface.withOpacity(0.4),
                     child: SvgPicture.asset(
                       widget.post.comments.isNotEmpty
-                          ? 'assets/icons/ic_comment_style_1.svg'
-                          : 'assets/icons/ic_comment.svg',
+                          ? ICON_COMMENT_STYLE_1
+                          : ICON_COMMENT_BORDER,
                       color: widget.post.comments.isNotEmpty
                           ? Theme.of(context)
                               .colorScheme
@@ -382,7 +383,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 2),
+                const SizedBox(width: AppDimens.size4),
                 Text(
                   widget.post.comments.length.toString(),
                   style: AppTextStyles.textStylePostWithNumbers.copyWith(
@@ -405,7 +406,12 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
           // Caption
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            padding: const EdgeInsets.fromLTRB(
+              AppDimens.size20,
+              AppDimens.size0,
+              AppDimens.size20,
+              AppDimens.size12,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -416,7 +422,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     fontSize: AppDimens.textSizeRegular,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: AppDimens.size4),
                 ConstrainedBox(
                   constraints: const BoxConstraints(
                       maxHeight: 100,
@@ -442,7 +448,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
           if (widget.post.comments.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.only(right: 200, left: 8.0),
+              padding: const EdgeInsets.only(right: 200, left: AppDimens.size8),
               child: Divider(
                 height: 1,
                 color: Theme.of(context)
@@ -459,7 +465,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 final post =
                     state.posts.firstWhere((p) => p.id == widget.post.id);
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: AppDimens.size4),
                   child: ListView.builder(
                     itemCount: post.comments.length,
                     shrinkWrap: true,
@@ -482,7 +489,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
             },
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: AppDimens.size8),
             child: Divider(
               height: 1,
               color:

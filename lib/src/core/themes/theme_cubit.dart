@@ -6,7 +6,7 @@ import 'package:lyxa_live/src/core/themes/light_mode.dart';
 class ThemeCubit extends Cubit<ThemeData> {
   bool _isDarkMode = false;
 
-  ThemeCubit() : super(darkMode);
+  ThemeCubit() : super(lightMode);
 
   bool get isDarkMode => _isDarkMode;
 
