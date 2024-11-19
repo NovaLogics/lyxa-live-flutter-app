@@ -10,6 +10,7 @@ import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
@@ -106,17 +107,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
       BuildContext context, ProfileUser user, bool isOwnProfile) {
     return Scaffold(
       appBar: _buildAppBar(context, user, isOwnProfile),
-      body: ListView(
+      body: Stack(
         children: [
-          _buildProfileHeader(user),
-          const SizedBox(height: AppDimens.size8),
-          _buildProfileStats(user),
-          if (!isOwnProfile) const SizedBox(height: AppDimens.size8),
-          if (!isOwnProfile) _buildFollowActionSection(user),
-          const SizedBox(height: AppDimens.size16),
-          _buildStoryLineSection(user.bio),
-          const SizedBox(height: AppDimens.size24),
-          _buildPostSection(context),
+          RepaintBoundary(
+            child: getIt<GradientBackgroundUnit>(
+              param1: AppDimens.containerSize400,
+              param2: BackgroundStyle.home,
+            ),
+          ),
+          ListView(
+            children: [
+              _buildProfileHeader(user),
+              const SizedBox(height: AppDimens.size8),
+              _buildProfileStats(user),
+              if (!isOwnProfile) const SizedBox(height: AppDimens.size8),
+              if (!isOwnProfile) _buildFollowActionSection(user),
+              const SizedBox(height: AppDimens.size8),
+              _buildStoryLineSection(user.bio),
+              const SizedBox(height: AppDimens.size24),
+              _buildPostSection(context),
+            ],
+          ),
         ],
       ),
     );
@@ -246,15 +257,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
             AppStrings.storyline,
             style: AppTextStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.normal,
+              fontWeight: FontWeight.w300,
+              // fontFamily: FONT_DYNALIGHT,
+              // fontSize: 24,
               shadows: AppTextStyles.shadowStyle2,
             ),
           ),
         ),
-        const SizedBox(height: AppDimens.size12),
+        const SizedBox(height: AppDimens.size8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
-          child: StoryLineUnit(text: bio),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface, // Background color
+              borderRadius: BorderRadius.circular(8.0), // Rounded corners
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSecondary
+                      .withOpacity(0.2), // Shadow color
+                  blurRadius: 3.0, // Blur radius
+                  offset: const Offset(0.5, 0.5), // Offset for the shadow
+                ),
+              ],
+            ),
+            child: StoryLineUnit(text: bio),
+          ),
         ),
       ],
     );
