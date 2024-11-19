@@ -30,6 +30,8 @@ dependencies:
   injectable: ^2.2.0
   flutter_svg: ^2.0.0
   carousel_slider: ^5.0.0
+  image_cropper: ^8.0.2
+  flutter_image_compress: ^2.3.0
 
 dev_dependencies:
   flutter_test:
