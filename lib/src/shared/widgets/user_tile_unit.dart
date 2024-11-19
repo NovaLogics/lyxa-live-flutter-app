@@ -23,6 +23,9 @@ class UserTileUnit extends StatelessWidget {
         Icons.person,
         color: Theme.of(context).colorScheme.primary,
       ),
+      // leading: CircleAvatar(
+      //   backgroundImage: NetworkImage(user.profileImageUrl ?? ''),
+      // ),
       trailing: Icon(
         Icons.arrow_forward,
         color: Theme.of(context).colorScheme.primary,
