@@ -108,6 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ListView(
         children: [
           _buildProfileHeader(user),
+          const SizedBox(height: AppDimens.size8),
           _buildProfileStats(user),
           if (!isOwnProfile) _buildFollowActionSection(user),
           const SizedBox(height: AppDimens.size24),
@@ -180,7 +181,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             shadows: AppTextStyles.shadowStyle2,
           ),
         ),
-        const SizedBox(height: AppDimens.size16),
       ],
     );
   }
@@ -196,16 +196,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .length;
         }
 
-        return ProfileStatsUnit(
-          postCount: postCount,
-          followerCount: user.followers.length,
-          followingCount: user.following.length,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => FollowerScreen(
-                followers: user.followers,
-                following: user.following,
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ProfileStatsUnit(
+            postCount: postCount,
+            followerCount: user.followers.length,
+            followingCount: user.following.length,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => FollowerScreen(
+                  followers: user.followers,
+                  following: user.following,
+                ),
               ),
             ),
           ),

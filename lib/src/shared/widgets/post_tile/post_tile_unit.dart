@@ -253,7 +253,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                           DateTimeUtil.datetimeAgo(widget.post.timestamp),
                           style:
                               AppTextStyles.textStylePostWithNumbers.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontSize: AppDimens.textSizeSmall,
                             fontWeight: FontWeight.w400,
                             letterSpacing: 0.1,
