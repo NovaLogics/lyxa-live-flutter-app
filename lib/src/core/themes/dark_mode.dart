@@ -19,11 +19,11 @@ const Color bluePurpleShade900 = Color(0xFF1A237E);
 const ColorScheme darkColorScheme = ColorScheme.dark(
   brightness: Brightness.dark,
   // Primary color for main actions
-  primary: bluePurpleShade100,
+  primary: bluePurpleShade600,
   // Text/Icon color on primary
-  onPrimary: bluePurpleShade50,
+  onPrimary: bluePurpleShade400,
   // Darker shade of primary
-  primaryContainer: Color(0xFF512DA8),
+  primaryContainer: AppColors.blueGreyShade900X,
   // Text/Icon color on primary container
   onPrimaryContainer: bluePurpleShade50,
   // Secondary color for accents
@@ -33,7 +33,7 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
   //text/Icon color on secondary container
   secondaryContainer: Color(0xFF673AB7),
 
-  onTertiary: bluePurpleShade400,
+  onTertiary: bluePurpleShade100,
   // Error color
   error: Colors.red,
   // Text/Icon color on error
@@ -52,6 +52,10 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
   onInverseSurface: Colors.black,
   // Tint for elevated surfaces
   surfaceTint: Colors.purple,
+
+  inversePrimary: bluePurpleShade50,
+
+  surfaceContainer: AppColors.blueGreyShade900X,
 
   surfaceContainerLowest: AppColors.deepPurpleShade500,
   surfaceContainerLow: AppColors.deepPurpleShade700,

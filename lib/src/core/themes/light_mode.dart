@@ -15,16 +15,17 @@ const Color bluePurpleShade600 = Color(0xFF3949AB);
 const Color bluePurpleShade700 = Color(0xFF303F9F);
 const Color bluePurpleShade800 = Color(0xFF283593);
 const Color bluePurpleShade900 = Color(0xFF1A237E);
-const Color bluePurpleShade900X = Color.fromARGB(255, 12, 17, 65);
+const Color bluePurpleShade900X = Color.fromARGB(255, 61, 31, 109);
+const Color bluePurpleShade900Y = Color.fromARGB(255, 41, 20, 73);
 
 const ColorScheme lightColorScheme = ColorScheme.light(
   brightness: Brightness.light,
   // Primary color for main actions
-  primary: bluePurpleShade500,
+  primary: bluePurpleShade900Y,
   // Text/Icon color on primary
   onPrimary: bluePurpleShade900X,
   // Darker shade of primary
-  primaryContainer: Color(0xFFD1C4E9),
+  primaryContainer: bluePurpleShade50,
   // Text/Icon color on primary container
   onPrimaryContainer: Color(0xFF311B92),
   // Secondary color for accents
@@ -35,6 +36,8 @@ const ColorScheme lightColorScheme = ColorScheme.light(
   secondaryContainer: Color(0xFFEDE7F6),
   // Text/Icon color on secondary container
   onSecondaryContainer: Color(0xFF311B92),
+
+  onTertiary: bluePurpleShade700,
   // Error color
   error: Colors.red,
   // Text/Icon color on error
@@ -53,11 +56,13 @@ const ColorScheme lightColorScheme = ColorScheme.light(
   onInverseSurface: Colors.white,
   // Tint for elevated surfaces
   surfaceTint: Color(0xFF673AB7),
+  inversePrimary: Colors.black,
+  surfaceContainer: AppColors.blueGreyShade900Y,
 
- surfaceContainerLowest:   AppColors.deepPurpleShade100,
-    surfaceContainerLow: AppColors.deepPurpleShade100,
-    surfaceContainerHigh:   AppColors.blueGreyShade100,
-    surfaceContainerHighest: AppColors.blueGreyShade100,
+  surfaceContainerLowest: AppColors.deepPurpleShade100,
+  surfaceContainerLow: AppColors.deepPurpleShade100,
+  surfaceContainerHigh: AppColors.blueGreyShade100,
+  surfaceContainerHighest: AppColors.blueGreyShade100,
 );
 
 

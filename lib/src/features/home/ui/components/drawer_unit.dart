@@ -104,6 +104,7 @@ class DrawerUnit extends StatelessWidget {
   }
 
   void _navigateToSettingsScreen(BuildContext context) {
+    Navigator.of(context).pop();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SettingsScreen()),
@@ -114,7 +115,7 @@ class DrawerUnit extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProfileScreen(uid: uid),
+        builder: (context) => ProfileScreen(displayUserId: uid),
       ),
     );
   }

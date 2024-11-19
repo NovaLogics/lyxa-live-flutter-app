@@ -7,6 +7,12 @@ const String STORAGE_PATH_POST_IMAGES = 'post_images';
 
 const String IMAGE_PATH_LYXA_BANNER = 'assets/images/lyxa_banner.png';
 
+const String ICON_SETTINGS_STYLE_1 = 'assets/icons/ic_settings_style_1.svg';
+const String ICON_COMMENT_BORDER = 'assets/icons/ic_comment.svg';
+const String ICON_COMMENT_STYLE_1 = 'assets/icons/ic_comment_style_1.svg';
+const String ICON_HEART_FILLED = 'assets/icons/ic_heart_filled.svg';
+const String ICON_HEART_BORDER = 'assets/icons/ic_heart_border.svg';
+
 const String FONT_RALEWAY = 'Raleway';
 const String FONT_DYNALIGHT = 'Dynalight';
 const String FONT_MONTSERRAT = 'Montserrat';

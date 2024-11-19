@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 import 'package:lyxa_live/src/core/themes/theme_cubit.dart';
 
@@ -20,7 +22,14 @@ class SettingsScreen extends StatelessWidget {
       body: Column(
         children: [
           ListTile(
-            title: const Text("Dark Mode"),
+            title: Text(
+              "Dark Mode",
+              style: AppTextStyles.textStylePost.copyWith(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                fontWeight: FontWeight.bold,
+                fontSize: AppDimens.textSizeLarge,
+              ),
+            ),
             trailing: CupertinoSwitch(
               value: isDarkMode,
               onChanged: (value) {

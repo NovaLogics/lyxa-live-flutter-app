@@ -5,18 +5,20 @@ class ScrollableScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget? drawer;
   final Widget body;
+  final Color? backgroundColor;
 
   const ScrollableScaffold({
     super.key,
     this.appBar,
     this.drawer,
-    required this.body,
+    this.backgroundColor,
+    required this.body, 
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: backgroundColor?? Colors.transparent,
       appBar: appBar,
       drawer: drawer,
       body: LayoutBuilder(

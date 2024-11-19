@@ -40,6 +40,23 @@ class AppStrings {
 
   // Common
   static const String pleaseWaitMessage = 'Please wait...';
+  static const String imageLoadError = 'Error loading image..';
+  static const String profileNotFoundError = 'Error profile not found..';
+  static const String postsUpperCase = 'POSTS';
+  static const String followersUpperCase = 'FOLLOWERS';
+  static const String followingUpperCase = 'FOLLOWING';
+  static const String followUpperCase = 'FOLLOW';
+  static const String unfollowUpperCase = 'UNFOLLOW';
+  static const String emptyStoryLineMessage = 'Empty story line...';
+  static const String storyline = 'Storyline';
+  static const String storylineBio = 'Storyline / Bio';
+  static const String addYourStorylineBio = 'Add your storyline / bio';
+  static const String followersTabTitle = 'Followers';
+  static const String followingTabTitle = 'Following';
+  static const String noFollowersMessage = 'No followers';
+  static const String noFollowingMessage = 'No following';
+  static const String loadingMessage = 'Loading...';
+  static const String userNotFoundMessage = 'User not found';
 
   // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
