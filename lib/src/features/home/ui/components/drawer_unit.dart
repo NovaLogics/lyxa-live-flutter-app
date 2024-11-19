@@ -104,6 +104,7 @@ class DrawerUnit extends StatelessWidget {
   }
 
   void _navigateToSettingsScreen(BuildContext context) {
+    Navigator.of(context).pop();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SettingsScreen()),
