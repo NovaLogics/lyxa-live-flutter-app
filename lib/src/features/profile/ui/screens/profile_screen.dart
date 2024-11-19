@@ -12,7 +12,7 @@ import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
-import 'package:lyxa_live/src/features/profile/ui/components/bio_box_unit.dart';
+import 'package:lyxa_live/src/features/profile/ui/components/story_line_unit.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/follow_button_unit.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_stats_unit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
@@ -112,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildProfileStats(user),
           if (!isOwnProfile) _buildFollowActionSection(user),
           const SizedBox(height: AppDimens.size24),
-          _buildBioSection(user.bio),
+          _buildStoryLineSection(user.bio),
           const SizedBox(height: AppDimens.size24),
           _buildPostSection(context),
         ],
@@ -224,16 +224,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildBioSection(String bio) {
+  Widget _buildStoryLineSection(String bio) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Bio',
-              style: TextStyle(color: Theme.of(context).colorScheme.primary)),
-          const SizedBox(height: 12),
-          BioBoxUnit(text: bio),
+          Text(
+            'Storyline',
+            style: AppTextStyles.subtitleSecondary.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.normal,
+              shadows: AppTextStyles.shadowStyle2,
+            ),
+          ),
+          const SizedBox(height: AppDimens.size12),
+          StoryLineUnit(text: bio),
         ],
       ),
     );

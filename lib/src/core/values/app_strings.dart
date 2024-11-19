@@ -47,6 +47,7 @@ class AppStrings {
   static const String followingUpperCase = 'FOLLOWING';
   static const String followUpperCase = 'FOLLOW';
     static const String unfollowUpperCase = 'UNFOLLOW';
+        static const String emptyStoryLineMessage = '"Empty story line..."';
 
 
   // Hint Text Section
