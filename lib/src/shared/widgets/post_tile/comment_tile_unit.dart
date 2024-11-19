@@ -79,6 +79,7 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
             "⤷ ${widget.comment.userName}",
             style: AppTextStyles.textStylePost.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
+              fontWeight: FontWeight.bold,
               fontSize: AppDimens.textSizeSmall,
             ),
           ),
@@ -88,7 +89,7 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
           Text(
             widget.comment.text,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.onTertiary,
               fontSize: 12,
               fontWeight: FontWeight.normal,
             ),
