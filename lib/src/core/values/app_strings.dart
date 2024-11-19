@@ -40,6 +40,7 @@ class AppStrings {
 
   // Common
   static const String pleaseWaitMessage = 'Please wait...';
+    static const String imageLoadError = 'Error loading image..';
 
   // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
