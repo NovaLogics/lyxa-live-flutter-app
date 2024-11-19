@@ -125,7 +125,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   AppBar _buildAppBar(
       BuildContext context, ProfileUser user, bool isOwnProfile) {
     return AppBar(
-      title: Center(child: Text(user.name)),
+      title: Center(
+        child: Text(
+          '${user.name}    ',
+          style: AppTextStyles.textStylePost.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontWeight: FontWeight.bold,
+            fontSize: AppDimens.textSizeXLarge,
+          ),
+        ),
+      ),
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface,
       actions: isOwnProfile
@@ -161,8 +170,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Theme.of(context).colorScheme.primary,
               ),
               imageBuilder: (_, imageProvider) => Container(
-                height: 160,
-                width: 160,
+                height: 120,
+                width: 120,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(

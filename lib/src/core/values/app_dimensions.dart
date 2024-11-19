@@ -23,7 +23,8 @@ class AppDimens {
   static const double textSizeRegular = 14.0;
   static const double textSizeMedium = 16.0;
   static const double textSizeLarge = 18.0;
-  static const double textSizeXLarge = 24.0;
+   static const double textSizeXLarge = 20.0;
+  static const double textSize2XLarge = 24.0;
   static const double textSizeTitle = 32.0;
   static const double textSizeTitleLarge = 42.0;
 
