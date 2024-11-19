@@ -23,8 +23,12 @@ class ConstrainedScaffold extends StatelessWidget {
       drawer: drawer,
       body: Stack(
         children: [
-          getIt<GradientBackgroundUnit>(
-              param1: AppDimens.containerSize400, param2: BackgroundStyle.home),
+          RepaintBoundary(
+            child: getIt<GradientBackgroundUnit>(
+              param1: AppDimens.containerSize400,
+              param2: BackgroundStyle.home,
+            ),
+          ),
           Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 430),
