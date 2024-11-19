@@ -19,9 +19,9 @@ const Color bluePurpleShade900 = Color(0xFF1A237E);
 const ColorScheme darkColorScheme = ColorScheme.dark(
   brightness: Brightness.dark,
   // Primary color for main actions
-  primary: bluePurpleShade100,
+  primary: bluePurpleShade600,
   // Text/Icon color on primary
-  onPrimary: bluePurpleShade50,
+  onPrimary: bluePurpleShade400,
   // Darker shade of primary
   primaryContainer: Color(0xFF512DA8),
   // Text/Icon color on primary container
@@ -52,6 +52,8 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
   onInverseSurface: Colors.black,
   // Tint for elevated surfaces
   surfaceTint: Colors.purple,
+
+  inversePrimary: bluePurpleShade50,
 
   surfaceContainerLowest: AppColors.deepPurpleShade500,
   surfaceContainerLow: AppColors.deepPurpleShade700,
