@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
@@ -74,11 +76,10 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
         children: [
           // Username
           Text(
-            widget.comment.userName,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
+            "⤷ ${widget.comment.userName}",
+            style: AppTextStyles.textStylePost.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+              fontSize: AppDimens.textSizeSmall,
             ),
           ),
           const SizedBox(width: 10),
