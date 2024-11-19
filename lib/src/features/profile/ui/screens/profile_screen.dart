@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
+import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -86,7 +88,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (state is ProfileLoaded) {
           return _buildProfileContent(context, state.profileUser, isOwnProfile);
         } else if (state is ProfileLoading) {
-          return getIt<CenterLoadingUnit>(param1: AppStrings.pleaseWaitMessage);
+          return Scaffold(
+            body:
+                getIt<CenterLoadingUnit>(param1: AppStrings.pleaseWaitMessage),
+          );
         } else {
           return const Scaffold(
             body: Center(child: Text(AppStrings.profileNotFoundError)),
@@ -105,9 +110,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildProfileHeader(user),
           _buildProfileStats(user),
           if (!isOwnProfile) _buildFollowActionSection(user),
-          const SizedBox(height: 25),
+          const SizedBox(height: AppDimens.size24),
           _buildBioSection(user.bio),
-          const SizedBox(height: 25),
+          const SizedBox(height: AppDimens.size24),
           _buildPostSection(context),
         ],
       ),
@@ -139,17 +144,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       children: [
         Material(
-          elevation: 2.0,
+          elevation: AppDimens.elevationSmall,
           shape: const CircleBorder(),
           color: Theme.of(context).colorScheme.surfaceContainer,
           child: Padding(
-            padding: const EdgeInsets.all(2.0),
+            padding: const EdgeInsets.all(1),
             child: CachedNetworkImage(
               imageUrl: user.profileImageUrl,
               placeholder: (_, __) => const CircularProgressIndicator(),
               errorWidget: (_, __, ___) => Icon(
                 Icons.person,
-                size: 72,
+                size: AppDimens.iconSize2XLarge,
                 color: Theme.of(context).colorScheme.primary,
               ),
               imageBuilder: (_, imageProvider) => Container(
@@ -166,12 +171,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: AppDimens.size16),
         Text(
           user.email,
-          style: TextStyle(color: Theme.of(context).colorScheme.primary),
+          style: AppTextStyles.subtitlePrimary.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontWeight: FontWeight.normal,
+            shadows: AppTextStyles.shadowStyle2,
+          ),
         ),
-        const SizedBox(height: 25),
+        const SizedBox(height: AppDimens.size16),
       ],
     );
   }
