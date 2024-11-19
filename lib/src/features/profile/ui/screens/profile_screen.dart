@@ -122,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildProfileStats(user),
               if (!isOwnProfile) const SizedBox(height: AppDimens.size8),
               if (!isOwnProfile) _buildFollowActionSection(user),
-              const SizedBox(height: AppDimens.size8),
+              const SizedBox(height: AppDimens.size12),
               _buildStoryLineSection(user.bio),
               const SizedBox(height: AppDimens.size24),
               _buildPostSection(context),
@@ -169,7 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Material(
           elevation: AppDimens.elevationSmall,
           shape: const CircleBorder(),
-          color: Theme.of(context).colorScheme.surfaceContainer,
+          color: Theme.of(context).colorScheme.outline,
           child: Padding(
             padding: const EdgeInsets.all(1),
             child: CachedNetworkImage(
@@ -268,21 +268,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
           child: Container(
+            padding: const EdgeInsets.all(1),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface, // Background color
-              borderRadius: BorderRadius.circular(8.0), // Rounded corners
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSecondary
-                      .withOpacity(0.2), // Shadow color
-                  blurRadius: 3.0, // Blur radius
-                  offset: const Offset(0.5, 0.5), // Offset for the shadow
-                ),
-              ],
+              gradient: const LinearGradient(
+                colors: [
+                  Colors.blueAccent,
+                  Colors.deepPurpleAccent,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: StoryLineUnit(text: bio),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: StoryLineUnit(text: bio),
+            ),
           ),
         ),
       ],
