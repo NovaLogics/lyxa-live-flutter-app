@@ -42,7 +42,7 @@ class ProfileStatsUnit extends StatelessWidget {
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(4.0), // Inner padding
+              padding: const EdgeInsets.all(8.0), // Inner padding
               child: Row(
                 children: [
                   //Posts
@@ -59,11 +59,13 @@ class ProfileStatsUnit extends StatelessWidget {
                             fontSize: AppDimens.textSizeMedium,
                           ),
                         ),
+                        const SizedBox(height: AppDimens.size4),
                         Text(
                           AppStrings.postsUpperCase,
                           style: AppTextStyles.textStylePost.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDimens.textSizeSmall,
                           ),
                         ),
                       ],
@@ -83,11 +85,13 @@ class ProfileStatsUnit extends StatelessWidget {
                             fontSize: AppDimens.textSizeMedium,
                           ),
                         ),
+                        const SizedBox(height: AppDimens.size4),
                         Text(
                           AppStrings.followersUpperCase,
                           style: AppTextStyles.textStylePost.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDimens.textSizeSmall,
                           ),
                         ),
                       ],
@@ -108,11 +112,13 @@ class ProfileStatsUnit extends StatelessWidget {
                             fontSize: AppDimens.textSizeMedium,
                           ),
                         ),
+                        const SizedBox(height: AppDimens.size4),
                         Text(
                           AppStrings.followingUpperCase,
                           style: AppTextStyles.textStylePost.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDimens.textSizeSmall,
                           ),
                         ),
                       ],
