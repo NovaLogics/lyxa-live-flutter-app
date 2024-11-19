@@ -193,7 +193,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProfileScreen(uid: widget.post.userId)),
+                  builder: (context) =>
+                      ProfileScreen(displayUserId: widget.post.userId)),
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(

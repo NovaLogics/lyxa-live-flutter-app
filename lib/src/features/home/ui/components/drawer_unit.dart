@@ -115,7 +115,7 @@ class DrawerUnit extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProfileScreen(uid: uid),
+        builder: (context) => ProfileScreen(displayUserId: uid),
       ),
     );
   }

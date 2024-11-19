@@ -19,9 +19,9 @@ import 'package:lyxa_live/src/features/profile/ui/screens/edit_profile_screen.da
 import 'package:lyxa_live/src/features/profile/ui/screens/follower_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final String uid;
+  final String displayUserId;
 
-  const ProfileScreen({super.key, required this.uid});
+  const ProfileScreen({super.key, required this.displayUserId});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -30,7 +30,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late final AuthCubit _authCubit;
   late final ProfileCubit _profileCubit;
-  late AppUser? _currentUser;
+  late final String? _currentUserId;
 
   @override
   void initState() {
@@ -38,9 +38,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     _authCubit = context.read<AuthCubit>();
     _profileCubit = context.read<ProfileCubit>();
-    _currentUser = _authCubit.currentUser;
+    AppUser? currentUser = _authCubit.currentUser;
+    _currentUserId = currentUser!.uid;
 
-    _profileCubit.fetchUserProfile(widget.uid);
+    _profileCubit.fetchUserProfile(widget.displayUserId);
   }
 
   /// Handles the follow/unfollow button press.
@@ -50,25 +51,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (profileState is! ProfileLoaded) return;
 
     final profileUser = profileState.profileUser;
-    final isFollowing = profileUser.followers.contains(_currentUser!.uid);
+    final isFollowing = profileUser.followers.contains(_currentUserId);
 
     // Optimistically update UI
     setState(() {
       if (isFollowing) {
-        profileUser.followers.remove(_currentUser!.uid);
+        profileUser.followers.remove(_currentUserId!);
       } else {
-        profileUser.followers.add(_currentUser!.uid);
+        profileUser.followers.add(_currentUserId!);
       }
     });
 
     // Perform follow/unfollow logic and handle errors
-    _profileCubit.toggleFollow(_currentUser!.uid, widget.uid).catchError((_) {
+    _profileCubit
+        .toggleFollow(_currentUserId!, widget.displayUserId)
+        .catchError((_) {
       // Revert optimistic UI changes if the operation fails
       setState(() {
         if (isFollowing) {
-          profileUser.followers.add(_currentUser!.uid);
+          profileUser.followers.add(_currentUserId);
         } else {
-          profileUser.followers.remove(_currentUser!.uid);
+          profileUser.followers.remove(_currentUserId);
         }
       });
     });
@@ -76,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isOwnProfile = widget.uid == _currentUser!.uid;
+    final isOwnProfile = (widget.displayUserId == _currentUserId!);
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
@@ -101,11 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           _buildProfileHeader(user),
           _buildProfileStats(user),
-          if (!isOwnProfile)
-            FollowButtonUnit(
-              onPressed: _handleFollowButtonPressed,
-              isFollowing: user.followers.contains(_currentUser!.uid),
-            ),
+          if (!isOwnProfile) _buildFollowActionSection(user),
           const SizedBox(height: 25),
           _buildBioSection(user.bio),
           const SizedBox(height: 25),
@@ -183,8 +182,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         int postCount = 0;
 
         if (state is PostLoaded) {
-          postCount =
-              state.posts.where((post) => post.userId == widget.uid).length;
+          postCount = state.posts
+              .where((post) => post.userId == widget.displayUserId)
+              .length;
         }
 
         return ProfileStatsUnit(
@@ -202,6 +202,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildFollowActionSection(ProfileUser user) {
+    return FollowButtonUnit(
+      onPressed: _handleFollowButtonPressed,
+      isFollowing: user.followers.contains(_currentUserId!),
     );
   }
 
@@ -224,8 +231,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
         if (state is PostLoaded) {
-          final userPosts =
-              state.posts.where((post) => post.userId == widget.uid).toList();
+          final userPosts = state.posts
+              .where((post) => post.userId == widget.displayUserId)
+              .toList();
 
           if (userPosts.isEmpty) {
             return const Center(child: Text("No posts."));

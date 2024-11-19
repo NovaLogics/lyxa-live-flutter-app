@@ -30,7 +30,7 @@ class UserTileUnit extends StatelessWidget {
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProfileScreen(uid: user.uid),
+            builder: (context) => ProfileScreen(displayUserId: user.uid),
           )),
     );
   }
