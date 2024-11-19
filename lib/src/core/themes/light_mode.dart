@@ -31,13 +31,13 @@ const ColorScheme lightColorScheme = ColorScheme.light(
   // Secondary color for accents
   secondary: Color(0xFF512DA8),
   // Text/Icon color on secondary
-  onSecondary: bluePurpleShade900,
+  onSecondary: bluePurpleShade900Y,
   // Secondary container background
   secondaryContainer: Color(0xFFEDE7F6),
   // Text/Icon color on secondary container
   onSecondaryContainer: Color(0xFF311B92),
 
-  onTertiary: bluePurpleShade700,
+  onTertiary: bluePurpleShade900,
   // Error color
   error: Colors.red,
   // Text/Icon color on error
