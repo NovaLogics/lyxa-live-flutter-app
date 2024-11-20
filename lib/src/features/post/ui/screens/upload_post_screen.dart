@@ -33,35 +33,21 @@ class UploadPostScreen extends StatefulWidget {
 }
 
 class _UploadPostScreenState extends State<UploadPostScreen> {
-  late final authCubit = context.read<AuthCubit>();
-  // Mobile Image Pick
-  PlatformFile? imagePickedFile;
-
-  // Web Image Pick
-  Uint8List? pickedImage;
-
-  //Bio Text Controller
-  final textController = TextEditingController();
-
-  // Current user
-  // AppUser? currentUser;
+  late final AuthCubit authCubit = context.read<AuthCubit>();
   late AppUser? currentUser = authCubit.currentUser;
 
-  // On Startup
+  Uint8List? selectedImage;  // Selected image bytes for web
+
+  final TextEditingController captionController = TextEditingController();
+
   @override
-  void initState() {
-    super.initState();
-
-    // getCurrentUser();
+  void dispose() {
+    captionController.dispose();
+    super.dispose();
   }
 
-  void getCurrentUser() async {
-    final authCubit = context.read<AuthCubit>();
-    currentUser = authCubit.currentUser;
-  }
-
-  // Pick image
-  Future<void> pickCropCompressImage() async {
+  /// Handles image selection, cropping, and compression
+  Future<void> handleImageSelection() async {
     try {
       final pickedFile = await FilePicker.platform.pickFiles(
         type: FileType.image,
@@ -70,49 +56,52 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
       if (pickedFile == null) return;
 
-      // Platform -> WEB
       if (kIsWeb) {
+        // Handle web image selection
         setState(() {
-          pickedImage = pickedFile.files.single.bytes;
+          selectedImage = pickedFile.files.single.bytes;
         });
+      } else {
+        // Handle mobile image selection and cropping
+        await _processMobileImage(pickedFile.files.single.path!);
       }
-      // Platform -> MOBILE
-      else {
-        final croppedFile = await ImageCropper().cropImage(
-          sourcePath: pickedFile.files.single.path!,
-          compressFormat: ImageCompressFormat.jpg,
-          compressQuality: 95,
-          uiSettings: _getCropperSettings(),
-        );
-
-        if (croppedFile == null) return;
-
-        final compressedImage = await compressImage(croppedFile.path);
-        if (compressedImage != null) {
-          setState(() {
-            pickedImage = compressedImage;
-          });
-          Logger.logDebug(AppStrings.imagePickedSuccessfully);
-        }
-      }
-    } catch (error) {
-      Logger.logError(error.toString());
+      Logger.logDebug(AppStrings.imagePickedSuccessfully);
+    } catch (e) {
+      Logger.logError(e.toString());
     }
   }
 
-  List<PlatformUiSettings> _getCropperSettings() {
+  /// Processes mobile images by cropping and compressing
+  Future<void> _processMobileImage(String filePath) async {
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: filePath,
+      compressFormat: ImageCompressFormat.jpg,
+      compressQuality: 95,
+      uiSettings: _getImageCropperSettings(),
+    );
+
+    if (croppedFile == null) return;
+
+    final compressedImage = await _compressImage(croppedFile.path);
+    if (compressedImage != null) {
+      setState(() {
+        selectedImage = compressedImage;
+      });
+    }
+  }
+
+  /// Returns platform-specific image cropper settings
+  List<PlatformUiSettings> _getImageCropperSettings() {
     return [
       AndroidUiSettings(
         toolbarTitle: AppStrings.cropperTitle,
         toolbarColor: Colors.deepPurple,
         toolbarWidgetColor: Colors.white,
-        initAspectRatio: CropAspectRatioPreset.square,
         lockAspectRatio: true,
         aspectRatioPresets: [
           CropAspectRatioPreset.square,
           CropAspectRatioPreset.ratio16x9,
           CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio3x2,
         ],
       ),
       IOSUiSettings(
@@ -121,13 +110,13 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           CropAspectRatioPreset.square,
           CropAspectRatioPreset.ratio16x9,
           CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio3x2,
         ],
       ),
     ];
   }
 
-  Future<Uint8List?> compressImage(String filePath) async {
+  /// Compresses image to reduce size
+  Future<Uint8List?> _compressImage(String filePath) async {
     return await FlutterImageCompress.compressWithFile(
       filePath,
       minWidth: 800,
@@ -136,84 +125,43 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 
-  // Create & upload post
-  void uploadPost() async {
-    final text = textController.text.trim();
+  /// Handles post creation and upload
+  void createAndUploadPost() {
+    final caption = captionController.text.trim();
 
-    Logger.logDebug('currentUser : ${currentUser!.toString()}');
-
-    // Check if both image and caption are provided
-    if (pickedImage == null || text.isEmpty) {
+    if (selectedImage == null || caption.isEmpty) {
       ToastMessengerUnit.showToast(
         context: context,
-        message: 'Both image and caption are required',
+        message: AppStrings.errorImageAndCaptionRequired,
         icon: Icons.error,
         backgroundColor: AppColors.bluePurpleShade900X,
         textColor: AppColors.whiteShade,
-        shadowColor: AppColors.blackShade,
-        duration: ToastDuration.second7,
       );
-
       return;
     }
 
-    // Create a new Post
-    final newPost = Post(
+    final post = Post(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       userId: currentUser!.uid,
       userName: currentUser!.name,
-      text: text,
+      text: caption,
       imageUrl: '',
       timestamp: DateTime.now(),
       likes: [],
       comments: [],
     );
 
-    // PostCubit
-    final postCubit = context.read<PostCubit>();
-
-    postCubit.createPost(
-      newPost,
-      imageBytes: pickedImage,
-    );
-
-    // // Upload Web
-    // if (kIsWeb) {
-    //   postCubit.createPost(
-    //     newPost,
-    //     imageBytes: imagePickedFile?.bytes,
-    //   );
-    // }
-    // // Upload Mobile
-    // else {
-    //   postCubit.createPost(
-    //     newPost,
-    //     imagePath: imagePickedFile?.path,
-    //   );
-    // }
+    context.read<PostCubit>().createPost(post, imageBytes: selectedImage);
   }
 
-  @override
-  void dispose() {
-    textController.dispose();
-    super.dispose();
-  }
-
-  // Build UI
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PostCubit, PostState>(
       builder: (context, state) {
-        Logger.logDebug(state.toString());
-        // Loading or Uploading
         if (state is PostLoading || state is PostUploading) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
-        // Build upload page
+
         return Scaffold(
           body: Stack(
             children: [
@@ -223,7 +171,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           ),
         );
       },
-      // Go to previous screen when upload is done & posts are loaded
       listener: (context, state) {
         if (state is PostLoaded) {
           Navigator.pop(context);
@@ -241,87 +188,67 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 
-  Widget _buildPickImageButton() {
-    return Center(
-      child: GradientButton(
-        text: AppStrings.pickImage.toUpperCase(),
-        onPressed: pickCropCompressImage,
-        textStyle: AppTextStyles.buttonTextPrimary.copyWith(
-          color: Theme.of(context).colorScheme.inversePrimary,
-        ),
-        icon: Icon(Icons.filter,
-            color: Theme.of(context).colorScheme.inversePrimary),
+  Widget _buildUploadPage() {
+    return ScrollableScaffold(
+      appBar: AppBar(
+        title: const Text(AppStrings.createPost),
+        actions: [
+          IconButton(
+            onPressed: createAndUploadPost,
+            icon: const Icon(Icons.upload),
+          )
+        ],
+      ),
+      body: Column(
+        children: [
+          _buildImagePreview(),
+          _buildPickImageButton(),
+          const SizedBox(height: AppDimens.spacing28),
+          _buildCaptionInput(),
+        ],
       ),
     );
   }
 
-  Widget _buildCaptionSection() {
+  Widget _buildImagePreview() {
+    return selectedImage != null
+        ? Padding(
+            padding: const EdgeInsets.all(AppDimens.padding8),
+            child: Image.memory(selectedImage!, width: double.infinity, fit: BoxFit.contain),
+          )
+        : Icon(Icons.image, size: AppDimens.imageSize180, color: Theme.of(context).colorScheme.outline);
+  }
+
+  Widget _buildPickImageButton() {
+    return Center(
+      child: GradientButton(
+        text: AppStrings.pickImageButton.toUpperCase(),
+        onPressed: handleImageSelection,
+        textStyle: AppTextStyles.buttonTextPrimary.copyWith(
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
+        icon: Icon(Icons.filter, color: Theme.of(context).colorScheme.inversePrimary),
+      ),
+    );
+  }
+
+  Widget _buildCaptionInput() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.padding24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            'Caption',
-            style: AppTextStyles.subtitleSecondary.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.bold,
-              shadows: [],
-            ),
-          ),
-          const SizedBox(height: AppDimens.size4),
+          const Text(AppStrings.caption, style: AppTextStyles.subtitleSecondary),
+          const SizedBox(height: AppDimens.spacing4),
           MultilineTextFieldUnit(
-            controller: textController,
-            labelText: 'Caption Area...',
-            hintText: 'Add post caption here..',
+            controller: captionController,
+            labelText: AppStrings.captionLabel,
+            hintText: AppStrings.captionHint,
             maxLength: MAX_LENGTH_POST_FIELD,
           ),
         ],
       ),
     );
   }
-
-  Widget _buildUploadPage() {
-    return ScrollableScaffold(
-      // App Bar
-      appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        title: const Text("Create Post"),
-        actions: [
-          // Upload button
-          IconButton(
-            onPressed: uploadPost,
-            icon: const Icon(Icons.upload),
-          )
-        ],
-      ),
-      // Body
-      body: Column(
-        children: [
-          // Image preview for web
-          (pickedImage != null)
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.memory(
-                    pickedImage!,
-                    width: double.infinity,
-                    fit: BoxFit.contain,
-                  ),
-                )
-              : Icon(
-                  Icons.image,
-                  size: AppDimens.imageSize180,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-
-          // Pick image button
-          _buildPickImageButton(),
-          const SizedBox(height: AppDimens.size28),
-
-          // Caption Text
-          _buildCaptionSection(),
-        ],
-      ),
-    );
-  }
 }
+
