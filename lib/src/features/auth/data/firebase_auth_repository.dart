@@ -37,6 +37,8 @@ class FirebaseAuthRepository implements AuthRepository {
         uid: userCredential.user!.uid,
         email: email,
         name: userDoc.get(AppUserFields.name),
+        searchableName:
+            userDoc.get(AppUserFields.name).toString().toLowerCase(),
       );
 
       return user;
@@ -66,6 +68,7 @@ class FirebaseAuthRepository implements AuthRepository {
         uid: userCredential.user!.uid,
         email: email,
         name: name,
+        searchableName: name.toLowerCase(),
       );
 
       // Save user data in firestore
@@ -104,6 +107,7 @@ class FirebaseAuthRepository implements AuthRepository {
       uid: firebaseUser.uid,
       email: firebaseUser.email!,
       name: userDoc.get(AppUserFields.name),
+      searchableName: userDoc.get(AppUserFields.name).toString().toLowerCase(),
     );
   }
 
@@ -115,9 +119,8 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<AppUser?> getSavedUser( {String key = HiveKeys.loginDataKey}) async {
-    final String loginData =
-        hiveHelper.getValue<String>(key, '');
+  Future<AppUser?> getSavedUser({String key = HiveKeys.loginDataKey}) async {
+    final String loginData = hiveHelper.getValue<String>(key, '');
     if (loginData.isNotEmpty) {
       try {
         return AppUser.fromJsonString(loginData);
@@ -129,7 +132,8 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> saveUser(AppUser user, {String key = HiveKeys.loginDataKey}) async {
+  Future<void> saveUser(AppUser user,
+      {String key = HiveKeys.loginDataKey}) async {
     await hiveHelper.save(key, user.toJsonString());
   }
 }
