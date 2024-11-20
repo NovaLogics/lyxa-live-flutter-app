@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 
 ///USAGE ->
-//  CustomToast.showToast(
+//  ToastMessengerUnit.showToast(
 //     context: context,
 //     message: "This is a custom toast message!",
 //     icon: Icons.check_circle,
@@ -17,7 +17,7 @@ import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 //     duration: const Duration(seconds: 5), // Customize how long to show
 //   );
 
-class CustomToast {
+class ToastMessengerUnit {
   static OverlayEntry? _overlayEntry;
   static Timer? _toastTimer;
 
