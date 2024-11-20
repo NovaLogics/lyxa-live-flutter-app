@@ -9,8 +9,8 @@ class FirebaseSearchRepository implements SearchRepository {
     try {
       final result = await FirebaseFirestore.instance
           .collection(FIRESTORE_COLLECTION_USERS)
-          .where('name', isGreaterThanOrEqualTo: query)
-          .where('name', isLessThanOrEqualTo: '$query\uf8ff')
+          .where('searchableName', isGreaterThanOrEqualTo: query)
+          .where('searchableName', isLessThanOrEqualTo: '$query\uf8ff')
           .get();
 
       return result.docs
