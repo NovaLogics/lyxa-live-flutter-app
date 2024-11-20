@@ -10,6 +10,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
@@ -19,6 +20,7 @@ import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
+import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final ProfileUser user;
@@ -37,7 +39,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Uint8List? pickedImage;
   final bioTextController = TextEditingController();
 
-  
+  // BUILD UI
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileCubit, ProfileState>(
@@ -49,9 +51,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         }
       },
       listener: (context, state) {
+        // Show Error
         if (state is ProfileError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
+          ToastMessengerUnit.showToast(
+            context: context,
+            message: state.message,
+            icon: Icons.error,
+            backgroundColor: AppColors.bluePurpleShade900X,
+            textColor: AppColors.whiteShade,
+            shadowColor: AppColors.blackShade,
+            duration: ToastDuration.second5,
           );
         } else if (state is ProfileLoaded) {
           Navigator.pop(context);
@@ -123,7 +132,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
       IOSUiSettings(
         title: AppStrings.cropperTitle,
-        aspectRatioPresets: [CropAspectRatioPreset.original, CropAspectRatioPreset.square],
+        aspectRatioPresets: [
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.square
+        ],
       ),
     ];
   }
@@ -140,10 +152,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void updateProfile() async {
     final profileCubit = context.read<ProfileCubit>();
     final String uid = widget.user.uid;
-    final String? newBio = bioTextController.text.isNotEmpty ? bioTextController.text : null;
+    final String? newBio =
+        bioTextController.text.isNotEmpty ? bioTextController.text : null;
 
     if (pickedImage != null || newBio != null) {
-      profileCubit.updateProfile(uid: uid, newBio: newBio, imageWebBytes: pickedImage);
+      profileCubit.updateProfile(
+          uid: uid, newBio: newBio, imageWebBytes: pickedImage);
     } else {
       Navigator.pop(context);
     }
@@ -212,10 +226,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             clipBehavior: Clip.hardEdge,
             child: (pickedImage != null)
-                ? Image.memory(pickedImage!, width: 200, height: 200, fit: BoxFit.cover)
+                ? Image.memory(pickedImage!,
+                    width: 200, height: 200, fit: BoxFit.cover)
                 : CachedNetworkImage(
                     imageUrl: widget.user.profileImageUrl,
-                    placeholder: (context, url) => const CircularProgressIndicator(),
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
                     errorWidget: (context, url, error) => Icon(
                       Icons.person,
                       size: 72,
@@ -236,7 +252,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         textStyle: AppTextStyles.buttonTextPrimary.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
-        icon: Icon(Icons.filter, color: Theme.of(context).colorScheme.inversePrimary),
+        icon: Icon(Icons.filter,
+            color: Theme.of(context).colorScheme.inversePrimary),
       ),
     );
   }
