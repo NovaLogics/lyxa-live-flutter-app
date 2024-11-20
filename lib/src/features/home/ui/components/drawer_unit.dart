@@ -5,18 +5,17 @@ import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_title_unit.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
 import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
 
 class DrawerUnit extends StatelessWidget {
-  final String? userId;
-  final String? imageUrl;
+  final ProfileUser? user;
 
   const DrawerUnit({
     super.key,
-    required this.userId,
-    required this.imageUrl,
+    this.user,
   });
 
   @override
@@ -78,33 +77,44 @@ class DrawerUnit extends StatelessWidget {
       color: Theme.of(context).colorScheme.outline,
       child: Padding(
         padding: const EdgeInsets.all(1),
-        child: CachedNetworkImage(
-          imageUrl: imageUrl ?? '',
-          placeholder: (_, __) => const CircularProgressIndicator(),
-          errorWidget: (_, __, ___) => Icon(
-            Icons.person,
-            size: AppDimens.iconSize3XLarge,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          imageBuilder: (_, imageProvider) => Container(
-            height: AppDimens.iconSize3XLarge,
-            width: AppDimens.iconSize3XLarge,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
+        child: (user?.profileImageUrl != null)
+            ? CachedNetworkImage(
+                imageUrl: user?.profileImageUrl ?? '',
+                placeholder: (_, __) => const CircularProgressIndicator(),
+                errorWidget: (_, __, ___) => Icon(
+                  Icons.person,
+                  size: AppDimens.iconSize3XLarge,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                imageBuilder: (_, imageProvider) => Container(
+                  height: AppDimens.iconSize3XLarge,
+                  width: AppDimens.iconSize3XLarge,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              )
+            : Icon(
+                Icons.person,
+                size: AppDimens.iconSize3XLarge,
+                color: Theme.of(context).colorScheme.primary,
               ),
-            ),
-          ),
-        ),
       ),
     );
   }
 
   Widget _buildProfileSection(BuildContext context) {
-    final user = context.read<AuthCubit>().currentUser;
-    final uid = user?.uid;
+    String? userId;
+    if (user?.uid != null) {
+      userId = user!.uid;
+    } else {
+      final userData = context.read<AuthCubit>().currentUser;
+      userId = userData!.uid;
+    }
 
     return _buildDrawerItem(
       context,
@@ -113,7 +123,7 @@ class DrawerUnit extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pop();
         if (userId != null) {
-          _navigateToProfileScreen(context, userId ?? '');
+          _navigateToProfileScreen(context, userId);
         }
       },
     );
