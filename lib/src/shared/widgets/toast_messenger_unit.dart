@@ -60,6 +60,8 @@ class ToastMessengerUnit {
     VoidCallback? onButtonPressed,
     Duration duration = ToastDuration.second3,
   }) {
+    FocusScope.of(context).unfocus();
+
     // Remove any existing toast
     _removeToast();
 
