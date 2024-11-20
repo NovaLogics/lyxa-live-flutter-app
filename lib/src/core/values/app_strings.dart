@@ -59,17 +59,23 @@ class AppStrings {
   static const String loadingMessage = 'Loading...';
   static const String userNotFoundMessage = 'User not found';
 
+  static const String createPost = "Create Post";
+  static const String caption = "Caption";
+  static const String captionHint = "Add post caption here..";
+  static const String captionLabel = "Caption Area...";
+  static const String pickImageButton = "Pick Image";
+  static const String errorImageAndCaptionRequired = "Both image and caption are required.";
+  static const String cropperTitle = "Crop Image";
+  static const String imagePickedSuccessfully = "Image picked successfully";
+
   static const String updating = "Updating...";
   static const String errorFetchingImage =
       "Error picking or compressing image.";
   static const String pickImage = "Pick Image";
   static const String editProfile = "Edit Profile";
-
   static const String addYourStorylineBio = "Add your bio / storyline";
   static const String cropperToolbarTitle = "Profile Image Cropper";
-  static const String cropperTitle = "Cropper";
-  static const String imagePickedSuccessfully =
-      "Image picked and compressed successfully!";
+
 
   // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
