@@ -11,6 +11,9 @@ class AppColors {
   static const Color bluePurpleShade700 = Color(0xFF303F9F);
   static const Color bluePurpleShade800 = Color(0xFF283593);
   static const Color bluePurpleShade900 = Color(0xFF1A237E);
+  static const Color bluePurpleShade900X = Color.fromARGB(255, 61, 31, 109);
+  static const Color bluePurpleShade900Y = Color.fromARGB(255, 41, 20, 73);
+  static const Color bluePurpleShade900Z = Color.fromARGB(255, 27, 10, 52);
 
   static const Color deepPurpleShade50 = Color(0xFFEDE7F6);
   static const Color deepPurpleShade100 = Color(0xFFD1C4E9);
@@ -68,6 +71,51 @@ class AppColors {
   static const Color blackShade700 = Color(0xFF212121); // Rich black
   static const Color blackShade800 = Color(0xFF161616); // Very dark black
   static const Color blackShade900 = Color(0xFF0A0A0A); // Almost true black
+
+// Neutral Colors
+  static const Color whiteShade = Color(0xFFFFF8F8);
+  static const Color blackShade = Color(0xFF0A0A0A);
+  static const Color grayLight = Color(0xFFDDDDDD);
+  static const Color grayDark = Color(0xFF888888);
+  static const Color grayNeutral = Color(0xFFCCCCCC);
+
+// Primary Colors
+  static const Color primaryBlue = Color(0xFF2196F3);
+  static const Color primaryRed = Color(0xFFF44336);
+  static const Color primaryGreen = Color(0xFF4CAF50);
+  static const Color primaryYellow = Color(0xFFFFEB3B);
+  static const Color primaryOrange = Color(0xFFFF9800);
+
+// Accent Colors
+  static const Color accentBlue = Color(0xFF42A5F5);
+  static const Color accentRed = Color(0xFFEF5350);
+  static const Color accentGreen = Color(0xFF66BB6A);
+  static const Color accentYellow = Color(0xFFFFEE58);
+  static const Color accentOrange = Color(0xFFFFA726);
+
+  // Background Colors
+  static const Color backgroundLight = Color(0xFFF5F5F5);
+  static const Color backgroundDark = Color(0xFF303030);
+  static const Color backgroundSurface = Color(0xFFFAFAFA);
+  static const Color backgroundOverlay =
+      Color(0xB3000000); // Semi-transparent black
+
+  // Text Colors
+  static const Color textPrimary = Color(0xFF212121);
+  static const Color textSecondary = Color(0xFF757575);
+  static const Color textHint = Color(0xFFBDBDBD);
+  static const Color textDisabled = Color(0xFF9E9E9E);
+
+  // Border Colors
+  static const Color borderLight = Color(0xFFE0E0E0);
+  static const Color borderDark = Color(0xFFBDBDBD);
+  static const Color borderPrimary = Color(0xFF2196F3);
+
+  // Utility Colors
+  static const Color successGreen = Color(0xFF4CAF50);
+  static const Color warningYellow = Color(0xFFFFEB3B);
+  static const Color errorRed = Color(0xFFF44336);
+  static const Color infoBlue = Color(0xFF2196F3);
 }
 
 class AppThemeColors {

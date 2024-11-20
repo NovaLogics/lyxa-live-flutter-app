@@ -49,8 +49,9 @@ class AppStrings {
   static const String unfollowUpperCase = 'UNFOLLOW';
   static const String emptyStoryLineMessage = 'Empty story line...';
   static const String storyline = 'Storyline';
+  static const String storylineDecoText = '✧ Storyline ✧';
   static const String storylineBio = 'Storyline / Bio';
-  static const String addYourStorylineBio = 'Add your storyline / bio';
+
   static const String followersTabTitle = 'Followers';
   static const String followingTabTitle = 'Following';
   static const String noFollowersMessage = 'No followers';
@@ -58,9 +59,27 @@ class AppStrings {
   static const String loadingMessage = 'Loading...';
   static const String userNotFoundMessage = 'User not found';
 
+  static const String createPost = "Create Post";
+  static const String caption = "Caption";
+  static const String captionHint = "Add post caption here..";
+  static const String captionLabel = "Caption Area...";
+  static const String pickImageButton = "Pick Image";
+  static const String errorImageAndCaptionRequired = "Both image and caption are required.";
+  static const String cropperTitle = "Crop Image";
+  static const String imagePickedSuccessfully = "Image picked successfully";
+
+  static const String updating = "Updating...";
+  static const String errorFetchingImage =
+      "Error picking or compressing image.";
+  static const String pickImage = "Pick Image";
+  static const String editProfile = "Edit Profile";
+  static const String addYourStorylineBio = "Add your bio / storyline";
+  static const String cropperToolbarTitle = "Profile Image Cropper";
+
+
   // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
-  static const String hintUsername = 'Username (e.g., User_Name)';
+  static const String hintUsername = 'Name (e.g., Mike Joe )';
   static const String hintPassword = 'Password (e.g., P@ssw0rd)';
   static const String hintConfirmPassword = 'Confirm Password (e.g., P@ssw0rd)';
 

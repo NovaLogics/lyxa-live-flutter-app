@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,17 +5,23 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/helper/logger.dart';
+import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
+import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
-import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
-import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
+import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final ProfileUser user;
@@ -31,202 +36,260 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  // Mobile Image Pick
   PlatformFile? imagePickedFile;
-
-  // Web Image Pick
-  Uint8List? webImage;
-
-  //Bio Text Controller
+  Uint8List? pickedImage;
   final bioTextController = TextEditingController();
 
+  // BUILD UI
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileCubit, ProfileState>(builder: (context, state) {
-      // Profile loading
-      if (state is ProfileLoading) {
-        return const Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-                Text('Updating...'),
-              ],
-            ),
-          ),
-        );
-      }
-      // Profile error
-
-      // Edit screen
-      else {
-        return _buildEditScreen();
-      }
-    }, listener: (context, state) {
-      if (state is ProfileError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(state.message),
-          ),
-        );
-      } else if (state is ProfileLoaded) {
-        Navigator.pop(context);
-      }
-    });
-  }
-
-  // Pick image
-  Future<void> pickImage() async {
-    final result = await FilePicker.platform
-        .pickFiles(type: FileType.image, withData: kIsWeb);
-
-    if (result != null) {
-      setState(() {
-        imagePickedFile = result.files.first;
-
-        if (kIsWeb) {
-          webImage = imagePickedFile!.bytes;
+    return BlocConsumer<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        if (state is ProfileLoading) {
+          return _buildLoadingScreen();
+        } else {
+          return _buildEditScreen();
         }
-      });
-    }
+      },
+      listener: (context, state) {
+        // Show Error
+        if (state is ProfileError) {
+          ToastMessengerUnit.showToast(
+            context: context,
+            message: state.message,
+            icon: Icons.error,
+            backgroundColor: AppColors.bluePurpleShade900X,
+            textColor: AppColors.whiteShade,
+            shadowColor: AppColors.blackShade,
+            duration: ToastDuration.second5,
+          );
+        } else if (state is ProfileLoaded) {
+          Navigator.pop(context);
+        }
+      },
+    );
   }
 
-  // Update profile button pressed
-  void updateProfile() async {
-    final profileCubit = context.read<ProfileCubit>();
-
-    // Prepare images & data
-    final String uid = widget.user.uid;
-    final String? newBio =
-        bioTextController.text.isNotEmpty ? bioTextController.text : null;
-    final imageMobilePath = kIsWeb ? null : imagePickedFile?.path;
-    final imageWebBytes = kIsWeb ? imagePickedFile?.bytes : null;
-
-    //Update profile if there is something to update
-    if (imagePickedFile != null || newBio != null) {
-      profileCubit.updateProfile(
-          uid: uid,
-          newBio: newBio,
-          imageMobilePath: imageMobilePath,
-          imageWebBytes: imageWebBytes);
-    }
-    // No data to update -> Go to previous page
-    else {
-      Navigator.pop(context);
-    }
+  // SCREEN -> Loading
+  Widget _buildLoadingScreen() {
+    return const Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            Text(AppStrings.updating),
+          ],
+        ),
+      ),
+    );
   }
 
+  // SCREEN -> Edit
   Widget _buildEditScreen() {
     bioTextController.text = widget.user.bio;
+    return Scaffold(
+      body: Stack(
+        children: [
+          _buildBackground(),
+          _buildContent(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBackground() {
+    return RepaintBoundary(
+      child: getIt<GradientBackgroundUnit>(
+        param1: AppDimens.containerSize400,
+        param2: BackgroundStyle.home,
+      ),
+    );
+  }
+
+  Widget _buildContent() {
     return ScrollableScaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        title: const Text("Edit Profile"),
-        foregroundColor: Theme.of(context).colorScheme.primary,
+        title: const Text(AppStrings.editProfile),
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         actions: [
           IconButton(
             onPressed: updateProfile,
             icon: const Icon(Icons.upload),
-          )
+          ),
         ],
       ),
       body: Column(
         children: [
-          const SizedBox(height: 25),
-          Center(
-            child: Material(
-              elevation: AppDimens.elevationSmall,
-              shape: const CircleBorder(),
+          const SizedBox(height: AppDimens.size24),
+          _buildProfileImage(),
+          const SizedBox(height: AppDimens.size24),
+          _buildPickImageButton(),
+          const SizedBox(height: AppDimens.size24),
+          _buildBioSection(),
+        ],
+      ),
+    );
+  }
+
+  Future<void> pickCropCompressImage() async {
+    try {
+      final pickedFile = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: kIsWeb,
+      );
+
+      if (pickedFile == null) return;
+
+      // Platform -> WEB
+      if (kIsWeb) {
+        setState(() {
+          pickedImage = pickedFile.files.single.bytes;
+        });
+      }
+      // Platform -> MOBILE
+      else {
+        final croppedFile = await ImageCropper().cropImage(
+          sourcePath: pickedFile.files.single.path!,
+          compressFormat: ImageCompressFormat.jpg,
+          compressQuality: 95,
+          uiSettings: _getCropperSettings(),
+        );
+
+        if (croppedFile == null) return;
+
+        final compressedImage = await compressImage(croppedFile.path);
+        if (compressedImage != null) {
+          setState(() {
+            pickedImage = compressedImage;
+          });
+          Logger.logDebug(AppStrings.imagePickedSuccessfully);
+        }
+      }
+    } catch (error) {
+      Logger.logError(error.toString());
+    }
+  }
+
+  List<PlatformUiSettings> _getCropperSettings() {
+    return [
+      AndroidUiSettings(
+        toolbarTitle: AppStrings.cropperToolbarTitle,
+        toolbarColor: Colors.deepPurple,
+        toolbarWidgetColor: Colors.white,
+        initAspectRatio: CropAspectRatioPreset.square,
+        cropStyle: CropStyle.circle,
+        lockAspectRatio: true,
+        aspectRatioPresets: [CropAspectRatioPreset.square],
+      ),
+      IOSUiSettings(
+        title: AppStrings.cropperTitle,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.square
+        ],
+      ),
+    ];
+  }
+
+  Future<Uint8List?> compressImage(String filePath) async {
+    return await FlutterImageCompress.compressWithFile(
+      filePath,
+      minWidth: 800,
+      minHeight: 800,
+      quality: 85,
+    );
+  }
+
+  void updateProfile() async {
+    final profileCubit = context.read<ProfileCubit>();
+    final String uid = widget.user.uid;
+    final String? newBio =
+        bioTextController.text.isNotEmpty ? bioTextController.text : null;
+
+    if (pickedImage != null || newBio != null) {
+      profileCubit.updateProfile(
+          uid: uid, newBio: newBio, imageWebBytes: pickedImage);
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
+  Widget _buildProfileImage() {
+    return Center(
+      child: Material(
+        elevation: AppDimens.elevationSmall,
+        shape: const CircleBorder(),
+        color: Theme.of(context).colorScheme.outline,
+        child: Padding(
+          padding: const EdgeInsets.all(1.0),
+          child: Container(
+            height: AppDimens.imageSize180,
+            width: AppDimens.imageSize180,
+            decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surfaceContainer,
-              child: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: Container(
-                  height: 160,
-                  width: 160,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    shape: BoxShape.circle,
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child:
-                      // Display selected image for mobile
-                      (!kIsWeb && imagePickedFile != null)
-                          ? Image.file(File(imagePickedFile!.path!))
-                          :
-                          // Display selected image for web
-                          (kIsWeb && webImage != null)
-                              ? Image.memory(
-                                  webImage!,
-                                  fit: BoxFit.cover,
-                                )
-                              :
-                              // No image selected -> display existing profile pic
-                              CachedNetworkImage(
-                                  imageUrl: widget.user.profileImageUrl,
-                                  // Loading
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                  // Error -> Failed to load
-                                  errorWidget: (context, url, error) => Icon(
-                                    Icons.person,
-                                    size: 72,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-
-                                  errorListener: (value) =>
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text(value.toString()))),
-
-                                  // Loaded
-                                  imageBuilder: (context, imageProvider) =>
-                                      Image(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                ),
-              ),
+              shape: BoxShape.circle,
             ),
-          ),
-          const SizedBox(height: 25),
-          // Pick image button
-          Center(
-            child: MaterialButton(
-              onPressed: pickImage,
-              color: Colors.teal,
-              child: const Text("Pick Image"),
-            ),
-          ),
-          // Bio section
-          const SizedBox(height: 25),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppDimens.size32),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  AppStrings.storyline,
-                  style: AppTextStyles.subtitleSecondary.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontWeight: FontWeight.bold,
-                    shadows: AppTextStyles.shadowStyle2,
+            clipBehavior: Clip.hardEdge,
+            child: (pickedImage != null)
+                ? Image.memory(
+                    pickedImage!,
+                    width: AppDimens.imageSize180,
+                    height: AppDimens.imageSize180,
+                    fit: BoxFit.cover,
+                  )
+                : CachedNetworkImage(
+                    imageUrl: widget.user.profileImageUrl,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const Icon(
+                      Icons.person,
+                      size: AppDimens.iconSize2XLarge,
+                      color: AppColors.grayLight,
+                    ),
                   ),
-                ),
-              ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPickImageButton() {
+    return Center(
+      child: GradientButton(
+        text: AppStrings.pickImage,
+        onPressed: pickCropCompressImage,
+        textStyle: AppTextStyles.buttonTextPrimary.copyWith(
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
+        icon: Icon(Icons.filter,
+            color: Theme.of(context).colorScheme.inversePrimary),
+      ),
+    );
+  }
+
+  Widget _buildBioSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppStrings.storylineDecoText,
+            style: AppTextStyles.subtitleSecondary.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+              shadows: AppTextStyles.shadowStyle2,
             ),
           ),
           const SizedBox(height: AppDimens.size12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: MultilineTextFieldUnit(
-              controller: bioTextController,
-              hintText: AppStrings.addYourStorylineBio,
-              maxLength: MAX_LENGTH_BIO_DESCRIPTION_FIELD,
-            ),
-          )
+          MultilineTextFieldUnit(
+            controller: bioTextController,
+            labelText: AppStrings.storyline,
+            hintText: AppStrings.addYourStorylineBio,
+            maxLength: MAX_LENGTH_BIO_DESCRIPTION_FIELD,
+          ),
         ],
       ),
     );

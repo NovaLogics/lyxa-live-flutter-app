@@ -33,7 +33,7 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
   //text/Icon color on secondary container
   secondaryContainer: Color(0xFF673AB7),
 
-  onTertiary: bluePurpleShade100,
+  onTertiary: bluePurpleShade50,
   // Error color
   error: Colors.red,
   // Text/Icon color on error
@@ -57,8 +57,8 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
 
   surfaceContainer: AppColors.blueGreyShade900X,
 
-  surfaceContainerLowest: AppColors.deepPurpleShade500,
-  surfaceContainerLow: AppColors.deepPurpleShade700,
+  surfaceContainerLowest: AppColors.bluePurpleShade900Z,
+  surfaceContainerLow: AppColors.bluePurpleShade900Z,
   surfaceContainerHigh: AppColors.blueGreyShade900Y,
   surfaceContainerHighest: AppColors.blueGreyShade900X,
 );

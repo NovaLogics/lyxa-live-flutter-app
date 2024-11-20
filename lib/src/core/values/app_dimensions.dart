@@ -23,7 +23,7 @@ class AppDimens {
   static const double textSizeRegular = 14.0;
   static const double textSizeMedium = 16.0;
   static const double textSizeLarge = 18.0;
-   static const double textSizeXLarge = 20.0;
+  static const double textSizeXLarge = 20.0;
   static const double textSize2XLarge = 24.0;
   static const double textSizeTitle = 32.0;
   static const double textSizeTitleLarge = 42.0;
@@ -64,6 +64,14 @@ class AppDimens {
 
   static const double containerSize400 = 400.0;
   static const double containerSize430 = 430.0;
+
+  static const double imageSize120 = 120.0;
+  static const double imageSize180 = 180.0;
+
+  static const double padding8 = 8.0;
+  static const double padding24 = 24.0;
+  static const double spacing4 = 4.0;
+  static const double spacing28 = 28.0;
 
   // Custom Sizes
   static const double size0 = 0.0;

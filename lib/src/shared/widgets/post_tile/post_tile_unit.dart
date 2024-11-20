@@ -10,7 +10,7 @@ import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
-import 'package:lyxa_live/src/shared/widgets/custom_toast.dart';
+import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
@@ -214,7 +214,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
                               Icons.person,
                               color:
                                   Theme.of(context).colorScheme.inversePrimary),
-                          errorListener: (value) => CustomToast.showToast(
+                          errorListener: (value) =>
+                              ToastMessengerUnit.showToast(
                             context: context,
                             message: AppStrings.imageLoadError,
                             icon: Icons.check_circle,
@@ -272,7 +273,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       onTap: showDeleteOptions,
                       child: SvgPicture.asset(
                         ICON_SETTINGS_STYLE_1,
-                        color: Theme.of(context).colorScheme.primary,
+                        colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.primary,
+                          BlendMode.srcIn,
+                        ),
                         width: AppDimens.size48,
                         height: AppDimens.size48,
                       ),
@@ -340,9 +344,12 @@ class _PostTileUnitState extends State<PostTileUnit> {
                             widget.post.likes.contains(currentUser!.uid)
                                 ? ICON_HEART_FILLED
                                 : ICON_HEART_BORDER,
-                            color: (widget.post.likes.contains(currentUser!.uid)
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.onPrimary),
+                            colorFilter: ColorFilter.mode(
+                              (widget.post.likes.contains(currentUser!.uid)
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onPrimary),
+                              BlendMode.srcIn,
+                            ),
                             width: AppDimens.size24,
                             height: AppDimens.size24,
                           ),
@@ -373,12 +380,15 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       widget.post.comments.isNotEmpty
                           ? ICON_COMMENT_STYLE_1
                           : ICON_COMMENT_BORDER,
-                      color: widget.post.comments.isNotEmpty
-                          ? Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(0.9)
-                          : Theme.of(context).colorScheme.onPrimary,
+                      colorFilter: ColorFilter.mode(
+                        widget.post.comments.isNotEmpty
+                            ? Theme.of(context)
+                                .colorScheme
+                                .onPrimary
+                                .withOpacity(0.9)
+                            : Theme.of(context).colorScheme.onPrimary,
+                        BlendMode.srcIn,
+                      ),
                       width: widget.post.comments.isNotEmpty ? 26 : 22,
                       height: widget.post.comments.isNotEmpty ? 26 : 22,
                     ),

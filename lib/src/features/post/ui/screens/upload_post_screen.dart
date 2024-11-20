@@ -1,18 +1,29 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
+import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/helper/logger.dart';
+import 'package:lyxa_live/src/core/values/app_colors.dart';
+import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/values/app_strings.dart';
 
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
-import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
+import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
-import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
+import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class UploadPostScreen extends StatefulWidget {
   const UploadPostScreen({super.key});
@@ -22,123 +33,144 @@ class UploadPostScreen extends StatefulWidget {
 }
 
 class _UploadPostScreenState extends State<UploadPostScreen> {
-  late final authCubit = context.read<AuthCubit>();
-  // Mobile Image Pick
-  PlatformFile? imagePickedFile;
-
-  // Web Image Pick
-  Uint8List? webImage;
-
-  //Bio Text Controller
-  final textController = TextEditingController();
-
-  // Current user
-  // AppUser? currentUser;
+  late final AuthCubit authCubit = context.read<AuthCubit>();
   late AppUser? currentUser = authCubit.currentUser;
 
-  // On Startup
+  Uint8List? selectedImage;  // Selected image bytes for web
+
+  final TextEditingController captionController = TextEditingController();
+
   @override
-  void initState() {
-    super.initState();
-
-    // getCurrentUser();
+  void dispose() {
+    captionController.dispose();
+    super.dispose();
   }
 
-  void getCurrentUser() async {
-    final authCubit = context.read<AuthCubit>();
-    currentUser = authCubit.currentUser;
+  /// Handles image selection, cropping, and compression
+  Future<void> handleImageSelection() async {
+    try {
+      final pickedFile = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: kIsWeb,
+      );
+
+      if (pickedFile == null) return;
+
+      if (kIsWeb) {
+        // Handle web image selection
+        setState(() {
+          selectedImage = pickedFile.files.single.bytes;
+        });
+      } else {
+        // Handle mobile image selection and cropping
+        await _processMobileImage(pickedFile.files.single.path!);
+      }
+      Logger.logDebug(AppStrings.imagePickedSuccessfully);
+    } catch (e) {
+      Logger.logError(e.toString());
+    }
   }
 
-  // Pick image
-  Future<void> pickImage() async {
-    final result = await FilePicker.platform
-        .pickFiles(type: FileType.image, withData: kIsWeb);
+  /// Processes mobile images by cropping and compressing
+  Future<void> _processMobileImage(String filePath) async {
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: filePath,
+      compressFormat: ImageCompressFormat.jpg,
+      compressQuality: 95,
+      uiSettings: _getImageCropperSettings(),
+    );
 
-    if (result != null) {
+    if (croppedFile == null) return;
+
+    final compressedImage = await _compressImage(croppedFile.path);
+    if (compressedImage != null) {
       setState(() {
-        imagePickedFile = result.files.first;
-
-        if (kIsWeb) {
-          webImage = imagePickedFile!.bytes;
-        }
+        selectedImage = compressedImage;
       });
     }
   }
 
-  // Create & upload post
-  void uploadPost() async {
-    final text = textController.text;
+  /// Returns platform-specific image cropper settings
+  List<PlatformUiSettings> _getImageCropperSettings() {
+    return [
+      AndroidUiSettings(
+        toolbarTitle: AppStrings.cropperTitle,
+        toolbarColor: Colors.deepPurple,
+        toolbarWidgetColor: Colors.white,
+        lockAspectRatio: true,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio4x3,
+        ],
+      ),
+      IOSUiSettings(
+        title: AppStrings.cropperTitle,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio4x3,
+        ],
+      ),
+    ];
+  }
 
-    print('currentUser : ${currentUser!.toString()}');
+  /// Compresses image to reduce size
+  Future<Uint8List?> _compressImage(String filePath) async {
+    return await FlutterImageCompress.compressWithFile(
+      filePath,
+      minWidth: 800,
+      minHeight: 800,
+      quality: 85,
+    );
+  }
 
-    // Check if both image and caption are provided
-    if (imagePickedFile == null || text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Both image and caption are required"),
-        ),
+  /// Handles post creation and upload
+  void createAndUploadPost() {
+    final caption = captionController.text.trim();
+
+    if (selectedImage == null || caption.isEmpty) {
+      ToastMessengerUnit.showToast(
+        context: context,
+        message: AppStrings.errorImageAndCaptionRequired,
+        icon: Icons.error,
+        backgroundColor: AppColors.bluePurpleShade900X,
+        textColor: AppColors.whiteShade,
       );
-
       return;
     }
 
-    // Create a new Post
-    final newPost = Post(
+    final post = Post(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       userId: currentUser!.uid,
       userName: currentUser!.name,
-      text: text,
+      text: caption,
       imageUrl: '',
       timestamp: DateTime.now(),
       likes: [],
       comments: [],
     );
 
-    // PostCubit
-    final postCubit = context.read<PostCubit>();
-
-    // Upload Web
-    if (kIsWeb) {
-      postCubit.createPost(
-        newPost,
-        imageBytes: imagePickedFile?.bytes,
-      );
-    }
-    // Upload Mobile
-    else {
-      postCubit.createPost(
-        newPost,
-        imagePath: imagePickedFile?.path,
-      );
-    }
+    context.read<PostCubit>().createPost(post, imageBytes: selectedImage);
   }
 
-  @override
-  void dispose() {
-    textController.dispose();
-    super.dispose();
-  }
-
-  // Build UI
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PostCubit, PostState>(
       builder: (context, state) {
-        if (kDebugMode) {
-          print(state);
-        }
-        // Loading or Uploading
         if (state is PostLoading || state is PostUploading) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
-        // Build upload page
-        return _buildUploadPage();
+
+        return Scaffold(
+          body: Stack(
+            children: [
+              _buildBackground(),
+              _buildUploadPage(),
+            ],
+          ),
+        );
       },
-      // Go to previous screen when upload is done & posts are loaded
       listener: (context, state) {
         if (state is PostLoaded) {
           Navigator.pop(context);
@@ -147,48 +179,76 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 
+  Widget _buildBackground() {
+    return RepaintBoundary(
+      child: getIt<GradientBackgroundUnit>(
+        param1: AppDimens.containerSize400,
+        param2: BackgroundStyle.home,
+      ),
+    );
+  }
+
   Widget _buildUploadPage() {
-    return ConstrainedScaffold(
-      // App Bar
+    return ScrollableScaffold(
       appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text("Create Post"),
+        title: const Text(AppStrings.createPost),
         actions: [
-          // Upload button
           IconButton(
-            onPressed: uploadPost,
+            onPressed: createAndUploadPost,
             icon: const Icon(Icons.upload),
           )
         ],
       ),
-      // Body
-      body: Center(
-        child: Column(
-          children: [
-            // Image preview for web
-            if (kIsWeb && webImage != null) Image.memory(webImage!),
+      body: Column(
+        children: [
+          _buildImagePreview(),
+          _buildPickImageButton(),
+          const SizedBox(height: AppDimens.spacing28),
+          _buildCaptionInput(),
+        ],
+      ),
+    );
+  }
 
-            // Image preview for mobile
-            if (!kIsWeb && imagePickedFile != null)
-              Image.file(File(imagePickedFile!.path!)),
+  Widget _buildImagePreview() {
+    return selectedImage != null
+        ? Padding(
+            padding: const EdgeInsets.all(AppDimens.padding8),
+            child: Image.memory(selectedImage!, width: double.infinity, fit: BoxFit.contain),
+          )
+        : Icon(Icons.image, size: AppDimens.imageSize180, color: Theme.of(context).colorScheme.outline);
+  }
 
-            // Pick image button
-            MaterialButton(
-              onPressed: pickImage,
-              color: Colors.blueAccent,
-              child: const Text('Pick Image'),
-            ),
-
-            // Caption Text
-            TextFieldUnit(
-              controller: textController,
-              hintText: 'Caption',
-              obscureText: false,
-            prefixIcon: null,
-            ),
-          ],
+  Widget _buildPickImageButton() {
+    return Center(
+      child: GradientButton(
+        text: AppStrings.pickImageButton.toUpperCase(),
+        onPressed: handleImageSelection,
+        textStyle: AppTextStyles.buttonTextPrimary.copyWith(
+          color: Theme.of(context).colorScheme.inversePrimary,
         ),
+        icon: Icon(Icons.filter, color: Theme.of(context).colorScheme.inversePrimary),
+      ),
+    );
+  }
+
+  Widget _buildCaptionInput() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.padding24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(AppStrings.caption, style: AppTextStyles.subtitleSecondary),
+          const SizedBox(height: AppDimens.spacing4),
+          MultilineTextFieldUnit(
+            controller: captionController,
+            labelText: AppStrings.captionLabel,
+            hintText: AppStrings.captionHint,
+            maxLength: MAX_LENGTH_POST_FIELD,
+          ),
+        ],
       ),
     );
   }
 }
+

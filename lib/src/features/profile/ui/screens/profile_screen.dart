@@ -20,6 +20,7 @@ import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/edit_profile_screen.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/follower_screen.dart';
+import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String displayUserId;
@@ -104,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildProfileContent(
       BuildContext context, ProfileUser user, bool isOwnProfile) {
-    return Scaffold(
+    return ConstrainedScaffold(
       appBar: _buildAppBar(context, user, isOwnProfile),
       body: ListView(
         children: [
@@ -113,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildProfileStats(user),
           if (!isOwnProfile) const SizedBox(height: AppDimens.size8),
           if (!isOwnProfile) _buildFollowActionSection(user),
-          const SizedBox(height: AppDimens.size16),
+          const SizedBox(height: AppDimens.size12),
           _buildStoryLineSection(user.bio),
           const SizedBox(height: AppDimens.size24),
           _buildPostSection(context),
@@ -158,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Material(
           elevation: AppDimens.elevationSmall,
           shape: const CircleBorder(),
-          color: Theme.of(context).colorScheme.surfaceContainer,
+          color: Theme.of(context).colorScheme.outline,
           child: Padding(
             padding: const EdgeInsets.all(1),
             child: CachedNetworkImage(
@@ -170,13 +171,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Theme.of(context).colorScheme.primary,
               ),
               imageBuilder: (_, imageProvider) => Container(
-                height: 120,
-                width: 120,
+                height: AppDimens.imageSize120,
+                width: AppDimens.imageSize120,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
                     image: imageProvider,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -243,18 +244,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDimens.size32),
           child: Text(
-            AppStrings.storyline,
+            AppStrings.storylineDecoText,
             style: AppTextStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.normal,
+              fontWeight: FontWeight.w300,
+              // fontFamily: FONT_DYNALIGHT,
+              // fontSize: 24,
               shadows: AppTextStyles.shadowStyle2,
             ),
           ),
         ),
-        const SizedBox(height: AppDimens.size12),
+        const SizedBox(height: AppDimens.size8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
-          child: StoryLineUnit(text: bio),
+          child: Container(
+            padding: const EdgeInsets.all(1),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [
+                  Colors.blueAccent,
+                  Colors.deepPurpleAccent,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: StoryLineUnit(text: bio),
+            ),
+          ),
         ),
       ],
     );

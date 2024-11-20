@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 
 ///USAGE ->
-//  CustomToast.showToast(
+//  ToastMessengerUnit.showToast(
 //     context: context,
 //     message: "This is a custom toast message!",
 //     icon: Icons.check_circle,
@@ -17,7 +17,25 @@ import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 //     duration: const Duration(seconds: 5), // Customize how long to show
 //   );
 
-class CustomToast {
+class ToastDuration {
+  static const Duration second1 = Duration(seconds: 1);
+  static const Duration second2 = Duration(seconds: 2);
+  static const Duration second3 = Duration(seconds: 3);
+  static const Duration second4 = Duration(seconds: 4);
+  static const Duration second5 = Duration(seconds: 5);
+  static const Duration second6 = Duration(seconds: 6);
+  static const Duration second7 = Duration(seconds: 7);
+  static const Duration second8 = Duration(seconds: 8);
+  static const Duration second9 = Duration(seconds: 9);
+  static const Duration second10 = Duration(seconds: 10);
+  static const Duration second11 = Duration(seconds: 11);
+  static const Duration second12 = Duration(seconds: 12);
+  static const Duration second13 = Duration(seconds: 13);
+  static const Duration second14 = Duration(seconds: 14);
+  static const Duration second15 = Duration(seconds: 15);
+}
+
+class ToastMessengerUnit {
   static OverlayEntry? _overlayEntry;
   static Timer? _toastTimer;
 
@@ -40,8 +58,10 @@ class CustomToast {
     Color shadowColor = Colors.grey,
     String? buttonText,
     VoidCallback? onButtonPressed,
-    Duration duration = const Duration(seconds: 3),
+    Duration duration = ToastDuration.second3,
   }) {
+    FocusScope.of(context).unfocus();
+
     // Remove any existing toast
     _removeToast();
 
