@@ -24,9 +24,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final PostCubit _postCubit;
-
-  late final AuthCubit _authCubit;
-  late final ProfileCubit _profileCubit;
   late final String? _currentUserId;
 
   @override
@@ -34,15 +31,17 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _postCubit = context.read<PostCubit>();
     _fetchAllPosts();
+    _fetchCurrentUserData();
+  }
 
-    _authCubit = context.read<AuthCubit>();
-    _profileCubit = context.read<ProfileCubit>();
-    AppUser? currentUser = _authCubit.currentUser;
+  void _fetchCurrentUserData() {
+    AuthCubit authCubit = context.read<AuthCubit>();
+    ProfileCubit profileCubit = context.read<ProfileCubit>();
+    AppUser? currentUser = authCubit.currentUser;
     _currentUserId = currentUser!.uid;
 
-    if (_currentUserId != null) {
-      _profileCubit.fetchUserProfile(_currentUserId);
-    }
+    if (_currentUserId == null) return;
+    profileCubit.fetchUserProfile(_currentUserId);
   }
 
   void _fetchAllPosts() {
@@ -60,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // App Bar
       appBar: _buildAppBar(context),
       // Drawer
-      drawer: buildDrawer(),
+      drawer: _buildAppDrawer(),
       // Body
       body: BlocBuilder<PostCubit, PostState>(
         builder: (context, state) {
@@ -78,18 +77,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildDrawer() {
+  Widget _buildAppDrawer() {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         if (state is ProfileLoaded) {
           return DrawerUnit(
-            userId: state.profileUser.uid,
-            imageUrl: state.profileUser.profileImageUrl,
+            user: state.profileUser,
           );
         } else {
           return const DrawerUnit(
-            userId: null,
-            imageUrl: null,
+            user: null,
           );
         }
       },
