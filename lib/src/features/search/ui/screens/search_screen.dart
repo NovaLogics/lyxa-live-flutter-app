@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
@@ -23,7 +24,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   // Trigger search when text changes
   void _onSearchChanged() {
-    final query = _searchController.text;
+    final query = _searchController.text.toLowerCase();
     _searchCubit.searchUsers(query);
   }
 
@@ -60,8 +61,8 @@ class _SearchScreenState extends State<SearchScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                _buildBackButton(),
-                const SizedBox(width: AppDimens.size24),
+                if (kIsWeb) _buildBackButton(),
+                if (kIsWeb) const SizedBox(width: AppDimens.size24),
                 _buildSearchBar(),
               ],
             ),
