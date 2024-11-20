@@ -121,11 +121,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
       body: Column(
         children: [
-          const SizedBox(height: 25),
+          const SizedBox(height: AppDimens.size24),
           _buildProfileImage(),
-          const SizedBox(height: 25),
+          const SizedBox(height: AppDimens.size24),
           _buildPickImageButton(),
-          const SizedBox(height: 25),
+          const SizedBox(height: AppDimens.size24),
           _buildBioSection(),
         ],
       ),
@@ -166,8 +166,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           Logger.logDebug(AppStrings.imagePickedSuccessfully);
         }
       }
-    } catch (e) {
-      Logger.logError(AppStrings.errorFetchingImage);
+    } catch (error) {
+      Logger.logError(error.toString());
     }
   }
 
@@ -224,24 +224,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         child: Padding(
           padding: const EdgeInsets.all(1.0),
           child: Container(
-            height: 160,
-            width: 160,
+            height: AppDimens.imageSize180,
+            width: AppDimens.imageSize180,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surfaceContainer,
               shape: BoxShape.circle,
             ),
             clipBehavior: Clip.hardEdge,
             child: (pickedImage != null)
-                ? Image.memory(pickedImage!,
-                    width: 200, height: 200, fit: BoxFit.cover)
+                ? Image.memory(
+                    pickedImage!,
+                    width: AppDimens.imageSize180,
+                    height: AppDimens.imageSize180,
+                    fit: BoxFit.cover,
+                  )
                 : CachedNetworkImage(
                     imageUrl: widget.user.profileImageUrl,
+                    fit: BoxFit.cover,
                     placeholder: (context, url) =>
                         const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(
+                    errorWidget: (context, url, error) => const Icon(
                       Icons.person,
-                      size: 72,
-                      color: Theme.of(context).colorScheme.primary,
+                      size: AppDimens.iconSize2XLarge,
+                      color: AppColors.grayLight,
                     ),
                   ),
           ),
