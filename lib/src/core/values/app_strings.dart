@@ -64,7 +64,8 @@ class AppStrings {
   static const String captionHint = "Add post caption here..";
   static const String captionLabel = "Caption Area...";
   static const String pickImageButton = "Pick Image";
-  static const String errorImageAndCaptionRequired = "Both image and caption are required.";
+  static const String errorImageAndCaptionRequired =
+      "Both image and caption are required.";
   static const String cropperTitle = "Crop Image";
   static const String imagePickedSuccessfully = "Image picked successfully";
 
@@ -76,16 +77,15 @@ class AppStrings {
   static const String addYourStorylineBio = "Add your bio / storyline";
   static const String cropperToolbarTitle = "Profile Image Cropper";
 
-
   // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
   static const String hintUsername = 'Name (e.g., Mike Joe )';
   static const String hintPassword = 'Password (e.g., P@ssw0rd)';
   static const String hintConfirmPassword = 'Confirm Password (e.g., P@ssw0rd)';
 
-  static const String titleHome = "H O M E";
-  static const String titleProfile = "P R O F I L E";
-  static const String titleSearch = "S E A R C H";
-  static const String titleSettings = "S E T T I N G S";
-  static const String titleLogout = "L O G O U T";
+  static const String titleHome = "HOME";
+  static const String titleProfile = "PROFILE";
+  static const String titleSearch = "SEARCH";
+  static const String titleSettings = "SETTINGS";
+  static const String titleLogout = "LOGOUT";
 }
