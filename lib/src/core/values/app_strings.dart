@@ -77,6 +77,13 @@ class AppStrings {
   static const String addYourStorylineBio = "Add your bio / storyline";
   static const String cropperToolbarTitle = "Profile Image Cropper";
 
+  static const String settings = 'Settings';
+  static const String darkMode = 'Dark Mode';
+  static const String searchUsers = 'Search users...';
+
+  static const String noUserFoundMessage = "No user found";
+  static const String defaultSearchMessage = "Start search for user...";
+
   // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
   static const String hintUsername = 'Name (e.g., Mike Joe )';

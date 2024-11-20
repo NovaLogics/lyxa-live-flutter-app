@@ -74,6 +74,9 @@ class AppDimens {
   static const double spacing4 = 4.0;
   static const double spacing28 = 28.0;
 
+  static const double searchBarWidth = 300.0;
+  static const double searchBarHeight = 64.0;
+
   // Custom Sizes
   static const double size0 = 0.0;
   static const double size4 = 4.0;
