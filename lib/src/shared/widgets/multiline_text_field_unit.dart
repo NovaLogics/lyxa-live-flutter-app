@@ -36,9 +36,8 @@ class MultilineTextFieldUnit extends StatelessWidget {
           fontSize: AppDimens.textSizeRegular,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16), // Rounded corners
+          borderRadius: BorderRadius.circular(16),
         ),
-        counterText: '',
       ),
     );
   }
