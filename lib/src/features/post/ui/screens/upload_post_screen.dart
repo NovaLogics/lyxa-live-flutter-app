@@ -1,10 +1,11 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
@@ -58,26 +59,80 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   }
 
   // Pick image
-  Future<void> pickImage() async {
-    final result = await FilePicker.platform
-        .pickFiles(type: FileType.image, withData: kIsWeb);
+  Future<void> pickCropCompressImage() async {
+    try {
+      final pickedFile = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: kIsWeb,
+      );
 
-    if (result != null) {
-      setState(() {
-        imagePickedFile = result.files.first;
+      if (pickedFile == null) return;
 
-        if (kIsWeb) {
-          pickedImage = imagePickedFile!.bytes;
+      // Platform -> WEB
+      if (kIsWeb) {
+        setState(() {
+          pickedImage = pickedFile.files.single.bytes;
+        });
+      }
+      // Platform -> MOBILE
+      else {
+        final croppedFile = await ImageCropper().cropImage(
+          sourcePath: pickedFile.files.single.path!,
+          compressFormat: ImageCompressFormat.jpg,
+          compressQuality: 95,
+          uiSettings: _getCropperSettings(),
+        );
+
+        if (croppedFile == null) return;
+
+        final compressedImage = await compressImage(croppedFile.path);
+        if (compressedImage != null) {
+          setState(() {
+            pickedImage = compressedImage;
+          });
+          Logger.logDebug(AppStrings.imagePickedSuccessfully);
         }
-      });
+      }
+    } catch (error) {
+      Logger.logError(error.toString());
     }
+  }
+
+  List<PlatformUiSettings> _getCropperSettings() {
+    return [
+      AndroidUiSettings(
+        toolbarTitle: AppStrings.cropperToolbarTitle,
+        toolbarColor: Colors.deepPurple,
+        toolbarWidgetColor: Colors.white,
+        initAspectRatio: CropAspectRatioPreset.square,
+        cropStyle: CropStyle.circle,
+        lockAspectRatio: true,
+        aspectRatioPresets: [CropAspectRatioPreset.square],
+      ),
+      IOSUiSettings(
+        title: AppStrings.cropperTitle,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.square
+        ],
+      ),
+    ];
+  }
+
+  Future<Uint8List?> compressImage(String filePath) async {
+    return await FlutterImageCompress.compressWithFile(
+      filePath,
+      minWidth: 800,
+      minHeight: 800,
+      quality: 85,
+    );
   }
 
   // Create & upload post
   void uploadPost() async {
-    final text = textController.text;
+    final text = textController.text.trim();
 
-    print('currentUser : ${currentUser!.toString()}');
+    Logger.logDebug('currentUser : ${currentUser!.toString()}');
 
     // Check if both image and caption are provided
     if (imagePickedFile == null || text.isEmpty) {
@@ -105,20 +160,25 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     // PostCubit
     final postCubit = context.read<PostCubit>();
 
-    // Upload Web
-    if (kIsWeb) {
-      postCubit.createPost(
-        newPost,
-        imageBytes: imagePickedFile?.bytes,
-      );
-    }
-    // Upload Mobile
-    else {
-      postCubit.createPost(
-        newPost,
-        imagePath: imagePickedFile?.path,
-      );
-    }
+    postCubit.createPost(
+      newPost,
+      imageBytes: pickedImage,
+    );
+
+    // // Upload Web
+    // if (kIsWeb) {
+    //   postCubit.createPost(
+    //     newPost,
+    //     imageBytes: imagePickedFile?.bytes,
+    //   );
+    // }
+    // // Upload Mobile
+    // else {
+    //   postCubit.createPost(
+    //     newPost,
+    //     imagePath: imagePickedFile?.path,
+    //   );
+    // }
   }
 
   @override
@@ -173,7 +233,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     return Center(
       child: GradientButton(
         text: AppStrings.pickImage.toUpperCase(),
-        onPressed: pickImage,
+        onPressed: pickCropCompressImage,
         textStyle: AppTextStyles.buttonTextPrimary.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
