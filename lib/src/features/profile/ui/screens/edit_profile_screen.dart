@@ -206,7 +206,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final profileCubit = context.read<ProfileCubit>();
     final String uid = widget.user.uid;
     final String? newBio =
-        bioTextController.text.isNotEmpty ? bioTextController.text : null;
+        bioTextController.text.isNotEmpty ? bioTextController.text.toString().trim() : null;
 
     if (pickedImage != null || newBio != null) {
       profileCubit.updateProfile(
@@ -281,7 +281,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             style: AppTextStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
-              shadows: AppTextStyles.shadowStyle2,
+              shadows: [],
             ),
           ),
           const SizedBox(height: AppDimens.size12),
