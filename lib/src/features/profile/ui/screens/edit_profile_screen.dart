@@ -276,7 +276,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppStrings.storyline,
+            AppStrings.storylineDecoText,
             style: AppTextStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
@@ -286,6 +286,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           const SizedBox(height: AppDimens.size12),
           MultilineTextFieldUnit(
             controller: bioTextController,
+            labelText: AppStrings.storyline,
             hintText: AppStrings.addYourStorylineBio,
             maxLength: MAX_LENGTH_BIO_DESCRIPTION_FIELD,
           ),

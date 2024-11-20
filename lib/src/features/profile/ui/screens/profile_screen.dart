@@ -244,7 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDimens.size32),
           child: Text(
-            AppStrings.storyline,
+            AppStrings.storylineDecoText,
             style: AppTextStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.w300,
