@@ -68,6 +68,11 @@ class AppDimens {
   static const double imageSize120 = 120.0;
   static const double imageSize180 = 180.0;
 
+  static const double padding8 = 8.0;
+  static const double padding24 = 24.0;
+  static const double spacing4 = 4.0;
+  static const double spacing28 = 28.0;
+
   // Custom Sizes
   static const double size0 = 0.0;
   static const double size4 = 4.0;
