@@ -127,6 +127,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           _buildPickImageButton(),
           const SizedBox(height: AppDimens.size24),
           _buildBioSection(),
+          const SizedBox(height: AppDimens.size72),
         ],
       ),
     );
