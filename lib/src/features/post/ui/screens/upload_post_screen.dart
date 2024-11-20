@@ -103,19 +103,25 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   List<PlatformUiSettings> _getCropperSettings() {
     return [
       AndroidUiSettings(
-        toolbarTitle: AppStrings.cropperToolbarTitle,
+        toolbarTitle: AppStrings.cropperTitle,
         toolbarColor: Colors.deepPurple,
         toolbarWidgetColor: Colors.white,
         initAspectRatio: CropAspectRatioPreset.square,
-        cropStyle: CropStyle.circle,
         lockAspectRatio: true,
-        aspectRatioPresets: [CropAspectRatioPreset.square],
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio3x2,
+        ],
       ),
       IOSUiSettings(
         title: AppStrings.cropperTitle,
         aspectRatioPresets: [
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.square
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio3x2,
         ],
       ),
     ];
@@ -294,11 +300,13 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         children: [
           // Image preview for web
           (pickedImage != null)
-              ? Image.memory(
-                  pickedImage!,
-                  width: AppDimens.imageSize180,
-                  height: AppDimens.imageSize180,
-                  fit: BoxFit.cover,
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.memory(
+                    pickedImage!,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
+                  ),
                 )
               : Icon(
                   Icons.image,
