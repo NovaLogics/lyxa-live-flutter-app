@@ -10,7 +10,7 @@ import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
-import 'package:lyxa_live/src/shared/widgets/custom_toast.dart';
+import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
@@ -214,7 +214,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
                               Icons.person,
                               color:
                                   Theme.of(context).colorScheme.inversePrimary),
-                          errorListener: (value) => CustomToast.showToast(
+                          errorListener: (value) =>
+                              ToastMessengerUnit.showToast(
                             context: context,
                             message: AppStrings.imageLoadError,
                             icon: Icons.check_circle,
