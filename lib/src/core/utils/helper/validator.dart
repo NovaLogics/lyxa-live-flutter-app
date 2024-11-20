@@ -12,7 +12,8 @@ class Validator {
     }
   }
 
-  static String? validatePasswordFileds(String? value, String confirmPasswordText) {
+  static String? validatePasswordFileds(
+      String? value, String confirmPasswordText) {
     if (value == null || value.isEmpty) {
       return "Password cannot be empty";
     } else if (value.length < 6) {
@@ -21,7 +22,7 @@ class Validator {
       return "Password should not be greater than 15 characters";
     } else if (value != confirmPasswordText) {
       return "Passwords do not match!";
-    }else {
+    } else {
       return null;
     }
   }
@@ -45,8 +46,8 @@ class Validator {
       return "Username should be at least 3 characters long";
     } else if (value.length > 30) {
       return "Username should not be greater than 30 characters";
-    } else if (!RegExp(r"^[a-zA-Z0-9_]+$").hasMatch(value)) {
-      return "Username can only contain letters, numbers, and underscores";
+    } else if (!RegExp(r"^[a-zA-Z0-9 ]+$").hasMatch(value)) {
+      return "Username can only contain letters, numbers, and spaces";
     } else {
       return null;
     }
