@@ -60,7 +60,7 @@ class AppStrings {
 
   // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
-  static const String hintUsername = 'Username (e.g., User_Name)';
+  static const String hintUsername = 'Name (e.g., Mike Joe )';
   static const String hintPassword = 'Password (e.g., P@ssw0rd)';
   static const String hintConfirmPassword = 'Confirm Password (e.g., P@ssw0rd)';
 
