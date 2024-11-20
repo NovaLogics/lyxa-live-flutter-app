@@ -36,7 +36,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   late final AuthCubit authCubit = context.read<AuthCubit>();
   late AppUser? currentUser = authCubit.currentUser;
 
-  Uint8List? selectedImage;  // Selected image bytes for web
+  Uint8List? selectedImage; // Selected image bytes for web
 
   final TextEditingController captionController = TextEditingController();
 
@@ -159,7 +159,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     return BlocConsumer<PostCubit, PostState>(
       builder: (context, state) {
         if (state is PostLoading || state is PostUploading) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(
+              body: Center(child: CircularProgressIndicator()));
         }
 
         return Scaffold(
@@ -205,6 +206,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           _buildPickImageButton(),
           const SizedBox(height: AppDimens.spacing28),
           _buildCaptionInput(),
+          const SizedBox(height: AppDimens.size72),
         ],
       ),
     );
@@ -214,9 +216,12 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     return selectedImage != null
         ? Padding(
             padding: const EdgeInsets.all(AppDimens.padding8),
-            child: Image.memory(selectedImage!, width: double.infinity, fit: BoxFit.contain),
+            child: Image.memory(selectedImage!,
+                width: double.infinity, fit: BoxFit.contain),
           )
-        : Icon(Icons.image, size: AppDimens.imageSize180, color: Theme.of(context).colorScheme.outline);
+        : Icon(Icons.image,
+            size: AppDimens.imageSize180,
+            color: Theme.of(context).colorScheme.outline);
   }
 
   Widget _buildPickImageButton() {
@@ -227,7 +232,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         textStyle: AppTextStyles.buttonTextPrimary.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
-        icon: Icon(Icons.filter, color: Theme.of(context).colorScheme.inversePrimary),
+        icon: Icon(Icons.filter,
+            color: Theme.of(context).colorScheme.inversePrimary),
       ),
     );
   }
@@ -238,7 +244,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(AppStrings.caption, style: AppTextStyles.subtitleSecondary),
+          const Text(AppStrings.caption,
+              style: AppTextStyles.subtitleSecondary),
           const SizedBox(height: AppDimens.spacing4),
           MultilineTextFieldUnit(
             controller: captionController,
@@ -251,4 +258,3 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 }
-

@@ -166,9 +166,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               imageUrl: user.profileImageUrl,
               placeholder: (_, __) => const CircularProgressIndicator(),
               errorWidget: (_, __, ___) => Icon(
-                Icons.person,
-                size: AppDimens.iconSize2XLarge,
-                color: Theme.of(context).colorScheme.primary,
+                Icons.person_rounded,
+                size: AppDimens.iconSize3XLarge,
+                color: Theme.of(context).colorScheme.onSecondary,
               ),
               imageBuilder: (_, imageProvider) => Container(
                 height: AppDimens.imageSize120,

@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
+import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
@@ -20,12 +24,24 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final PostCubit _postCubit;
+  late final String? _currentUserId;
 
   @override
   void initState() {
     super.initState();
     _postCubit = context.read<PostCubit>();
     _fetchAllPosts();
+    _fetchCurrentUserData();
+  }
+
+  void _fetchCurrentUserData() {
+    AuthCubit authCubit = context.read<AuthCubit>();
+    ProfileCubit profileCubit = context.read<ProfileCubit>();
+    AppUser? currentUser = authCubit.currentUser;
+    _currentUserId = currentUser!.uid;
+
+    if (_currentUserId == null) return;
+    profileCubit.fetchUserProfile(_currentUserId);
   }
 
   void _fetchAllPosts() {
@@ -43,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // App Bar
       appBar: _buildAppBar(context),
       // Drawer
-      drawer: const DrawerUnit(),
+      drawer: _buildAppDrawer(),
       // Body
       body: BlocBuilder<PostCubit, PostState>(
         builder: (context, state) {
@@ -58,6 +74,22 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
+    );
+  }
+
+  Widget _buildAppDrawer() {
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        if (state is ProfileLoaded) {
+          return DrawerUnit(
+            user: state.profileUser,
+          );
+        } else {
+          return const DrawerUnit(
+            user: null,
+          );
+        }
+      },
     );
   }
 

@@ -48,6 +48,7 @@ class AppDimens {
   static const double iconSizeLarge = 48.0;
   static const double iconSizeXLarge = 64.0;
   static const double iconSize2XLarge = 72.0;
+  static const double iconSize3XLarge = 96.0;
 
   static const double prefixIconSizeMedium = 22.0;
 
@@ -72,6 +73,9 @@ class AppDimens {
   static const double padding24 = 24.0;
   static const double spacing4 = 4.0;
   static const double spacing28 = 28.0;
+
+  static const double searchBarWidth = 240.0;
+  static const double searchBarHeight = 64.0;
 
   // Custom Sizes
   static const double size0 = 0.0;

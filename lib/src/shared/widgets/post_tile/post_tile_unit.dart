@@ -5,12 +5,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/helper/date_time_util.dart';
-import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
-import 'package:lyxa_live/src/core/values/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
-import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
@@ -208,35 +205,41 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 children: [
                   // Profile picture
                   postUser?.profileImageUrl != null
-                      ? CachedNetworkImage(
-                          imageUrl: postUser!.profileImageUrl,
-                          errorWidget: (context, url, error) => Icon(
-                              Icons.person,
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary),
-                          errorListener: (value) =>
-                              ToastMessengerUnit.showToast(
-                            context: context,
-                            message: AppStrings.imageLoadError,
-                            icon: Icons.check_circle,
-                            backgroundColor: AppColors.deepPurpleShade900,
-                            textColor: Colors.white,
-                            shadowColor: Colors.black,
-                            duration: const Duration(seconds: 4),
-                          ),
-                          imageBuilder: (context, imageProvider) => Container(
-                            height: AppDimens.size36,
-                            width: AppDimens.size36,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
+                      ? Material(
+                          elevation: AppDimens.elevationSmall,
+                          shape: const CircleBorder(),
+                          color: Theme.of(context).colorScheme.outline,
+                          child: Padding(
+                            padding: const EdgeInsets.all(1),
+                            child: CachedNetworkImage(
+                              imageUrl: postUser!.profileImageUrl,
+                              placeholder: (_, __) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (_, __, ___) => Icon(
+                                Icons.person_rounded,
+                                size: AppDimens.size36,
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary,
+                              ),
+                              imageBuilder: (_, imageProvider) => Container(
+                                height: AppDimens.size36,
+                                width: AppDimens.size36,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         )
-                      : const Icon(Icons.person),
+                      : Icon(
+                          Icons.person_rounded,
+                          size: AppDimens.size36,
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        ),
                   const SizedBox(width: AppDimens.size8),
                   Column(
                     children: [
@@ -299,8 +302,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 child: SizedBox(),
               ),
               errorWidget: (context, url, error) => Icon(
-                Icons.error,
-                color: Theme.of(context).colorScheme.primary,
+                Icons.image_not_supported_outlined,
+                size: AppDimens.iconSize3XLarge,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
               imageBuilder: (context, imageProvider) {
                 return LayoutBuilder(

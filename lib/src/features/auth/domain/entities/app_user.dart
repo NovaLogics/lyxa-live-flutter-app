@@ -17,11 +17,13 @@ class AppUser {
   final String uid;
   final String email;
   final String name;
+  final String searchableName;
 
   AppUser({
     required this.uid,
     required this.email,
     required this.name,
+    required this.searchableName,
   });
 
   // Creates an `AppUser` instance from a JSON map.
@@ -40,7 +42,7 @@ class AppUser {
   }
 
   static createWith({String uid = "", String email = "", String name = ""}) {
-    return AppUser(uid: uid, email: email, name: name);
+    return AppUser(uid: uid, email: email, name: name, searchableName: name.toLowerCase());
   }
 
   // Returns a string representation of the `AppUser` instance.

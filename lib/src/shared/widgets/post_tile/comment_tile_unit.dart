@@ -71,8 +71,9 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 2),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start, // Align items at the top
         children: [
           // Username
           Text(
@@ -86,26 +87,37 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
           const SizedBox(width: 10),
 
           // Comment Text
-          Text(
-            widget.comment.text,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onTertiary,
-              fontSize: 12,
-              fontWeight: FontWeight.normal,
+          SizedBox(
+            width: 220,
+            child: Expanded(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxHeight: 100,
+                ),
+                child: Text(
+                  widget.comment.text,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onTertiary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  softWrap: true, // Wrap long text
+                  overflow: TextOverflow.ellipsis, // Show ellipsis for overflow
+                  maxLines: 5, // Limit to 5 lines
+                ),
+              ),
             ),
           ),
 
           const Spacer(),
 
-          // Delete button
+          // Delete Button
           if (isOwnPost)
             GestureDetector(
               onTap: showOptions,
-              child: AbsorbPointer(
-                child: Icon(
-                  Icons.more_horiz,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+              child: Icon(
+                Icons.more_horiz,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
         ],

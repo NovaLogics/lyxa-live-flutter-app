@@ -64,7 +64,8 @@ class AppStrings {
   static const String captionHint = "Add post caption here..";
   static const String captionLabel = "Caption Area...";
   static const String pickImageButton = "Pick Image";
-  static const String errorImageAndCaptionRequired = "Both image and caption are required.";
+  static const String errorImageAndCaptionRequired =
+      "Both image and caption are required.";
   static const String cropperTitle = "Crop Image";
   static const String imagePickedSuccessfully = "Image picked successfully";
 
@@ -76,6 +77,12 @@ class AppStrings {
   static const String addYourStorylineBio = "Add your bio / storyline";
   static const String cropperToolbarTitle = "Profile Image Cropper";
 
+  static const String settings = 'Settings';
+  static const String darkMode = 'Dark Mode';
+  static const String searchUsers = 'Search users...';
+
+  static const String noUserFoundMessage = "No user found";
+  static const String defaultSearchMessage = "Start search for user...";
 
   // Hint Text Section
   static const String hintEmail = 'Email (e.g., name@address.com)';
@@ -83,9 +90,9 @@ class AppStrings {
   static const String hintPassword = 'Password (e.g., P@ssw0rd)';
   static const String hintConfirmPassword = 'Confirm Password (e.g., P@ssw0rd)';
 
-  static const String titleHome = "H O M E";
-  static const String titleProfile = "P R O F I L E";
-  static const String titleSearch = "S E A R C H";
-  static const String titleSettings = "S E T T I N G S";
-  static const String titleLogout = "L O G O U T";
+  static const String titleHome = "HOME";
+  static const String titleProfile = "PROFILE";
+  static const String titleSearch = "SEARCH";
+  static const String titleSettings = "SETTINGS";
+  static const String titleLogout = "LOGOUT";
 }
