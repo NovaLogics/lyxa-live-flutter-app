@@ -273,7 +273,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       onTap: showDeleteOptions,
                       child: SvgPicture.asset(
                         ICON_SETTINGS_STYLE_1,
-                        color: Theme.of(context).colorScheme.primary,
+                        colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.primary,
+                          BlendMode.srcIn,
+                        ),
                         width: AppDimens.size48,
                         height: AppDimens.size48,
                       ),
@@ -341,9 +344,12 @@ class _PostTileUnitState extends State<PostTileUnit> {
                             widget.post.likes.contains(currentUser!.uid)
                                 ? ICON_HEART_FILLED
                                 : ICON_HEART_BORDER,
-                            color: (widget.post.likes.contains(currentUser!.uid)
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.onPrimary),
+                            colorFilter: ColorFilter.mode(
+                              (widget.post.likes.contains(currentUser!.uid)
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onPrimary),
+                              BlendMode.srcIn,
+                            ),
                             width: AppDimens.size24,
                             height: AppDimens.size24,
                           ),
@@ -374,12 +380,15 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       widget.post.comments.isNotEmpty
                           ? ICON_COMMENT_STYLE_1
                           : ICON_COMMENT_BORDER,
-                      color: widget.post.comments.isNotEmpty
-                          ? Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(0.9)
-                          : Theme.of(context).colorScheme.onPrimary,
+                      colorFilter: ColorFilter.mode(
+                        widget.post.comments.isNotEmpty
+                            ? Theme.of(context)
+                                .colorScheme
+                                .onPrimary
+                                .withOpacity(0.9)
+                            : Theme.of(context).colorScheme.onPrimary,
+                        BlendMode.srcIn,
+                      ),
                       width: widget.post.comments.isNotEmpty ? 26 : 22,
                       height: widget.post.comments.isNotEmpty ? 26 : 22,
                     ),
