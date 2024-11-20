@@ -10,6 +10,7 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/helper/logger.dart';
+import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
 
@@ -22,6 +23,7 @@ import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
+import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class UploadPostScreen extends StatefulWidget {
   const UploadPostScreen({super.key});
@@ -135,11 +137,15 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     Logger.logDebug('currentUser : ${currentUser!.toString()}');
 
     // Check if both image and caption are provided
-    if (imagePickedFile == null || text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Both image and caption are required"),
-        ),
+    if (pickedImage == null || text.isEmpty) {
+      ToastMessengerUnit.showToast(
+        context: context,
+        message: 'Both image and caption are required',
+        icon: Icons.error,
+        backgroundColor: AppColors.bluePurpleShade900X,
+        textColor: AppColors.whiteShade,
+        shadowColor: AppColors.blackShade,
+        duration: ToastDuration.second5,
       );
 
       return;
