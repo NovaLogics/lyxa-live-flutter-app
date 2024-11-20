@@ -151,7 +151,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         backgroundColor: AppColors.bluePurpleShade900X,
         textColor: AppColors.whiteShade,
         shadowColor: AppColors.blackShade,
-        duration: ToastDuration.second5,
+        duration: ToastDuration.second7,
       );
 
       return;
@@ -272,7 +272,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           const SizedBox(height: AppDimens.size4),
           MultilineTextFieldUnit(
             controller: textController,
-            labelText: 'Caption area',
+            labelText: 'Caption Area...',
             hintText: 'Add post caption here..',
             maxLength: MAX_LENGTH_POST_FIELD,
           ),
