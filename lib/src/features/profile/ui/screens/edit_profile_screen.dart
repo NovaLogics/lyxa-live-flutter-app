@@ -10,6 +10,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/helper/logger.dart';
 import 'package:lyxa_live/src/core/values/app_colors.dart';
 import 'package:lyxa_live/src/core/values/app_dimensions.dart';
 import 'package:lyxa_live/src/core/values/app_strings.dart';
@@ -69,6 +70,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
+  // SCREEN -> Loading
   Widget _buildLoadingScreen() {
     return const Scaffold(
       body: Center(
@@ -83,6 +85,53 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
+  // SCREEN -> Edit
+  Widget _buildEditScreen() {
+    bioTextController.text = widget.user.bio;
+    return Scaffold(
+      body: Stack(
+        children: [
+          _buildBackground(),
+          _buildContent(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBackground() {
+    return RepaintBoundary(
+      child: getIt<GradientBackgroundUnit>(
+        param1: AppDimens.containerSize400,
+        param2: BackgroundStyle.home,
+      ),
+    );
+  }
+
+  Widget _buildContent() {
+    return ScrollableScaffold(
+      appBar: AppBar(
+        title: const Text(AppStrings.editProfile),
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        actions: [
+          IconButton(
+            onPressed: updateProfile,
+            icon: const Icon(Icons.upload),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          const SizedBox(height: 25),
+          _buildProfileImage(),
+          const SizedBox(height: 25),
+          _buildPickImageButton(),
+          const SizedBox(height: 25),
+          _buildBioSection(),
+        ],
+      ),
+    );
+  }
+
   Future<void> pickCropCompressImage() async {
     try {
       final pickedFile = await FilePicker.platform.pickFiles(
@@ -92,11 +141,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       if (pickedFile == null) return;
 
+      // Platform -> WEB
       if (kIsWeb) {
         setState(() {
           pickedImage = pickedFile.files.single.bytes;
         });
-      } else {
+      }
+      // Platform -> MOBILE
+      else {
         final croppedFile = await ImageCropper().cropImage(
           sourcePath: pickedFile.files.single.path!,
           compressFormat: ImageCompressFormat.jpg,
@@ -111,11 +163,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           setState(() {
             pickedImage = compressedImage;
           });
-          print(AppStrings.imagePickedSuccessfully);
+          Logger.logDebug(AppStrings.imagePickedSuccessfully);
         }
       }
     } catch (e) {
-      print(AppStrings.errorFetchingImage);
+      Logger.logError(AppStrings.errorFetchingImage);
     }
   }
 
@@ -161,52 +213,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     } else {
       Navigator.pop(context);
     }
-  }
-
-  Widget _buildEditScreen() {
-    bioTextController.text = widget.user.bio;
-    return Scaffold(
-      body: Stack(
-        children: [
-          _buildBackground(),
-          _buildContent(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBackground() {
-    return RepaintBoundary(
-      child: getIt<GradientBackgroundUnit>(
-        param1: AppDimens.containerSize400,
-        param2: BackgroundStyle.home,
-      ),
-    );
-  }
-
-  Widget _buildContent() {
-    return ScrollableScaffold(
-      appBar: AppBar(
-        title: const Text(AppStrings.editProfile),
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        actions: [
-          IconButton(
-            onPressed: updateProfile,
-            icon: const Icon(Icons.upload),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 25),
-          _buildProfileImage(),
-          const SizedBox(height: 25),
-          _buildPickImageButton(),
-          const SizedBox(height: 25),
-          _buildBioSection(),
-        ],
-      ),
-    );
   }
 
   Widget _buildProfileImage() {
