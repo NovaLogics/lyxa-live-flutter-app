@@ -10,7 +10,6 @@ import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
-import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
@@ -21,6 +20,7 @@ import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/edit_profile_screen.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/follower_screen.dart';
+import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String displayUserId;
@@ -105,29 +105,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildProfileContent(
       BuildContext context, ProfileUser user, bool isOwnProfile) {
-    return Scaffold(
+    return ConstrainedScaffold(
       appBar: _buildAppBar(context, user, isOwnProfile),
-      body: Stack(
+      body: ListView(
         children: [
-          RepaintBoundary(
-            child: getIt<GradientBackgroundUnit>(
-              param1: AppDimens.containerSize400,
-              param2: BackgroundStyle.home,
-            ),
-          ),
-          ListView(
-            children: [
-              _buildProfileHeader(user),
-              const SizedBox(height: AppDimens.size8),
-              _buildProfileStats(user),
-              if (!isOwnProfile) const SizedBox(height: AppDimens.size8),
-              if (!isOwnProfile) _buildFollowActionSection(user),
-              const SizedBox(height: AppDimens.size12),
-              _buildStoryLineSection(user.bio),
-              const SizedBox(height: AppDimens.size24),
-              _buildPostSection(context),
-            ],
-          ),
+          _buildProfileHeader(user),
+          const SizedBox(height: AppDimens.size8),
+          _buildProfileStats(user),
+          if (!isOwnProfile) const SizedBox(height: AppDimens.size8),
+          if (!isOwnProfile) _buildFollowActionSection(user),
+          const SizedBox(height: AppDimens.size12),
+          _buildStoryLineSection(user.bio),
+          const SizedBox(height: AppDimens.size24),
+          _buildPostSection(context),
         ],
       ),
     );
@@ -181,8 +171,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Theme.of(context).colorScheme.primary,
               ),
               imageBuilder: (_, imageProvider) => Container(
-                height: 120,
-                width: 120,
+                height: AppDimens.imageSize120,
+                width: AppDimens.imageSize120,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
