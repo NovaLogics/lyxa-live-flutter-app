@@ -4,6 +4,8 @@ class ProfileUser extends AppUser {
   final String bio;
   final String profileImageUrl;
 
+  final bool isPrivate;
+
   final List<String> followers;
   final List<String> following;
 
@@ -11,10 +13,12 @@ class ProfileUser extends AppUser {
     required super.uid,
     required super.email,
     required super.name,
+    required super.searchableName,
     required this.bio,
     required this.profileImageUrl,
     required this.followers,
     required this.following,
+    this.isPrivate = false,
   });
 
   // Update profile user
@@ -28,6 +32,7 @@ class ProfileUser extends AppUser {
       uid: uid,
       email: email,
       name: name,
+      searchableName: searchableName,
       bio: newBio ?? bio,
       profileImageUrl: newProfileImageUrl ?? profileImageUrl,
       followers: newFollowers ?? followers,
@@ -42,6 +47,7 @@ class ProfileUser extends AppUser {
       'uid': uid,
       'email': email,
       'name': name,
+      'searchableName': searchableName,
       'bio': bio,
       'profileImageUrl': profileImageUrl,
       'followers': followers,
@@ -55,6 +61,7 @@ class ProfileUser extends AppUser {
       uid: json['uid'],
       email: json['email'],
       name: json['name'],
+      searchableName: json['searchableName'],
       bio: json['bio'] ?? '',
       profileImageUrl: json['profileImageUrl'] ?? '',
       followers: List<String>.from(json['followers'] ?? []),
