@@ -23,47 +23,51 @@ class DrawerUnit extends StatelessWidget {
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
-          child: Column(
-            children: [
-              const SizedBox(height: AppDimens.size12),
-              _buildDrawerIcon(context),
-              const SizedBox(height: AppDimens.size12),
-              Divider(
-                color: Theme.of(context).colorScheme.outline,
-              ),
-              _buildDrawerItem(
-                context,
-                title: AppStrings.titleHome,
-                icon: Icons.home_outlined,
-                onTap: () => Navigator.of(context).pop(),
-              ),
-              _buildProfileSection(context),
-              _buildDrawerItem(
-                context,
-                title: AppStrings.titleSearch,
-                icon: Icons.search_outlined,
-                onTap: () => _navigateToSearchScreen(context),
-              ),
-              _buildDrawerItem(
-                context,
-                title: AppStrings.titleSettings,
-                icon: Icons.settings_outlined,
-                onTap: () => _navigateToSettingsScreen(context),
-              ),
-              const Spacer(),
-              Divider(
-                color: Theme.of(context).colorScheme.outline,
-              ),
-              _buildDrawerItem(
-                context,
-                title: AppStrings.titleLogout,
-                icon: Icons.login,
-                onTap: () => _logout(context),
-              ),
-              const SizedBox(height: AppDimens.size12),
-            ],
+        child: SingleChildScrollView(
+          // Make the drawer scrollable
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
+            child: Column(
+              children: [
+                const SizedBox(height: AppDimens.size12),
+                _buildDrawerIcon(context),
+                const SizedBox(height: AppDimens.size12),
+                Divider(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+                _buildDrawerItem(
+                  context,
+                  title: AppStrings.titleHome,
+                  icon: Icons.home_outlined,
+                  onTap: () => Navigator.of(context).pop(),
+                ),
+                _buildProfileSection(context),
+                _buildDrawerItem(
+                  context,
+                  title: AppStrings.titleSearch,
+                  icon: Icons.search_outlined,
+                  onTap: () => _navigateToSearchScreen(context),
+                ),
+                _buildDrawerItem(
+                  context,
+                  title: AppStrings.titleSettings,
+                  icon: Icons.settings_outlined,
+                  onTap: () => _navigateToSettingsScreen(context),
+                ),
+                const SizedBox(
+                    height: AppDimens.size12), // Add space before the spacer
+                Divider(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+                _buildDrawerItem(
+                  context,
+                  title: AppStrings.titleLogout,
+                  icon: Icons.login,
+                  onTap: () => _logout(context),
+                ),
+                const SizedBox(height: AppDimens.size12),
+              ],
+            ),
           ),
         ),
       ),
@@ -82,9 +86,9 @@ class DrawerUnit extends StatelessWidget {
                 imageUrl: user?.profileImageUrl ?? '',
                 placeholder: (_, __) => const CircularProgressIndicator(),
                 errorWidget: (_, __, ___) => Icon(
-                  Icons.person,
+                  Icons.person_rounded,
                   size: AppDimens.iconSize3XLarge,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
                 imageBuilder: (_, imageProvider) => Container(
                   height: AppDimens.iconSize3XLarge,
@@ -99,9 +103,9 @@ class DrawerUnit extends StatelessWidget {
                 ),
               )
             : Icon(
-                Icons.person,
+                Icons.person_rounded,
                 size: AppDimens.iconSize3XLarge,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.onSecondary,
               ),
       ),
     );
