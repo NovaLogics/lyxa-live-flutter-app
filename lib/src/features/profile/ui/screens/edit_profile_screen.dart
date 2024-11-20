@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -17,11 +16,9 @@ import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
-import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
-import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final ProfileUser user;
@@ -82,189 +79,77 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
   }
 
-  // Pick image
-  // Future<void> pickImage() async {
-  //   final result = await FilePicker.platform
-  //       .pickFiles(type: FileType.image, withData: kIsWeb);
+  Future<void> pickCropCompressImage() async {
+    try {
+      // Step 1: Pick the image using FilePicker
+      final pickedFile =
+          await FilePicker.platform.pickFiles(type: FileType.image, withData: kIsWeb);
+      if (pickedFile == null) return; // User cancelled the picker
 
-  //   if (result != null) {
-  //     setState(() {
-  //       imagePickedFile = result.files.first;
-
-  //       if (kIsWeb) {
-  //         webImage = imagePickedFile!.bytes;
-  //       }
-  //     });
-  //   }
-  // }
-
-  // Method to pick and process the image
-  Future<void> pickImage() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
-
-    if (result != null) {
-      setState(() {
-        imagePickedFile = result.files.first;
-      });
-
-      // Check if it's a web or mobile platform
       if (kIsWeb) {
-        // For web: Use image bytes (Uint8List)
-        pickedImage = imagePickedFile!.bytes;
-
-        // Step 2: Crop the image (not necessary for web in most cases, but can be added)
-        // For simplicity, skip cropping for web, as it's typically handled by uploading the byte data directly.
-      } else {
-        // For mobile: Use the file path (PlatformFile)
+        setState(() {
+          pickedImage = pickedFile.files.single.bytes;
+        });
+            } else {
+        // Step 2: Crop the image using ImageCropper
         final croppedFile = await ImageCropper().cropImage(
-          sourcePath: imagePickedFile!.path!,
+          sourcePath: pickedFile.files.single.path!,
+          compressFormat: ImageCompressFormat.jpg,
+          compressQuality: 95,
           uiSettings: [
             AndroidUiSettings(
               toolbarTitle: 'Profile Image Cropper',
               toolbarColor: Colors.deepPurple,
               toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.square,
               cropStyle: CropStyle.circle,
+              lockAspectRatio: true,
               aspectRatioPresets: [
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.square,
                 CropAspectRatioPreset.square,
               ],
             ),
             IOSUiSettings(
-              title: 'Profile Image Cropper',
+              title: 'Cropper',
               aspectRatioPresets: [
+                CropAspectRatioPreset.original,
                 CropAspectRatioPreset.square,
               ],
             ),
+            //           WebUiSettings(
+            //   context: context,
+            //   presentStyle: WebPresentStyle.dialog,
+            //   size: const CropperSize(
+            //     width: 520,
+            //     height: 520,
+            //   ),
+            // ),
           ],
         );
 
-        if (croppedFile != null) {
-          // Step 3: Compress the image (For mobile)
-          final compressedImage = await compressImage(croppedFile.path);
+        if (croppedFile == null) return; // User cancelled cropping
 
-          // Update state with compressed image bytes (for mobile)
+        // Step 3: Compress the image using FlutterImageCompress
+        final Uint8List? compressedImage =
+            await FlutterImageCompress.compressWithFile(
+          croppedFile.path,
+          format: CompressFormat.jpeg,
+          quality: 95,
+        );
+
+        if (compressedImage != null) {
           setState(() {
-            pickedImage =
-                compressedImage; // Using `webImage` for both mobile and web (as a byte array)
+            pickedImage = compressedImage;
           });
+
+          // Example: Upload or use the Uint8List (pickedImage)
+          print("Image picked and compressed successfully!");
         }
-      }
-
-      // You can now upload the image (webImage) as needed for both mobile and web platforms
-    }
-  }
-
-  Future<void> pickCropCompressImage() async {
-    try {
-      // Step 1: Pick the image using FilePicker
-      final pickedFile =
-          await FilePicker.platform.pickFiles(type: FileType.image);
-      if (pickedFile == null) return; // User cancelled the picker
-
-      // Step 2: Crop the image using ImageCropper
-      final croppedFile = await ImageCropper().cropImage(
-        sourcePath: pickedFile.files.single.path!,
-        compressFormat: ImageCompressFormat.jpg,
-        compressQuality: 95,
-        uiSettings: [
-          AndroidUiSettings(
-            toolbarTitle: 'Profile Image Cropper',
-            toolbarColor: Colors.deepPurple,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.square,
-              cropStyle: CropStyle.circle,
-            lockAspectRatio: true,
-            aspectRatioPresets: [
-              CropAspectRatioPreset.square,
-            ],
-          ),
-          IOSUiSettings(
-            title: 'Cropper',
-            aspectRatioPresets: [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-            ],
-          ),
-        ],
-      );
-
-      if (croppedFile == null) return; // User cancelled cropping
-
-      // Step 3: Compress the image using FlutterImageCompress
-      final Uint8List? compressedImage =
-          await FlutterImageCompress.compressWithFile(
-        croppedFile.path,
-        format: CompressFormat.jpeg,
-        quality: 95,
-      );
-
-      if (compressedImage != null) {
-        setState(() {
-          pickedImage = compressedImage;
-        });
-
-        // Example: Upload or use the Uint8List (pickedImage)
-        print("Image picked and compressed successfully!");
       }
     } catch (e) {
       print("Error picking or compressing image: $e");
     }
   }
 
-  // XFile? _pickedFile;
-  // CroppedFile? _croppedFile;
-
-  // Future<void> _cropImage() async {
-  //   final pickedFile =
-  //       await FilePicker.platform.pickFiles(type: FileType.image);
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       _pickedFile = pickedFile as XFile?;
-  //     });
-  //   }
-  //   if (_pickedFile != null) {
-  //     final croppedFile = await ImageCropper().cropImage(
-  //       sourcePath: _pickedFile!.path,
-  //       compressFormat: ImageCompressFormat.jpg,
-  //       compressQuality: 95,
-  //       uiSettings: [
-  //         AndroidUiSettings(
-  //           toolbarTitle: 'Profile Image Cropper',
-  //           toolbarColor: Colors.deepPurple,
-  //           toolbarWidgetColor: Colors.white,
-  //           initAspectRatio: CropAspectRatioPreset.square,
-  //           lockAspectRatio: true,
-  //           aspectRatioPresets: [
-  //             CropAspectRatioPreset.square,
-  //           ],
-  //         ),
-  //         IOSUiSettings(
-  //           title: 'Cropper',
-  //           aspectRatioPresets: [
-  //             CropAspectRatioPreset.original,
-  //             CropAspectRatioPreset.square,
-  //             CropAspectRatioPreset.ratio4x3,
-  //           ],
-  //         ),
-  //         WebUiSettings(
-  //           context: context,
-  //           presentStyle: WebPresentStyle.dialog,
-  //           size: const CropperSize(
-  //             width: 520,
-  //             height: 520,
-  //           ),
-  //         ),
-  //       ],
-  //     );
-  //     if (croppedFile != null) {
-  //       setState(() {
-  //         _croppedFile = croppedFile;
-  //       });
-  //     }
-  //   }
-  // }
 
 // Compress the image (For mobile: file path; for web: image data bytes)
   Future<Uint8List?> compressImage(String filePath) async {
@@ -289,9 +174,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         bioTextController.text.isNotEmpty ? bioTextController.text : null;
     // final imageMobilePath = kIsWeb ? null : imagePickedFile?.path;
     // final imageWebBytes = kIsWeb ? imagePickedFile?.bytes : null;
-
-    final imageMobilePath = kIsWeb ? null : pickedImage;
-    final imageWebBytes = kIsWeb ? pickedImage : null;
 
     //Update profile if there is something to update
     if (pickedImage != null || newBio != null) {
@@ -354,22 +236,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 height: 200,
                                 fit: BoxFit.cover,
                               )
-                            :
-                            // Display selected image for mobile
-                            // (!kIsWeb && imagePickedFile != null)
-                            //     ? Image.file(
-                            //         File(imagePickedFile!.path!),
-                            //       )
-                            //     :
-                            //     // Display selected image for web
-                            //     (kIsWeb && pickedImage != null)
-                            //         ? Image.memory(
-                            //             pickedImage!,
-                            //             fit: BoxFit.cover,
-                            //           )
-                            //         :
-                            //         // No image selected -> display existing profile pic
-                            CachedNetworkImage(
+                            : CachedNetworkImage(
                                 imageUrl: widget.user.profileImageUrl,
                                 // Loading
                                 placeholder: (context, url) =>
