@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-    void _fetchCurrentUserData() {
+  void _fetchCurrentUserData() {
     AuthCubit authCubit = context.read<AuthCubit>();
     ProfileCubit profileCubit = context.read<ProfileCubit>();
     AppUser? currentUser = authCubit.currentUser;
@@ -117,11 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
   // Loading state widget
   Widget _buildLoadingState() {
-    return getIt<CenterLoadingUnit>(param1: AppStrings.pleaseWaitMessage);
+    return getIt<CenterLoadingUnit>(param1: AppStrings.pleaseWait);
   }
 
   // Post list display

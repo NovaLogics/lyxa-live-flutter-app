@@ -102,7 +102,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return RepaintBoundary(
       child: getIt<GradientBackgroundUnit>(
         param1: AppDimens.containerSize400,
-        param2: BackgroundStyle.home,
+        param2: BackgroundStyle.main,
       ),
     );
   }

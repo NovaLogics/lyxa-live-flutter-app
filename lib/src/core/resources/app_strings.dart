@@ -61,7 +61,7 @@ class AppStrings {
   static const String hintConfirmPassword = 'Confirm Password (e.g., P@ssw0rd)';
 
   // Common
-  static const String pleaseWaitMessage = 'Please wait...';
+  static const String pleaseWait = 'Please wait...';
   static const String imageLoadError = 'Error loading image..';
   static const String profileNotFoundError = 'Error profile not found..';
   static const String postsUpperCase = 'POSTS';
@@ -92,6 +92,7 @@ class AppStrings {
   static const String imagePickedSuccessfully = "Image picked successfully";
 
   static const String updating = "Updating...";
+  static const String uploading = "Uploading...";
   static const String errorFetchingImage =
       "Error picking or compressing image.";
   static const String pickImage = "Pick Image";
