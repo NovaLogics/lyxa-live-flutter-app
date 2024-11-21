@@ -19,27 +19,23 @@ class UserTileUnit extends StatelessWidget {
       title: Text(
         user.name,
         style: AppTextStyles.textStylePost.copyWith(
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: Theme.of(context).colorScheme.inversePrimary,
           fontWeight: FontWeight.bold,
         ),
       ),
       subtitle: Text(
         user.email,
         style: AppTextStyles.subtitlePrimary.copyWith(
-          color: Theme.of(context).colorScheme.inversePrimary,
+          color: Theme.of(context).colorScheme.onSecondary,
           fontWeight: FontWeight.bold,
           fontFamily: FONT_MONTSERRAT,
-          fontSize: AppDimens.fontSizeSm12,
+          fontSize: AppDimens.fontSizeSM12,
           shadows: AppTextStyles.shadowStyle2,
         ),
       ),
-      subtitleTextStyle: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
-        fontWeight: FontWeight.normal,
-      ),
       leading: Icon(
         Icons.person_rounded,
-        color: Theme.of(context).colorScheme.onPrimary,
+        color: Theme.of(context).colorScheme.onSecondary,
         size: AppDimens.size36,
       ),
       // leading: CircleAvatar(
@@ -47,13 +43,14 @@ class UserTileUnit extends StatelessWidget {
       // ),
       trailing: Icon(
         Icons.arrow_forward,
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
       onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProfileScreen(displayUserId: user.uid),
-          )),
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfileScreen(displayUserId: user.uid),
+        ),
+      ),
     );
   }
 }
