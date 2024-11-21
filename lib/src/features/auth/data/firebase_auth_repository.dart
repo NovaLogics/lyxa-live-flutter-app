@@ -22,6 +22,7 @@ class FirebaseAuthRepository implements AuthRepository {
     String password,
   ) async {
     try {
+      firebaseAuth.setLanguageCode('en');
       // Sign in user
       UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);

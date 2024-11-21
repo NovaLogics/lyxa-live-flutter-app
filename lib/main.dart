@@ -29,7 +29,8 @@ Future<void> setupFirebase() async {
 }
 
 Future<void> setupHive() async {
-  await Hive.initFlutter(); // Initialize Hive
+  // Initialize Hive
+  await Hive.initFlutter();
   final hiveHelper = HiveHelper();
   await hiveHelper.initialize();
 }
