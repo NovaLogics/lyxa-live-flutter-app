@@ -17,7 +17,7 @@ import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 
 class RegisterScreen extends StatefulWidget {
-  final void Function()? onToggle;
+  final VoidCallback? onToggle;
 
   const RegisterScreen({
     super.key,
@@ -111,14 +111,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _authCubit.saveUser(cachedUser, key: HiveKeys.signUpDataKey);
         _authCubit.register(name, email, password);
       } catch (error) {
-        ToastMessengerUnit.showToast(
+        ToastMessengerUnit.showErrorToast(
           context: context,
           message: AppStrings.registerErrorMessage,
-          icon: Icons.error,
-          backgroundColor: AppColors.deepPurple900,
-          textColor: Colors.white,
-          shadowColor: Colors.black,
-          duration: const Duration(seconds: 5),
         );
       }
     }
