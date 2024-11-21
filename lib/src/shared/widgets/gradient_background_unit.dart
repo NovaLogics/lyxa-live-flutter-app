@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 
-enum BackgroundStyle { home, auth }
+enum BackgroundStyle { main, auth }
 
 class GradientBackgroundUnit extends StatelessWidget {
   final double width;
@@ -85,7 +85,7 @@ class GradientBackgroundUnit extends StatelessWidget {
   /// Returns the list of colors based on the selected style
   List<Color> _getStyleColors(BuildContext context) {
     switch (style) {
-      case BackgroundStyle.home:
+      case BackgroundStyle.main:
         return [
           Theme.of(context).colorScheme.surfaceContainerLow,
           Theme.of(context).colorScheme.surfaceContainerLowest,
