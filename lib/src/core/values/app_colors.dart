@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 class AppColors {
 // Neutral Colors
+
+  static const Color whitePure = Color(0xFFFFFFFF);
   static const Color whiteShade = Color(0xFFFFF8F8);
+  static const Color blackPure = Color(0xFF000000);
   static const Color blackShade = Color(0xFF0A0A0A);
   static const Color grayLight = Color(0xFFDDDDDD);
   static const Color grayDark = Color(0xFF888888);
@@ -99,16 +102,17 @@ class AppColors {
   static const Color gold800 = Color(0xFFFB8C00);
   static const Color gold900 = Color(0xFFEF6C00);
 
-  static const Color whiteShade50 = Color(0xFFFFFFFF);
-  static const Color whiteShade100 = Color(0xFFFFF8F8);
-  static const Color whiteShade200 = Color(0xFFFFF2F2);
-  static const Color whiteShade300 = Color(0xFFEEEDED);
-  static const Color whiteShade400 = Color(0xFFE8E8E8);
-  static const Color whiteShade500 = Color(0xFFE0E0E0);
-  static const Color whiteShade600 = Color(0xFFD6D6D6);
-  static const Color whiteShade700 = Color(0xFFCCCCCC);
-  static const Color whiteShade800 = Color(0xFFBDBDBD);
-  static const Color whiteShade900 = Color(0xFFAFAFAF);
+  // -> WHITE
+  static const Color white50 = Color(0xFFFFFFFF);
+  static const Color white100 = Color(0xFFFFF8F8);
+  static const Color white200 = Color(0xFFFFF2F2);
+  static const Color white300 = Color(0xFFEEEDED);
+  static const Color white400 = Color(0xFFE8E8E8);
+  static const Color white500 = Color(0xFFE0E0E0);
+  static const Color white600 = Color(0xFFD6D6D6);
+  static const Color white700 = Color(0xFFCCCCCC);
+  static const Color white800 = Color(0xFFBDBDBD);
+  static const Color white900 = Color(0xFFAFAFAF);
 
   static const Color blackShade50 = Color(0xFFE0E0E0);
   static const Color blackShade100 = Color(0xFFBDBDBD);

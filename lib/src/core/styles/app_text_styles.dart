@@ -7,7 +7,7 @@ class AppTextStyles {
   /// Headings
   /// ->
   static const TextStyle headingPrimary = TextStyle(
-    color: AppColors.whiteShade50,
+    color: AppColors.whitePure,
     fontSize: AppDimens.fontSizeTitleLg42,
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,

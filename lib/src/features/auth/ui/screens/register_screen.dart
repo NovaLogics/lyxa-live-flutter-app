@@ -150,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Text(
       AppStrings.createAccountMessage,
       style: AppTextStyles.headingSecondary.copyWith(
-        color: AppColors.whiteShade100,
+        color: AppColors.white100,
         fontSize: AppDimens.fontSizeXXL24,
       ),
     );
