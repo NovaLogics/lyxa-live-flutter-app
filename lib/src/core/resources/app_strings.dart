@@ -106,6 +106,7 @@ class AppStrings {
   static const String deleteThisPostMessage = 'Delete This Post?';
   static const String addNewComment = 'Add a new comment';
   static const String typeComment = 'Type a comment...';
+  static const String addComment = 'Add Comment';
   static const String cancel = 'Cancel';
   static const String delete = 'Delete';
   static const String save = 'Save';
