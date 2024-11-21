@@ -58,27 +58,27 @@ class AppDimens {
   static const double spacingLg24 = 24.0;
   static const double spacingXL28 = 28.0;
   static const double spacingXL32 = 32.0;
-  static const double spacingXxl36 = 36.0;
-  static const double spacingXxl42 = 42.0;
-  static const double spacingXxl48 = 48.0;
-  static const double spacingXxl52 = 52.0;
-  static const double spacingXxl58 = 58.0;
-  static const double spacingXxl64 = 64.0;
+  static const double spacingXXL36 = 36.0;
+  static const double spacingXXL42 = 42.0;
+  static const double spacingXXL48 = 48.0;
+  static const double spacingXXL52 = 52.0;
+  static const double spacingXXL58 = 58.0;
+  static const double spacingXXL64 = 64.0;
 
   static const double letterSpaceMedium = 1.2;
 
-  // Text Sizes
-  static const double textSizeXs10 = 10.0;
-  static const double textSizeSm12 = 12.0;
-  static const double textSizeRg14 = 14.0;
-  static const double textSizeMd16 = 16.0;
-  static const double textSizeLg18 = 18.0;
-  static const double textSizeXL20 = 20.0;
-  static const double textSizeXXL24 = 24.0;
-  static const double textSizeXXL28 = 28.0;
-  static const double textSizeTitle32 = 32.0;
-  static const double textSizeTitleLg42 = 42.0;
-  static const double textSizeTitleXL48 = 48.0;
+  // Font/Text Sizes
+  static const double fontSizeXs10 = 10.0;
+  static const double fontSizeSm12 = 12.0;
+  static const double fontSizeRg14 = 14.0;
+  static const double fontSizeMd16 = 16.0;
+  static const double fontSizeLg18 = 18.0;
+  static const double fontSizeXL20 = 20.0;
+  static const double fontSizeXXL24 = 24.0;
+  static const double fontSizeXXL28 = 28.0;
+  static const double fontSizeTitle32 = 32.0;
+  static const double fontSizeTitleLg42 = 42.0;
+  static const double fontSizeTitleXL48 = 48.0;
 
   // Elevations
   static const double elevationSmall = 2.0;

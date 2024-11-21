@@ -26,14 +26,14 @@ class MultilineTextFieldUnit extends StatelessWidget {
           color: Theme.of(context).colorScheme.inversePrimary,
           fontFamily: FONT_RALEWAY,
           fontWeight: FontWeight.w500,
-          fontSize: AppDimens.textSizeMd16),
+          fontSize: AppDimens.fontSizeMd16),
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
         hintStyle: TextStyle(
           color: Theme.of(context).colorScheme.onSecondary,
           fontWeight: FontWeight.normal,
-          fontSize: AppDimens.textSizeRg14,
+          fontSize: AppDimens.fontSizeRg14,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
