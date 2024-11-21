@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
 class ConstrainedScaffold extends StatelessWidget {
   final Widget body;
@@ -10,32 +8,24 @@ class ConstrainedScaffold extends StatelessWidget {
 
   const ConstrainedScaffold({
     super.key,
-    required this.body,
     this.appBar,
     this.drawer,
+    required this.body,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Colors.transparent,
       appBar: appBar,
       drawer: drawer,
-      body: Stack(
-        children: [
-          RepaintBoundary(
-            child: getIt<GradientBackgroundUnit>(
-              param1: AppDimens.containerSize400,
-              param2: BackgroundStyle.home,
-            ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppDimens.containerSize430,
           ),
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 430),
-              child: body,
-            ),
-          ),
-        ],
+          child: body,
+        ),
       ),
     );
   }
