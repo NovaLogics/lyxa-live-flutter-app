@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -19,6 +21,7 @@ import 'package:lyxa_live/src/features/photo_slider/cubits/slider_state.dart';
 import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
+import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 /// Main Application Entry Point for LyxaApp
@@ -36,6 +39,10 @@ class LyxaApp extends StatelessWidget {
           theme: currentTheme,
           home: Stack(
             children: [
+              getIt<GradientBackgroundUnit>(
+                param1: AppDimens.containerSize400,
+                param2: BackgroundStyle.auth,
+              ),
               _buildHomeScreen(),
               _buildPhotoSliderScreen(),
             ],
@@ -91,18 +98,18 @@ class LyxaApp extends StatelessWidget {
   /// Displays the appropriate screen based on the user's authentication status.
   Widget _buildHomeScreen() {
     return BlocConsumer<AuthCubit, AuthState>(
-      builder: (context, authState) {
-        if (kDebugMode) print(authState);
+      builder: (context, state) {
+        Logger.logDebug(state.toString());
 
-        if (authState is Unauthenticated) {
+        if (state is Unauthenticated) {
           // Show Authentication Screen
           return const AuthScreen();
-        } else if (authState is AuthLoading) {
+        } else if (state is AuthLoading) {
           // Show Authentication Screen with loading
           return const AuthScreen(
             isLoading: true,
           );
-        } else if (authState is Authenticated) {
+        } else if (state is Authenticated) {
           // Show Main Home Screen
           return const HomeScreen();
         } else {
