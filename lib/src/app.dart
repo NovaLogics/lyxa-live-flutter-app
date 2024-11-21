@@ -97,16 +97,10 @@ class LyxaApp extends StatelessWidget {
           // Show Authentication Screen
           return Stack(
             children: [
-              RepaintBoundary(
-                child: getIt<GradientBackgroundUnit>(
-                  param1: AppDimens.containerSize400,
-                  param2: BackgroundStyle.auth,
-                ),
-              ),
               const AuthScreen(),
               if (state is AuthLoading)
                 getIt<CenterLoadingUnit>(
-                  param1: AppStrings.pleaseWaitMessage,
+                  param1: AppStrings.pleaseWait,
                 )
             ],
           );
@@ -114,11 +108,9 @@ class LyxaApp extends StatelessWidget {
           // Show Main Home Screen
           return Stack(
             children: [
-              RepaintBoundary(
-                child: getIt<GradientBackgroundUnit>(
-                  param1: AppDimens.containerSize400,
-                  param2: BackgroundStyle.home,
-                ),
+              getIt<GradientBackgroundUnit>(
+                param1: AppDimens.containerSize400,
+                param2: BackgroundStyle.home,
               ),
               const HomeScreen(),
               _buildPhotoSliderScreen(),
@@ -127,7 +119,7 @@ class LyxaApp extends StatelessWidget {
         } else {
           // Show Loading Indicator
           return getIt<CenterLoadingUnit>(
-            param1: AppStrings.pleaseWaitMessage,
+            param1: AppStrings.pleaseWait,
           );
         }
       },
