@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
@@ -20,39 +21,94 @@ class CommentTileUnit extends StatefulWidget {
 }
 
 class _CommentTileUnitState extends State<CommentTileUnit> {
-  // Current user
   AppUser? currentUser;
   bool isOwnPost = false;
 
-  // On startup
   @override
   void initState() {
     super.initState();
-
-    getCurrentUser();
+    _fetchCurrentUser();
   }
 
-  void getCurrentUser() {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppDimens.paddingLG20, vertical: AppDimens.paddingXS2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // USERNAME
+          Text(
+            "⤷ ${widget.comment.userName}",
+            style: AppTextStyles.textStylePost.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+              fontWeight: FontWeight.bold,
+              fontSize: AppDimens.fontSizeSM12,
+            ),
+          ),
+          const SizedBox(width: AppDimens.size12),
+
+          // COMMENT TEXT
+          SizedBox(
+            width: AppDimens.size220,
+            child: Expanded(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxHeight: AppDimens.size100,
+                ),
+                child: Text(
+                  widget.comment.text,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onTertiary,
+                    fontSize: AppDimens.fontSizeSM12,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 5,
+                ),
+              ),
+            ),
+          ),
+
+          const Spacer(),
+
+          // DELETE BUTTON
+          if (isOwnPost)
+            GestureDetector(
+              onTap: _showOptions,
+              child: Icon(
+                Icons.more_horiz,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  void _fetchCurrentUser() {
     final authCubit = context.read<AuthCubit>();
     currentUser = authCubit.currentUser;
     isOwnPost = (widget.comment.userId == currentUser!.uid);
   }
 
   // Show options for deletion
-  void showOptions() {
+  void _showOptions() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Delete Comment"),
+        title: const Text(AppStrings.deleteCommentMessage),
         actions: [
-          // Cancel button
+          // CANCEL BUTTON
           TextButton(
             onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop('dialog');
+              Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
             },
-            child: const Text("Cancel"),
+            child: const Text(AppStrings.cancel),
           ),
-          // Delete button
+          // DELETE BUTTON
           TextButton(
             onPressed: () {
               context.read<PostCubit>().deleteComment(
@@ -61,65 +117,8 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
                   );
               Navigator.of(context).pop();
             },
-            child: const Text("Delete"),
+            child: const Text(AppStrings.delete),
           ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 2),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align items at the top
-        children: [
-          // Username
-          Text(
-            "⤷ ${widget.comment.userName}",
-            style: AppTextStyles.textStylePost.copyWith(
-              color: Theme.of(context).colorScheme.onSecondary,
-              fontWeight: FontWeight.bold,
-              fontSize: AppDimens.fontSizeSm12,
-            ),
-          ),
-          const SizedBox(width: 10),
-
-          // Comment Text
-          SizedBox(
-            width: 220,
-            child: Expanded(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxHeight: 100,
-                ),
-                child: Text(
-                  widget.comment.text,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onTertiary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                  ),
-                  softWrap: true, // Wrap long text
-                  overflow: TextOverflow.ellipsis, // Show ellipsis for overflow
-                  maxLines: 5, // Limit to 5 lines
-                ),
-              ),
-            ),
-          ),
-
-          const Spacer(),
-
-          // Delete Button
-          if (isOwnPost)
-            GestureDetector(
-              onTap: showOptions,
-              child: Icon(
-                Icons.more_horiz,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
         ],
       ),
     );
