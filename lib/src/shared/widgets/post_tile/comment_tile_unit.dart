@@ -47,7 +47,7 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
               fontSize: AppDimens.fontSizeSM12,
             ),
           ),
-          const SizedBox(width: AppDimens.size12),
+          const SizedBox(width: AppDimens.size8),
 
           // COMMENT TEXT
           SizedBox(
