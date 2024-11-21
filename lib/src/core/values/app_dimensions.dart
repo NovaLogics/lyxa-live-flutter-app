@@ -28,6 +28,25 @@ class AppDimens {
   static const double size120 = 120.0;
   static const double size128 = 128.0;
 
+  static const double size140 = 140.0;
+  static const double size160 = 160.0;
+  static const double size180 = 180.0;
+  static const double size200 = 200.0;
+  static const double size220 = 220.0;
+  static const double size240 = 240.0;
+  static const double size260 = 260.0;
+  static const double size280 = 280.0;
+  static const double size300 = 300.0;
+  static const double size320 = 320.0;
+  static const double size340 = 340.0;
+  static const double size360 = 360.0;
+  static const double size380 = 380.0;
+  static const double size400 = 400.0;
+  static const double size420 = 420.0;
+  static const double size440 = 440.0;
+  static const double size460 = 460.0;
+  static const double size480 = 480.0;
+
 // Size categories:
 // Xs  - Extra Small
 // Sm  - Small
@@ -131,7 +150,7 @@ class AppDimens {
   static const double containerSize400 = 400.0;
   static const double containerSize430 = 430.0;
 
-  static const double imageSize120 = 120.0;
+  static const double imageSize120 = size120;
   static const double imageSize180 = 180.0;
 
   static const double searchBarWidth = 240.0;
