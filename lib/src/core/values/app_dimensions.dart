@@ -25,7 +25,8 @@ class AppDimens {
   static const double size88 = 88.0;
   static const double size92 = 92.0;
   static const double size96 = 96.0;
-  static const double size3XLarge = 128.0;
+  static const double size120 = 120.0;
+  static const double size128 = 128.0;
 
 // Size categories:
 // Xs  - Extra Small
@@ -37,25 +38,25 @@ class AppDimens {
 // Xxl - Extra Extra Large
 
   // Padding
-  static const double paddingXs2 = 2.0;
-  static const double paddingSm4 = 4.0;
-  static const double paddingRg8 = 8.0;
-  static const double paddingMd16 = 16.0;
-  static const double paddingLg20 = 20.0;
-  static const double paddingLg24 = 24.0;
-  static const double paddingXl28 = 28.0;
-  static const double paddingXl32 = 32.0;
-  static const double paddingXxl36 = 36.0;
-  static const double paddingXxl42 = 42.0;
-  static const double paddingXxl48 = 48.0;
+  static const double paddingXS2 = 2.0;
+  static const double paddingSM4 = 4.0;
+  static const double paddingRG8 = 8.0;
+  static const double paddingMD16 = 16.0;
+  static const double paddingLG20 = 20.0;
+  static const double paddingLG24 = 24.0;
+  static const double paddingXL28 = 28.0;
+  static const double paddingXL32 = 32.0;
+  static const double paddingXXL36 = 36.0;
+  static const double paddingXXL42 = 42.0;
+  static const double paddingXXL48 = 48.0;
 
   // Spacing
-  static const double spacingXs2 = 2.0;
-  static const double spacingSm4 = 4.0;
-  static const double spacingRg8 = 8.0;
-  static const double spacingMd16 = 16.0;
-  static const double spacingLg20 = 20.0;
-  static const double spacingLg24 = 24.0;
+  static const double spacingXS2 = 2.0;
+  static const double spacingSM4 = 4.0;
+  static const double spacingRG8 = 8.0;
+  static const double spacingMD16 = 16.0;
+  static const double spacingLG20 = 20.0;
+  static const double spacingLG24 = 24.0;
   static const double spacingXL28 = 28.0;
   static const double spacingXL32 = 32.0;
   static const double spacingXXL36 = 36.0;
@@ -132,11 +133,6 @@ class AppDimens {
 
   static const double imageSize120 = 120.0;
   static const double imageSize180 = 180.0;
-
-  static const double padding8 = 8.0;
-  static const double padding24 = 24.0;
-  static const double spacing4 = 4.0;
-  static const double spacing28 = 28.0;
 
   static const double searchBarWidth = 240.0;
   static const double searchBarHeight = 64.0;

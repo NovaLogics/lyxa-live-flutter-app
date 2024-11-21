@@ -204,7 +204,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         children: [
           _buildImagePreview(),
           _buildPickImageButton(),
-          const SizedBox(height: AppDimens.spacing28),
+          const SizedBox(height: AppDimens.spacingXL28),
           _buildCaptionInput(),
           const SizedBox(height: AppDimens.size72),
         ],
@@ -215,7 +215,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   Widget _buildImagePreview() {
     return selectedImage != null
         ? Padding(
-            padding: const EdgeInsets.all(AppDimens.padding8),
+            padding: const EdgeInsets.all(AppDimens.paddingRG8),
             child: Image.memory(selectedImage!,
                 width: double.infinity, fit: BoxFit.contain),
           )
@@ -240,13 +240,13 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
   Widget _buildCaptionInput() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimens.padding24),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingLG24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(AppStrings.caption,
               style: AppTextStyles.subtitleSecondary),
-          const SizedBox(height: AppDimens.spacing4),
+          const SizedBox(height: AppDimens.spacingSM4),
           MultilineTextFieldUnit(
             controller: captionController,
             labelText: AppStrings.captionLabel,
