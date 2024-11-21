@@ -23,10 +23,11 @@ class MultilineTextFieldUnit extends StatelessWidget {
       maxLines: 5,
       maxLength: maxLength,
       style: TextStyle(
-          color: Theme.of(context).colorScheme.inversePrimary,
-          fontFamily: FONT_RALEWAY,
-          fontWeight: FontWeight.w500,
-          fontSize: AppDimens.fontSizeMD16),
+        color: Theme.of(context).colorScheme.inversePrimary,
+        fontFamily: FONT_RALEWAY,
+        fontWeight: FontWeight.w500,
+        fontSize: AppDimens.fontSizeMD16,
+      ),
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
@@ -36,7 +37,7 @@ class MultilineTextFieldUnit extends StatelessWidget {
           fontSize: AppDimens.fontSizeRG14,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppDimens.radiusLG16),
         ),
       ),
     );
