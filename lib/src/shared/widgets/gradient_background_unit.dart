@@ -93,8 +93,8 @@ class GradientBackgroundUnit extends StatelessWidget {
         return [
           AppColors.deepPurple700,
           AppColors.deepPurple500,
-          AppColors.blueGreyShade900X,
-          AppColors.blueGreyShade900Y,
+          AppColors.blueGrey900X,
+          AppColors.blueGrey900Y,
         ];
     }
   }

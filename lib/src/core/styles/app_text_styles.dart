@@ -16,7 +16,7 @@ class AppTextStyles {
   );
 
   static const TextStyle headingSecondary = TextStyle(
-    color: AppColors.blueGreyShade50,
+    color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeLg18,
     fontFamily: FONT_RALEWAY,
     shadows: shadowStyle1,
@@ -25,7 +25,7 @@ class AppTextStyles {
   /// Subtitles
   /// ->
   static const TextStyle subtitlePrimary = TextStyle(
-    color: AppColors.blueGreyShade50,
+    color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeLg18,
     fontFamily: FONT_RALEWAY,
     fontWeight: FontWeight.bold,
@@ -34,21 +34,21 @@ class AppTextStyles {
   );
 
   static const TextStyle subtitleSecondary = TextStyle(
-    color: AppColors.blueGreyShade50,
+    color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeMd16,
     fontFamily: FONT_RALEWAY,
     shadows: shadowStyle1,
   );
 
   static const TextStyle textStylePost = TextStyle(
-    color: AppColors.blueGreyShade50,
+    color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeRg14,
     fontWeight: FontWeight.w600,
     fontFamily: FONT_RALEWAY,
   );
 
   static const TextStyle textStylePostWithNumbers = TextStyle(
-    color: AppColors.blueGreyShade50,
+    color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeRg14,
     fontWeight: FontWeight.w600,
     fontFamily: FONT_MONTSERRAT,
@@ -58,7 +58,7 @@ class AppTextStyles {
   /// Button Text
   /// ->
   static const TextStyle buttonTextPrimary = TextStyle(
-    color: AppColors.blueGreyShade50,
+    color: AppColors.blueGrey50,
     fontWeight: FontWeight.bold,
     fontSize: AppDimens.fontSizeMd16,
     fontFamily: FONT_RALEWAY,
