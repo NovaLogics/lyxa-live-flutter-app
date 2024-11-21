@@ -115,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           context: context,
           message: AppStrings.registerErrorMessage,
           icon: Icons.error,
-          backgroundColor: AppColors.deepPurpleShade900,
+          backgroundColor: AppColors.deepPurple900,
           textColor: Colors.white,
           shadowColor: Colors.black,
           duration: const Duration(seconds: 5),

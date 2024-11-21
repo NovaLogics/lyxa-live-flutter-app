@@ -61,16 +61,17 @@ class AppColors {
   static const Color bluePurple900Y = Color.fromARGB(255, 41, 20, 73);
   static const Color bluePurple900Z = Color.fromARGB(255, 27, 10, 52);
 
-  static const Color deepPurpleShade50 = Color(0xFFEDE7F6);
-  static const Color deepPurpleShade100 = Color(0xFFD1C4E9);
-  static const Color deepPurpleShade200 = Color(0xFFB39DDB);
-  static const Color deepPurpleShade300 = Color(0xFF9575CD);
-  static const Color deepPurpleShade400 = Color(0xFF7E57C2);
-  static const Color deepPurpleShade500 = Color(0xFF673AB7);
-  static const Color deepPurpleShade600 = Color(0xFF5E35B1);
-  static const Color deepPurpleShade700 = Color(0xFF512DA8);
-  static const Color deepPurpleShade800 = Color(0xFF4527A0);
-  static const Color deepPurpleShade900 = Color(0xFF311B92);
+  // -> DEEP PURPLE
+  static const Color deepPurple50 = Color(0xFFEDE7F6);
+  static const Color deepPurple100 = Color(0xFFD1C4E9);
+  static const Color deepPurple200 = Color(0xFFB39DDB);
+  static const Color deepPurple300 = Color(0xFF9575CD);
+  static const Color deepPurple400 = Color(0xFF7E57C2);
+  static const Color deepPurple500 = Color(0xFF673AB7);
+  static const Color deepPurple600 = Color(0xFF5E35B1);
+  static const Color deepPurple700 = Color(0xFF512DA8);
+  static const Color deepPurple800 = Color(0xFF4527A0);
+  static const Color deepPurple900 = Color(0xFF311B92);
 
   static const Color blueGreyShade50 = Color(0xFFECEFF1);
   static const Color blueGreyShade100 = Color(0xFFCFD8DC);

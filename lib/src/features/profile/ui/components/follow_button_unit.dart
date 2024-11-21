@@ -29,14 +29,14 @@ class FollowButtonUnit extends StatelessWidget {
               gradient: isFollowing
                   ? const LinearGradient(
                       colors: [
-                        AppColors.deepPurpleShade900,
+                        AppColors.deepPurple900,
                         AppColors.bluePurple300,
                       ],
                     )
                   : const LinearGradient(
                       colors: [
-                        AppColors.deepPurpleShade700,
-                        AppColors.deepPurpleShade300,
+                        AppColors.deepPurple700,
+                        AppColors.deepPurple300,
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -50,7 +50,7 @@ class FollowButtonUnit extends StatelessWidget {
                     ? AppStrings.unfollowUpperCase
                     : AppStrings.followUpperCase,
                 style: AppTextStyles.buttonTextPrimary.copyWith(
-                  color: AppColors.deepPurpleShade50,
+                  color: AppColors.deepPurple50,
                   fontSize: AppDimens.fontSizeRg14,
                   letterSpacing: 1.2,
                 ),

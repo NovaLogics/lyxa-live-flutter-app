@@ -83,16 +83,16 @@ class GradientBackgroundUnit extends StatelessWidget {
   List<Color> _getStyleColors(BuildContext context) {
     switch (style) {
       case BackgroundStyle.home:
-        return [ 
+        return [
           Theme.of(context).colorScheme.surfaceContainerLow,
           Theme.of(context).colorScheme.surfaceContainerLowest,
-           Theme.of(context).colorScheme.surfaceContainerHighest,
+          Theme.of(context).colorScheme.surfaceContainerHighest,
           Theme.of(context).colorScheme.surfaceContainerHigh,
         ];
       case BackgroundStyle.auth:
         return [
-          AppColors.deepPurpleShade700,
-          AppColors.deepPurpleShade500,
+          AppColors.deepPurple700,
+          AppColors.deepPurple500,
           AppColors.blueGreyShade900X,
           AppColors.blueGreyShade900Y,
         ];
