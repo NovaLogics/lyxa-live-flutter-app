@@ -81,10 +81,17 @@ class AppDimens {
   static const double fontSizeTitleXL48 = 48.0;
 
   // Elevations
-  static const double elevationSmall = 2.0;
-  static const double elevationMedium = 4.0;
-  static const double elevationLarge = 8.0;
-  static const double elevationXLarge = 16.0;
+  static const double elevationXs1 = 1.0;
+  static const double elevationSm2 = 2.0;
+  static const double elevationRg4 = 4.0;
+  static const double elevationMd8 = 8.0;
+  static const double elevationLg16 = 16.0;
+  static const double elevationLg20 = 20.0;
+  static const double elevationXL24 = 24.0;
+  static const double elevationXL28 = 28.0;
+  static const double elevationXXL36 = 36.0;
+  static const double elevationXXL42 = 42.0;
+  static const double elevationXXL48 = 48.0;
 
   // Corner Radius
   static const double radiusXSmall = 2.0;

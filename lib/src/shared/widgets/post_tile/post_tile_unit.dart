@@ -206,7 +206,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   // Profile picture
                   postUser?.profileImageUrl != null
                       ? Material(
-                          elevation: AppDimens.elevationSmall,
+                          elevation: AppDimens.elevationSm2,
                           shape: const CircleBorder(),
                           color: Theme.of(context).colorScheme.outline,
                           child: Padding(
@@ -338,7 +338,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                         onTap: toggleLikePost,
                         child: PhysicalModel(
                           color: Colors.transparent,
-                          elevation: AppDimens.elevationLarge,
+                          elevation: AppDimens.elevationMd8,
                           shape: BoxShape.rectangle,
                           shadowColor: Theme.of(context)
                               .colorScheme
@@ -376,7 +376,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   onTap: openNewCommentBox,
                   child: PhysicalModel(
                     color: Colors.transparent,
-                    elevation: AppDimens.elevationLarge,
+                    elevation: AppDimens.elevationMd8,
                     shape: BoxShape.rectangle,
                     shadowColor:
                         Theme.of(context).colorScheme.surface.withOpacity(0.4),

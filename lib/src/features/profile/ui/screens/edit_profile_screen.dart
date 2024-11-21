@@ -205,8 +205,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void updateProfile() async {
     final profileCubit = context.read<ProfileCubit>();
     final String uid = widget.user.uid;
-    final String? newBio =
-        bioTextController.text.isNotEmpty ? bioTextController.text.toString().trim() : null;
+    final String? newBio = bioTextController.text.isNotEmpty
+        ? bioTextController.text.toString().trim()
+        : null;
 
     if (pickedImage != null || newBio != null) {
       profileCubit.updateProfile(
@@ -219,7 +220,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget _buildProfileImage() {
     return Center(
       child: Material(
-        elevation: AppDimens.elevationSmall,
+        elevation: AppDimens.elevationSm2,
         shape: const CircleBorder(),
         color: Theme.of(context).colorScheme.outline,
         child: Padding(

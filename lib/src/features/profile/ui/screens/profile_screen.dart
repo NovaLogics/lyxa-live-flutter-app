@@ -157,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       children: [
         Material(
-          elevation: AppDimens.elevationSmall,
+          elevation: AppDimens.elevationSm2,
           shape: const CircleBorder(),
           color: Theme.of(context).colorScheme.outline,
           child: Padding(
