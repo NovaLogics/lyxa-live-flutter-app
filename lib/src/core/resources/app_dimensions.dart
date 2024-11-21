@@ -71,17 +71,17 @@ class AppDimens {
   static const double paddingXXL48 = 48.0;
 
   // Font/Text Sizes
-  static const double fontSizeXs10 = 10.0;
-  static const double fontSizeSm12 = 12.0;
-  static const double fontSizeRg14 = 14.0;
-  static const double fontSizeMd16 = 16.0;
-  static const double fontSizeLg18 = 18.0;
+  static const double fontSizeXS10 = 10.0;
+  static const double fontSizeSM12 = 12.0;
+  static const double fontSizeRG14 = 14.0;
+  static const double fontSizeMD16 = 16.0;
+  static const double fontSizeLG18 = 18.0;
   static const double fontSizeXL20 = 20.0;
   static const double fontSizeXXL24 = 24.0;
   static const double fontSizeXXL28 = 28.0;
-  static const double fontSizeTitle32 = 32.0;
-  static const double fontSizeTitleLg42 = 42.0;
-  static const double fontSizeTitleXL48 = 48.0;
+  static const double fontSizeXXL32 = 32.0;
+  static const double fontSizeXXL42 = 42.0;
+  static const double fontSizeXXL48 = 48.0;
 
   // Spacing
   static const double spacingXS2 = 2.0;

@@ -43,7 +43,7 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
         color: Theme.of(context).colorScheme.inversePrimary,
         fontFamily: FONT_MONTSERRAT,
         fontWeight: FontWeight.w600,
-        fontSize: AppDimens.fontSizeMd16,
+        fontSize: AppDimens.fontSizeMD16,
       ),
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
