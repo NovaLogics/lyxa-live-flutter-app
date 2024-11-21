@@ -47,7 +47,7 @@ class AppDimens {
   static const double size460 = 460.0;
   static const double size480 = 480.0;
 
-// Size categories:
+//>>> Size categories:
 // Xs  - Extra Small
 // Sm  - Small
 // Rg  - Regular
@@ -68,6 +68,19 @@ class AppDimens {
   static const double paddingXXL36 = 36.0;
   static const double paddingXXL42 = 42.0;
   static const double paddingXXL48 = 48.0;
+
+  // Font/Text Sizes
+  static const double fontSizeXs10 = 10.0;
+  static const double fontSizeSm12 = 12.0;
+  static const double fontSizeRg14 = 14.0;
+  static const double fontSizeMd16 = 16.0;
+  static const double fontSizeLg18 = 18.0;
+  static const double fontSizeXL20 = 20.0;
+  static const double fontSizeXXL24 = 24.0;
+  static const double fontSizeXXL28 = 28.0;
+  static const double fontSizeTitle32 = 32.0;
+  static const double fontSizeTitleLg42 = 42.0;
+  static const double fontSizeTitleXL48 = 48.0;
 
   // Spacing
   static const double spacingXS2 = 2.0;
@@ -106,21 +119,6 @@ class AppDimens {
   static const double letterSpacingPT18 = 1.8;
   static const double letterSpacingPT19 = 1.9;
   static const double letterSpacingPT20 = 2.0;
-
-  static const double letterSpaceMedium = 1.2;
-
-  // Font/Text Sizes
-  static const double fontSizeXs10 = 10.0;
-  static const double fontSizeSm12 = 12.0;
-  static const double fontSizeRg14 = 14.0;
-  static const double fontSizeMd16 = 16.0;
-  static const double fontSizeLg18 = 18.0;
-  static const double fontSizeXL20 = 20.0;
-  static const double fontSizeXXL24 = 24.0;
-  static const double fontSizeXXL28 = 28.0;
-  static const double fontSizeTitle32 = 32.0;
-  static const double fontSizeTitleLg42 = 42.0;
-  static const double fontSizeTitleXL48 = 48.0;
 
   // Elevations
   static const double elevationXs1 = 1.0;
@@ -165,7 +163,7 @@ class AppDimens {
   static const double iconSizeXXL96 = 96.0;
   static const double iconSizeXXL128 = 128.0;
 
-// Additional values
+  //->>> Additional values
   static const double bannerSize200 = size200;
 
   static const double containerSize400 = size400;
