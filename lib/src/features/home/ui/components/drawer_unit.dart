@@ -76,7 +76,7 @@ class DrawerUnit extends StatelessWidget {
 
   Widget _buildDrawerIcon(BuildContext context) {
     return Material(
-      elevation: AppDimens.elevationSm2,
+      elevation: AppDimens.elevationSM2,
       shape: const CircleBorder(),
       color: Theme.of(context).colorScheme.outline,
       child: Padding(

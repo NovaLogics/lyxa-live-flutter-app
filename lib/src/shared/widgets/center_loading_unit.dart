@@ -16,8 +16,8 @@ class CenterLoadingUnit extends StatelessWidget {
         child: Card(
           color: Theme.of(context).colorScheme.surface,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppDimens.radiusMd12)),
-          elevation: AppDimens.elevationMd8,
+              borderRadius: BorderRadius.circular(AppDimens.radiusMD12)),
+          elevation: AppDimens.elevationMD8,
           shadowColor: Theme.of(context).colorScheme.primary,
           child: Padding(
             padding: const EdgeInsets.all(AppDimens.size56),
