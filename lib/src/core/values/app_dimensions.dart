@@ -125,8 +125,6 @@ class AppDimens {
 
 // Additional values
 
-  static const double prefixIconSizeMedium = 22.0;
-
   static const double bannerSizeMedium = 200.0;
 
   static const double containerSize400 = 400.0;

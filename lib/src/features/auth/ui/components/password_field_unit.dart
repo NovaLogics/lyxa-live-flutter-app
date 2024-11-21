@@ -23,7 +23,7 @@ class PasswordFieldUnit extends StatelessWidget {
       obscureText: true,
       prefixIcon: Icon(
         Icons.lock_outlined,
-        size: AppDimens.prefixIconSizeMedium,
+        size: AppDimens.iconSizeSM22,
         color: Theme.of(context).colorScheme.onPrimary,
       ),
       validator: passwordValidator,

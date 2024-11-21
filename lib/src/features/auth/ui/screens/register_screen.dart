@@ -163,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       obscureText: false,
       prefixIcon: Icon(
         Icons.person_outline,
-        size: AppDimens.prefixIconSizeMedium,
+        size: AppDimens.iconSizeSM22,
         color: Theme.of(context).colorScheme.onPrimary,
       ),
       validator: (value) => Validator.validateUsername(value),

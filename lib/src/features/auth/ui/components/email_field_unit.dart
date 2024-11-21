@@ -18,7 +18,7 @@ class EmailFieldUnit extends StatelessWidget {
       obscureText: false,
       prefixIcon: Icon(
         Icons.email_outlined,
-        size: AppDimens.prefixIconSizeMedium,
+        size: AppDimens.iconSizeSM22,
         color: Theme.of(context).colorScheme.onPrimary,
       ),
       validator: Validator.validateEmail,
