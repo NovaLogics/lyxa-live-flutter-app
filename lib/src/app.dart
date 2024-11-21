@@ -16,7 +16,7 @@ import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_state.dart';
 import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
-import 'package:lyxa_live/src/core/themes/theme_cubit.dart';
+import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
 
 /// Main Application Entry Point for LyxaApp
 /// Root Level ->
