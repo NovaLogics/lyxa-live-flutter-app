@@ -103,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildTopBanner() {
     return Image.asset(
-      IMAGE_PATH_LYXA_BANNER,
+      IMAGE_LYXA_BANNER,
       height: AppDimens.bannerSize200,
       width: AppDimens.bannerSize200,
     );

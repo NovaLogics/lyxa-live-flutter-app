@@ -1,20 +1,19 @@
 // ignore_for_file: constant_identifier_names
 
+// Base res paths
+const String _imagePath = 'assets/images';
+const String _iconPath = 'assets/icons';
+
 // Data Storage Paths
+const String HIVE_BOX_LYXA = 'lyxaAppBox';
 const String FIRESTORE_COLLECTION_USERS = 'users';
 const String FIRESTORE_COLLECTION_POSTS = 'posts';
 const String STORAGE_PATH_PROFILE_IMAGES = 'profile_images';
 const String STORAGE_PATH_POST_IMAGES = 'post_images';
 
-const String HIVE_BOX_LYXA = 'lyxaAppBox';
-
-// Base image path
-const String _imagePath = 'assets/images';
 // Image Paths
-const String IMAGE_PATH_LYXA_BANNER = '$_imagePath/lyxa_banner.png';
+const String IMAGE_LYXA_BANNER = '$_imagePath/lyxa_banner.png';
 
-// Base icon path
-const String _iconPath = 'assets/icons';
 // Icon Paths
 const String ICON_HEART_FILLED = '$_iconPath/ic_heart_filled.svg';
 const String ICON_HEART_BORDER = '$_iconPath/ic_heart_border.svg';

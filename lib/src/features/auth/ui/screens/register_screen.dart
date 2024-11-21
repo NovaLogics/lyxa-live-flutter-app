@@ -140,7 +140,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _buildTopBanner() {
     return Image.asset(
-      IMAGE_PATH_LYXA_BANNER,
+      IMAGE_LYXA_BANNER,
       height: AppDimens.size128,
       width: AppDimens.size128,
     );
