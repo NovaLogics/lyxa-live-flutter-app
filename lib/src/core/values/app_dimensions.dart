@@ -1,19 +1,69 @@
 class AppDimens {
+
+  // General Sizes for custom components
+  static const double size0 = 0.0;
+  static const double size4 = 4.0;
+  static const double size8 = 8.0;
+  static const double size12 = 12.0;
+  static const double size16 = 16.0;
+  static const double size20 = 20.0;
+  static const double size24 = 24.0;
+  static const double size28 = 28.0;
+  static const double size32 = 32.0;
+  static const double size36 = 36.0;
+  static const double size40 = 40.0;
+  static const double size44 = 44.0;
+  static const double size48 = 48.0;
+  static const double size52 = 52.0;
+  static const double size56 = 56.0;
+  static const double size60 = 60.0;
+  static const double size64 = 64.0;
+  static const double size68 = 68.0;
+  static const double size72 = 72.0;
+  static const double size76 = 76.0;
+  static const double size80 = 80.0;
+  static const double size84 = 84.0;
+  static const double size88 = 88.0;
+  static const double size92 = 92.0;
+  static const double size96 = 96.0;
+
+// Size categories:
+// Xs  - Extra Small
+// Sm  - Small
+// Rg  - Regular
+// Md  - Medium
+// Lg  - Large
+// Xl  - Extra Large
+// Xxl - Extra Extra Large
+
   // Padding
   static const double paddingXs2 = 2.0;
   static const double paddingSm4 = 4.0;
   static const double paddingRg8 = 8.0;
   static const double paddingMd16 = 16.0;
+  static const double paddingLg20 = 20.0;
   static const double paddingLg24 = 24.0;
+  static const double paddingXl28 = 28.0;
   static const double paddingXl32 = 32.0;
+  static const double paddingXxl36 = 36.0;
+  static const double paddingXxl42 = 42.0;
+  static const double paddingXxl48 = 48.0;
 
   // Spacing
-  static const double spaceXSmall = 2.0;
-  static const double spaceSmall = 4.0;
-  static const double spaceRegular = 8.0;
-  static const double spaceMedium = 16.0;
-  static const double spaceLarge = 24.0;
-  static const double spaceXLarge = 32.0;
+  static const double spacingXs2 = 2.0;
+  static const double spacingSm4 = 4.0;
+  static const double spacingRg8 = 8.0;
+  static const double spacingMd16 = 16.0;
+  static const double spacingLg20 = 20.0;
+  static const double spacingLg24 = 24.0;
+  static const double spacingXl28 = 28.0;
+  static const double spacingXl32 = 32.0;
+  static const double spacingXxl36 = 36.0;
+  static const double spacingXxl42 = 42.0;
+  static const double spacingXxl48 = 48.0;
+  static const double spacingXxl52 = 52.0;
+  static const double spacingXxl58 = 58.0;
+  static const double spacingXxl64 = 64.0;
 
   static const double letterSpaceMedium = 1.2;
 
@@ -53,7 +103,7 @@ class AppDimens {
 
   static const double prefixIconSizeMedium = 22.0;
 
-  // General Sizes for custom components
+
   static const double sizeXSmall = 8.0;
   static const double sizeSmall = 24.0;
   static const double sizeMedium = 32.0;
@@ -78,30 +128,5 @@ class AppDimens {
   static const double searchBarWidth = 240.0;
   static const double searchBarHeight = 64.0;
 
-  // Custom Sizes
-  static const double size0 = 0.0;
-  static const double size4 = 4.0;
-  static const double size8 = 8.0;
-  static const double size12 = 12.0;
-  static const double size16 = 16.0;
-  static const double size20 = 20.0;
-  static const double size24 = 24.0;
-  static const double size28 = 28.0;
-  static const double size32 = 32.0;
-  static const double size36 = 36.0;
-  static const double size40 = 40.0;
-  static const double size44 = 44.0;
-  static const double size48 = 48.0;
-  static const double size52 = 52.0;
-  static const double size56 = 56.0;
-  static const double size60 = 60.0;
-  static const double size64 = 64.0;
-  static const double size68 = 68.0;
-  static const double size72 = 72.0;
-  static const double size76 = 76.0;
-  static const double size80 = 80.0;
-  static const double size84 = 84.0;
-  static const double size88 = 88.0;
-  static const double size92 = 92.0;
-  static const double size96 = 96.0;
+
 }
