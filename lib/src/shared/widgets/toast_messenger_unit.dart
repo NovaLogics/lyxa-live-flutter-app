@@ -51,7 +51,7 @@ class ToastMessengerUnit {
       backgroundColor: Theme.of(context).colorScheme.inverseSurface,
       textColor: Theme.of(context).colorScheme.onInverseSurface,
       shadowColor: AppColors.blackShade,
-      duration: ToastDuration.second6,
+      duration: ToastDuration.second5,
     );
   }
 

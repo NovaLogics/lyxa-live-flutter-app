@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -125,7 +124,6 @@ class LyxaApp extends StatelessWidget {
               _buildPhotoSliderScreen(),
             ],
           );
-        
         } else {
           // Show Loading Indicator
           return getIt<CenterLoadingUnit>(
