@@ -87,16 +87,17 @@ class AppColors {
   static const Color blueGrey900X = Color.fromARGB(255, 13, 13, 13);
   static const Color blueGrey900Y = Color.fromARGB(255, 28, 40, 46);
 
-  static const Color goldShade50 = Color(0xFFFFF8E1);
-  static const Color goldShade100 = Color(0xFFFFECB3);
-  static const Color goldShade200 = Color(0xFFFFE082);
-  static const Color goldShade300 = Color(0xFFFFD54F);
-  static const Color goldShade400 = Color(0xFFFFCA28);
-  static const Color goldShade500 = Color(0xFFFFB300);
-  static const Color goldShade600 = Color(0xFFFFA000);
-  static const Color goldShade700 = Color(0xFFFF8F00);
-  static const Color goldShade800 = Color(0xFFFB8C00);
-  static const Color goldShade900 = Color(0xFFEF6C00);
+  // -> GOLD
+  static const Color gold50 = Color(0xFFFFF8E1);
+  static const Color gold100 = Color(0xFFFFECB3);
+  static const Color gold200 = Color(0xFFFFE082);
+  static const Color gold300 = Color(0xFFFFD54F);
+  static const Color gold400 = Color(0xFFFFCA28);
+  static const Color gold500 = Color(0xFFFFB300);
+  static const Color gold600 = Color(0xFFFFA000);
+  static const Color gold700 = Color(0xFFFF8F00);
+  static const Color gold800 = Color(0xFFFB8C00);
+  static const Color gold900 = Color(0xFFEF6C00);
 
   static const Color whiteShade50 = Color(0xFFFFFFFF);
   static const Color whiteShade100 = Color(0xFFFFF8F8);

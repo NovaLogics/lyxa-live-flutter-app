@@ -101,12 +101,13 @@ class _PhotoSliderState extends State<PhotoSlider> {
                   duration: const Duration(milliseconds: 300),
                   width: AppDimens.size8,
                   height: AppDimens.size8,
-                  margin: const EdgeInsets.symmetric(horizontal: AppDimens.size4),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: AppDimens.size4),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: (_current == index)
-                        ? AppColors.goldShade400
-                        : AppColors.goldShade50,
+                        ? AppColors.gold400
+                        : AppColors.gold50,
                   ),
                 );
               }),
