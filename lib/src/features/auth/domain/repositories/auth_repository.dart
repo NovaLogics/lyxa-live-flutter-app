@@ -1,4 +1,4 @@
-import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
+import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 
 /// Defines authentication operations for the app

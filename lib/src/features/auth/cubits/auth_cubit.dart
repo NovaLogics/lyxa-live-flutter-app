@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
-import 'package:lyxa_live/src/core/utils/helper/logger.dart';
+import 'package:lyxa_live/src/core/utils/hive_helper.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';

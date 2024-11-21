@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lyxa_live/src/app.dart';
 import 'package:lyxa_live/src/config/firebase_options.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
+import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 
 void main() async {
   // Ensures all Flutter bindings are initialized

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/values/app_colors.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
 
 ThemeData darkMode = ThemeData(
   colorScheme: darkColorScheme,

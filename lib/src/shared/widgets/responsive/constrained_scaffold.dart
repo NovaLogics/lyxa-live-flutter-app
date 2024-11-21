@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
 class ConstrainedScaffold extends StatelessWidget {
