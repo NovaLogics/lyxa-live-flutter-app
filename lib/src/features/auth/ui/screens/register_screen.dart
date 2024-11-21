@@ -50,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppDimens.paddingLg24,
+          horizontal: AppDimens.paddingLG24,
         ),
         child: Form(
           key: _formKey,

@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppDimens.paddingLg24,
+        horizontal: AppDimens.paddingLG24,
       ),
       child: Form(
         key: _formKey,
@@ -104,8 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildTopBanner() {
     return Image.asset(
       IMAGE_PATH_LYXA_BANNER,
-      height: AppDimens.bannerSizeMedium,
-      width: AppDimens.bannerSizeMedium,
+      height: AppDimens.bannerSize200,
+      width: AppDimens.bannerSize200,
     );
   }
 

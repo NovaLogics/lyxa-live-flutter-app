@@ -68,7 +68,7 @@ class ProfileStatsUnit extends StatelessWidget {
                             style: AppTextStyles.textStylePost.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.textSizeSm12,
+                              fontSize: AppDimens.fontSizeSm12,
                             ),
                           ),
                         ],
@@ -94,7 +94,7 @@ class ProfileStatsUnit extends StatelessWidget {
                             style: AppTextStyles.textStylePost.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.textSizeSm12,
+                              fontSize: AppDimens.fontSizeSm12,
                             ),
                           ),
                         ],
@@ -121,7 +121,7 @@ class ProfileStatsUnit extends StatelessWidget {
                             style: AppTextStyles.textStylePost.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.textSizeSm12,
+                              fontSize: AppDimens.fontSizeSm12,
                             ),
                           ),
                         ],

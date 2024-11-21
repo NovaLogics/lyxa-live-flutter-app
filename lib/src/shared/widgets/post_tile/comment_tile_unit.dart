@@ -81,7 +81,7 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
             style: AppTextStyles.textStylePost.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
               fontWeight: FontWeight.bold,
-              fontSize: AppDimens.textSizeSm12,
+              fontSize: AppDimens.fontSizeSm12,
             ),
           ),
           const SizedBox(width: 10),

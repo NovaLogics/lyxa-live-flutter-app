@@ -16,7 +16,7 @@ class ButtonUnit extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(AppDimens.paddingLg24),
+        padding: const EdgeInsets.all(AppDimens.paddingLG24),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.tertiary,
             borderRadius: BorderRadius.circular(AppDimens.radiusMd12)),

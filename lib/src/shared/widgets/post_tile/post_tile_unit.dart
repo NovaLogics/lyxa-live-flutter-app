@@ -258,7 +258,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                           style:
                               AppTextStyles.textStylePostWithNumbers.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
-                            fontSize: AppDimens.textSizeSm12,
+                            fontSize: AppDimens.fontSizeSm12,
                             fontWeight: FontWeight.w400,
                             letterSpacing: 0.1,
                           ),

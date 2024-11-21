@@ -144,15 +144,14 @@ class AppDimens {
   static const double iconSizeXXL128 = 128.0;
 
 // Additional values
+  static const double bannerSize200 = size200;
 
-  static const double bannerSizeMedium = 200.0;
-
-  static const double containerSize400 = 400.0;
+  static const double containerSize400 = size400;
   static const double containerSize430 = 430.0;
 
   static const double imageSize120 = size120;
-  static const double imageSize180 = 180.0;
+  static const double imageSize180 = size180;
 
-  static const double searchBarWidth = 240.0;
-  static const double searchBarHeight = 64.0;
+  static const double searchBarWidth = size240;
+  static const double searchBarHeight = size64;
 }
