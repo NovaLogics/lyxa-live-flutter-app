@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -21,6 +22,7 @@ import 'package:lyxa_live/src/features/photo_slider/cubits/slider_state.dart';
 import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
+import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
@@ -37,16 +39,7 @@ class LyxaApp extends StatelessWidget {
         builder: (context, currentTheme) => MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: currentTheme,
-          home: Stack(
-            children: [
-              getIt<GradientBackgroundUnit>(
-                param1: AppDimens.containerSize400,
-                param2: BackgroundStyle.auth,
-              ),
-              _buildHomeScreen(),
-              _buildPhotoSliderScreen(),
-            ],
-          ),
+          home: _buildHomeScreen(),
         ),
       ),
     );
@@ -101,23 +94,42 @@ class LyxaApp extends StatelessWidget {
       builder: (context, state) {
         Logger.logDebug(state.toString());
 
-        if (state is Unauthenticated) {
+        if (state is Unauthenticated || state is AuthLoading) {
           // Show Authentication Screen
-          return const AuthScreen();
-        } else if (state is AuthLoading) {
-          // Show Authentication Screen with loading
-          return const AuthScreen(
-            isLoading: true,
+          return Stack(
+            children: [
+              RepaintBoundary(
+                child: getIt<GradientBackgroundUnit>(
+                  param1: AppDimens.containerSize400,
+                  param2: BackgroundStyle.auth,
+                ),
+              ),
+              const AuthScreen(),
+              if (state is AuthLoading)
+                getIt<CenterLoadingUnit>(
+                  param1: AppStrings.pleaseWaitMessage,
+                )
+            ],
           );
         } else if (state is Authenticated) {
           // Show Main Home Screen
-          return const HomeScreen();
+          return Stack(
+            children: [
+              RepaintBoundary(
+                child: getIt<GradientBackgroundUnit>(
+                  param1: AppDimens.containerSize400,
+                  param2: BackgroundStyle.home,
+                ),
+              ),
+              const HomeScreen(),
+              _buildPhotoSliderScreen(),
+            ],
+          );
+        
         } else {
           // Show Loading Indicator
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
+          return getIt<CenterLoadingUnit>(
+            param1: AppStrings.pleaseWaitMessage,
           );
         }
       },
