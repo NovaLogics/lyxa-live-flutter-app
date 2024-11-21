@@ -29,7 +29,7 @@ class UserTileUnit extends StatelessWidget {
           color: Theme.of(context).colorScheme.inversePrimary,
           fontWeight: FontWeight.bold,
           fontFamily: FONT_MONTSERRAT,
-          fontSize: AppDimens.textSizeSmall,
+          fontSize: AppDimens.textSizeSm12,
           shadows: AppTextStyles.shadowStyle2,
         ),
       ),

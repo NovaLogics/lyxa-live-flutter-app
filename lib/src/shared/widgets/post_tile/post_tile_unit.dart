@@ -258,7 +258,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                           style:
                               AppTextStyles.textStylePostWithNumbers.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
-                            fontSize: AppDimens.textSizeSmall,
+                            fontSize: AppDimens.textSizeSm12,
                             fontWeight: FontWeight.w400,
                             letterSpacing: 0.1,
                           ),
@@ -434,7 +434,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   widget.post.userName,
                   style: AppTextStyles.textStylePost.copyWith(
                     color: Theme.of(context).colorScheme.onSecondary,
-                    fontSize: AppDimens.textSizeRegular,
+                    fontSize: AppDimens.textSizeRg14,
                   ),
                 ),
                 const SizedBox(height: AppDimens.size4),
@@ -447,7 +447,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       widget.post.text.replaceAll("\\n", "\n"),
                       style: AppTextStyles.textStylePost.copyWith(
                         color: Theme.of(context).colorScheme.inversePrimary,
-                        fontSize: AppDimens.textSizeRegular,
+                        fontSize: AppDimens.textSizeRg14,
                         letterSpacing: 0.7,
                         shadows: AppTextStyles.shadowStyle2,
                       ),

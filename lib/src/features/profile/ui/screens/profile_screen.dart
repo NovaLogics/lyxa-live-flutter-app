@@ -132,7 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: AppTextStyles.textStylePost.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.bold,
-            fontSize: AppDimens.textSizeXLarge,
+            fontSize: AppDimens.textSizeXL20,
           ),
         ),
       ),

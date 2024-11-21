@@ -51,7 +51,7 @@ class FollowButtonUnit extends StatelessWidget {
                     : AppStrings.followUpperCase,
                 style: AppTextStyles.buttonTextPrimary.copyWith(
                   color: AppColors.deepPurpleShade50,
-                  fontSize: AppDimens.textSizeRegular,
+                  fontSize: AppDimens.textSizeRg14,
                   letterSpacing: 1.2,
                 ),
               ),

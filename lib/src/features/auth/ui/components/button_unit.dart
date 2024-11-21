@@ -25,7 +25,7 @@ class ButtonUnit extends StatelessWidget {
             text,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: AppDimens.textSizeLarge,
+              fontSize: AppDimens.textSizeLg18,
             ),
           ),
         ),

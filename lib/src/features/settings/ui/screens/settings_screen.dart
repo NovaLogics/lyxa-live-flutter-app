@@ -28,7 +28,7 @@ class SettingsScreen extends StatelessWidget {
               style: AppTextStyles.textStylePost.copyWith(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 fontWeight: FontWeight.bold,
-                fontSize: AppDimens.textSizeLarge,
+                fontSize: AppDimens.textSizeLg18,
               ),
             ),
             trailing: CupertinoSwitch(

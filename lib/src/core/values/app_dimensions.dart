@@ -1,5 +1,4 @@
 class AppDimens {
-
   // General Sizes for custom components
   static const double size0 = 0.0;
   static const double size4 = 4.0;
@@ -26,6 +25,7 @@ class AppDimens {
   static const double size88 = 88.0;
   static const double size92 = 92.0;
   static const double size96 = 96.0;
+  static const double size3XLarge = 128.0;
 
 // Size categories:
 // Xs  - Extra Small
@@ -56,8 +56,8 @@ class AppDimens {
   static const double spacingMd16 = 16.0;
   static const double spacingLg20 = 20.0;
   static const double spacingLg24 = 24.0;
-  static const double spacingXl28 = 28.0;
-  static const double spacingXl32 = 32.0;
+  static const double spacingXL28 = 28.0;
+  static const double spacingXL32 = 32.0;
   static const double spacingXxl36 = 36.0;
   static const double spacingXxl42 = 42.0;
   static const double spacingXxl48 = 48.0;
@@ -68,16 +68,17 @@ class AppDimens {
   static const double letterSpaceMedium = 1.2;
 
   // Text Sizes
-  static const double textSizeXSmall = 10.0;
-  static const double textSizeSmall = 12.0;
-  static const double textSizeRegular = 14.0;
-  static const double textSizeMedium = 16.0;
-  static const double textSizeLarge = 18.0;
-  static const double textSizeXLarge = 20.0;
-  static const double textSize2XLarge = 24.0;
-  static const double textSizeTitle = 32.0;
-  static const double textSizeTitleLarge = 42.0;
-  static const double textSizeTitleXLarge = 48.0;
+  static const double textSizeXs10 = 10.0;
+  static const double textSizeSm12 = 12.0;
+  static const double textSizeRg14 = 14.0;
+  static const double textSizeMd16 = 16.0;
+  static const double textSizeLg18 = 18.0;
+  static const double textSizeXL20 = 20.0;
+  static const double textSizeXXL24 = 24.0;
+  static const double textSizeXXL28 = 28.0;
+  static const double textSizeTitle32 = 32.0;
+  static const double textSizeTitleLg42 = 42.0;
+  static const double textSizeTitleXL48 = 48.0;
 
   // Elevations
   static const double elevationSmall = 2.0;
@@ -103,15 +104,6 @@ class AppDimens {
 
   static const double prefixIconSizeMedium = 22.0;
 
-
-  static const double sizeXSmall = 8.0;
-  static const double sizeSmall = 24.0;
-  static const double sizeMedium = 32.0;
-  static const double sizeLarge = 48.0;
-  static const double sizeXLarge = 64.0;
-  static const double size2XLarge = 96.0;
-  static const double size3XLarge = 128.0;
-
   static const double bannerSizeMedium = 200.0;
 
   static const double containerSize400 = 400.0;
@@ -127,6 +119,4 @@ class AppDimens {
 
   static const double searchBarWidth = 240.0;
   static const double searchBarHeight = 64.0;
-
-
 }
