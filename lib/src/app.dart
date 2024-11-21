@@ -108,10 +108,6 @@ class LyxaApp extends StatelessWidget {
           // Show Main Home Screen
           return Stack(
             children: [
-              getIt<GradientBackgroundUnit>(
-                param1: AppDimens.containerSize400,
-                param2: BackgroundStyle.home,
-              ),
               const HomeScreen(),
               _buildPhotoSliderScreen(),
             ],
