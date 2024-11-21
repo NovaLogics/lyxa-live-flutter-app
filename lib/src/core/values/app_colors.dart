@@ -114,16 +114,17 @@ class AppColors {
   static const Color white800 = Color(0xFFBDBDBD);
   static const Color white900 = Color(0xFFAFAFAF);
 
-  static const Color blackShade50 = Color(0xFFE0E0E0);
-  static const Color blackShade100 = Color(0xFFBDBDBD);
-  static const Color blackShade200 = Color(0xFF9E9E9E);
-  static const Color blackShade300 = Color(0xFF757575);
-  static const Color blackShade400 = Color(0xFF616161);
-  static const Color blackShade500 = Color(0xFF424242);
-  static const Color blackShade600 = Color(0xFF2E2E2E);
-  static const Color blackShade700 = Color(0xFF212121);
-  static const Color blackShade800 = Color(0xFF161616);
-  static const Color blackShade900 = Color(0xFF0A0A0A);
+  // -> BLACK
+  static const Color black50 = Color(0xFFE0E0E0);
+  static const Color black100 = Color(0xFFBDBDBD);
+  static const Color black200 = Color(0xFF9E9E9E);
+  static const Color black300 = Color(0xFF757575);
+  static const Color black400 = Color(0xFF616161);
+  static const Color black500 = Color(0xFF424242);
+  static const Color black600 = Color(0xFF2E2E2E);
+  static const Color black700 = Color(0xFF212121);
+  static const Color black800 = Color(0xFF161616);
+  static const Color black900 = Color(0xFF0A0A0A);
 }
 
 class AppThemeColors {
