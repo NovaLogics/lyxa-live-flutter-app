@@ -101,4 +101,13 @@ class AppStrings {
   static const String editProfile = 'Edit Profile';
   static const String addYourStorylineBio = 'Add your bio / storyline';
   static const String cropperToolbarTitle = 'Profile Image Cropper';
+
+  static const String deleteCommentMessage = 'Delete This Comment?';
+  static const String deleteThisPostMessage = 'Delete This Post?';
+  static const String addNewComment = 'Add a new comment';
+  static const String typeComment = 'Type a comment...';
+  static const String cancel = 'Cancel';
+  static const String delete = 'Delete';
+  static const String save = 'Save';
+  static const String dialog = 'dialog';
 }
