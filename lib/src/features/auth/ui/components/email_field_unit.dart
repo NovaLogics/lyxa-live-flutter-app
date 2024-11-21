@@ -19,7 +19,7 @@ class EmailFieldUnit extends StatelessWidget {
       prefixIcon: Icon(
         Icons.email_outlined,
         size: AppDimens.prefixIconSizeMedium,
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
       validator: Validator.validateEmail,
       maxLength: MAX_LENGTH_EMAIL_FIELD,

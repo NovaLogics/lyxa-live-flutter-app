@@ -7,7 +7,7 @@ class PasswordFieldUnit extends StatelessWidget {
   final TextEditingController passwordTextController;
   final String hintText;
   final String? Function(String?)? passwordValidator;
-  
+
   const PasswordFieldUnit({
     super.key,
     required this.passwordTextController,
@@ -24,7 +24,7 @@ class PasswordFieldUnit extends StatelessWidget {
       prefixIcon: Icon(
         Icons.lock_outlined,
         size: AppDimens.prefixIconSizeMedium,
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
       validator: passwordValidator,
       maxLength: MAX_LENGTH_PASSWORD_FIELD,

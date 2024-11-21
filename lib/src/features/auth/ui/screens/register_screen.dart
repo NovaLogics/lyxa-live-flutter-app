@@ -164,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       prefixIcon: Icon(
         Icons.person_outline,
         size: AppDimens.prefixIconSizeMedium,
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
       validator: (value) => Validator.validateUsername(value),
       maxLength: MAX_LENGTH_USERNAME_FIELD,
