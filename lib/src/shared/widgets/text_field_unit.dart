@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/utils/constants/constants.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 
 class TextFieldUnit extends StatefulWidget {
   final TextEditingController controller;
@@ -40,24 +40,26 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
       maxLength: widget.maxLength,
       obscureText: widget.obscureText && !isPasswordVisible,
       style: TextStyle(
-          color: Theme.of(context).colorScheme.inversePrimary,
-          fontFamily: FONT_RALEWAY,
-          fontWeight: FontWeight.w500,
-          fontSize: AppDimens.textSizeMedium),
+        color: Theme.of(context).colorScheme.inversePrimary,
+        fontFamily: FONT_MONTSERRAT,
+        fontWeight: FontWeight.w600,
+        fontSize: AppDimens.fontSizeMd16,
+      ),
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary),
           borderRadius: BorderRadius.circular(12),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+          borderSide:
+              BorderSide(color: Theme.of(context).colorScheme.onPrimary),
           borderRadius: BorderRadius.circular(12),
         ),
         hintText: widget.hintText,
         hintStyle: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.onSecondary,
           fontWeight: FontWeight.normal,
-          fontSize: AppDimens.textSizeRegular,
+          fontFamily: FONT_MONTSERRAT,
         ),
         fillColor: Theme.of(context)
             .colorScheme
@@ -69,7 +71,7 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
             ? IconButton(
                 icon: Icon(
                   isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
                 onPressed: () {
                   setState(() {

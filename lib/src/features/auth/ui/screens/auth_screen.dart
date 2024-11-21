@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
-import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/login_screen.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/register_screen.dart';

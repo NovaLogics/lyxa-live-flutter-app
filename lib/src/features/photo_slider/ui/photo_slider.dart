@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/core/values/app_colors.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 
 class PhotoSlider extends StatefulWidget {
@@ -101,12 +101,13 @@ class _PhotoSliderState extends State<PhotoSlider> {
                   duration: const Duration(milliseconds: 300),
                   width: AppDimens.size8,
                   height: AppDimens.size8,
-                  margin: const EdgeInsets.symmetric(horizontal: AppDimens.size4),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: AppDimens.size4),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: (_current == index)
-                        ? AppColors.goldShade400
-                        : AppColors.goldShade50,
+                        ? AppColors.gold400
+                        : AppColors.gold50,
                   ),
                 );
               }),

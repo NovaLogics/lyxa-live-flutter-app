@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/utils/constants/constants.dart';
-import 'package:lyxa_live/src/core/utils/helper/date_time_util.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/date_time_util.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
@@ -206,7 +206,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   // Profile picture
                   postUser?.profileImageUrl != null
                       ? Material(
-                          elevation: AppDimens.elevationSmall,
+                          elevation: AppDimens.elevationSm2,
                           shape: const CircleBorder(),
                           color: Theme.of(context).colorScheme.outline,
                           child: Padding(
@@ -258,7 +258,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                           style:
                               AppTextStyles.textStylePostWithNumbers.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
-                            fontSize: AppDimens.textSizeSmall,
+                            fontSize: AppDimens.fontSizeSm12,
                             fontWeight: FontWeight.w400,
                             letterSpacing: 0.1,
                           ),
@@ -303,7 +303,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
               ),
               errorWidget: (context, url, error) => Icon(
                 Icons.image_not_supported_outlined,
-                size: AppDimens.iconSize3XLarge,
+                size: AppDimens.iconSizeXXL96,
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
               imageBuilder: (context, imageProvider) {
@@ -338,7 +338,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                         onTap: toggleLikePost,
                         child: PhysicalModel(
                           color: Colors.transparent,
-                          elevation: AppDimens.elevationLarge,
+                          elevation: AppDimens.elevationMd8,
                           shape: BoxShape.rectangle,
                           shadowColor: Theme.of(context)
                               .colorScheme
@@ -376,7 +376,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   onTap: openNewCommentBox,
                   child: PhysicalModel(
                     color: Colors.transparent,
-                    elevation: AppDimens.elevationLarge,
+                    elevation: AppDimens.elevationMd8,
                     shape: BoxShape.rectangle,
                     shadowColor:
                         Theme.of(context).colorScheme.surface.withOpacity(0.4),
@@ -434,7 +434,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   widget.post.userName,
                   style: AppTextStyles.textStylePost.copyWith(
                     color: Theme.of(context).colorScheme.onSecondary,
-                    fontSize: AppDimens.textSizeRegular,
+                    fontSize: AppDimens.fontSizeRg14,
                   ),
                 ),
                 const SizedBox(height: AppDimens.size4),
@@ -447,7 +447,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       widget.post.text.replaceAll("\\n", "\n"),
                       style: AppTextStyles.textStylePost.copyWith(
                         color: Theme.of(context).colorScheme.inversePrimary,
-                        fontSize: AppDimens.textSizeRegular,
+                        fontSize: AppDimens.fontSizeRg14,
                         letterSpacing: 0.7,
                         shadows: AppTextStyles.shadowStyle2,
                       ),

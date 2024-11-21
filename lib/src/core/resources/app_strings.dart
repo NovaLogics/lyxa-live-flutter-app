@@ -1,9 +1,7 @@
 class AppStrings {
-  static const String appName = 'Lyxa Zone';
-  static const String welcomeMessage = 'Welcome to LYXA Live';
-  static const String errorMessage = 'Something went wrong';
+  static const String appName = 'Lyxa Live';
 
-  // Login Section
+  // UI SECTION [1]-> LOGIN
   static const String welcomeBack = 'Hey! Welcome Back';
   static const String itsTimeToShareYourStory =
       'It\'s time to share your story';
@@ -13,15 +11,16 @@ class AppStrings {
   static const String password = 'Password';
   static const String confirmPassword = 'Confirm Password';
   static const String login = 'Login';
+
+  // LOGIN -> Authentication Error Messages
+  static const String loginFailedError = 'Login Failed: ';
   static const String loginErrorMessage =
       'Please enter both email and password';
-
-  // Authentication error messages
-  static const String loginFailedError = 'Login Failed: ';
   static const String registrationFailedError = 'Registration Failed: ';
   static const String generalError = 'An error occurred: ';
+  static const String errorMessage = 'Something went wrong';
 
-  // Register Section
+  // UI SECTION [2]-> REGISTER
   static const String createAccountMessage = 'Let\'s create an account for you';
   static const String alreadyAMember = 'Already a member?';
   static const String loginNow = 'Login Now';
@@ -30,13 +29,36 @@ class AppStrings {
   static const String registerErrorMessage = 'Please complete all fields';
   static const String passwordNotMatchError = 'Passwords do not match!';
 
-  // Profile Section
+  // UI SECTION [3]-> HOME
+  static const String homeTitle = 'Lyxa Zone';
+  static const String noPostAvailableError = 'No posts available';
+
+  // UI SECTION [4]-> DRAWER
+  static const String titleHome = "HOME";
+  static const String titleProfile = "PROFILE";
+  static const String titleSearch = "SEARCH";
+  static const String titleSettings = "SETTINGS";
+  static const String titleLogout = "LOGOUT";
+
+  // UI SECTION [5]-> PROFILE
   static const String userNotFoundError = 'User not found';
   static const String failedToFetchUserError =
       'Failed to fetch user for profile update';
 
-  // Home Section
-  static const String noPostAvailableError = 'No posts available';
+  // UI SECTION [6]-> SEARCH
+  static const String noUserFoundMessage = "No user found";
+  static const String defaultSearchMessage = "Start search for user...";
+
+  // UI SECTION [7]-> SETTINGS
+  static const String settings = 'Settings';
+  static const String darkMode = 'Dark Mode';
+  static const String searchUsers = 'Search users...';
+
+  // Hint Text Section
+  static const String hintEmail = 'Email (e.g., name@address.com)';
+  static const String hintUsername = 'Name (e.g., Mike Joe )';
+  static const String hintPassword = 'Password (e.g., P@ssw0rd)';
+  static const String hintConfirmPassword = 'Confirm Password (e.g., P@ssw0rd)';
 
   // Common
   static const String pleaseWaitMessage = 'Please wait...';
@@ -76,23 +98,4 @@ class AppStrings {
   static const String editProfile = "Edit Profile";
   static const String addYourStorylineBio = "Add your bio / storyline";
   static const String cropperToolbarTitle = "Profile Image Cropper";
-
-  static const String settings = 'Settings';
-  static const String darkMode = 'Dark Mode';
-  static const String searchUsers = 'Search users...';
-
-  static const String noUserFoundMessage = "No user found";
-  static const String defaultSearchMessage = "Start search for user...";
-
-  // Hint Text Section
-  static const String hintEmail = 'Email (e.g., name@address.com)';
-  static const String hintUsername = 'Name (e.g., Mike Joe )';
-  static const String hintPassword = 'Password (e.g., P@ssw0rd)';
-  static const String hintConfirmPassword = 'Confirm Password (e.g., P@ssw0rd)';
-
-  static const String titleHome = "HOME";
-  static const String titleProfile = "PROFILE";
-  static const String titleSearch = "SEARCH";
-  static const String titleSettings = "SETTINGS";
-  static const String titleLogout = "LOGOUT";
 }

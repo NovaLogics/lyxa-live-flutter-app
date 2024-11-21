@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/utils/constants/constants.dart'; 
+import 'package:lyxa_live/src/core/constants/constants.dart'; 
 
 // Constants for consistent styling
 const double _buttonVerticalPadding = 12.0;

@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:lyxa_live/src/core/utils/constants/constants.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
 
 class HiveKeys {
   static const loginDataKey = 'login_data';

@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
+import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 

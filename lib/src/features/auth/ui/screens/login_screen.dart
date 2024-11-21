@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/utils/constants/constants.dart';
-import 'package:lyxa_live/src/core/utils/helper/logger.dart';
-import 'package:lyxa_live/src/core/utils/helper/validator.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
-import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
+import 'package:lyxa_live/src/core/utils/validator.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppDimens.paddingLarge,
+        horizontal: AppDimens.paddingLG24,
       ),
       child: Form(
         key: _formKey,
@@ -103,9 +103,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildTopBanner() {
     return Image.asset(
-      IMAGE_PATH_LYXA_BANNER,
-      height: AppDimens.bannerSizeMedium,
-      width: AppDimens.bannerSizeMedium,
+      IMAGE_LYXA_BANNER,
+      height: AppDimens.bannerSize200,
+      width: AppDimens.bannerSize200,
     );
   }
 

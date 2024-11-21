@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
-import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
 class ProfileStatsUnit extends StatelessWidget {
   final int postCount;
@@ -27,7 +27,7 @@ class ProfileStatsUnit extends StatelessWidget {
         children: [
           // Post
           Container(
-            padding: const EdgeInsets.all(1), 
+            padding: const EdgeInsets.all(1),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [
@@ -37,16 +37,15 @@ class ProfileStatsUnit extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(12), 
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius:
-                    BorderRadius.circular(12), 
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8.0), 
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     //Posts
@@ -60,7 +59,7 @@ class ProfileStatsUnit extends StatelessWidget {
                                 AppTextStyles.textStylePostWithNumbers.copyWith(
                               color: Theme.of(context).colorScheme.onTertiary,
                               fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.textSizeMedium,
+                              fontSize: AppDimens.fontSizeMd16,
                             ),
                           ),
                           const SizedBox(height: AppDimens.size4),
@@ -69,7 +68,7 @@ class ProfileStatsUnit extends StatelessWidget {
                             style: AppTextStyles.textStylePost.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.textSizeSmall,
+                              fontSize: AppDimens.fontSizeSm12,
                             ),
                           ),
                         ],
@@ -86,7 +85,7 @@ class ProfileStatsUnit extends StatelessWidget {
                                 AppTextStyles.textStylePostWithNumbers.copyWith(
                               color: Theme.of(context).colorScheme.onTertiary,
                               fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.textSizeMedium,
+                              fontSize: AppDimens.fontSizeMd16,
                             ),
                           ),
                           const SizedBox(height: AppDimens.size4),
@@ -95,7 +94,7 @@ class ProfileStatsUnit extends StatelessWidget {
                             style: AppTextStyles.textStylePost.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.textSizeSmall,
+                              fontSize: AppDimens.fontSizeSm12,
                             ),
                           ),
                         ],
@@ -113,7 +112,7 @@ class ProfileStatsUnit extends StatelessWidget {
                                 AppTextStyles.textStylePostWithNumbers.copyWith(
                               color: Theme.of(context).colorScheme.onTertiary,
                               fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.textSizeMedium,
+                              fontSize: AppDimens.fontSizeMd16,
                             ),
                           ),
                           const SizedBox(height: AppDimens.size4),
@@ -122,7 +121,7 @@ class ProfileStatsUnit extends StatelessWidget {
                             style: AppTextStyles.textStylePost.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.textSizeSmall,
+                              fontSize: AppDimens.fontSizeSm12,
                             ),
                           ),
                         ],

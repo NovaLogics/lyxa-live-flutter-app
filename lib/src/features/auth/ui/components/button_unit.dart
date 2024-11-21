@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 
 class ButtonUnit extends StatelessWidget {
   final void Function()? onTap;
@@ -16,16 +16,16 @@ class ButtonUnit extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(AppDimens.paddingLarge),
+        padding: const EdgeInsets.all(AppDimens.paddingLG24),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.tertiary,
-            borderRadius: BorderRadius.circular(AppDimens.radiusMedium)),
+            borderRadius: BorderRadius.circular(AppDimens.radiusMd12)),
         child: Center(
           child: Text(
             text,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: AppDimens.textSizeLarge,
+              fontSize: AppDimens.fontSizeLg18,
             ),
           ),
         ),

@@ -9,11 +9,11 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/utils/constants/constants.dart';
-import 'package:lyxa_live/src/core/utils/helper/logger.dart';
-import 'package:lyxa_live/src/core/values/app_colors.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
-import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
@@ -58,7 +58,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             context: context,
             message: state.message,
             icon: Icons.error,
-            backgroundColor: AppColors.bluePurpleShade900X,
+            backgroundColor: AppColors.bluePurple900L1,
             textColor: AppColors.whiteShade,
             shadowColor: AppColors.blackShade,
             duration: ToastDuration.second5,
@@ -205,8 +205,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void updateProfile() async {
     final profileCubit = context.read<ProfileCubit>();
     final String uid = widget.user.uid;
-    final String? newBio =
-        bioTextController.text.isNotEmpty ? bioTextController.text.toString().trim() : null;
+    final String? newBio = bioTextController.text.isNotEmpty
+        ? bioTextController.text.toString().trim()
+        : null;
 
     if (pickedImage != null || newBio != null) {
       profileCubit.updateProfile(
@@ -219,7 +220,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget _buildProfileImage() {
     return Center(
       child: Material(
-        elevation: AppDimens.elevationSmall,
+        elevation: AppDimens.elevationSm2,
         shape: const CircleBorder(),
         color: Theme.of(context).colorScheme.outline,
         child: Padding(
@@ -246,7 +247,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         const CircularProgressIndicator(),
                     errorWidget: (context, url, error) => const Icon(
                       Icons.person,
-                      size: AppDimens.iconSize2XLarge,
+                      size: AppDimens.iconSizeXXL72,
                       color: AppColors.grayLight,
                     ),
                   ),

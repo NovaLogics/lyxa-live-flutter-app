@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 
 class ScrollableScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;

@@ -8,11 +8,11 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/utils/constants/constants.dart';
-import 'package:lyxa_live/src/core/utils/helper/logger.dart';
-import 'package:lyxa_live/src/core/values/app_colors.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
-import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
@@ -134,7 +134,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         context: context,
         message: AppStrings.errorImageAndCaptionRequired,
         icon: Icons.error,
-        backgroundColor: AppColors.bluePurpleShade900X,
+        backgroundColor: AppColors.bluePurple900L1,
         textColor: AppColors.whiteShade,
       );
       return;
@@ -204,7 +204,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         children: [
           _buildImagePreview(),
           _buildPickImageButton(),
-          const SizedBox(height: AppDimens.spacing28),
+          const SizedBox(height: AppDimens.spacingXL28),
           _buildCaptionInput(),
           const SizedBox(height: AppDimens.size72),
         ],
@@ -215,7 +215,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   Widget _buildImagePreview() {
     return selectedImage != null
         ? Padding(
-            padding: const EdgeInsets.all(AppDimens.padding8),
+            padding: const EdgeInsets.all(AppDimens.paddingRG8),
             child: Image.memory(selectedImage!,
                 width: double.infinity, fit: BoxFit.contain),
           )
@@ -240,13 +240,13 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
   Widget _buildCaptionInput() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimens.padding24),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingLG24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(AppStrings.caption,
               style: AppTextStyles.subtitleSecondary),
-          const SizedBox(height: AppDimens.spacing4),
+          const SizedBox(height: AppDimens.spacingSM4),
           MultilineTextFieldUnit(
             controller: captionController,
             labelText: AppStrings.captionLabel,

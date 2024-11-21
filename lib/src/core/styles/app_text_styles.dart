@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/utils/constants/constants.dart';
-import 'package:lyxa_live/src/core/values/app_colors.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 
 class AppTextStyles {
   /// Headings
   /// ->
   static const TextStyle headingPrimary = TextStyle(
-    color: AppColors.whiteShade50,
-    fontSize: AppDimens.textSizeTitleLarge,
+    color: AppColors.whitePure,
+    fontSize: AppDimens.fontSizeTitleLg42,
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
     fontFamily: FONT_DYNALIGHT,
@@ -16,8 +16,8 @@ class AppTextStyles {
   );
 
   static const TextStyle headingSecondary = TextStyle(
-    color: AppColors.blueGreyShade50,
-    fontSize: AppDimens.textSizeLarge,
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeLg18,
     fontFamily: FONT_RALEWAY,
     shadows: shadowStyle1,
   );
@@ -25,8 +25,8 @@ class AppTextStyles {
   /// Subtitles
   /// ->
   static const TextStyle subtitlePrimary = TextStyle(
-    color: AppColors.blueGreyShade50,
-    fontSize: AppDimens.textSizeLarge,
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeLg18,
     fontFamily: FONT_RALEWAY,
     fontWeight: FontWeight.bold,
     letterSpacing: 0.7,
@@ -34,22 +34,22 @@ class AppTextStyles {
   );
 
   static const TextStyle subtitleSecondary = TextStyle(
-    color: AppColors.blueGreyShade50,
-    fontSize: AppDimens.textSizeMedium,
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeMd16,
     fontFamily: FONT_RALEWAY,
     shadows: shadowStyle1,
   );
 
   static const TextStyle textStylePost = TextStyle(
-    color: AppColors.blueGreyShade50,
-    fontSize: AppDimens.textSizeRegular,
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeRg14,
     fontWeight: FontWeight.w600,
     fontFamily: FONT_RALEWAY,
   );
 
   static const TextStyle textStylePostWithNumbers = TextStyle(
-    color: AppColors.blueGreyShade50,
-    fontSize: AppDimens.textSizeRegular,
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeRg14,
     fontWeight: FontWeight.w600,
     fontFamily: FONT_MONTSERRAT,
     letterSpacing: 0.5,
@@ -58,9 +58,9 @@ class AppTextStyles {
   /// Button Text
   /// ->
   static const TextStyle buttonTextPrimary = TextStyle(
-    color: AppColors.blueGreyShade50,
+    color: AppColors.blueGrey50,
     fontWeight: FontWeight.bold,
-    fontSize: AppDimens.textSizeMedium,
+    fontSize: AppDimens.fontSizeMd16,
     fontFamily: FONT_RALEWAY,
   );
 

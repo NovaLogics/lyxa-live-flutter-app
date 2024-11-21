@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/utils/constants/constants.dart';
-import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
-import 'package:lyxa_live/src/core/utils/helper/logger.dart';
-import 'package:lyxa_live/src/core/utils/helper/validator.dart';
-import 'package:lyxa_live/src/core/values/app_colors.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
-import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/hive_helper.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
+import 'package:lyxa_live/src/core/utils/validator.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
@@ -50,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppDimens.paddingLarge,
+          horizontal: AppDimens.paddingLG24,
         ),
         child: Form(
           key: _formKey,
@@ -115,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           context: context,
           message: AppStrings.registerErrorMessage,
           icon: Icons.error,
-          backgroundColor: AppColors.deepPurpleShade900,
+          backgroundColor: AppColors.deepPurple900,
           textColor: Colors.white,
           shadowColor: Colors.black,
           duration: const Duration(seconds: 5),
@@ -140,9 +140,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _buildTopBanner() {
     return Image.asset(
-      IMAGE_PATH_LYXA_BANNER,
-      height: AppDimens.size3XLarge,
-      width: AppDimens.size3XLarge,
+      IMAGE_LYXA_BANNER,
+      height: AppDimens.size128,
+      width: AppDimens.size128,
     );
   }
 
@@ -150,8 +150,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Text(
       AppStrings.createAccountMessage,
       style: AppTextStyles.headingSecondary.copyWith(
-        color: AppColors.whiteShade100,
-        fontSize: AppDimens.textSize2XLarge,
+        color: AppColors.white100,
+        fontSize: AppDimens.fontSizeXXL24,
       ),
     );
   }
@@ -163,8 +163,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       obscureText: false,
       prefixIcon: Icon(
         Icons.person_outline,
-        size: AppDimens.prefixIconSizeMedium,
-        color: Theme.of(context).colorScheme.primary,
+        size: AppDimens.iconSizeSM22,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
       validator: (value) => Validator.validateUsername(value),
       maxLength: MAX_LENGTH_USERNAME_FIELD,

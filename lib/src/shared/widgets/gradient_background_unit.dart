@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/values/app_colors.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
 
 enum BackgroundStyle { home, auth }
 
@@ -83,18 +83,18 @@ class GradientBackgroundUnit extends StatelessWidget {
   List<Color> _getStyleColors(BuildContext context) {
     switch (style) {
       case BackgroundStyle.home:
-        return [ 
+        return [
           Theme.of(context).colorScheme.surfaceContainerLow,
           Theme.of(context).colorScheme.surfaceContainerLowest,
-           Theme.of(context).colorScheme.surfaceContainerHighest,
+          Theme.of(context).colorScheme.surfaceContainerHighest,
           Theme.of(context).colorScheme.surfaceContainerHigh,
         ];
       case BackgroundStyle.auth:
         return [
-          AppColors.deepPurpleShade700,
-          AppColors.deepPurpleShade500,
-          AppColors.blueGreyShade900X,
-          AppColors.blueGreyShade900Y,
+          AppColors.deepPurple700,
+          AppColors.deepPurple500,
+          AppColors.blueGrey900L1,
+          AppColors.blueGrey900L2,
         ];
     }
   }

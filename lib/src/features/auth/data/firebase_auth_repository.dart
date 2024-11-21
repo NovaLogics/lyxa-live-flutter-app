@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 
-import 'package:lyxa_live/src/core/utils/constants/constants.dart';
-import 'package:lyxa_live/src/core/utils/helper/firebase_error_util.dart';
-import 'package:lyxa_live/src/core/utils/helper/hive_helper.dart';
-import 'package:lyxa_live/src/core/utils/helper/logger.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/firebase_error_util.dart';
+import 'package:lyxa_live/src/core/utils/hive_helper.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 
@@ -22,6 +22,7 @@ class FirebaseAuthRepository implements AuthRepository {
     String password,
   ) async {
     try {
+      firebaseAuth.setLanguageCode('en');
       // Sign in user
       UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);

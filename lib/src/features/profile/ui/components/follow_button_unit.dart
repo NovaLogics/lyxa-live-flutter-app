@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/values/app_colors.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
-import 'package:lyxa_live/src/core/values/app_strings.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
 class FollowButtonUnit extends StatelessWidget {
   final void Function()? onPressed;
@@ -29,14 +29,14 @@ class FollowButtonUnit extends StatelessWidget {
               gradient: isFollowing
                   ? const LinearGradient(
                       colors: [
-                        AppColors.deepPurpleShade900,
-                        AppColors.bluePurpleShade300,
+                        AppColors.deepPurple900,
+                        AppColors.bluePurple300,
                       ],
                     )
                   : const LinearGradient(
                       colors: [
-                        AppColors.deepPurpleShade700,
-                        AppColors.deepPurpleShade300,
+                        AppColors.deepPurple700,
+                        AppColors.deepPurple300,
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -50,8 +50,8 @@ class FollowButtonUnit extends StatelessWidget {
                     ? AppStrings.unfollowUpperCase
                     : AppStrings.followUpperCase,
                 style: AppTextStyles.buttonTextPrimary.copyWith(
-                  color: AppColors.deepPurpleShade50,
-                  fontSize: AppDimens.textSizeRegular,
+                  color: AppColors.deepPurple50,
+                  fontSize: AppDimens.fontSizeRg14,
                   letterSpacing: 1.2,
                 ),
               ),

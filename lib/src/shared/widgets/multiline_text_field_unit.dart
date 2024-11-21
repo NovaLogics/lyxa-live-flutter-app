@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/utils/constants/constants.dart';
-import 'package:lyxa_live/src/core/values/app_dimensions.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 
 class MultilineTextFieldUnit extends StatelessWidget {
   final TextEditingController controller;
@@ -26,14 +26,14 @@ class MultilineTextFieldUnit extends StatelessWidget {
           color: Theme.of(context).colorScheme.inversePrimary,
           fontFamily: FONT_RALEWAY,
           fontWeight: FontWeight.w500,
-          fontSize: AppDimens.textSizeMedium),
+          fontSize: AppDimens.fontSizeMd16),
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
         hintStyle: TextStyle(
           color: Theme.of(context).colorScheme.onSecondary,
           fontWeight: FontWeight.normal,
-          fontSize: AppDimens.textSizeRegular,
+          fontSize: AppDimens.fontSizeRg14,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),

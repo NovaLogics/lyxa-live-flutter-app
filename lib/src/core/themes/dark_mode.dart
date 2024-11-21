@@ -1,64 +1,78 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/values/app_colors.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
 
 ThemeData darkMode = ThemeData(
   colorScheme: darkColorScheme,
 );
 
-const Color bluePurpleShade50 = Color.fromARGB(255, 247, 248, 254);
-const Color bluePurpleShade100 = Color(0xFFC5CAE9);
-const Color bluePurpleShade200 = Color(0xFF9FA8DA);
-const Color bluePurpleShade300 = Color(0xFF7986CB);
-const Color bluePurpleShade400 = Color(0xFF5C6BC0);
-const Color bluePurpleShade500 = Color(0xFF3F51B5);
-const Color bluePurpleShade600 = Color(0xFF3949AB);
-const Color bluePurpleShade700 = Color(0xFF303F9F);
-const Color bluePurpleShade800 = Color(0xFF283593);
-const Color bluePurpleShade900 = Color(0xFF1A237E);
-
 const ColorScheme darkColorScheme = ColorScheme.dark(
   brightness: Brightness.dark,
+
+  // --- Primary Colors ---
   // Primary color for main actions
-  primary: bluePurpleShade600,
+  primary: AppColors.bluePurple600,
   // Text/Icon color on primary
-  onPrimary: bluePurpleShade400,
-  // Darker shade of primary
-  primaryContainer: AppColors.blueGreyShade900X,
+  onPrimary: AppColors.bluePurple400,
+  // Darker shade of primary (background for primary elements)
+  primaryContainer: AppColors.blueGrey900L1,
   // Text/Icon color on primary container
-  onPrimaryContainer: bluePurpleShade50,
+  onPrimaryContainer: AppColors.bluePurple50,
+
+  // --- Secondary Colors ---
   // Secondary color for accents
-  secondary: AppColors.deepPurpleShade600,
+  secondary: AppColors.deepPurple600,
   // Text/Icon color on secondary
-  onSecondary: bluePurpleShade200,
-  //text/Icon color on secondary container
+  onSecondary: AppColors.bluePurple200,
+  // Text/Icon color on secondary container
   secondaryContainer: Color(0xFF673AB7),
 
-  onTertiary: bluePurpleShade50,
-  // Error color
+  // --- Tertiary Colors ---
+  // Text/Icon color on tertiary
+  onTertiary: AppColors.bluePurple50,
+
+  // --- Error Colors ---
+  // Error color (used for error states)
   error: Colors.red,
   // Text/Icon color on error
-  onError: Colors.black,
-  // Card backgrounds, Dialogs
+  onError: AppColors.blackPure,
+
+  // --- Surface and Background Colors ---
+  // Background color for surfaces like cards, dialogs, etc.
   surface: Color(0xFF121212),
-  // Text/Icon color on background
-  onSurface: Colors.white,
-  // Borders and outlines
+  // Text/Icon color on surface
+  onSurface: AppColors.whitePure,
+  // Borders and outlines color (used for borders or subtle divisions)
   outline: Color(0xFF616161),
-  // Shadows for cards, modals, etc.
+  // Shadows color for cards, modals, etc.
   shadow: Colors.black45,
+
+  // --- Inverse Colors ---
   // Used for lighter text background in dark mode
   inverseSurface: Color(0xFFE0E0E0),
-  // Text/Icon on inverse surface
-  onInverseSurface: Colors.black,
-  // Tint for elevated surfaces
+  // Text/Icon color on inverse surface
+  onInverseSurface: AppColors.blackPure,
+
+  // --- Surface Tint Colors ---
+  // Tint for elevated surfaces (buttons / card backgrounds)
   surfaceTint: Colors.purple,
 
-  inversePrimary: bluePurpleShade50,
+  // --- Inverse Primary Color ---
+  // Inverse primary color
+  inversePrimary: AppColors.bluePurple50,
 
-  surfaceContainer: AppColors.blueGreyShade900X,
+  // --- Surface Containers ---
+  // Different levels of surface containers for varying background shades
+  surfaceContainer: AppColors.blueGrey900L1,
 
-  surfaceContainerLowest: AppColors.bluePurpleShade900Z,
-  surfaceContainerLow: AppColors.bluePurpleShade900Z,
-  surfaceContainerHigh: AppColors.blueGreyShade900Y,
-  surfaceContainerHighest: AppColors.blueGreyShade900X,
+  // Lowest level container surface
+  surfaceContainerLowest: AppColors.bluePurple900L3,
+
+  // Low level container surface
+  surfaceContainerLow: AppColors.bluePurple900L3,
+
+  // High level container surface
+  surfaceContainerHigh: AppColors.blueGrey900L2,
+
+  // Highest level container surface
+  surfaceContainerHighest: AppColors.blueGrey900L1,
 );
