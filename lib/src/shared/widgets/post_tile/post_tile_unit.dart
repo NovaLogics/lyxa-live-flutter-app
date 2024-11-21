@@ -303,7 +303,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
               ),
               errorWidget: (context, url, error) => Icon(
                 Icons.image_not_supported_outlined,
-                size: AppDimens.iconSize3XLarge,
+                size: AppDimens.iconSizeXXL96,
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
               imageBuilder: (context, imageProvider) {

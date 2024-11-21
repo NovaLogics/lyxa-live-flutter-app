@@ -247,7 +247,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         const CircularProgressIndicator(),
                     errorWidget: (context, url, error) => const Icon(
                       Icons.person,
-                      size: AppDimens.iconSize2XLarge,
+                      size: AppDimens.iconSizeXXL72,
                       color: AppColors.grayLight,
                     ),
                   ),

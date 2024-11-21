@@ -108,13 +108,22 @@ class AppDimens {
   static const double radiusXXL48 = 48.0;
 
   // Icon Sizes
-  static const double iconSizeXSmall = 16.0;
-  static const double iconSizeSmall = 24.0;
-  static const double iconSizeMedium = 32.0;
-  static const double iconSizeLarge = 48.0;
-  static const double iconSizeXLarge = 64.0;
-  static const double iconSize2XLarge = 72.0;
-  static const double iconSize3XLarge = 96.0;
+  static const double iconSizeXS12 = 12.0;
+  static const double iconSizeXS16 = 16.0;
+  static const double iconSizeSM20 = 20.0;
+  static const double iconSizeSM22 = 22.0;
+  static const double iconSizeSM24 = 24.0;
+  static const double iconSizeMD28 = 28.0;
+  static const double iconSizeMD32 = 32.0;
+  static const double iconSizeLG36 = 36.0;
+  static const double iconSizeLG42 = 42.0;
+  static const double iconSizeLG48 = 48.0;
+  static const double iconSizeXL64 = 64.0;
+  static const double iconSizeXXL72 = 72.0;
+  static const double iconSizeXXL96 = 96.0;
+  static const double iconSizeXXL128 = 128.0;
+
+// Additional values
 
   static const double prefixIconSizeMedium = 22.0;
 

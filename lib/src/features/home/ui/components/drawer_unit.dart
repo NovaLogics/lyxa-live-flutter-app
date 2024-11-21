@@ -87,12 +87,12 @@ class DrawerUnit extends StatelessWidget {
                 placeholder: (_, __) => const CircularProgressIndicator(),
                 errorWidget: (_, __, ___) => Icon(
                   Icons.person_rounded,
-                  size: AppDimens.iconSize3XLarge,
+                  size: AppDimens.iconSizeXXL96,
                   color: Theme.of(context).colorScheme.onSecondary,
                 ),
                 imageBuilder: (_, imageProvider) => Container(
-                  height: AppDimens.iconSize3XLarge,
-                  width: AppDimens.iconSize3XLarge,
+                  height: AppDimens.iconSizeXXL96,
+                  width: AppDimens.iconSizeXXL96,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
@@ -104,7 +104,7 @@ class DrawerUnit extends StatelessWidget {
               )
             : Icon(
                 Icons.person_rounded,
-                size: AppDimens.iconSize3XLarge,
+                size: AppDimens.iconSizeXXL96,
                 color: Theme.of(context).colorScheme.onSecondary,
               ),
       ),
