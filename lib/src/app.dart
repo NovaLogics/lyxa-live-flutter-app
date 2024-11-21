@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
@@ -21,17 +22,8 @@ import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
 /// Main Application Entry Point for LyxaApp
 /// Root Level ->
 class LyxaApp extends StatelessWidget {
-  /// Define Repositories (Database > Firebase)
-  /// ->
-  final FirebaseAuthRepository _authRepository = FirebaseAuthRepository();
-  final FirebaseProfileRepository _profileRepository =
-      FirebaseProfileRepository();
-  final FirebaseStorageRepository _storageRepository =
-      FirebaseStorageRepository();
-  final FirebasePostRepository _postRepository = FirebasePostRepository();
-  final FirebaseSearchRepository _searchRepository = FirebaseSearchRepository();
 
-  LyxaApp({super.key});
+  const LyxaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,29 +75,32 @@ class LyxaApp extends StatelessWidget {
     return [
       // Authentication Cubit
       BlocProvider<AuthCubit>(
-        create: (context) =>
-            AuthCubit(authRepository: _authRepository)..checkAuthentication(),
+        create: (context) => AuthCubit(
+          authRepository: GetIt.instance<FirebaseAuthRepository>(),
+        )..checkAuthentication(),
       ),
 
       // Profile Cubit
       BlocProvider<ProfileCubit>(
         create: (context) => ProfileCubit(
-          profileRepository: _profileRepository,
-          storageRepository: _storageRepository,
+          profileRepository: GetIt.instance<FirebaseProfileRepository>(),
+          storageRepository: GetIt.instance<FirebaseStorageRepository>(),
         ),
       ),
 
       // Post Cubit
       BlocProvider<PostCubit>(
         create: (context) => PostCubit(
-          postRepository: _postRepository,
-          storageRepository: _storageRepository,
+          postRepository: GetIt.instance<FirebasePostRepository>(),
+          storageRepository: GetIt.instance<FirebaseStorageRepository>(),
         ),
       ),
 
       // Search Cubit
       BlocProvider<SearchCubit>(
-        create: (context) => SearchCubit(searchRepository: _searchRepository),
+        create: (context) => SearchCubit(
+          searchRepository: GetIt.instance<FirebaseSearchRepository>(),
+        ),
       ),
 
       // Theme Cubit
