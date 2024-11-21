@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/login_screen.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/register_screen.dart';
@@ -7,6 +8,7 @@ import 'package:lyxa_live/src/features/auth/ui/screens/register_screen.dart';
 /// AuthScreen:
 /// -> Displays either the Login or Register page with the ability to toggle between them
 class AuthScreen extends StatefulWidget {
+  
   const AuthScreen({super.key});
 
   @override
@@ -21,6 +23,7 @@ class _AuthScreenState extends State<AuthScreen> {
     _setStatusBarStyle();
 
     return ScrollableScaffold(
+      backgroundStyle: BackgroundStyle.auth,
       body: _isLoginPage
           ? LoginScreen(
               onToggle: _toggleAuthenticationPage,
