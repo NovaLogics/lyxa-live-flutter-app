@@ -48,12 +48,9 @@ class _AuthScreenState extends State<AuthScreen> {
     _setStatusBarStyle();
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          getIt<GradientBackgroundUnit>(
-            param1: AppDimens.containerSize400,
-            param2: BackgroundStyle.auth,
-          ),
           ScrollableScaffold(
             body: _isLoginPage
                 ? LoginScreen(
