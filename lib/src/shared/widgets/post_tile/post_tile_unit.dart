@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/date_time_util.dart';
@@ -102,10 +103,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Add a new comment"),
+        title: const Text(AppStrings.addNewComment),
         content: TextFieldUnit(
           controller: commentTextController,
-          hintText: "Type a comment",
+          hintText: AppStrings.typeComment,
           obscureText: false,
           prefixIcon: null,
         ),
@@ -115,7 +116,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
             },
-            child: const Text("Cancel"),
+            child: const Text(AppStrings.cancel),
           ),
           // Save button to submit the comment
           TextButton(
@@ -123,7 +124,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
               addComment();
               Navigator.of(context).pop();
             },
-            child: const Text("Save"),
+            child: const Text(AppStrings.save),
           ),
         ],
       ),
@@ -157,14 +158,14 @@ class _PostTileUnitState extends State<PostTileUnit> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Delete this post?"),
+        title: const Text(AppStrings.deleteThisPostMessage),
         actions: [
           // Cancel button
           TextButton(
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
             },
-            child: const Text("Cancel"),
+            child: const Text(AppStrings.cancel),
           ),
           // Confirm Delete button
           TextButton(
@@ -172,7 +173,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
               widget.onDeletePressed!();
               Navigator.of(context).pop();
             },
-            child: const Text("Delete"),
+            child: const Text(AppStrings.delete),
           ),
         ],
       ),
