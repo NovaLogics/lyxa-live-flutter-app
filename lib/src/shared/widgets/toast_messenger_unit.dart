@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
 
 ///USAGE ->
 //  ToastMessengerUnit.showToast(
@@ -38,6 +39,21 @@ class ToastDuration {
 class ToastMessengerUnit {
   static OverlayEntry? _overlayEntry;
   static Timer? _toastTimer;
+
+  static void showErrorToast({
+    required BuildContext context,
+    required String message,
+  }) {
+    showToast(
+      context: context,
+      message: message,
+      icon: Icons.error,
+      backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+      textColor: Theme.of(context).colorScheme.onInverseSurface,
+      shadowColor: AppColors.blackShade,
+      duration: ToastDuration.second6,
+    );
+  }
 
   /// Show a custom toast message
   /// [message] - Text to display
@@ -131,7 +147,13 @@ class ToastMessengerUnit {
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(color: textColor, fontSize: 16),
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: FONT_MONTSERRAT,
+                  letterSpacing: 0.1,
+                ),
               ),
             ),
             if (buttonText != null && onButtonPressed != null) ...[
@@ -148,7 +170,7 @@ class ToastMessengerUnit {
                 child: Text(
                   buttonText,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: textColor,
                     fontFamily: FONT_RALEWAY,
