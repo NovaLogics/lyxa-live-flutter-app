@@ -88,15 +88,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         if (state is ProfileLoaded) {
-          return _buildProfileContent(context, state.profileUser, isOwnProfile);
+          return _buildProfileContent(
+            context,
+            state.profileUser,
+            isOwnProfile,
+          );
         } else if (state is ProfileLoading) {
-          return Scaffold(
-            body:
-                getIt<CenterLoadingUnit>(param1: AppStrings.pleaseWaitMessage),
+          return getIt<CenterLoadingUnit>(
+            param1: AppStrings.pleaseWait,
           );
         } else {
           return const Scaffold(
-            body: Center(child: Text(AppStrings.profileNotFoundError)),
+            body: Center(
+              child: Text(AppStrings.profileNotFoundError),
+            ),
           );
         }
       },
