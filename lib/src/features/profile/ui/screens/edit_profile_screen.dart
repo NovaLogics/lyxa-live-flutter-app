@@ -58,7 +58,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             context: context,
             message: state.message,
             icon: Icons.error,
-            backgroundColor: AppColors.bluePurpleShade900X,
+            backgroundColor: AppColors.bluePurple900X,
             textColor: AppColors.whiteShade,
             shadowColor: AppColors.blackShade,
             duration: ToastDuration.second5,

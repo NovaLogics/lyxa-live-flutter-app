@@ -134,7 +134,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         context: context,
         message: AppStrings.errorImageAndCaptionRequired,
         icon: Icons.error,
-        backgroundColor: AppColors.bluePurpleShade900X,
+        backgroundColor: AppColors.bluePurple900X,
         textColor: AppColors.whiteShade,
       );
       return;

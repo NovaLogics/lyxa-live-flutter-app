@@ -30,7 +30,7 @@ class FollowButtonUnit extends StatelessWidget {
                   ? const LinearGradient(
                       colors: [
                         AppColors.deepPurpleShade900,
-                        AppColors.bluePurpleShade300,
+                        AppColors.bluePurple300,
                       ],
                     )
                   : const LinearGradient(

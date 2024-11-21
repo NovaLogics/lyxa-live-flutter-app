@@ -59,8 +59,8 @@ const ColorScheme lightColorScheme = ColorScheme.light(
   inversePrimary: Colors.black,
   surfaceContainer: AppColors.blueGreyShade900Y,
 
-  surfaceContainerLowest: AppColors.bluePurpleShade50,
-  surfaceContainerLow: AppColors.bluePurpleShade50,
+  surfaceContainerLowest: AppColors.bluePurple50,
+  surfaceContainerLow: AppColors.bluePurple50,
   surfaceContainerHigh: AppColors.blueGreyShade100,
   surfaceContainerHighest: AppColors.blueGreyShade50,
 );
