@@ -1,37 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
 class CenterLoadingUnit extends StatelessWidget {
   final String message;
 
-  const CenterLoadingUnit({super.key, this.message = "Please wait..."});
+  const CenterLoadingUnit({super.key, this.message = AppStrings.pleaseWait});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black.withOpacity(0.5),
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.5),
       body: Center(
         child: Card(
-          color: const Color(0xFFEEEEEE), // Background semi-transparent
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          color: Theme.of(context).colorScheme.surface,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppDimens.radiusMd12)),
+          elevation: AppDimens.elevationMd8,
+          shadowColor: Theme.of(context).colorScheme.primary,
           child: Padding(
-            padding: const EdgeInsets.all(54.0),
+            padding: const EdgeInsets.all(AppDimens.size56),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CircularProgressIndicator(
-                  color: Colors.deepPurple,
+                CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ), // Loading indicator
-                const SizedBox(height: 24.0),
+                const SizedBox(height: AppDimens.size24),
                 Text(
                   message,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     letterSpacing: 1.1,
                     fontFamily: FONT_RALEWAY,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF4527A0),
+                    color: Theme.of(context).colorScheme.onSecondary,
                   ),
                 ),
               ],
