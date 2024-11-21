@@ -39,13 +39,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    _fetchUserProfile(widget.displayUserId);
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        if (state is ProfileLoaded) {
+          return _buildProfileContent(context, state.profileUser);
+        } else if (state is ProfileLoading) {
+          return _buildLoadingScreen();
+        } else {
+          return const Scaffold(
+            body: Center(
+              child: Text(AppStrings.profileNotFoundError),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  void _fetchUserProfile(String uid) async {
     _authCubit = context.read<AuthCubit>();
     _profileCubit = context.read<ProfileCubit>();
     AppUser? currentUser = _authCubit.currentUser;
     _currentUserId = currentUser!.uid;
 
-    _profileCubit.fetchUserProfile(widget.displayUserId);
+    _profileCubit.fetchUserProfile(uid);
   }
 
   /// Handles the follow/unfollow button press.
@@ -81,40 +103,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final isOwnProfile = (widget.displayUserId == _currentUserId!);
-
-    return BlocBuilder<ProfileCubit, ProfileState>(
-      builder: (context, state) {
-        if (state is ProfileLoaded) {
-          return _buildProfileContent(
-            context,
-            state.profileUser,
-            isOwnProfile,
-          );
-        } else if (state is ProfileLoading) {
-          return getIt<CenterLoadingUnit>(
-            param1: AppStrings.pleaseWait,
-          );
-        } else {
-          return const Scaffold(
-            body: Center(
-              child: Text(AppStrings.profileNotFoundError),
-            ),
-          );
-        }
-      },
-    );
+  Widget _buildLoadingScreen() {
+    return getIt<CenterLoadingUnit>(param1: AppStrings.uploading);
   }
 
-  Widget _buildProfileContent(
-      BuildContext context, ProfileUser user, bool isOwnProfile) {
+  Widget _buildProfileContent(BuildContext context, ProfileUser user) {
+    final isOwnProfile = (widget.displayUserId == _currentUserId!);
+
     return ConstrainedScaffold(
       appBar: _buildAppBar(context, user, isOwnProfile),
       body: ListView(
         children: [
-          _buildProfileHeader(user),
+          _buildProfilePicture(user),
+          const SizedBox(height: AppDimens.size16),
+          _buildEmailSection(user),
           const SizedBox(height: AppDimens.size8),
           _buildProfileStats(user),
           if (!isOwnProfile) const SizedBox(height: AppDimens.size8),
@@ -149,7 +151,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => EditProfileScreen(user: user)),
+                    builder: (_) => EditProfileScreen(user: user),
+                  ),
                 ),
                 icon: const Icon(Icons.settings_outlined),
               ),
@@ -158,48 +161,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildProfileHeader(ProfileUser user) {
-    return Column(
-      children: [
-        Material(
-          elevation: AppDimens.elevationSm2,
-          shape: const CircleBorder(),
-          color: Theme.of(context).colorScheme.outline,
-          child: Padding(
-            padding: const EdgeInsets.all(1),
-            child: CachedNetworkImage(
-              imageUrl: user.profileImageUrl,
-              placeholder: (_, __) => const CircularProgressIndicator(),
-              errorWidget: (_, __, ___) => Icon(
-                Icons.person_rounded,
-                size: AppDimens.iconSizeXXL96,
-                color: Theme.of(context).colorScheme.onSecondary,
-              ),
-              imageBuilder: (_, imageProvider) => Container(
-                height: AppDimens.imageSize120,
-                width: AppDimens.imageSize120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+  Widget _buildProfilePicture(ProfileUser user) {
+    return Material(
+      elevation: AppDimens.elevationSM2,
+      shape: const CircleBorder(),
+      color: Theme.of(context).colorScheme.outline,
+      child: Padding(
+        padding: const EdgeInsets.all(AppDimens.paddingXS1),
+        child: CachedNetworkImage(
+          imageUrl: user.profileImageUrl,
+          placeholder: (_, __) => const CircularProgressIndicator(),
+          errorWidget: (_, __, ___) => Icon(
+            Icons.person_rounded,
+            size: AppDimens.iconSizeXXL96,
+            color: Theme.of(context).colorScheme.onSecondary,
+          ),
+          imageBuilder: (_, imageProvider) => Container(
+            height: AppDimens.imageSize120,
+            width: AppDimens.imageSize120,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
               ),
             ),
           ),
         ),
-        const SizedBox(height: AppDimens.size16),
-        Text(
-          user.email,
-          style: AppTextStyles.subtitlePrimary.copyWith(
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontWeight: FontWeight.normal,
-            fontFamily: FONT_MONTSERRAT,
-            shadows: AppTextStyles.shadowStyle2,
-          ),
-        ),
-      ],
+      ),
+    );
+  }
+
+  Widget _buildEmailSection(ProfileUser user) {
+    return Text(
+      user.email,
+      style: AppTextStyles.subtitlePrimary.copyWith(
+        color: Theme.of(context).colorScheme.onPrimary,
+        fontWeight: FontWeight.normal,
+        fontFamily: FONT_MONTSERRAT,
+        shadows: AppTextStyles.shadowStyle2,
+      ),
     );
   }
 
@@ -215,7 +216,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
 
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(AppDimens.paddingRG8),
           child: ProfileStatsUnit(
             postCount: postCount,
             followerCount: user.followers.length,
@@ -253,8 +254,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: AppTextStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.w300,
-              // fontFamily: FONT_DYNALIGHT,
-              // fontSize: 24,
               shadows: AppTextStyles.shadowStyle2,
             ),
           ),
@@ -263,7 +262,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
           child: Container(
-            padding: const EdgeInsets.all(1),
+            padding: const EdgeInsets.all(AppDimens.paddingXS1),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [
@@ -273,12 +272,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppDimens.radiusMD12),
             ),
             child: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppDimens.radiusMD12),
               ),
               child: StoryLineUnit(text: bio),
             ),
@@ -297,7 +296,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .toList();
 
           if (userPosts.isEmpty) {
-            return const Center(child: Text("No posts."));
+            return const Center(child: Text(AppStrings.noPosts));
           }
 
           return ListView.builder(
@@ -316,7 +315,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         } else if (state is PostLoading) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          return const Center(child: Text("Failed to load posts."));
+          return const Center(child: Text(AppStrings.failedToLoadPostError));
         }
       },
     );
