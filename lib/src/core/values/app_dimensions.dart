@@ -1,11 +1,11 @@
 class AppDimens {
   // Padding
-  static const double paddingXSmall = 2.0;
-  static const double paddingSmall = 4.0;
-  static const double paddingRegular = 8.0;
-  static const double paddingMedium = 16.0;
-  static const double paddingLarge = 24.0;
-  static const double paddingXLarge = 32.0;
+  static const double paddingXs2 = 2.0;
+  static const double paddingSm4 = 4.0;
+  static const double paddingRg8 = 8.0;
+  static const double paddingMd16 = 16.0;
+  static const double paddingLg24 = 24.0;
+  static const double paddingXl32 = 32.0;
 
   // Spacing
   static const double spaceXSmall = 2.0;
@@ -27,6 +27,7 @@ class AppDimens {
   static const double textSize2XLarge = 24.0;
   static const double textSizeTitle = 32.0;
   static const double textSizeTitleLarge = 42.0;
+  static const double textSizeTitleXLarge = 48.0;
 
   // Elevations
   static const double elevationSmall = 2.0;

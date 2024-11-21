@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppDimens.paddingLarge,
+        horizontal: AppDimens.paddingLg24,
       ),
       child: Form(
         key: _formKey,
