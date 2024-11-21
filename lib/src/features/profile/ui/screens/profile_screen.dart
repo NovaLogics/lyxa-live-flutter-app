@@ -162,28 +162,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfilePicture(ProfileUser user) {
-    return Material(
-      elevation: AppDimens.elevationSM2,
-      shape: const CircleBorder(),
-      color: Theme.of(context).colorScheme.outline,
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimens.paddingXS1),
-        child: CachedNetworkImage(
-          imageUrl: user.profileImageUrl,
-          placeholder: (_, __) => const CircularProgressIndicator(),
-          errorWidget: (_, __, ___) => Icon(
-            Icons.person_rounded,
-            size: AppDimens.iconSizeXXL96,
-            color: Theme.of(context).colorScheme.onSecondary,
-          ),
-          imageBuilder: (_, imageProvider) => Container(
-            height: AppDimens.imageSize120,
-            width: AppDimens.imageSize120,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
+    return Center(
+      child: Material(
+        elevation: AppDimens.elevationSM2,
+        shape: const CircleBorder(),
+        color: Theme.of(context).colorScheme.outline,
+        child: Padding(
+          padding: const EdgeInsets.all(AppDimens.paddingXS1),
+          child: CachedNetworkImage(
+            imageUrl: user.profileImageUrl,
+            placeholder: (_, __) => const CircularProgressIndicator(),
+            errorWidget: (_, __, ___) => SizedBox(
+              height: AppDimens.imageSize120,
+              child: Icon(
+                Icons.person_rounded,
+                size: AppDimens.iconSizeXXL96,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+            ),
+            imageBuilder: (_, imageProvider) => Container(
+              height: AppDimens.imageSize120,
+              width: AppDimens.imageSize120,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -193,13 +198,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildEmailSection(ProfileUser user) {
-    return Text(
-      user.email,
-      style: AppTextStyles.subtitlePrimary.copyWith(
-        color: Theme.of(context).colorScheme.onPrimary,
-        fontWeight: FontWeight.normal,
-        fontFamily: FONT_MONTSERRAT,
-        shadows: AppTextStyles.shadowStyle2,
+    return Center(
+      child: Text(
+        user.email,
+        style: AppTextStyles.subtitlePrimary.copyWith(
+          color: Theme.of(context).colorScheme.onPrimary,
+          fontWeight: FontWeight.normal,
+          fontFamily: FONT_MONTSERRAT,
+          shadows: AppTextStyles.shadowStyle2,
+        ),
       ),
     );
   }

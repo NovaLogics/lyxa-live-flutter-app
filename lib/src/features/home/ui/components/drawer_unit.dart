@@ -84,7 +84,9 @@ class DrawerUnit extends StatelessWidget {
         child: (user?.profileImageUrl != null)
             ? CachedNetworkImage(
                 imageUrl: user?.profileImageUrl ?? '',
-                placeholder: (_, __) => const CircularProgressIndicator(),
+                placeholder: (_, __) => const SizedBox(
+                    width: AppDimens.iconSizeXXL96,
+                    child: CircularProgressIndicator()),
                 errorWidget: (_, __, ___) => Icon(
                   Icons.person_rounded,
                   size: AppDimens.iconSizeXXL96,
@@ -147,6 +149,7 @@ class DrawerUnit extends StatelessWidget {
   }
 
   void _navigateToSearchScreen(BuildContext context) {
+    Navigator.of(context).pop();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SearchScreen()),
@@ -162,6 +165,7 @@ class DrawerUnit extends StatelessWidget {
   }
 
   void _navigateToProfileScreen(BuildContext context, String uid) {
+    Navigator.of(context).pop();
     Navigator.push(
       context,
       MaterialPageRoute(

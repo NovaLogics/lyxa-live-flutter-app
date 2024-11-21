@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
@@ -16,10 +15,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  // Controller for search input
   final TextEditingController _searchController = TextEditingController();
-
-  // Reference to SearchCubit
   late final SearchCubit _searchCubit = context.read<SearchCubit>();
 
   // Trigger search when text changes
@@ -54,40 +50,26 @@ class _SearchScreenState extends State<SearchScreen> {
       centerTitle: true,
       title: SizedBox(
         width: AppDimens.containerSize400,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: AppDimens.size24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                if (kIsWeb) _buildBackButton(),
-                if (kIsWeb) const SizedBox(width: AppDimens.size24),
-                _buildSearchBar(),
-              ],
-            ),
-          ],
-        ),
+        child: _buildSearchBar(),
       ),
     );
   }
 
-  // Back button in the AppBar
-  Widget _buildBackButton() {
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pop(),
-      child: const Icon(
-        Icons.arrow_back_outlined,
-        size: AppDimens.size24,
-      ),
-    );
-  }
+  // Widget _buildBackButton() {
+  //   return GestureDetector(
+  //     onTap: () => Navigator.of(context).pop(),
+  //     child: const Icon(
+  //       Icons.arrow_back_outlined,
+  //       size: AppDimens.size24,
+  //     ),
+  //   );
+  // }
 
   // Search input field
   Widget _buildSearchBar() {
     return SizedBox(
-      width: AppDimens.searchBarWidth,
-      height: AppDimens.searchBarHeight,
+      width: AppDimens.size280,
+      height: AppDimens.size52,
       child: TextField(
         controller: _searchController,
         decoration: InputDecoration(

@@ -6,7 +6,6 @@ import 'package:lyxa_live/src/shared/widgets/user_tile_unit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
-
 class FollowerScreen extends StatelessWidget {
   final List<String> followers;
   final List<String> following;
@@ -39,49 +38,40 @@ class FollowerScreen extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(AppDimens.size72), 
-      child: AppBar(
-        centerTitle: true, 
-        automaticallyImplyLeading:
-            false, 
-        title: SizedBox(
-          width: AppDimens.containerSize430, 
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: AppDimens.size24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: const Icon(
-                      Icons.arrow_back_outlined,
-                      size: AppDimens.size16,
-                    ),
-                  ),
-                ],
-              ),
-              _buildCustomTabBar(context),
-            ],
-          ),
-        ),
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      centerTitle: true,
+      title: SizedBox(
+        width: AppDimens.containerSize400,
+        child: _buildCustomTabBar(context),
       ),
     );
   }
 
+  // Widget _buildBackButton(BuildContext context) {
+  //   return GestureDetector(
+  //     onTap: () => Navigator.of(context).pop(),
+  //     child: const Icon(
+  //       Icons.arrow_back_outlined,
+  //       size: AppDimens.size24,
+  //     ),
+  //   );
+  // }
+
   /// Builds a custom TabBar
   Widget _buildCustomTabBar(BuildContext context) {
-    return TabBar(
-      dividerColor: Colors.transparent,
-      labelColor: Theme.of(context).colorScheme.inversePrimary,
-      indicatorColor: Theme.of(context).colorScheme.primary,
-      tabs: const [
-        Tab(text: AppStrings.followersTabTitle),
-        Tab(text: AppStrings.followingTabTitle),
-      ],
+    return SizedBox(
+      width: AppDimens.size280,
+      height: AppDimens.size96,
+      child: TabBar(
+        dividerColor: Colors.transparent,
+        labelColor: Theme.of(context).colorScheme.inversePrimary,
+        indicatorColor: Theme.of(context).colorScheme.primary,
+        tabs: const [
+          Tab(text: AppStrings.followersTabTitle),
+          Tab(text: AppStrings.followingTabTitle),
+        ],
+      ),
     );
   }
 }
@@ -118,7 +108,9 @@ class UserListView extends StatelessWidget {
               final user = snapshot.data!;
               return UserTileUnit(user: user);
             } else {
-              return const ListTile(title: Text(AppStrings.userNotFoundMessage));
+              return const ListTile(
+                title: Text(AppStrings.userNotFoundMessage),
+              );
             }
           },
         );
