@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      title: const Text(AppStrings.appName),
+      title: const Text(AppStrings.homeTitle),
       actions: [
         IconButton(
           onPressed: _navigateToUploadPostScreen,
