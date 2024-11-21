@@ -18,11 +18,11 @@ import 'package:lyxa_live/src/features/photo_slider/cubits/slider_state.dart';
 import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
+import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 /// Main Application Entry Point for LyxaApp
 /// Root Level ->
 class LyxaApp extends StatelessWidget {
-
   const LyxaApp({super.key});
 
   @override
@@ -41,30 +41,6 @@ class LyxaApp extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildPhotoSliderScreen() {
-    return BlocConsumer<SliderCubit, SliderState>(
-      builder: (context, state) {
-        if (kDebugMode) print(state);
-
-        if (state is SliderLoaded) {
-          return PhotoSlider(
-            listImagesModel: state.images,
-            current: state.currentIndex,
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      },
-      listener: (context, state) {
-        if (state is SliderError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
-        }
-      },
     );
   }
 
@@ -140,6 +116,32 @@ class LyxaApp extends StatelessWidget {
       listener: (context, state) {
         // Show error messages if authentication fails
         if (state is AuthError) {
+          // ToastMessengerUnit.showErrorToast(
+          //     context: context, message: state.message);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildPhotoSliderScreen() {
+    return BlocConsumer<SliderCubit, SliderState>(
+      builder: (context, state) {
+        if (kDebugMode) print(state);
+
+        if (state is SliderLoaded) {
+          return PhotoSlider(
+            listImagesModel: state.images,
+            current: state.currentIndex,
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+      listener: (context, state) {
+        if (state is SliderError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
