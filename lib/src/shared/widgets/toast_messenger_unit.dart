@@ -3,21 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 
-///USAGE ->
-//  ToastMessengerUnit.showToast(
-//     context: context,
-//     message: "This is a custom toast message!",
-//     icon: Icons.check_circle,
-//     backgroundColor: AppColors.deepPurpleShade800,
-//     textColor: Colors.white,
-//     shadowColor: Colors.black,
-//     buttonText: "Undo",
-//     onButtonPressed: () {
-//       print("Button Pressed!");
-//     },
-//     duration: const Duration(seconds: 5), // Customize how long to show
-//   );
-
 class ToastDuration {
   static const Duration second1 = Duration(seconds: 1);
   static const Duration second2 = Duration(seconds: 2);
@@ -76,6 +61,22 @@ class ToastMessengerUnit {
     VoidCallback? onButtonPressed,
     Duration duration = ToastDuration.second3,
   }) {
+
+    ///USAGE ->
+//  ToastMessengerUnit.showToast(
+//     context: context,
+//     message: "This is a custom toast message!",
+//     icon: Icons.check_circle,
+//     backgroundColor: AppColors.deepPurpleShade800,
+//     textColor: Colors.white,
+//     shadowColor: Colors.black,
+//     buttonText: "Undo",
+//     onButtonPressed: () {
+//       print("Button Pressed!");
+//     },
+//     duration: const Duration(seconds: 5), // Customize how long to show
+//   );
+
     FocusScope.of(context).unfocus();
 
     // Remove any existing toast
