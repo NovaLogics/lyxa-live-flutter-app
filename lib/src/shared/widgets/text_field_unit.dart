@@ -17,7 +17,7 @@ class TextFieldUnit extends StatefulWidget {
     this.obscureText = false,
     this.prefixIcon,
     this.validator,
-    this.maxLength = 45,
+    this.maxLength = MAX_LENGTH_DEFAULT,
   });
 
   @override
@@ -48,12 +48,12 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppDimens.radiusMD12),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide:
               BorderSide(color: Theme.of(context).colorScheme.onPrimary),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppDimens.radiusMD12),
         ),
         hintText: widget.hintText,
         hintStyle: TextStyle(

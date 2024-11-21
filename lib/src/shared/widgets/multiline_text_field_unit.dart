@@ -13,7 +13,7 @@ class MultilineTextFieldUnit extends StatelessWidget {
     required this.controller,
     required this.hintText,
     required this.labelText,
-    this.maxLength = 100,
+    this.maxLength = MAX_LENGTH_DEFAULT,
   });
 
   @override

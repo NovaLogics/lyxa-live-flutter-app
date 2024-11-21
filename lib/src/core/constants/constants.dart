@@ -27,6 +27,7 @@ const String FONT_DYNALIGHT = 'Dynalight';
 const String FONT_MONTSERRAT = 'Montserrat';
 
 // TEXT FIELD LIMITS
+const int MAX_LENGTH_DEFAULT = 100;
 const int MAX_LENGTH_POST_FIELD = 500;
 const int MAX_LENGTH_EMAIL_FIELD = 128;
 const int MAX_LENGTH_USERNAME_FIELD = 30;
