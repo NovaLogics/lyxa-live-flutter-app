@@ -85,6 +85,28 @@ class AppDimens {
   static const double spacingXXL58 = 58.0;
   static const double spacingXXL64 = 64.0;
 
+  // Letter Spacing
+  static const double letterSpacingPT01 = 0.1;
+  static const double letterSpacingPT02 = 0.2;
+  static const double letterSpacingPT03 = 0.3;
+  static const double letterSpacingPT04 = 0.4;
+  static const double letterSpacingPT05 = 0.5;
+  static const double letterSpacingPT06 = 0.6;
+  static const double letterSpacingPT07 = 0.7;
+  static const double letterSpacingPT08 = 0.8;
+  static const double letterSpacingPT09 = 0.9;
+  static const double letterSpacingPT10 = 1.0;
+  static const double letterSpacingPT11 = 1.1;
+  static const double letterSpacingPT12 = 1.2;
+  static const double letterSpacingPT13 = 1.3;
+  static const double letterSpacingPT14 = 1.4;
+  static const double letterSpacingPT15 = 1.5;
+  static const double letterSpacingPT16 = 1.6;
+  static const double letterSpacingPT17 = 1.7;
+  static const double letterSpacingPT18 = 1.8;
+  static const double letterSpacingPT19 = 1.9;
+  static const double letterSpacingPT20 = 2.0;
+
   static const double letterSpaceMedium = 1.2;
 
   // Font/Text Sizes
