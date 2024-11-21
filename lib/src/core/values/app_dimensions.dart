@@ -94,11 +94,18 @@ class AppDimens {
   static const double elevationXXL48 = 48.0;
 
   // Corner Radius
-  static const double radiusXSmall = 2.0;
-  static const double radiusSmall = 4.0;
-  static const double radiusRegular = 8.0;
-  static const double radiusMedium = 12.0;
-  static const double radiusLarge = 16.0;
+  static const double radiusXs1 = 1.0;
+  static const double radiusXs2 = 2.0;
+  static const double radiusSm4 = 4.0;
+  static const double radiusRg8 = 8.0;
+  static const double radiusMd12 = 12.0;
+  static const double radiusLg16 = 16.0;
+  static const double radiusLg20 = 20.0;
+  static const double radiusXL24 = 24.0;
+  static const double radiusXL28 = 28.0;
+  static const double radiusXXL36 = 36.0;
+  static const double radiusXXL42 = 42.0;
+  static const double radiusXXL48 = 48.0;
 
   // Icon Sizes
   static const double iconSizeXSmall = 16.0;

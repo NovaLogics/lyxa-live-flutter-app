@@ -19,7 +19,7 @@ class ButtonUnit extends StatelessWidget {
         padding: const EdgeInsets.all(AppDimens.paddingLg24),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.tertiary,
-            borderRadius: BorderRadius.circular(AppDimens.radiusMedium)),
+            borderRadius: BorderRadius.circular(AppDimens.radiusMd12)),
         child: Center(
           child: Text(
             text,
