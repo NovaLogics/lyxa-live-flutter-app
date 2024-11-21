@@ -17,17 +17,20 @@ class GradientBackgroundUnit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: width,
-        child: Stack(
-          children: [
-            ..._buildGradientCircles(context),
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
-              child: const SizedBox.expand(), // Simplified decoration
-            ),
-          ],
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: Center(
+        child: SizedBox(
+          width: width,
+          child: Stack(
+            children: [
+              ..._buildGradientCircles(context),
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
+                child: const SizedBox.expand(), // Simplified decoration
+              ),
+            ],
+          ),
         ),
       ),
     );
