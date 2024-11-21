@@ -16,6 +16,7 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
+import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
@@ -66,8 +67,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         await _processMobileImage(pickedFile.files.single.path!);
       }
       Logger.logDebug(AppStrings.imagePickedSuccessfully);
-    } catch (e) {
-      Logger.logError(e.toString());
+    } catch (error) {
+      Logger.logError(error.toString());
     }
   }
 
@@ -159,8 +160,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     return BlocConsumer<PostCubit, PostState>(
       builder: (context, state) {
         if (state is PostLoading || state is PostUploading) {
-          return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
+          return getIt<CenterLoadingUnit>(param1: AppStrings.uploading);
         }
 
         return Scaffold(
@@ -184,7 +184,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     return RepaintBoundary(
       child: getIt<GradientBackgroundUnit>(
         param1: AppDimens.containerSize400,
-        param2: BackgroundStyle.home,
+        param2: BackgroundStyle.main,
       ),
     );
   }
@@ -204,7 +204,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         children: [
           _buildImagePreview(),
           _buildPickImageButton(),
-          const SizedBox(height: AppDimens.spacingXL28),
+          const SizedBox(height: AppDimens.size28),
           _buildCaptionInput(),
           const SizedBox(height: AppDimens.size72),
         ],
@@ -216,12 +216,17 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     return selectedImage != null
         ? Padding(
             padding: const EdgeInsets.all(AppDimens.paddingRG8),
-            child: Image.memory(selectedImage!,
-                width: double.infinity, fit: BoxFit.contain),
+            child: Image.memory(
+              selectedImage!,
+              width: double.infinity,
+              fit: BoxFit.contain,
+            ),
           )
-        : Icon(Icons.image,
+        : Icon(
+            Icons.image,
             size: AppDimens.imageSize180,
-            color: Theme.of(context).colorScheme.outline);
+            color: Theme.of(context).colorScheme.outline,
+          );
   }
 
   Widget _buildPickImageButton() {
@@ -232,8 +237,10 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         textStyle: AppTextStyles.buttonTextPrimary.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
-        icon: Icon(Icons.filter,
-            color: Theme.of(context).colorScheme.inversePrimary),
+        icon: Icon(
+          Icons.filter,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
       ),
     );
   }
