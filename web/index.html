@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!--
   <script type="text/javascript"> window.flutterWebRenderer = "html"; </script>
+  -->
     <!-- cropperjs -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
@@ -38,6 +40,27 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script>
+    let useHtml = true;
+
+    window.addEventListener('load', function(ev) {
+        _flutter.loader.load({
+            entrypoint: (engineInitializer) => {
+                // Run-time engine configuration
+                let config = {
+                    renderer: useHtml ? "html" : "canvaskit",
+                };
+                engineInitializer.initializeEngine(config).then((appRunner) => {
+                    appRunner.runApp();
+                });
+            },
+            serviceWorker: {
+                serviceWorkerVersion: serviceWorkerVersion,
+            },
+        });
+    });
+</script>
+
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

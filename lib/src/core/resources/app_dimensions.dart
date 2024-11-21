@@ -25,6 +25,7 @@ class AppDimens {
   static const double size88 = 88.0;
   static const double size92 = 92.0;
   static const double size96 = 96.0;
+  static const double size100 = 100.0;
   static const double size120 = 120.0;
   static const double size128 = 128.0;
 
@@ -57,6 +58,7 @@ class AppDimens {
 // Xxl - Extra Extra Large
 
   // Padding
+  static const double paddingXS1 = 1.0;
   static const double paddingXS2 = 2.0;
   static const double paddingSM4 = 4.0;
   static const double paddingRG8 = 8.0;
@@ -70,17 +72,17 @@ class AppDimens {
   static const double paddingXXL48 = 48.0;
 
   // Font/Text Sizes
-  static const double fontSizeXs10 = 10.0;
-  static const double fontSizeSm12 = 12.0;
-  static const double fontSizeRg14 = 14.0;
-  static const double fontSizeMd16 = 16.0;
-  static const double fontSizeLg18 = 18.0;
+  static const double fontSizeXS10 = 10.0;
+  static const double fontSizeSM12 = 12.0;
+  static const double fontSizeRG14 = 14.0;
+  static const double fontSizeMD16 = 16.0;
+  static const double fontSizeLG18 = 18.0;
   static const double fontSizeXL20 = 20.0;
   static const double fontSizeXXL24 = 24.0;
   static const double fontSizeXXL28 = 28.0;
-  static const double fontSizeTitle32 = 32.0;
-  static const double fontSizeTitleLg42 = 42.0;
-  static const double fontSizeTitleXL48 = 48.0;
+  static const double fontSizeXXL32 = 32.0;
+  static const double fontSizeXXL42 = 42.0;
+  static const double fontSizeXXL48 = 48.0;
 
   // Spacing
   static const double spacingXS2 = 2.0;
@@ -121,12 +123,12 @@ class AppDimens {
   static const double letterSpacingPT20 = 2.0;
 
   // Elevations
-  static const double elevationXs1 = 1.0;
-  static const double elevationSm2 = 2.0;
-  static const double elevationRg4 = 4.0;
-  static const double elevationMd8 = 8.0;
-  static const double elevationLg16 = 16.0;
-  static const double elevationLg20 = 20.0;
+  static const double elevationXS1 = 1.0;
+  static const double elevationSM2 = 2.0;
+  static const double elevationRG4 = 4.0;
+  static const double elevationMD8 = 8.0;
+  static const double elevationLG16 = 16.0;
+  static const double elevationLG20 = 20.0;
   static const double elevationXL24 = 24.0;
   static const double elevationXL28 = 28.0;
   static const double elevationXXL36 = 36.0;
@@ -134,13 +136,13 @@ class AppDimens {
   static const double elevationXXL48 = 48.0;
 
   // Corner Radius
-  static const double radiusXs1 = 1.0;
-  static const double radiusXs2 = 2.0;
-  static const double radiusSm4 = 4.0;
-  static const double radiusRg8 = 8.0;
-  static const double radiusMd12 = 12.0;
-  static const double radiusLg16 = 16.0;
-  static const double radiusLg20 = 20.0;
+  static const double radiusXS1 = 1.0;
+  static const double radiusXS2 = 2.0;
+  static const double radiusSM4 = 4.0;
+  static const double radiusRG8 = 8.0;
+  static const double radiusMD12 = 12.0;
+  static const double radiusLG16 = 16.0;
+  static const double radiusLG20 = 20.0;
   static const double radiusXL24 = 24.0;
   static const double radiusXL28 = 28.0;
   static const double radiusXXL36 = 36.0;
@@ -172,6 +174,6 @@ class AppDimens {
   static const double imageSize120 = size120;
   static const double imageSize180 = size180;
 
-  static const double searchBarWidth = size240;
+  static const double searchBarWidth = size260;
   static const double searchBarHeight = size64;
 }

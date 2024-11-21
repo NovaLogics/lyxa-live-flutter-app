@@ -50,9 +50,9 @@ const ColorScheme lightColorScheme = ColorScheme.light(
 
   // --- Inverse Colors ---
   // Used for darker text background in light mode
-  inverseSurface: Color(0xFF303030),
+  inverseSurface: AppColors.bluePurple900L3,
   // Text/Icon color on inverse surface 
-  onInverseSurface: Colors.white,
+  onInverseSurface: AppColors.bluePurple50,
 
   // --- Surface Tint Colors ---
   // Tint for elevated surfaces 

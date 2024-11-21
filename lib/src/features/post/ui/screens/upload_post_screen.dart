@@ -16,7 +16,7 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
-import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -33,12 +33,38 @@ class UploadPostScreen extends StatefulWidget {
 }
 
 class _UploadPostScreenState extends State<UploadPostScreen> {
+  final TextEditingController captionController = TextEditingController();
   late final AuthCubit authCubit = context.read<AuthCubit>();
   late AppUser? currentUser = authCubit.currentUser;
+  Uint8List? selectedImage;
 
-  Uint8List? selectedImage; // Selected image bytes for web
-
-  final TextEditingController captionController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<PostCubit, PostState>(
+      builder: (context, state) {
+        if (state is PostLoading || state is PostUploading) {
+          return _buildLoadingScreen();
+        }
+        return ScrollableScaffold(
+          appBar: _buildAppBar(),
+          body: Column(
+            children: [
+              _buildImagePreview(),
+              _buildPickImageButton(),
+              const SizedBox(height: AppDimens.size28),
+              _buildCaptionInput(),
+              const SizedBox(height: AppDimens.size72),
+            ],
+          ),
+        );
+      },
+      listener: (context, state) {
+        if (state is PostLoaded) {
+          Navigator.pop(context);
+        }
+      },
+    );
+  }
 
   @override
   void dispose() {
@@ -47,7 +73,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   }
 
   /// Handles image selection, cropping, and compression
-  Future<void> handleImageSelection() async {
+  Future<void> _handleImageSelection() async {
     try {
       final pickedFile = await FilePicker.platform.pickFiles(
         type: FileType.image,
@@ -66,8 +92,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         await _processMobileImage(pickedFile.files.single.path!);
       }
       Logger.logDebug(AppStrings.imagePickedSuccessfully);
-    } catch (e) {
-      Logger.logError(e.toString());
+    } catch (error) {
+      Logger.logError(error.toString());
     }
   }
 
@@ -90,7 +116,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     }
   }
 
-  /// Returns platform-specific image cropper settings
+  /// Returns platform specific image cropper settings
   List<PlatformUiSettings> _getImageCropperSettings() {
     return [
       AndroidUiSettings(
@@ -126,7 +152,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   }
 
   /// Handles post creation and upload
-  void createAndUploadPost() {
+  void _createAndUploadPost() {
     final caption = captionController.text.trim();
 
     if (selectedImage == null || caption.isEmpty) {
@@ -154,61 +180,19 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     context.read<PostCubit>().createPost(post, imageBytes: selectedImage);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<PostCubit, PostState>(
-      builder: (context, state) {
-        if (state is PostLoading || state is PostUploading) {
-          return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
-        }
-
-        return Scaffold(
-          body: Stack(
-            children: [
-              _buildBackground(),
-              _buildUploadPage(),
-            ],
-          ),
-        );
-      },
-      listener: (context, state) {
-        if (state is PostLoaded) {
-          Navigator.pop(context);
-        }
-      },
-    );
+  Widget _buildLoadingScreen() {
+    return getIt<CenterLoadingUnit>(param1: AppStrings.uploading);
   }
 
-  Widget _buildBackground() {
-    return RepaintBoundary(
-      child: getIt<GradientBackgroundUnit>(
-        param1: AppDimens.containerSize400,
-        param2: BackgroundStyle.home,
-      ),
-    );
-  }
-
-  Widget _buildUploadPage() {
-    return ScrollableScaffold(
-      appBar: AppBar(
-        title: const Text(AppStrings.createPost),
-        actions: [
-          IconButton(
-            onPressed: createAndUploadPost,
-            icon: const Icon(Icons.upload),
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          _buildImagePreview(),
-          _buildPickImageButton(),
-          const SizedBox(height: AppDimens.spacingXL28),
-          _buildCaptionInput(),
-          const SizedBox(height: AppDimens.size72),
-        ],
-      ),
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: const Text(AppStrings.createPost),
+      actions: [
+        IconButton(
+          onPressed: _createAndUploadPost,
+          icon: const Icon(Icons.upload),
+        )
+      ],
     );
   }
 
@@ -216,24 +200,31 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     return selectedImage != null
         ? Padding(
             padding: const EdgeInsets.all(AppDimens.paddingRG8),
-            child: Image.memory(selectedImage!,
-                width: double.infinity, fit: BoxFit.contain),
+            child: Image.memory(
+              selectedImage!,
+              width: double.infinity,
+              fit: BoxFit.contain,
+            ),
           )
-        : Icon(Icons.image,
+        : Icon(
+            Icons.image,
             size: AppDimens.imageSize180,
-            color: Theme.of(context).colorScheme.outline);
+            color: Theme.of(context).colorScheme.outline,
+          );
   }
 
   Widget _buildPickImageButton() {
     return Center(
       child: GradientButton(
         text: AppStrings.pickImageButton.toUpperCase(),
-        onPressed: handleImageSelection,
+        onPressed: _handleImageSelection,
         textStyle: AppTextStyles.buttonTextPrimary.copyWith(
-          color: Theme.of(context).colorScheme.inversePrimary,
+          color: AppColors.whitePure,
         ),
-        icon: Icon(Icons.filter,
-            color: Theme.of(context).colorScheme.inversePrimary),
+        icon: const Icon(
+          Icons.filter,
+          color: AppColors.whitePure,
+        ),
       ),
     );
   }
@@ -244,8 +235,10 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(AppStrings.caption,
-              style: AppTextStyles.subtitleSecondary),
+          const Text(
+            AppStrings.caption,
+            style: AppTextStyles.subtitleSecondary,
+          ),
           const SizedBox(height: AppDimens.spacingSM4),
           MultilineTextFieldUnit(
             controller: captionController,

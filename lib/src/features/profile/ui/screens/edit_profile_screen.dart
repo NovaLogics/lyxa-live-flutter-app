@@ -102,7 +102,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return RepaintBoundary(
       child: getIt<GradientBackgroundUnit>(
         param1: AppDimens.containerSize400,
-        param2: BackgroundStyle.home,
+        param2: BackgroundStyle.main,
       ),
     );
   }
@@ -220,7 +220,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget _buildProfileImage() {
     return Center(
       child: Material(
-        elevation: AppDimens.elevationSm2,
+        elevation: AppDimens.elevationSM2,
         shape: const CircleBorder(),
         color: Theme.of(context).colorScheme.outline,
         child: Padding(

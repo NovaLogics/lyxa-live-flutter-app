@@ -1,21 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
-
-///USAGE ->
-//  ToastMessengerUnit.showToast(
-//     context: context,
-//     message: "This is a custom toast message!",
-//     icon: Icons.check_circle,
-//     backgroundColor: AppColors.deepPurpleShade800,
-//     textColor: Colors.white,
-//     shadowColor: Colors.black,
-//     buttonText: "Undo",
-//     onButtonPressed: () {
-//       print("Button Pressed!");
-//     },
-//     duration: const Duration(seconds: 5), // Customize how long to show
-//   );
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
 
 class ToastDuration {
   static const Duration second1 = Duration(seconds: 1);
@@ -39,6 +25,21 @@ class ToastMessengerUnit {
   static OverlayEntry? _overlayEntry;
   static Timer? _toastTimer;
 
+  static void showErrorToast({
+    required BuildContext context,
+    required String message,
+  }) {
+    showToast(
+      context: context,
+      message: message,
+      icon: Icons.error,
+      backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+      textColor: Theme.of(context).colorScheme.onInverseSurface,
+      shadowColor: AppColors.blackShade,
+      duration: ToastDuration.second5,
+    );
+  }
+
   /// Show a custom toast message
   /// [message] - Text to display
   /// [context] - BuildContext required to show overlay
@@ -60,6 +61,22 @@ class ToastMessengerUnit {
     VoidCallback? onButtonPressed,
     Duration duration = ToastDuration.second3,
   }) {
+
+    ///USAGE ->
+//  ToastMessengerUnit.showToast(
+//     context: context,
+//     message: "This is a custom toast message!",
+//     icon: Icons.check_circle,
+//     backgroundColor: AppColors.deepPurpleShade800,
+//     textColor: Colors.white,
+//     shadowColor: Colors.black,
+//     buttonText: "Undo",
+//     onButtonPressed: () {
+//       print("Button Pressed!");
+//     },
+//     duration: const Duration(seconds: 5), // Customize how long to show
+//   );
+
     FocusScope.of(context).unfocus();
 
     // Remove any existing toast
@@ -131,7 +148,13 @@ class ToastMessengerUnit {
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(color: textColor, fontSize: 16),
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: FONT_MONTSERRAT,
+                  letterSpacing: 0.1,
+                ),
               ),
             ),
             if (buttonText != null && onButtonPressed != null) ...[
@@ -148,7 +171,7 @@ class ToastMessengerUnit {
                 child: Text(
                   buttonText,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: textColor,
                     fontFamily: FONT_RALEWAY,

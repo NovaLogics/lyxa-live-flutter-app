@@ -34,11 +34,11 @@ class AppStrings {
   static const String noPostAvailableError = 'No posts available';
 
   // UI SECTION [4]-> DRAWER
-  static const String titleHome = "HOME";
-  static const String titleProfile = "PROFILE";
-  static const String titleSearch = "SEARCH";
-  static const String titleSettings = "SETTINGS";
-  static const String titleLogout = "LOGOUT";
+  static const String titleHome = 'HOME';
+  static const String titleProfile = 'PROFILE';
+  static const String titleSearch = 'SEARCH';
+  static const String titleSettings = 'SETTINGS';
+  static const String titleLogout = 'LOGOUT';
 
   // UI SECTION [5]-> PROFILE
   static const String userNotFoundError = 'User not found';
@@ -46,8 +46,8 @@ class AppStrings {
       'Failed to fetch user for profile update';
 
   // UI SECTION [6]-> SEARCH
-  static const String noUserFoundMessage = "No user found";
-  static const String defaultSearchMessage = "Start search for user...";
+  static const String noUserFoundMessage = 'No user found';
+  static const String defaultSearchMessage = 'Start search for user...';
 
   // UI SECTION [7]-> SETTINGS
   static const String settings = 'Settings';
@@ -61,7 +61,7 @@ class AppStrings {
   static const String hintConfirmPassword = 'Confirm Password (e.g., P@ssw0rd)';
 
   // Common
-  static const String pleaseWaitMessage = 'Please wait...';
+  static const String pleaseWait = 'Please wait...';
   static const String imageLoadError = 'Error loading image..';
   static const String profileNotFoundError = 'Error profile not found..';
   static const String postsUpperCase = 'POSTS';
@@ -81,21 +81,34 @@ class AppStrings {
   static const String loadingMessage = 'Loading...';
   static const String userNotFoundMessage = 'User not found';
 
-  static const String createPost = "Create Post";
-  static const String caption = "Caption";
-  static const String captionHint = "Add post caption here..";
-  static const String captionLabel = "Caption Area...";
-  static const String pickImageButton = "Pick Image";
+  static const String createPost = 'Create Post';
+  static const String noPosts = 'No Posts';
+  static const String failedToLoadPostError = 'Failed to load posts.';
+  static const String caption = 'Caption';
+  static const String captionHint = 'Add post caption here..';
+  static const String captionLabel = 'Caption Area...';
+  static const String pickImageButton = 'Pick Image';
   static const String errorImageAndCaptionRequired =
-      "Both image and caption are required.";
-  static const String cropperTitle = "Crop Image";
-  static const String imagePickedSuccessfully = "Image picked successfully";
+      'Both image and caption are required.';
+  static const String cropperTitle = 'Crop Image';
+  static const String imagePickedSuccessfully = 'Image picked successfully';
 
-  static const String updating = "Updating...";
+  static const String updating = 'Updating...';
+  static const String uploading = 'Uploading...';
   static const String errorFetchingImage =
-      "Error picking or compressing image.";
-  static const String pickImage = "Pick Image";
-  static const String editProfile = "Edit Profile";
-  static const String addYourStorylineBio = "Add your bio / storyline";
-  static const String cropperToolbarTitle = "Profile Image Cropper";
+      'Error picking or compressing image.';
+  static const String pickImage = 'Pick Image';
+  static const String editProfile = 'Edit Profile';
+  static const String addYourStorylineBio = 'Add your bio / storyline';
+  static const String cropperToolbarTitle = 'Profile Image Cropper';
+
+  static const String deleteCommentMessage = 'Delete This Comment?';
+  static const String deleteThisPostMessage = 'Delete This Post?';
+  static const String addNewComment = 'Add a new comment';
+  static const String typeComment = 'Type a comment...';
+  static const String addComment = 'Add Comment';
+  static const String cancel = 'Cancel';
+  static const String delete = 'Delete';
+  static const String save = 'Save';
+  static const String dialog = 'dialog';
 }

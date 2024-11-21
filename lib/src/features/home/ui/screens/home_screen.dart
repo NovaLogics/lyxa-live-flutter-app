@@ -34,25 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _fetchCurrentUserData();
   }
 
-  void _fetchCurrentUserData() {
-    AuthCubit authCubit = context.read<AuthCubit>();
-    ProfileCubit profileCubit = context.read<ProfileCubit>();
-    AppUser? currentUser = authCubit.currentUser;
-    _currentUserId = currentUser!.uid;
-
-    if (_currentUserId == null) return;
-    profileCubit.fetchUserProfile(_currentUserId);
-  }
-
-  void _fetchAllPosts() {
-    _postCubit.fetchAllPosts();
-  }
-
-  void _deletePost(String postId) {
-    _postCubit.deletePost(postId);
-    _fetchAllPosts();
-  }
-
   @override
   Widget build(BuildContext context) {
     return ConstrainedScaffold(
@@ -73,6 +54,34 @@ class _HomeScreenState extends State<HomeScreen> {
             return const SizedBox();
           }
         },
+      ),
+    );
+  }
+
+  void _fetchCurrentUserData() {
+    AuthCubit authCubit = context.read<AuthCubit>();
+    ProfileCubit profileCubit = context.read<ProfileCubit>();
+    AppUser? currentUser = authCubit.currentUser;
+    _currentUserId = currentUser!.uid;
+
+    if (_currentUserId == null) return;
+    profileCubit.fetchUserProfile(_currentUserId);
+  }
+
+  void _fetchAllPosts() {
+    _postCubit.fetchAllPosts();
+  }
+
+  void _deletePost(String postId) {
+    _postCubit.deletePost(postId);
+    _fetchAllPosts();
+  }
+
+  void _navigateToUploadPostScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const UploadPostScreen(),
       ),
     );
   }
@@ -108,19 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Navigate to Upload Post Screen
-  void _navigateToUploadPostScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const UploadPostScreen(),
-      ),
-    );
-  }
-
   // Loading state widget
   Widget _buildLoadingState() {
-    return getIt<CenterLoadingUnit>(param1: AppStrings.pleaseWaitMessage);
+    return getIt<CenterLoadingUnit>(param1: AppStrings.pleaseWait);
   }
 
   // Post list display
