@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
@@ -22,7 +21,6 @@ import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
-import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 /// Main Application Entry Point for LyxaApp
@@ -38,7 +36,7 @@ class LyxaApp extends StatelessWidget {
         builder: (context, currentTheme) => MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: currentTheme,
-          home: _buildHomeScreen(),
+          home: _buildMainScreen(),
         ),
       ),
     );
@@ -88,7 +86,7 @@ class LyxaApp extends StatelessWidget {
   }
 
   /// Displays the appropriate screen based on the user's authentication status.
-  Widget _buildHomeScreen() {
+  Widget _buildMainScreen() {
     return BlocConsumer<AuthCubit, AuthState>(
       builder: (context, state) {
         Logger.logDebug(state.toString());
