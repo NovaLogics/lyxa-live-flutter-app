@@ -23,7 +23,7 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
   // Text/Icon color on primary
   onPrimary: bluePurpleShade400,
   // Darker shade of primary
-  primaryContainer: AppColors.blueGrey900X,
+  primaryContainer: AppColors.blueGrey900L1,
   // Text/Icon color on primary container
   onPrimaryContainer: bluePurpleShade50,
   // Secondary color for accents
@@ -55,10 +55,10 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
 
   inversePrimary: bluePurpleShade50,
 
-  surfaceContainer: AppColors.blueGrey900X,
+  surfaceContainer: AppColors.blueGrey900L1,
 
-  surfaceContainerLowest: AppColors.bluePurple900Z,
-  surfaceContainerLow: AppColors.bluePurple900Z,
-  surfaceContainerHigh: AppColors.blueGrey900Y,
-  surfaceContainerHighest: AppColors.blueGrey900X,
+  surfaceContainerLowest: AppColors.bluePurple900L3,
+  surfaceContainerLow: AppColors.bluePurple900L3,
+  surfaceContainerHigh: AppColors.blueGrey900L2,
+  surfaceContainerHighest: AppColors.blueGrey900L1,
 );

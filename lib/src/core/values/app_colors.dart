@@ -50,7 +50,7 @@ class AppColors {
 
   // App Color Palette
   // -> BLUE PURPLE
-  static const Color bluePurple50 = Color.fromARGB(255, 247, 248, 254);
+  static const Color bluePurple50 = Color(0xFFF7F8FE);
   static const Color bluePurple100 = Color(0xFFC5CAE9);
   static const Color bluePurple200 = Color(0xFF9FA8DA);
   static const Color bluePurple300 = Color(0xFF7986CB);
@@ -60,9 +60,9 @@ class AppColors {
   static const Color bluePurple700 = Color(0xFF303F9F);
   static const Color bluePurple800 = Color(0xFF283593);
   static const Color bluePurple900 = Color(0xFF1A237E);
-  static const Color bluePurple900X = Color.fromARGB(255, 61, 31, 109);
-  static const Color bluePurple900Y = Color.fromARGB(255, 41, 20, 73);
-  static const Color bluePurple900Z = Color.fromARGB(255, 27, 10, 52);
+  static const Color bluePurple900L1 = Color(0xFF3D1F6D);
+  static const Color bluePurple900L2 = Color(0xFF291449);
+  static const Color bluePurple900L3 = Color(0xFF1B0A34);
 
   // -> DEEP PURPLE
   static const Color deepPurple50 = Color(0xFFEDE7F6);
@@ -87,8 +87,8 @@ class AppColors {
   static const Color blueGrey700 = Color(0xFF455A64);
   static const Color blueGrey800 = Color(0xFF37474F);
   static const Color blueGrey900 = Color(0xFF263238);
-  static const Color blueGrey900X = Color.fromARGB(255, 13, 13, 13);
-  static const Color blueGrey900Y = Color.fromARGB(255, 28, 40, 46);
+  static const Color blueGrey900L1 = Color(0xFF0D0D0D);
+  static const Color blueGrey900L2 = Color(0xFF1C2830);
 
   // -> GOLD
   static const Color gold50 = Color(0xFFFFF8E1);
