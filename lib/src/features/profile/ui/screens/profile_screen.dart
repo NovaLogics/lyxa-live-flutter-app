@@ -6,6 +6,7 @@ import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
@@ -34,7 +35,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late final AuthCubit _authCubit;
   late final ProfileCubit _profileCubit;
-  late final String? _currentUserId;
+  late final String? _appUserId;
 
   @override
   void initState() {
@@ -65,7 +66,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _authCubit = context.read<AuthCubit>();
     _profileCubit = context.read<ProfileCubit>();
     AppUser? currentUser = _authCubit.currentUser;
-    _currentUserId = currentUser!.uid;
+    _appUserId = currentUser!.uid;
+    Logger.logDebug(_appUserId.toString());
 
     _profileCubit.fetchUserProfile(uid);
   }
@@ -77,27 +79,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (profileState is! ProfileLoaded) return;
 
     final profileUser = profileState.profileUser;
-    final isFollowing = profileUser.followers.contains(_currentUserId);
+    final isFollowing = profileUser.followers.contains(_appUserId);
 
     // Optimistically update UI
     setState(() {
       if (isFollowing) {
-        profileUser.followers.remove(_currentUserId!);
+        profileUser.followers.remove(_appUserId!);
       } else {
-        profileUser.followers.add(_currentUserId!);
+        profileUser.followers.add(_appUserId!);
       }
     });
 
     // Perform follow/unfollow logic and handle errors
     _profileCubit
-        .toggleFollow(_currentUserId!, widget.displayUserId)
+        .toggleFollow(_appUserId!, widget.displayUserId)
         .catchError((_) {
       // Revert optimistic UI changes if the operation fails
       setState(() {
         if (isFollowing) {
-          profileUser.followers.add(_currentUserId);
+          profileUser.followers.add(_appUserId);
         } else {
-          profileUser.followers.remove(_currentUserId);
+          profileUser.followers.remove(_appUserId);
         }
       });
     });
@@ -108,7 +110,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileContent(BuildContext context, ProfileUser user) {
-    final isOwnProfile = (widget.displayUserId == _currentUserId!);
+    final isOwnProfile = (widget.displayUserId == _appUserId!);
+    Logger.logDebug('$isOwnProfile  ${widget.displayUserId} = $_appUserId ');
 
     return ConstrainedScaffold(
       appBar: _buildAppBar(context, user, isOwnProfile),
@@ -135,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return AppBar(
       title: Center(
         child: Text(
-          '${user.name}    ',
+          user.name,
           style: AppTextStyles.textStylePost.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.bold,
@@ -145,9 +148,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      actions: isOwnProfile
-          ? [
-              IconButton(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+      actions: [
+        isOwnProfile
+            ? IconButton(
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -155,9 +164,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 icon: const Icon(Icons.settings_outlined),
+                iconSize: AppDimens.iconSizeSM24,
+              )
+            : const SizedBox(
+                width: AppDimens.iconSizeMD32,
               ),
-            ]
-          : null,
+      ],
     );
   }
 
@@ -246,7 +258,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildFollowActionSection(ProfileUser user) {
     return FollowButtonUnit(
       onPressed: _handleFollowButtonPressed,
-      isFollowing: user.followers.contains(_currentUserId!),
+      isFollowing: user.followers.contains(_appUserId!),
     );
   }
 
