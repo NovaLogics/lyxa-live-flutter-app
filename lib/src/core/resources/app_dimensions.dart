@@ -174,6 +174,8 @@ class AppDimens {
   static const double imageSize120 = size120;
   static const double imageSize180 = size180;
 
+    static const double actionIconSize26 = 26.0;
+
   static const double searchBarWidth = size260;
   static const double searchBarHeight = size64;
 }
