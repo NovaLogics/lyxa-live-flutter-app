@@ -9,14 +9,13 @@ import 'package:lyxa_live/src/core/utils/date_time_util.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
-import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/comment_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 
@@ -35,64 +34,64 @@ class PostTileUnit extends StatefulWidget {
 }
 
 class _PostTileUnitState extends State<PostTileUnit> {
-  // Cubits for state management
+  final TextEditingController commentTextController = TextEditingController();
   late final PostCubit postCubit = context.read<PostCubit>();
   late final ProfileCubit profileCubit = context.read<ProfileCubit>();
+  // late final ProfileUser? postUser;
+  late final String? _currentUserId;
+  late final String? _currentUserName;
 
-  bool isOwnPost = false; // Determines if the post belongs to the current user
-
-  AppUser? currentUser; // Stores the current logged-in user
-  ProfileUser? postUser; // Stores the user who created the post
-
-  // Text controller for handling the comment input
-  final commentTextController = TextEditingController();
+  bool isOwnPost = false;
 
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
-    fetchPostUser();
+    _fetchCurrentUser();
+    // _fetchPostUser();
   }
 
   // Fetch the current logged-in user
-  void getCurrentUser() {
+  void _fetchCurrentUser() {
     final authCubit = context.read<AuthCubit>();
-    currentUser = authCubit.currentUser;
-    isOwnPost = widget.post.userId == currentUser!.uid;
+    AppUser? currentUser = authCubit.currentUser;
+    _currentUserId = currentUser!.uid;
+    _currentUserName = currentUser.name;
+
+    isOwnPost = (widget.post.userId == _currentUserId);
   }
 
   // Fetch the profile user for the post
-  void fetchPostUser() async {
-    final fetchedUser = await profileCubit.getUserProfile(widget.post.userId);
-    if (fetchedUser != null) {
-      setState(() {
-        postUser = fetchedUser;
-      });
-    }
-  }
+  // void _fetchPostUser() async {
+  //   final fetchedUser = await profileCubit.getUserProfile(widget.post.userId);
+  //   if (fetchedUser != null) {
+  //     setState(() {
+  //       postUser = fetchedUser;
+  //     });
+  //   }
+  // }
 
   // Handle the logic for liking/unliking a post
   void toggleLikePost() {
-    final isLiked = widget.post.likes.contains(currentUser!.uid);
+    final isLiked = widget.post.likes.contains(_currentUserId);
 
     // Optimistically update the UI
     setState(() {
       if (isLiked) {
-        widget.post.likes.remove(currentUser!.uid); // Unlike
+        widget.post.likes.remove(_currentUserId); // Unlike
       } else {
-        widget.post.likes.add(currentUser!.uid); // Like
+        widget.post.likes.add(_currentUserId!); // Like
       }
     });
 
     // Update like status in the backend
     postCubit
-        .toggleLikePost(widget.post.id, currentUser!.uid)
+        .toggleLikePost(widget.post.id, _currentUserId!)
         .catchError((error) {
       setState(() {
         if (isLiked) {
-          widget.post.likes.add(currentUser!.uid); // Revert the unlike
+          widget.post.likes.add(_currentUserId); // Revert the unlike
         } else {
-          widget.post.likes.remove(currentUser!.uid); // Revert the like
+          widget.post.likes.remove(_currentUserId); // Revert the like
         }
       });
     });
@@ -104,11 +103,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text(AppStrings.addNewComment),
-        content: TextFieldUnit(
+        content: MultilineTextFieldUnit(
           controller: commentTextController,
           hintText: AppStrings.typeComment,
-          obscureText: false,
-          prefixIcon: null,
+          labelText: AppStrings.addComment,
+          maxLength: MAX_LENGTH_COMMENTS_FIELD,
         ),
         actions: [
           // Cancel button
@@ -138,8 +137,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
       final newComment = Comment(
         id: DateTime.now().microsecondsSinceEpoch.toString(),
         postId: widget.post.id,
-        userId: currentUser!.uid,
-        userName: currentUser!.name,
+        userId: _currentUserId!,
+        userName: _currentUserName!,
         text: comment,
         timestamp: DateTime.now(),
       );
@@ -205,7 +204,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Profile picture
-                  postUser?.profileImageUrl != null
+                  widget.post.userProfileImageUrl != null
                       ? Material(
                           elevation: AppDimens.elevationSM2,
                           shape: const CircleBorder(),
@@ -213,7 +212,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                           child: Padding(
                             padding: const EdgeInsets.all(1),
                             child: CachedNetworkImage(
-                              imageUrl: postUser!.profileImageUrl,
+                              imageUrl: widget.post.userProfileImageUrl,
                               placeholder: (_, __) =>
                                   const CircularProgressIndicator(),
                               errorWidget: (_, __, ___) => Icon(
@@ -346,11 +345,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
                               .surface
                               .withOpacity(0.4),
                           child: SvgPicture.asset(
-                            widget.post.likes.contains(currentUser!.uid)
+                            widget.post.likes.contains(_currentUserId)
                                 ? ICON_HEART_FILLED
                                 : ICON_HEART_BORDER,
                             colorFilter: ColorFilter.mode(
-                              (widget.post.likes.contains(currentUser!.uid)
+                              (widget.post.likes.contains(_currentUserId)
                                   ? Theme.of(context).colorScheme.primary
                                   : Theme.of(context).colorScheme.onPrimary),
                               BlendMode.srcIn,
