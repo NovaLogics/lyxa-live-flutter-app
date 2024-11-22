@@ -10,22 +10,23 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
-import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/comment_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
+import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class PostTileUnit extends StatefulWidget {
   final Post post;
-  final void Function()? onDeletePressed;
+  final AppUser currentAppUser;
+  final VoidCallback? onDeletePressed;
 
   const PostTileUnit({
     super.key,
     required this.post,
+    required this.currentAppUser,
     required this.onDeletePressed,
   });
 
@@ -34,12 +35,11 @@ class PostTileUnit extends StatefulWidget {
 }
 
 class _PostTileUnitState extends State<PostTileUnit> {
-  final TextEditingController commentTextController = TextEditingController();
-  late final PostCubit postCubit = context.read<PostCubit>();
-  late final ProfileCubit profileCubit = context.read<ProfileCubit>();
-  late final String? _currentUserId;
-  late final String? _currentUserName;
+  final TextEditingController _commentTextController = TextEditingController();
+  late final PostCubit _postCubit = context.read<PostCubit>();
   bool _isOwnPost = false;
+
+  String get _appUserId => widget.currentAppUser.uid;
 
   @override
   void initState() {
@@ -74,67 +74,64 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
   @override
   void dispose() {
-    commentTextController.dispose();
+    _commentTextController.dispose();
     super.dispose();
   }
 
   // Fetch the current logged-in user
   void _fetchCurrentUser() {
-    final authCubit = context.read<AuthCubit>();
-    AppUser? currentUser = authCubit.currentUser;
-    _currentUserId = currentUser!.uid;
-    _currentUserName = currentUser.name;
-    _isOwnPost = (widget.post.userId == _currentUserId);
+    _isOwnPost = (widget.post.userId == _appUserId);
   }
 
   // Handle the logic for liking/unliking a post
   void _toggleLikePost() {
-    final isLiked = widget.post.likes.contains(_currentUserId);
+    final isLiked = widget.post.likes.contains(_appUserId);
 
     // Optimistically update the UI
     setState(() {
       if (isLiked) {
-        widget.post.likes.remove(_currentUserId); // Unlike
+        widget.post.likes.remove(_appUserId);
       } else {
-        widget.post.likes.add(_currentUserId!); // Like
+        widget.post.likes.add(_appUserId);
       }
     });
 
     // Update like status in the backend
-    postCubit
-        .toggleLikePost(widget.post.id, _currentUserId!)
-        .catchError((error) {
+    _postCubit.toggleLikePost(widget.post.id, _appUserId).catchError((error) {
       setState(() {
+        ToastMessengerUnit.showErrorToast(
+            context: context, message: error.toString());
+        // Revert like/unlike
         if (isLiked) {
-          widget.post.likes.add(_currentUserId); // Revert the unlike
+          widget.post.likes.add(_appUserId);
         } else {
-          widget.post.likes.remove(_currentUserId); // Revert the like
+          widget.post.likes.remove(_appUserId);
         }
       });
     });
   }
 
-  // Opens a dialog for adding a new comment
-  void _openNewCommentBox() {
+  // Opens the comment input dialog
+  void _openCommentDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text(AppStrings.addNewComment),
         content: MultilineTextFieldUnit(
-          controller: commentTextController,
+          controller: _commentTextController,
           hintText: AppStrings.typeComment,
           labelText: AppStrings.addComment,
           maxLength: MAX_LENGTH_COMMENTS_FIELD,
         ),
         actions: [
-          // Cancel button
+          // CANCEL BUTTON
           TextButton(
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
             },
             child: const Text(AppStrings.cancel),
           ),
-          // Save button to submit the comment
+          // SAVE/SUBMIT BUTTON
           TextButton(
             onPressed: () {
               _addComment();
@@ -149,17 +146,17 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
   // Adds a new comment to the post
   void _addComment() {
-    final comment = commentTextController.text;
+    final comment = _commentTextController.text.trim();
     if (comment.isNotEmpty) {
       final newComment = Comment(
         id: DateTime.now().microsecondsSinceEpoch.toString(),
         postId: widget.post.id,
-        userId: _currentUserId!,
-        userName: _currentUserName!,
+        userId: _appUserId,
+        userName: widget.currentAppUser.name,
         text: comment,
         timestamp: DateTime.now(),
       );
-      postCubit.addComment(widget.post.id, newComment);
+      _postCubit.addComment(widget.post.id, newComment);
     }
   }
 
@@ -168,29 +165,40 @@ class _PostTileUnitState extends State<PostTileUnit> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(AppStrings.deleteThisPostMessage),
+        title: Text(
+          AppStrings.deleteThisPostMessage,
+          style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         actions: [
-          // Cancel button
+          // CANCEL BUTTON
           TextButton(
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
             },
-            child: const Text(AppStrings.cancel),
+            child: Text(
+              AppStrings.cancel,
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+            ),
           ),
-          // Confirm Delete button
+          // CONFIRM DELETE BUTTON
           TextButton(
             onPressed: () {
               widget.onDeletePressed!();
               Navigator.of(context).pop();
             },
-            child: const Text(AppStrings.delete),
+            child: Text(
+              AppStrings.delete,
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+            ),
           ),
         ],
       ),
     );
   }
 
-    Widget _buildPostHeader() {
+  Widget _buildPostHeader() {
     return Row(
       children: [
         GestureDetector(
@@ -343,11 +351,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     shadowColor:
                         Theme.of(context).colorScheme.surface.withOpacity(0.4),
                     child: SvgPicture.asset(
-                      widget.post.likes.contains(_currentUserId)
+                      widget.post.likes.contains(_appUserId)
                           ? ICON_HEART_FILLED
                           : ICON_HEART_BORDER,
                       colorFilter: ColorFilter.mode(
-                        (widget.post.likes.contains(_currentUserId)
+                        (widget.post.likes.contains(_appUserId)
                             ? Theme.of(context).colorScheme.primary
                             : Theme.of(context).colorScheme.onPrimary),
                         BlendMode.srcIn,
@@ -371,7 +379,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           const SizedBox(width: AppDimens.size12),
           // Comment button
           GestureDetector(
-            onTap: _openNewCommentBox,
+            onTap: _openCommentDialog,
             child: PhysicalModel(
               color: Colors.transparent,
               elevation: AppDimens.elevationMD8,
