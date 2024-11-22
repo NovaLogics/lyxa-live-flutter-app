@@ -37,146 +37,16 @@ class _PostTileUnitState extends State<PostTileUnit> {
   final TextEditingController commentTextController = TextEditingController();
   late final PostCubit postCubit = context.read<PostCubit>();
   late final ProfileCubit profileCubit = context.read<ProfileCubit>();
-  // late final ProfileUser? postUser;
+
   late final String? _currentUserId;
   late final String? _currentUserName;
 
-  bool isOwnPost = false;
+  bool _isOwnPost = false;
 
   @override
   void initState() {
     super.initState();
     _fetchCurrentUser();
-    // _fetchPostUser();
-  }
-
-  // Fetch the current logged-in user
-  void _fetchCurrentUser() {
-    final authCubit = context.read<AuthCubit>();
-    AppUser? currentUser = authCubit.currentUser;
-    _currentUserId = currentUser!.uid;
-    _currentUserName = currentUser.name;
-
-    isOwnPost = (widget.post.userId == _currentUserId);
-  }
-
-  // Fetch the profile user for the post
-  // void _fetchPostUser() async {
-  //   final fetchedUser = await profileCubit.getUserProfile(widget.post.userId);
-  //   if (fetchedUser != null) {
-  //     setState(() {
-  //       postUser = fetchedUser;
-  //     });
-  //   }
-  // }
-
-  // Handle the logic for liking/unliking a post
-  void toggleLikePost() {
-    final isLiked = widget.post.likes.contains(_currentUserId);
-
-    // Optimistically update the UI
-    setState(() {
-      if (isLiked) {
-        widget.post.likes.remove(_currentUserId); // Unlike
-      } else {
-        widget.post.likes.add(_currentUserId!); // Like
-      }
-    });
-
-    // Update like status in the backend
-    postCubit
-        .toggleLikePost(widget.post.id, _currentUserId!)
-        .catchError((error) {
-      setState(() {
-        if (isLiked) {
-          widget.post.likes.add(_currentUserId); // Revert the unlike
-        } else {
-          widget.post.likes.remove(_currentUserId); // Revert the like
-        }
-      });
-    });
-  }
-
-  // Opens a dialog for adding a new comment
-  void openNewCommentBox() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(AppStrings.addNewComment),
-        content: MultilineTextFieldUnit(
-          controller: commentTextController,
-          hintText: AppStrings.typeComment,
-          labelText: AppStrings.addComment,
-          maxLength: MAX_LENGTH_COMMENTS_FIELD,
-        ),
-        actions: [
-          // Cancel button
-          TextButton(
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-            },
-            child: const Text(AppStrings.cancel),
-          ),
-          // Save button to submit the comment
-          TextButton(
-            onPressed: () {
-              addComment();
-              Navigator.of(context).pop();
-            },
-            child: const Text(AppStrings.save),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Adds a new comment to the post
-  void addComment() {
-    final comment = commentTextController.text;
-    if (comment.isNotEmpty) {
-      final newComment = Comment(
-        id: DateTime.now().microsecondsSinceEpoch.toString(),
-        postId: widget.post.id,
-        userId: _currentUserId!,
-        userName: _currentUserName!,
-        text: comment,
-        timestamp: DateTime.now(),
-      );
-      postCubit.addComment(widget.post.id, newComment);
-    }
-  }
-
-  @override
-  void dispose() {
-    commentTextController.dispose();
-    super.dispose();
-  }
-
-  // Show confirmation dialog for post deletion
-  void showDeleteOptions() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(AppStrings.deleteThisPostMessage),
-        actions: [
-          // Cancel button
-          TextButton(
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-            },
-            child: const Text(AppStrings.cancel),
-          ),
-          // Confirm Delete button
-          TextButton(
-            onPressed: () {
-              widget.onDeletePressed!();
-              Navigator.of(context).pop();
-            },
-            child: const Text(AppStrings.delete),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -271,7 +141,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
                   const Spacer(),
                   // Delete option if it's the user's post
-                  if (isOwnPost)
+                  if (_isOwnPost)
                     GestureDetector(
                       onTap: showDeleteOptions,
                       child: SvgPicture.asset(
@@ -511,6 +381,136 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   Theme.of(context).colorScheme.inversePrimary.withOpacity(0.1),
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    commentTextController.dispose();
+    super.dispose();
+  }
+
+  // Fetch the current logged-in user
+  void _fetchCurrentUser() {
+    final authCubit = context.read<AuthCubit>();
+    AppUser? currentUser = authCubit.currentUser;
+    _currentUserId = currentUser!.uid;
+    _currentUserName = currentUser.name;
+    _isOwnPost = (widget.post.userId == _currentUserId);
+  }
+
+  // late final ProfileUser? postUser;
+  // _fetchPostUser();
+  // Fetch the profile user for the post
+  // void _fetchPostUser() async {
+  //   final fetchedUser = await profileCubit.getUserProfile(widget.post.userId);
+  //   if (fetchedUser != null) {
+  //     setState(() {
+  //       postUser = fetchedUser;
+  //     });
+  //   }
+  // }
+
+  // Handle the logic for liking/unliking a post
+  void toggleLikePost() {
+    final isLiked = widget.post.likes.contains(_currentUserId);
+
+    // Optimistically update the UI
+    setState(() {
+      if (isLiked) {
+        widget.post.likes.remove(_currentUserId); // Unlike
+      } else {
+        widget.post.likes.add(_currentUserId!); // Like
+      }
+    });
+
+    // Update like status in the backend
+    postCubit
+        .toggleLikePost(widget.post.id, _currentUserId!)
+        .catchError((error) {
+      setState(() {
+        if (isLiked) {
+          widget.post.likes.add(_currentUserId); // Revert the unlike
+        } else {
+          widget.post.likes.remove(_currentUserId); // Revert the like
+        }
+      });
+    });
+  }
+
+  // Opens a dialog for adding a new comment
+  void openNewCommentBox() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(AppStrings.addNewComment),
+        content: MultilineTextFieldUnit(
+          controller: commentTextController,
+          hintText: AppStrings.typeComment,
+          labelText: AppStrings.addComment,
+          maxLength: MAX_LENGTH_COMMENTS_FIELD,
+        ),
+        actions: [
+          // Cancel button
+          TextButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+            child: const Text(AppStrings.cancel),
+          ),
+          // Save button to submit the comment
+          TextButton(
+            onPressed: () {
+              addComment();
+              Navigator.of(context).pop();
+            },
+            child: const Text(AppStrings.save),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Adds a new comment to the post
+  void addComment() {
+    final comment = commentTextController.text;
+    if (comment.isNotEmpty) {
+      final newComment = Comment(
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        postId: widget.post.id,
+        userId: _currentUserId!,
+        userName: _currentUserName!,
+        text: comment,
+        timestamp: DateTime.now(),
+      );
+      postCubit.addComment(widget.post.id, newComment);
+    }
+  }
+
+  // Show confirmation dialog for post deletion
+  void showDeleteOptions() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(AppStrings.deleteThisPostMessage),
+        actions: [
+          // Cancel button
+          TextButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+            child: const Text(AppStrings.cancel),
+          ),
+          // Confirm Delete button
+          TextButton(
+            onPressed: () {
+              widget.onDeletePressed!();
+              Navigator.of(context).pop();
+            },
+            child: const Text(AppStrings.delete),
+          ),
         ],
       ),
     );
