@@ -160,6 +160,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
       text: comment,
       timestamp: DateTime.now(),
     );
+    _commentTextController.text = '';
 
     // Optimistically update the UI
     setState(() {
@@ -171,6 +172,21 @@ class _PostTileUnitState extends State<PostTileUnit> {
         ToastMessengerUnit.showErrorToast(
             context: context, message: error.toString());
         widget.post.comments.remove(newComment);
+      });
+    });
+  }
+
+  // Handle the logic for deleting comment to the post
+  void _deleteSelectedComment(Comment comment) {
+    setState(() {
+      widget.post.comments.remove(comment);
+    });
+
+    _postCubit.deleteComment(widget.post.id, comment.id).catchError((error) {
+      setState(() {
+        ToastMessengerUnit.showErrorToast(
+            context: context, message: error.toString());
+        widget.post.comments.add(comment);
       });
     });
   }
@@ -506,6 +522,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
               itemBuilder: (context, index) => CommentTileUnit(
                 comment: post.comments[index],
                 currentAppUser: widget.currentAppUser,
+                onDeletePressed: (comment) {
+                  _deleteSelectedComment(comment);
+                },
               ),
             ),
           );
