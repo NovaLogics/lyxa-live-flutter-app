@@ -82,7 +82,6 @@ class PostCubit extends Cubit<PostState> {
     try {
       await postRepository.addComment(postId, comment);
 
-      await fetchAllPosts();
     } catch (error) {
       emit(PostError('Failed to add comment: ${error.toString()}'));
     }
@@ -93,7 +92,6 @@ class PostCubit extends Cubit<PostState> {
     try {
       await postRepository.deleteComment(postId, commentId);
 
-      await fetchAllPosts();
     } catch (error) {
       emit(PostError('Failed to delete the comment: ${error.toString()}'));
     }

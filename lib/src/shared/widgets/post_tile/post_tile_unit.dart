@@ -134,7 +134,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           // SAVE/SUBMIT BUTTON
           TextButton(
             onPressed: () {
-              _addComment();
+              _addNewComment();
               Navigator.of(context).pop();
             },
             child: const Text(AppStrings.save),
@@ -144,20 +144,36 @@ class _PostTileUnitState extends State<PostTileUnit> {
     );
   }
 
-  // Adds a new comment to the post
-  void _addComment() {
+
+  // Handle the logic for adding comment to the post
+  void _addNewComment() {
     final comment = _commentTextController.text.trim();
-    if (comment.isNotEmpty) {
-      final newComment = Comment(
-        id: DateTime.now().microsecondsSinceEpoch.toString(),
-        postId: widget.post.id,
-        userId: _appUserId,
-        userName: widget.currentAppUser.name,
-        text: comment,
-        timestamp: DateTime.now(),
-      );
-      _postCubit.addComment(widget.post.id, newComment);
+    if (comment.isEmpty) {
+      ToastMessengerUnit.showErrorToast(context: context, message: '');
+      return;
     }
+
+    final newComment = Comment(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      postId: widget.post.id,
+      userId: _appUserId,
+      userName: widget.currentAppUser.name,
+      text: comment,
+      timestamp: DateTime.now(),
+    );
+
+    // Optimistically update the UI
+    setState(() {
+      widget.post.comments.add(newComment);
+    });
+
+    _postCubit.addComment(widget.post.id, newComment).catchError((error) {
+      setState(() {
+        ToastMessengerUnit.showErrorToast(
+            context: context, message: error.toString());
+        widget.post.comments.remove(newComment);
+      });
+    });
   }
 
   // Show confirmation dialog for post deletion
