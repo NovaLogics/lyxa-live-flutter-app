@@ -8,6 +8,7 @@ import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
@@ -25,6 +26,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final PostCubit _postCubit;
   late final String? _currentUserId;
+  ProfileUser? _profileUser;
+  bool isLodaingData = false;
 
   @override
   void initState() {
@@ -81,24 +84,39 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const UploadPostScreen(),
+        builder: (context) => UploadPostScreen(
+          profileUser: _profileUser,
+        ),
       ),
     );
   }
 
   Widget _buildAppDrawer() {
-    return BlocBuilder<ProfileCubit, ProfileState>(
-      builder: (context, state) {
-        if (state is ProfileLoaded) {
-          return DrawerUnit(
-            user: state.profileUser,
-          );
+    return BlocListener<ProfileCubit, ProfileState>(
+      listener: (context, state) {
+        if (state is ProfileError) {
+          isLodaingData = false;
+        } else if (state is ProfileLoaded) {
+          _profileUser = state.profileUser;
+          isLodaingData = false;
         } else {
-          return const DrawerUnit(
-            user: null,
-          );
+          isLodaingData = true;
         }
       },
+      child: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          if (state is ProfileLoaded) {
+            _profileUser = state.profileUser;
+            return DrawerUnit(
+              user: _profileUser,
+            );
+          } else {
+            return const DrawerUnit(
+              user: null,
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -124,21 +142,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Post list display
   Widget _buildPostList(List<Post> posts) {
-    if (posts.isEmpty) {
-      return const Center(
-        child: Text(AppStrings.noPostAvailableError),
-      );
-    }
-
-    return ListView.builder(
-      itemCount: posts.length,
-      itemBuilder: (context, index) {
-        final post = posts[index];
-        return PostTileUnit(
-          post: post,
-          onDeletePressed: () => _deletePost(post.id),
-        );
-      },
+    return Stack(
+      children: [
+        (posts.isEmpty)
+            ? const Center(child: Text(AppStrings.noPostAvailableError))
+            : ListView.builder(
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  final post = posts[index];
+                  return PostTileUnit(
+                    post: post,
+                    onDeletePressed: () => _deletePost(post.id),
+                  );
+                },
+              ),
+        if (isLodaingData) _buildLoadingState(),
+      ],
     );
   }
 
