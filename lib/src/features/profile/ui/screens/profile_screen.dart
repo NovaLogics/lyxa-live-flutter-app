@@ -35,7 +35,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late final AuthCubit _authCubit;
   late final ProfileCubit _profileCubit;
-  late final String? _appUserId;
+  late final AppUser _currentAppUser;
 
   @override
   void initState() {
@@ -62,14 +62,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _fetchUserProfile(String uid) async {
+  void _fetchUserProfile(String profileUserId) async {
+    // Initialize cubits
     _authCubit = context.read<AuthCubit>();
     _profileCubit = context.read<ProfileCubit>();
-    AppUser? currentUser = _authCubit.currentUser;
-    _appUserId = currentUser!.uid;
-    Logger.logDebug(_appUserId.toString());
 
-    _profileCubit.fetchUserProfile(uid);
+    // Ensure current user is not null
+    final currentUser = _authCubit.currentUser;
+    if (currentUser == null) {
+      throw Exception("No authenticated user found. Cannot fetch profile.");
+    }
+
+    // Set the current app user
+    _currentAppUser = currentUser;
+
+    // Log user ID
+    Logger.logDebug("Current user ID: ${_currentAppUser.uid}");
+
+    // Fetch profile for the given user ID
+    _profileCubit.fetchUserProfile(profileUserId);
   }
 
   /// Handles the follow/unfollow button press.
@@ -79,27 +90,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (profileState is! ProfileLoaded) return;
 
     final profileUser = profileState.profileUser;
-    final isFollowing = profileUser.followers.contains(_appUserId);
+    final isFollowing = profileUser.followers.contains(_currentAppUser.uid);
 
     // Optimistically update UI
     setState(() {
       if (isFollowing) {
-        profileUser.followers.remove(_appUserId!);
+        profileUser.followers.remove(_currentAppUser.uid);
       } else {
-        profileUser.followers.add(_appUserId!);
+        profileUser.followers.add(_currentAppUser.uid);
       }
     });
 
     // Perform follow/unfollow logic and handle errors
     _profileCubit
-        .toggleFollow(_appUserId!, widget.displayUserId)
+        .toggleFollow(_currentAppUser.uid, widget.displayUserId)
         .catchError((_) {
       // Revert optimistic UI changes if the operation fails
       setState(() {
         if (isFollowing) {
-          profileUser.followers.add(_appUserId);
+          profileUser.followers.add(_currentAppUser.uid);
         } else {
-          profileUser.followers.remove(_appUserId);
+          profileUser.followers.remove(_currentAppUser.uid);
         }
       });
     });
@@ -110,8 +121,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileContent(BuildContext context, ProfileUser user) {
-    final isOwnProfile = (widget.displayUserId == _appUserId!);
-    Logger.logDebug('$isOwnProfile  ${widget.displayUserId} = $_appUserId ');
+    final isOwnProfile = (widget.displayUserId == _currentAppUser.uid);
+    Logger.logDebug(
+        '$isOwnProfile  ${widget.displayUserId} = ${_currentAppUser.uid} ');
 
     return ConstrainedScaffold(
       appBar: _buildAppBar(context, user, isOwnProfile),
@@ -258,7 +270,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildFollowActionSection(ProfileUser user) {
     return FollowButtonUnit(
       onPressed: _handleFollowButtonPressed,
-      isFollowing: user.followers.contains(_appUserId!),
+      isFollowing: user.followers.contains(_currentAppUser.uid),
     );
   }
 
@@ -326,6 +338,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               final post = userPosts[index];
               return PostTileUnit(
                 post: post,
+                currentAppUser: _currentAppUser,
                 onDeletePressed: () =>
                     context.read<PostCubit>().deletePost(post.id),
               );
