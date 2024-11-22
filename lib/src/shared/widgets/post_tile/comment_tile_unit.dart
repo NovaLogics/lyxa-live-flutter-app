@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
-import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 
 class CommentTileUnit extends StatefulWidget {
   final AppUser currentAppUser;
   final Comment comment;
+  final Function(Comment) onDeletePressed;
 
   const CommentTileUnit({
     super.key,
     required this.comment,
     required this.currentAppUser,
+    required this.onDeletePressed,
   });
 
   @override
@@ -111,11 +111,8 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
           // DELETE BUTTON
           TextButton(
             onPressed: () {
-              context.read<PostCubit>().deleteComment(
-                    widget.comment.postId,
-                    widget.comment.id,
-                  );
-              Navigator.of(context).pop();
+              Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
+              widget.onDeletePressed(widget.comment).call();
             },
             child: const Text(AppStrings.delete),
           ),
