@@ -138,6 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       IMAGE_LYXA_BANNER,
       height: AppDimens.size128,
       width: AppDimens.size128,
+      fit: BoxFit.cover,
     );
   }
 

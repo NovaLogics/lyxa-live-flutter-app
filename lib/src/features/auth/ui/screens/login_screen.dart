@@ -106,6 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
       IMAGE_LYXA_BANNER,
       height: AppDimens.bannerSize200,
       width: AppDimens.bannerSize200,
+      fit: BoxFit.cover,
     );
   }
 
