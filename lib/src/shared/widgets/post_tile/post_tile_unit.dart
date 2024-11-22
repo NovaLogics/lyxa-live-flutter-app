@@ -419,16 +419,16 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   Theme.of(context).colorScheme.surface.withOpacity(0.4),
               child: SvgPicture.asset(
                 widget.post.comments.isNotEmpty
-                    ? ICON_COMMENT_STYLE_1
+                    ? ICON_COMMENT_FILLED
                     : ICON_COMMENT_BORDER,
                 colorFilter: ColorFilter.mode(
                   widget.post.comments.isNotEmpty
-                      ? Theme.of(context).colorScheme.onPrimary.withOpacity(0.9)
+                      ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.onPrimary,
                   BlendMode.srcIn,
                 ),
-                width: widget.post.comments.isNotEmpty ? 26 : 22,
-                height: widget.post.comments.isNotEmpty ? 26 : 22,
+                width: AppDimens.actionIconSize26,
+                height: AppDimens.actionIconSize26,
               ),
             ),
           ),
