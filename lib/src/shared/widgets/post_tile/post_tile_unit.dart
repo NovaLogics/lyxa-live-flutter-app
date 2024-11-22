@@ -144,7 +144,6 @@ class _PostTileUnitState extends State<PostTileUnit> {
     );
   }
 
-
   // Handle the logic for adding comment to the post
   void _addNewComment() {
     final comment = _commentTextController.text.trim();
@@ -504,8 +503,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
               itemCount: post.comments.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) =>
-                  CommentTileUnit(comment: post.comments[index]),
+              itemBuilder: (context, index) => CommentTileUnit(
+                comment: post.comments[index],
+                currentAppUser: widget.currentAppUser,
+              ),
             ),
           );
         }
