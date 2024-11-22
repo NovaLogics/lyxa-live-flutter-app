@@ -14,19 +14,23 @@ import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
-import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class UploadPostScreen extends StatefulWidget {
-  const UploadPostScreen({super.key});
+  final ProfileUser? profileUser;
+
+  const UploadPostScreen({
+    super.key,
+    required this.profileUser,
+  });
 
   @override
   State<UploadPostScreen> createState() => _UploadPostScreenState();
@@ -34,8 +38,6 @@ class UploadPostScreen extends StatefulWidget {
 
 class _UploadPostScreenState extends State<UploadPostScreen> {
   final TextEditingController captionController = TextEditingController();
-  late final AuthCubit authCubit = context.read<AuthCubit>();
-  late AppUser? currentUser = authCubit.currentUser;
   Uint8List? selectedImage;
 
   @override
@@ -168,8 +170,9 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
     final post = Post(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
-      userId: currentUser!.uid,
-      userName: currentUser!.name,
+      userId: widget.profileUser!.uid,
+      userName: widget.profileUser!.name,
+      userProfileImageUrl: widget.profileUser!.profileImageUrl,
       text: caption,
       imageUrl: '',
       timestamp: DateTime.now(),
@@ -187,6 +190,12 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   AppBar _buildAppBar() {
     return AppBar(
       title: const Text(AppStrings.createPost),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
       actions: [
         IconButton(
           onPressed: _createAndUploadPost,
