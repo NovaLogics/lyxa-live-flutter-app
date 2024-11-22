@@ -37,10 +37,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
   final TextEditingController commentTextController = TextEditingController();
   late final PostCubit postCubit = context.read<PostCubit>();
   late final ProfileCubit profileCubit = context.read<ProfileCubit>();
-
   late final String? _currentUserId;
   late final String? _currentUserName;
-
   bool _isOwnPost = false;
 
   @override
@@ -49,201 +47,152 @@ class _PostTileUnitState extends State<PostTileUnit> {
     _fetchCurrentUser();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
-      child: Column(
-        children: [
-          // User profile header
-          GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      ProfileScreen(displayUserId: widget.post.userId)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppDimens.size12,
-                AppDimens.size12,
-                AppDimens.size0,
-                AppDimens.size12,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Profile picture
-                  widget.post.userProfileImageUrl != null
-                      ? Material(
-                          elevation: AppDimens.elevationSM2,
-                          shape: const CircleBorder(),
-                          color: Theme.of(context).colorScheme.outline,
-                          child: Padding(
-                            padding: const EdgeInsets.all(1),
-                            child: CachedNetworkImage(
-                              imageUrl: widget.post.userProfileImageUrl,
-                              placeholder: (_, __) =>
-                                  const CircularProgressIndicator(),
-                              errorWidget: (_, __, ___) => Icon(
-                                Icons.person_rounded,
-                                size: AppDimens.size36,
-                                color:
-                                    Theme.of(context).colorScheme.onSecondary,
-                              ),
-                              imageBuilder: (_, imageProvider) => Container(
-                                height: AppDimens.size36,
-                                width: AppDimens.size36,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Icon(
-                          Icons.person_rounded,
-                          size: AppDimens.size36,
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        ),
-                  const SizedBox(width: AppDimens.size8),
-                  Column(
-                    children: [
-                      // Username
-                      Text(
-                        widget.post.userName.toString().trim(),
-                        style: AppTextStyles.textStylePost.copyWith(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                        ),
-                      ),
-                      // Time Ago text
-                      Padding(
-                        padding: const EdgeInsets.only(left: 1),
-                        child: Text(
-                          DateTimeUtil.datetimeAgo(widget.post.timestamp),
-                          style:
-                              AppTextStyles.textStylePostWithNumbers.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontSize: AppDimens.fontSizeSM12,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: 0.1,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(width: AppDimens.size12),
-
-                  const Spacer(),
-                  // Delete option if it's the user's post
-                  if (_isOwnPost)
-                    GestureDetector(
-                      onTap: showDeleteOptions,
-                      child: SvgPicture.asset(
-                        ICON_SETTINGS_STYLE_1,
-                        colorFilter: ColorFilter.mode(
-                          Theme.of(context).colorScheme.primary,
-                          BlendMode.srcIn,
-                        ),
-                        width: AppDimens.size48,
-                        height: AppDimens.size48,
-                      ),
-                    ),
-                ],
-              ),
-            ),
+  Widget _buildPostHeader() {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    ProfileScreen(displayUserId: widget.post.userId)),
           ),
-
-          // Post image
-          GestureDetector(
-            onTap: () => context
-                .read<SliderCubit>()
-                .showSlider([widget.post.imageUrl], 0),
-            onDoubleTap: toggleLikePost,
-            child: CachedNetworkImage(
-              imageUrl: widget.post.imageUrl,
-              placeholder: (context, url) => const AspectRatio(
-                aspectRatio: 1.5, // or 3:2
-                child: SizedBox(),
-              ),
-              errorWidget: (context, url, error) => Icon(
-                Icons.image_not_supported_outlined,
-                size: AppDimens.iconSizeXXL96,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              imageBuilder: (context, imageProvider) {
-                return LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Image(
-                      image: imageProvider,
-                      width: constraints.maxWidth,
-                      fit: BoxFit.cover,
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-
-          // Interaction buttons (Like, Comment, Timestamp)
-          Padding(
+          child: Padding(
             padding: const EdgeInsets.fromLTRB(
-              AppDimens.size16,
-              AppDimens.size16,
-              AppDimens.size16,
-              AppDimens.size8,
+              AppDimens.size12,
+              AppDimens.size12,
+              AppDimens.size0,
+              AppDimens.size12,
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Like button
-                SizedBox(
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: toggleLikePost,
-                        child: PhysicalModel(
-                          color: Colors.transparent,
-                          elevation: AppDimens.elevationMD8,
-                          shape: BoxShape.rectangle,
-                          shadowColor: Theme.of(context)
-                              .colorScheme
-                              .surface
-                              .withOpacity(0.4),
-                          child: SvgPicture.asset(
-                            widget.post.likes.contains(_currentUserId)
-                                ? ICON_HEART_FILLED
-                                : ICON_HEART_BORDER,
-                            colorFilter: ColorFilter.mode(
-                              (widget.post.likes.contains(_currentUserId)
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onPrimary),
-                              BlendMode.srcIn,
-                            ),
-                            width: AppDimens.size24,
-                            height: AppDimens.size24,
+                // Profile picture
+                Material(
+                  elevation: AppDimens.elevationSM2,
+                  shape: const CircleBorder(),
+                  color: Theme.of(context).colorScheme.outline,
+                  child: Padding(
+                    padding: const EdgeInsets.all(1),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.post.userProfileImageUrl,
+                      placeholder: (_, __) => const CircularProgressIndicator(),
+                      errorWidget: (_, __, ___) => Icon(
+                        Icons.person_rounded,
+                        size: AppDimens.size36,
+                        color: Theme.of(context).colorScheme.onSecondary,
+                      ),
+                      imageBuilder: (_, imageProvider) => Container(
+                        height: AppDimens.size36,
+                        width: AppDimens.size36,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                      const SizedBox(width: AppDimens.size4),
-                      // Like count
-                      Text(
-                        widget.post.likes.length.toString(),
-                        style: AppTextStyles.textStylePostWithNumbers.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
+                const SizedBox(width: AppDimens.size8),
+                Column(
+                  children: [
+                    // Username
+                    Text(
+                      widget.post.userName.toString().trim(),
+                      style: AppTextStyles.textStylePost.copyWith(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                    ),
+                    // Time Ago text
+                    Padding(
+                      padding: const EdgeInsets.only(left: 1),
+                      child: Text(
+                        DateTimeUtil.datetimeAgo(widget.post.timestamp),
+                        style: AppTextStyles.textStylePostWithNumbers.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontSize: AppDimens.fontSizeSM12,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 0.1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
                 const SizedBox(width: AppDimens.size12),
-                // Comment button
+              ],
+            ),
+          ),
+        ),
+        const Spacer(),
+        // Delete option if it's the user's post
+        if (_isOwnPost)
+          GestureDetector(
+            onTap: showDeleteOptions,
+            child: SvgPicture.asset(
+              ICON_SETTINGS_STYLE_1,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.primary,
+                BlendMode.srcIn,
+              ),
+              width: AppDimens.size48,
+              height: AppDimens.size48,
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildPostImage() {
+    return GestureDetector(
+      onTap: () =>
+          context.read<SliderCubit>().showSlider([widget.post.imageUrl], 0),
+      onDoubleTap: toggleLikePost,
+      child: CachedNetworkImage(
+        imageUrl: widget.post.imageUrl,
+        placeholder: (context, url) => const AspectRatio(
+          aspectRatio: 1.5, // or 3:2
+          child: SizedBox(),
+        ),
+        errorWidget: (context, url, error) => Icon(
+          Icons.image_not_supported_outlined,
+          size: AppDimens.iconSizeXXL96,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+        imageBuilder: (context, imageProvider) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return Image(
+                image: imageProvider,
+                width: constraints.maxWidth,
+                fit: BoxFit.cover,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildActionButtons() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppDimens.size16,
+        AppDimens.size16,
+        AppDimens.size16,
+        AppDimens.size8,
+      ),
+      child: Row(
+        children: [
+          // Like button
+          SizedBox(
+            child: Row(
+              children: [
                 GestureDetector(
-                  onTap: openNewCommentBox,
+                  onTap: toggleLikePost,
                   child: PhysicalModel(
                     color: Colors.transparent,
                     elevation: AppDimens.elevationMD8,
@@ -251,136 +200,182 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     shadowColor:
                         Theme.of(context).colorScheme.surface.withOpacity(0.4),
                     child: SvgPicture.asset(
-                      widget.post.comments.isNotEmpty
-                          ? ICON_COMMENT_STYLE_1
-                          : ICON_COMMENT_BORDER,
+                      widget.post.likes.contains(_currentUserId)
+                          ? ICON_HEART_FILLED
+                          : ICON_HEART_BORDER,
                       colorFilter: ColorFilter.mode(
-                        widget.post.comments.isNotEmpty
-                            ? Theme.of(context)
-                                .colorScheme
-                                .onPrimary
-                                .withOpacity(0.9)
-                            : Theme.of(context).colorScheme.onPrimary,
+                        (widget.post.likes.contains(_currentUserId)
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.onPrimary),
                         BlendMode.srcIn,
                       ),
-                      width: widget.post.comments.isNotEmpty ? 26 : 22,
-                      height: widget.post.comments.isNotEmpty ? 26 : 22,
+                      width: AppDimens.size24,
+                      height: AppDimens.size24,
                     ),
                   ),
                 ),
                 const SizedBox(width: AppDimens.size4),
+                // Like count
                 Text(
-                  widget.post.comments.length.toString(),
+                  widget.post.likes.length.toString(),
                   style: AppTextStyles.textStylePostWithNumbers.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-                const Spacer(),
-                // Timestamp
-                Text(
-                  DateTimeUtil.formatDate(widget.post.timestamp,
-                      format: DateTimeStyles.customShortDate),
-                  style: AppTextStyles.textStylePostWithNumbers.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
             ),
           ),
-
-          // Caption
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppDimens.size20,
-              AppDimens.size0,
-              AppDimens.size20,
-              AppDimens.size12,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.post.userName,
-                  style: AppTextStyles.textStylePost.copyWith(
-                    color: Theme.of(context).colorScheme.onSecondary,
-                    fontSize: AppDimens.fontSizeRG14,
-                  ),
+          const SizedBox(width: AppDimens.size12),
+          // Comment button
+          GestureDetector(
+            onTap: openNewCommentBox,
+            child: PhysicalModel(
+              color: Colors.transparent,
+              elevation: AppDimens.elevationMD8,
+              shape: BoxShape.rectangle,
+              shadowColor:
+                  Theme.of(context).colorScheme.surface.withOpacity(0.4),
+              child: SvgPicture.asset(
+                widget.post.comments.isNotEmpty
+                    ? ICON_COMMENT_STYLE_1
+                    : ICON_COMMENT_BORDER,
+                colorFilter: ColorFilter.mode(
+                  widget.post.comments.isNotEmpty
+                      ? Theme.of(context).colorScheme.onPrimary.withOpacity(0.9)
+                      : Theme.of(context).colorScheme.onPrimary,
+                  BlendMode.srcIn,
                 ),
-                const SizedBox(height: AppDimens.size4),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                      maxHeight: 100,
-                      minWidth: double.infinity), // Limit height
-                  child: SingleChildScrollView(
-                    child: Text(
-                      widget.post.text.replaceAll("\\n", "\n"),
-                      style: AppTextStyles.textStylePost.copyWith(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontSize: AppDimens.fontSizeRG14,
-                        letterSpacing: 0.7,
-                        shadows: AppTextStyles.shadowStyle2,
-                      ),
-                      maxLines: 5,
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          if (widget.post.comments.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(right: 200, left: AppDimens.size8),
-              child: Divider(
-                height: 1,
-                color: Theme.of(context)
-                    .colorScheme
-                    .inversePrimary
-                    .withOpacity(0.1),
+                width: widget.post.comments.isNotEmpty ? 26 : 22,
+                height: widget.post.comments.isNotEmpty ? 26 : 22,
               ),
             ),
-
-          // Comments section
-          BlocBuilder<PostCubit, PostState>(
-            builder: (context, state) {
-              if (state is PostLoaded) {
-                final post =
-                    state.posts.firstWhere((p) => p.id == widget.post.id);
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: AppDimens.size4),
-                  child: ListView.builder(
-                    itemCount: post.comments.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) =>
-                        CommentTileUnit(comment: post.comments[index]),
-                  ),
-                );
-              }
-
-              if (state is PostLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              if (state is PostError) {
-                return Center(child: Text(state.message));
-              }
-
-              return const Center(child: SizedBox());
-            },
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppDimens.size8),
-            child: Divider(
-              height: 1,
-              color:
-                  Theme.of(context).colorScheme.inversePrimary.withOpacity(0.1),
+          const SizedBox(width: AppDimens.size4),
+          Text(
+            widget.post.comments.length.toString(),
+            style: AppTextStyles.textStylePostWithNumbers.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
-          )
+          ),
+          const Spacer(),
+          // Timestamp
+          Text(
+            DateTimeUtil.formatDate(widget.post.timestamp,
+                format: DateTimeStyles.customShortDate),
+            style: AppTextStyles.textStylePostWithNumbers.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCaption() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppDimens.size20,
+        AppDimens.size0,
+        AppDimens.size20,
+        AppDimens.size12,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.post.userName,
+            style: AppTextStyles.textStylePost.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+              fontSize: AppDimens.fontSizeRG14,
+            ),
+          ),
+          const SizedBox(height: AppDimens.size4),
+          ConstrainedBox(
+            constraints: const BoxConstraints(
+                maxHeight: 100, minWidth: double.infinity), // Limit height
+            child: SingleChildScrollView(
+              child: Text(
+                widget.post.text,
+                style: AppTextStyles.textStylePost.copyWith(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  fontSize: AppDimens.fontSizeRG14,
+                  letterSpacing: 0.7,
+                  shadows: AppTextStyles.shadowStyle2,
+                ),
+                maxLines: 5,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider(bool isLongDivider) {
+    return Padding(
+      padding: isLongDivider
+          ? const EdgeInsets.symmetric(horizontal: AppDimens.size8)
+          : const EdgeInsets.only(right: 200, left: AppDimens.size8),
+      child: Divider(
+        height: 1,
+        color: Theme.of(context).colorScheme.inversePrimary.withOpacity(0.1),
+      ),
+    );
+  }
+
+  Widget _buildCommentSection() {
+    return BlocBuilder<PostCubit, PostState>(
+      builder: (context, state) {
+        if (state is PostLoaded) {
+          final post = state.posts.firstWhere((p) => p.id == widget.post.id);
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppDimens.size4),
+            child: ListView.builder(
+              itemCount: post.comments.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) =>
+                  CommentTileUnit(comment: post.comments[index]),
+            ),
+          );
+        }
+
+        if (state is PostLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state is PostError) {
+          return Center(child: Text(state.message));
+        }
+
+        return const Center(child: SizedBox());
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
+      child: Column(
+        children: [
+          // AUTHOR'S PROFILE HEADER
+          _buildPostHeader(),
+          // DISPLAY POST IMAGE
+          _buildPostImage(),
+          // INTERACTION BUTTONS : LIKE, COMMENT, TIMESTAMP
+          _buildActionButtons(),
+          // POST CAPTION
+          _buildCaption(),
+          // DIVIDER : SHORT
+          if (widget.post.comments.isNotEmpty) _buildDivider(false),
+          // COMMENT SECTION
+          _buildCommentSection(),
+          // DIVIDER : LONG
+          _buildDivider(true),
         ],
       ),
     );
