@@ -127,7 +127,6 @@ class DrawerUnit extends StatelessWidget {
       title: AppStrings.titleProfile,
       icon: Icons.person_outline,
       onTap: () {
-        Navigator.of(context).pop();
         if (userId != null) {
           _navigateToProfileScreen(context, userId);
         }

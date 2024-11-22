@@ -17,8 +17,8 @@ const String IMAGE_LYXA_BANNER = '$_IMAGE_PATH/lyxa_banner.png';
 // ICON PATHS
 const String ICON_HEART_FILLED = '$_ICON_PATH/ic_heart_filled.svg';
 const String ICON_HEART_BORDER = '$_ICON_PATH/ic_heart_border.svg';
-const String ICON_COMMENT_BORDER = '$_ICON_PATH/ic_comment.svg';
-const String ICON_COMMENT_STYLE_1 = '$_ICON_PATH/ic_comment_style_1.svg';
+const String ICON_COMMENT_BORDER = '$_ICON_PATH/ic_comment_border.svg';
+const String ICON_COMMENT_FILLED = '$_ICON_PATH/ic_comment_filled.svg';
 const String ICON_SETTINGS_STYLE_1 = '$_ICON_PATH/ic_settings_style_1.svg';
 
 // APP FONTS

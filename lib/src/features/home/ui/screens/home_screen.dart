@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
@@ -24,7 +26,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final PostCubit _postCubit;
-  late final String? _currentUserId;
+  late final AppUser _currentAppUser;
+  ProfileUser? _profileUser;
+  bool _isLodaingData = false;
 
   @override
   void initState() {
@@ -58,14 +62,26 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _fetchCurrentUserData() {
+
+  void _fetchCurrentUserData() async {
+    // Initialize cubits
     AuthCubit authCubit = context.read<AuthCubit>();
     ProfileCubit profileCubit = context.read<ProfileCubit>();
-    AppUser? currentUser = authCubit.currentUser;
-    _currentUserId = currentUser!.uid;
 
-    if (_currentUserId == null) return;
-    profileCubit.fetchUserProfile(_currentUserId);
+    // Ensure current user is not null
+    final currentUser = authCubit.currentUser;
+    if (currentUser == null) {
+      throw Exception("No authenticated user found. Cannot fetch profile.");
+    }
+
+    // Set the current app user
+    _currentAppUser = currentUser;
+
+    // Log user ID
+    Logger.logDebug("Current user ID: ${_currentAppUser.uid}");
+
+    // Fetch profile for the given user ID
+    profileCubit.fetchUserProfile(_currentAppUser.uid);
   }
 
   void _fetchAllPosts() {
@@ -81,24 +97,39 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const UploadPostScreen(),
+        builder: (context) => UploadPostScreen(
+          profileUser: _profileUser,
+        ),
       ),
     );
   }
 
   Widget _buildAppDrawer() {
-    return BlocBuilder<ProfileCubit, ProfileState>(
-      builder: (context, state) {
-        if (state is ProfileLoaded) {
-          return DrawerUnit(
-            user: state.profileUser,
-          );
+    return BlocListener<ProfileCubit, ProfileState>(
+      listener: (context, state) {
+        if (state is ProfileError) {
+          _isLodaingData = false;
+        } else if (state is ProfileLoaded) {
+          _profileUser = state.profileUser;
+          _isLodaingData = false;
         } else {
-          return const DrawerUnit(
-            user: null,
-          );
+          _isLodaingData = true;
         }
       },
+      child: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          if (state is ProfileLoaded) {
+            _profileUser = state.profileUser;
+            return DrawerUnit(
+              user: _profileUser,
+            );
+          } else {
+            return const DrawerUnit(
+              user: null,
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -124,21 +155,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Post list display
   Widget _buildPostList(List<Post> posts) {
-    if (posts.isEmpty) {
-      return const Center(
-        child: Text(AppStrings.noPostAvailableError),
-      );
-    }
-
-    return ListView.builder(
-      itemCount: posts.length,
-      itemBuilder: (context, index) {
-        final post = posts[index];
-        return PostTileUnit(
-          post: post,
-          onDeletePressed: () => _deletePost(post.id),
-        );
-      },
+    return Stack(
+      children: [
+        (posts.isEmpty)
+            ? const Center(child: Text(AppStrings.noPostAvailableError))
+            : ListView.builder(
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  final post = posts[index];
+                  return PostTileUnit(
+                    post: post,
+                    currentAppUser: _currentAppUser,
+                    onDeletePressed: () => _deletePost(post.id),
+                  );
+                },
+              ),
+        if (_isLodaingData) _buildLoadingState(),
+      ],
     );
   }
 

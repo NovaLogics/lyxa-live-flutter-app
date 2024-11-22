@@ -5,6 +5,7 @@ class Post {
   final String id;
   final String userId;
   final String userName;
+  final String userProfileImageUrl;
   final String text;
   final String imageUrl;
   final DateTime timestamp;
@@ -16,6 +17,7 @@ class Post {
     required this.id,
     required this.userId,
     required this.userName,
+    required this.userProfileImageUrl,
     required this.text,
     required this.imageUrl,
     required this.timestamp,
@@ -28,6 +30,7 @@ class Post {
       id: id,
       userId: userId,
       userName: userName,
+      userProfileImageUrl: userProfileImageUrl,
       text: text,
       imageUrl: imageUrl ?? this.imageUrl,
       timestamp: timestamp,
@@ -42,6 +45,7 @@ class Post {
       'id': id,
       'userId': userId,
       'userName': userName,
+      'userProfileImageUrl': userProfileImageUrl,
       'text': text,
       'imageUrl': imageUrl,
       'timestamp': Timestamp.fromDate(timestamp),
@@ -62,6 +66,7 @@ class Post {
       id: json['id'],
       userId: json['userId'],
       userName: json['userName'],
+      userProfileImageUrl: json['userProfileImageUrl'],
       text: json['text'],
       imageUrl: json['imageUrl'],
       timestamp: (json['timestamp'] as Timestamp).toDate(),
