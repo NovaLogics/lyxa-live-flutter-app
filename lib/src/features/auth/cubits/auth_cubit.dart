@@ -4,6 +4,7 @@ import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
+import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_cubit.dart';
 
 /// AuthCubit: Handles authentication state management
 /// ->
@@ -33,7 +34,8 @@ class AuthCubit extends Cubit<AuthState> {
   /// Logs in with email and password.
   Future<void> login(String email, String password) async {
     try {
-      emit(AuthLoading());
+      //emit(AuthLoading());
+      LoadingCubit.showLoading("Loading data...");
 
       final user = await _authRepository.loginWithEmailAndPassword(
         email: email,
@@ -49,6 +51,7 @@ class AuthCubit extends Cubit<AuthState> {
     } catch (error) {
       _handleAuthError(error);
     }
+    LoadingCubit.hideLoading();
   }
 
   /// Registers a new user with email and password.
