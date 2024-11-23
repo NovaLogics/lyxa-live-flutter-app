@@ -10,7 +10,8 @@ import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_cubit.dart';
-import 'package:lyxa_live/src/shared/event_handlers/errors/utils/error_type.dart';
+import 'package:lyxa_live/src/shared/event_handlers/errors/utils/error_handler.dart';
+import 'package:lyxa_live/src/shared/event_handlers/errors/utils/firebase_error_handler.dart';
 
 class FirebaseAuthRepository implements AuthRepository {
   final HiveHelper hiveHelper = getIt<HiveHelper>();
@@ -63,24 +64,15 @@ class FirebaseAuthRepository implements AuthRepository {
 
       return user;
     } on FirebaseAuthException catch (authError) {
-      // Handle Firebase authentication-specific errors
-      final String errorMessage = FirebaseErrorUtil.getMessage(authError.code);
-      Logger.logError('AuthError: ${authError.code}');
-      Logger.logError('Message: $errorMessage');
-      throw Exception(errorMessage);
+      FirebaseErrorHandler.handleAuthError(authError);
     } catch (error, stackTrace) {
-      // Handle general errors
-      Logger.logError(
-        'Unexpected Error: ${error.toString()} | stackTrace: ${stackTrace.toString()}',
-      );
-
-      ErrorAlertCubit.showErrorMessage(
-        errorType: ErrorType.authenticationError,
+      ErrorHandler.handleError(
+        error,
+        stackTrace: stackTrace,
         onRetry: () {
           ErrorAlertCubit.hideErrorMessage();
         },
       );
-      // throw Exception('An unexpected error occurred. Please try again.');
     }
   }
 
