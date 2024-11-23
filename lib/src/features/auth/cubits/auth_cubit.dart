@@ -21,7 +21,12 @@ class AuthCubit extends Cubit<AuthState> {
       : _authRepository = authRepository,
         super(AuthInitial());
 
-  /// Checks if a user is already authenticated
+  /// Retrieves the current authenticated user.
+  AppUser? get currentUser => _currentUser;
+
+  /// (ƒ) :: Check Authentication
+  ///
+  /// Emits [Authenticated] if a user is found, otherwise [Unauthenticated].
   Future<void> checkAuthentication() async {
     final AppUser? user = await _authRepository.getCurrentUser();
 
@@ -33,15 +38,15 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  /// Retrieves the current authenticated user.
-  AppUser? get currentUser => _currentUser;
-
-  /// Logs in with email and password.
+  /// (ƒ) :: Login
+  ///
+  /// Emits [Authenticated] on success,
+  /// or [Unauthenticated] / [AuthError] on failure.
   Future<void> login(
     String email,
     String password,
   ) async {
-    LoadingCubit.showLoading(message: AppStrings.authenticatingPleaseWait);
+    LoadingCubit.showLoading(message: AppStrings.authenticatingMsg);
 
     final result = await _authRepository.loginWithEmailAndPassword(
       email: email,
@@ -80,25 +85,52 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  /// Registers a new user with email and password.
-  Future<void> register(String name, String email, String password) async {
-    try {
-      emit(AuthLoading());
+  /// (ƒ) :: Register
+  ///
+  /// Emits [Authenticated] on success,
+  /// or [Unauthenticated] / [AuthError] on failure.
+  Future<void> register(
+    String name,
+    String email,
+    String password,
+  ) async {
+    LoadingCubit.showLoading(message: AppStrings.authenticatingMsg);
 
-      final user = await _authRepository.registerWithEmailAndPassword(
-        name: name,
-        email: email,
-        password: password,
-      );
+    final result = await _authRepository.registerWithEmailAndPassword(
+      name: name,
+      email: email,
+      password: password,
+    );
 
-      if (user != null) {
-        _currentUser = user;
-        emit(Authenticated(user));
-      } else {
-        emit(Unauthenticated());
-      }
-    } catch (error) {
-      _handleAuthError(error);
+    LoadingCubit.hideLoading();
+
+    switch (result.status) {
+      case Status.success:
+        if (result.isDataNotEmpty()) {
+          _currentUser = result.data as AppUser;
+
+          emit(Authenticated(_currentUser));
+        } else {
+          emit(Unauthenticated());
+        }
+        break;
+
+      case Status.errorMessage:
+        emit(AuthError(getError(result.errorMessage)));
+        break;
+
+      case Status.error:
+        ErrorHandler.handleError(
+          result.error,
+          stackTrace: null,
+          onRetry: () {
+            ErrorAlertCubit.hideErrorMessage();
+          },
+        );
+        break;
+
+      case Status.loading:
+        break;
     }
   }
 

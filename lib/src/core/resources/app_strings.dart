@@ -115,5 +115,5 @@ class AppStrings {
   static const String languageCodeEnglish = 'en';
   static const String unknown = 'Unknown';
 
-  static const String authenticatingPleaseWait = 'Authenticating, please hold on...';
+  static const String authenticatingMsg = 'Authenticating, please hold on...';
 }
