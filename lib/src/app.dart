@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -20,7 +18,12 @@ import 'package:lyxa_live/src/features/photo_slider/cubits/slider_state.dart';
 import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
-import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
+import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_cubit.dart';
+import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_state.dart';
+import 'package:lyxa_live/src/shared/event_handlers/errors/widgets/error_alert_unit.dart';
+import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_cubit.dart';
+import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_state.dart';
+import 'package:lyxa_live/src/shared/event_handlers/loading/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 /// Main Application Entry Point for LyxaApp
@@ -50,31 +53,30 @@ class LyxaApp extends StatelessWidget {
       // Authentication Cubit
       BlocProvider<AuthCubit>(
         create: (context) => AuthCubit(
-          authRepository: GetIt.instance<FirebaseAuthRepository>(),
+          authRepository: getIt<FirebaseAuthRepository>(),
         )..checkAuthentication(),
       ),
 
       // Profile Cubit
       BlocProvider<ProfileCubit>(
         create: (context) => ProfileCubit(
-          profileRepository: GetIt.instance<FirebaseProfileRepository>(),
-          storageRepository: GetIt.instance<FirebaseStorageRepository>(),
+          profileRepository: getIt<FirebaseProfileRepository>(),
+          storageRepository: getIt<FirebaseStorageRepository>(),
         ),
       ),
 
       // Post Cubit
       BlocProvider<PostCubit>(
         create: (context) => PostCubit(
-          postRepository: GetIt.instance<FirebasePostRepository>(),
-          storageRepository: GetIt.instance<FirebaseStorageRepository>(),
+          postRepository: getIt<FirebasePostRepository>(),
+          storageRepository: getIt<FirebaseStorageRepository>(),
         ),
       ),
 
       // Search Cubit
       BlocProvider<SearchCubit>(
-        create: (context) => SearchCubit(
-          searchRepository: GetIt.instance<FirebaseSearchRepository>(),
-        ),
+        create: (context) =>
+            SearchCubit(searchRepository: getIt<FirebaseSearchRepository>()),
       ),
 
       // Theme Cubit
@@ -82,6 +84,13 @@ class LyxaApp extends StatelessWidget {
 
       // Image Slider Cubit
       BlocProvider<SliderCubit>(create: (context) => SliderCubit()),
+
+      // Error Cubit
+      BlocProvider<ErrorAlertCubit>(
+          create: (context) => getIt<ErrorAlertCubit>()),
+
+      // Loading Cubit
+      BlocProvider<LoadingCubit>(create: (context) => getIt<LoadingCubit>()),
     ];
   }
 
@@ -91,15 +100,13 @@ class LyxaApp extends StatelessWidget {
       builder: (context, state) {
         Logger.logDebug(state.toString());
 
-        if (state is Unauthenticated || state is AuthLoading) {
-          // Show Authentication Screen
+        if (state is Unauthenticated) {
+          //Show Authentication Screen
           return Stack(
             children: [
               const AuthScreen(),
-              if (state is AuthLoading)
-                getIt<CenterLoadingUnit>(
-                  param1: AppStrings.pleaseWait,
-                )
+              _buildLoadingScreen(),
+              _buildErrorDisplayScreen(),
             ],
           );
         } else if (state is Authenticated) {
@@ -108,13 +115,13 @@ class LyxaApp extends StatelessWidget {
             children: [
               const HomeScreen(),
               _buildPhotoSliderScreen(),
+              _buildLoadingScreen(),
+              _buildErrorDisplayScreen(),
             ],
           );
         } else {
           // Show Loading Indicator
-          return getIt<CenterLoadingUnit>(
-            param1: AppStrings.pleaseWait,
-          );
+          return _buildLoadingScreen();
         }
       },
       listener: (context, state) {
@@ -125,6 +132,36 @@ class LyxaApp extends StatelessWidget {
             message: state.message,
           );
         }
+      },
+    );
+  }
+
+  Widget _buildErrorDisplayScreen() {
+    return BlocConsumer<ErrorAlertCubit, ErrorAlertState>(
+      builder: (context, state) {
+        return Visibility(
+          visible: state.isVisible,
+          child: const ErrorAlertUnit(),
+        );
+      },
+      listener: (BuildContext context, ErrorAlertState state) {
+        Logger.logDebug(state.errorMessage.toString());
+      },
+    );
+  }
+
+  Widget _buildLoadingScreen() {
+    return BlocConsumer<LoadingCubit, LoadingState>(
+      builder: (context, state) {
+        return Visibility(
+          visible: state.isVisible,
+          child: CenterLoadingUnit(
+            message: state.message,
+          ),
+        );
+      },
+      listener: (BuildContext context, LoadingState state) {
+        Logger.logDebug(state.isVisible.toString());
       },
     );
   }

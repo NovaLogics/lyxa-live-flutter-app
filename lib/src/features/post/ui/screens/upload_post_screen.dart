@@ -16,7 +16,7 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
-import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
+import 'package:lyxa_live/src/shared/event_handlers/loading/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';

@@ -4,6 +4,7 @@ import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
+import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_cubit.dart';
 
 /// AuthCubit: Handles authentication state management
 /// ->
@@ -33,10 +34,13 @@ class AuthCubit extends Cubit<AuthState> {
   /// Logs in with email and password.
   Future<void> login(String email, String password) async {
     try {
-      emit(AuthLoading());
+      //emit(AuthLoading());
+      LoadingCubit.showLoading(message: 'Loading data...');
 
-      final user =
-          await _authRepository.loginWithEmailPassword(email, password);
+      final user = await _authRepository.loginWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       if (user != null) {
         _currentUser = user;
@@ -47,6 +51,7 @@ class AuthCubit extends Cubit<AuthState> {
     } catch (error) {
       _handleAuthError(error);
     }
+    LoadingCubit.hideLoading();
   }
 
   /// Registers a new user with email and password.
@@ -54,8 +59,11 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(AuthLoading());
 
-      final user = await _authRepository.registerWithEmailPassword(
-          name, email, password);
+      final user = await _authRepository.registerWithEmailAndPassword(
+        name: name,
+        email: email,
+        password: password,
+      );
 
       if (user != null) {
         _currentUser = user;
@@ -70,7 +78,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   /// Logs out the current user.
   Future<void> logout() async {
-    await _authRepository.logout();
+    await _authRepository.logOut();
     _currentUser = null;
     emit(Unauthenticated());
   }
@@ -79,9 +87,11 @@ class AuthCubit extends Cubit<AuthState> {
     return await _authRepository.getSavedUser(key: key);
   }
 
-  Future<void> saveUser(AppUser user,
-      {String key = HiveKeys.loginDataKey}) async {
-    await _authRepository.saveUser(user, key: key);
+  Future<void> saveUser({
+    required AppUser user,
+    String key = HiveKeys.loginDataKey,
+  }) async {
+    await _authRepository.saveUserToLocalStorage(user: user, key: key);
   }
 
   /// Helper ->

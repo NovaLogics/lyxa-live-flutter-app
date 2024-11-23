@@ -108,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       try {
         AppUser cachedUser = AppUser.createWith(name: name, email: email);
 
-        _authCubit.saveUser(cachedUser, key: HiveKeys.signUpDataKey);
+        _authCubit.saveUser(user: cachedUser, key: HiveKeys.signUpDataKey);
         _authCubit.register(name, email, password);
       } catch (error) {
         ToastMessengerUnit.showErrorToast(
@@ -224,7 +224,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               widget.onToggle?.call();
 
               _authCubit.saveUser(
-                AppUser.createWith(
+                user: AppUser.createWith(
                   name: _nameController.text.trim(),
                   email: _emailController.text.trim(),
                 ),
