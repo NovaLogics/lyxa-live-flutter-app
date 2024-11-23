@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -20,6 +19,8 @@ import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
 import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_cubit.dart';
+import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_state.dart';
+import 'package:lyxa_live/src/shared/event_handlers/errors/widgets/error_alert_unit.dart';
 import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/event_handlers/loading/widgets/center_loading_unit.dart';
@@ -74,9 +75,8 @@ class LyxaApp extends StatelessWidget {
 
       // Search Cubit
       BlocProvider<SearchCubit>(
-        create: (context) => SearchCubit(
-          searchRepository: getIt<FirebaseSearchRepository>(),
-        ),
+        create: (context) =>
+            SearchCubit(searchRepository: getIt<FirebaseSearchRepository>()),
       ),
 
       // Theme Cubit
@@ -86,7 +86,8 @@ class LyxaApp extends StatelessWidget {
       BlocProvider<SliderCubit>(create: (context) => SliderCubit()),
 
       // Error Cubit
-      BlocProvider<ErrorAlertCubit>(create: (context) => getIt<ErrorAlertCubit>()),
+      BlocProvider<ErrorAlertCubit>(
+          create: (context) => getIt<ErrorAlertCubit>()),
 
       // Loading Cubit
       BlocProvider<LoadingCubit>(create: (context) => getIt<LoadingCubit>()),
@@ -99,12 +100,13 @@ class LyxaApp extends StatelessWidget {
       builder: (context, state) {
         Logger.logDebug(state.toString());
 
-        if (state is Unauthenticated ) {
+        if (state is Unauthenticated) {
           //Show Authentication Screen
           return Stack(
             children: [
               const AuthScreen(),
-              _buildLoadingScreen()
+              _buildLoadingScreen(),
+              _buildErrorDisplayScreen(),
             ],
           );
         } else if (state is Authenticated) {
@@ -114,13 +116,12 @@ class LyxaApp extends StatelessWidget {
               const HomeScreen(),
               _buildPhotoSliderScreen(),
               _buildLoadingScreen(),
+              _buildErrorDisplayScreen(),
             ],
           );
         } else {
           // Show Loading Indicator
-          return getIt<CenterLoadingUnit>(
-            param1: AppStrings.pleaseWait,
-          );
+          return _buildLoadingScreen();
         }
       },
       listener: (context, state) {
@@ -131,6 +132,20 @@ class LyxaApp extends StatelessWidget {
             message: state.message,
           );
         }
+      },
+    );
+  }
+
+  Widget _buildErrorDisplayScreen() {
+    return BlocConsumer<ErrorAlertCubit, ErrorAlertState>(
+      builder: (context, state) {
+        return Visibility(
+          visible: state.isVisible,
+          child: const ErrorAlertUnit(),
+        );
+      },
+      listener: (BuildContext context, ErrorAlertState state) {
+        Logger.logDebug(state.errorMessage.toString());
       },
     );
   }
