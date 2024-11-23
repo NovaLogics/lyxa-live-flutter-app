@@ -9,9 +9,9 @@ import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
-import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_cubit.dart';
-import 'package:lyxa_live/src/shared/event_handlers/errors/utils/error_handler.dart';
-import 'package:lyxa_live/src/shared/event_handlers/errors/utils/firebase_error_handler.dart';
+import 'package:lyxa_live/src/shared/entities/result.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/firebase_error_handler.dart';
 
 class FirebaseAuthRepository implements AuthRepository {
   final HiveHelper hiveHelper = getIt<HiveHelper>();
@@ -21,11 +21,12 @@ class FirebaseAuthRepository implements AuthRepository {
   /// Logs in the user with email and password
   /// ->
   @override
-  Future<AppUser?> loginWithEmailAndPassword({
+  Future<Result<AppUser>> loginWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     try {
+    
       // Set Firebase language preference
       firebaseAuth.setLanguageCode(AppStrings.languageCodeEnglish);
 
@@ -36,9 +37,10 @@ class FirebaseAuthRepository implements AuthRepository {
         password: password,
       );
 
-      final String userId = userCredential.user?.uid ?? '';
-      if (userId.isEmpty) {
-        throw Exception('Failed to retrieve user ID after authentication.');
+      final String? userId = userCredential.user?.uid;
+
+      if (userId == null || userId.isEmpty) {
+        throw Exception(ErrorMessages.failedToRetrieveUserId);
       }
 
       // Retrieve user data from Firestore
@@ -49,7 +51,7 @@ class FirebaseAuthRepository implements AuthRepository {
               .get();
 
       if (!userDocument.exists) {
-        throw Exception('User data not found in Firestore.');
+        throw Exception(ErrorMessages.userDataNotFound);
       }
 
       final String name = userDocument.data()?[AppUserFields.name] as String? ??
@@ -62,17 +64,12 @@ class FirebaseAuthRepository implements AuthRepository {
         searchableName: name.toLowerCase(),
       );
 
-      return user;
+      return Result.success(user);
     } on FirebaseAuthException catch (authError) {
-      FirebaseErrorHandler.handleAuthError(authError);
-    } catch (error, stackTrace) {
-      ErrorHandler.handleError(
-        error,
-        stackTrace: stackTrace,
-        onRetry: () {
-          ErrorAlertCubit.hideErrorMessage();
-        },
-      );
+      final errorMessage = FirebaseErrorHandler.getMessage(authError.code);
+      return Result.errorMessage(errorMessage);
+    } catch (error) {
+      return Result.error(error);
     }
   }
 
