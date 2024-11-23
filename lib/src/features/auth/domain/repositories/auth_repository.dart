@@ -1,4 +1,3 @@
-import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/shared/entities/result.dart';
 
@@ -20,12 +19,12 @@ abstract class AuthRepository {
 
   Future<void> logOut();
 
-  Future<AppUser?> getSavedUser({
-    String key = HiveKeys.loginDataKey,
+  Future<Result<AppUser>> getSavedUser({
+    required String key,
   });
 
   Future<void> saveUserToLocalStorage({
     required AppUser user,
-    String key = HiveKeys.loginDataKey,
+    required String key,
   });
 }
