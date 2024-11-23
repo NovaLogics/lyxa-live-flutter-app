@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       AppUser cachedUser = AppUser.createWith(email: email);
 
-      _authCubit.saveUser(cachedUser);
+      _authCubit.saveUser(user: cachedUser);
       _authCubit.login(email, password);
     }
   }
@@ -171,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
               widget.onToggle?.call();
 
               _authCubit.saveUser(
-                AppUser.createWith(email: _emailController.text.trim()),
+                user: AppUser.createWith(email: _emailController.text.trim()),
               );
             },
             child: const Text(

@@ -41,8 +41,13 @@ class AppUser {
     return AppUser.fromJson(jsonDecode(jsonString) as Map<String, dynamic>);
   }
 
-  static createWith({String uid = "", String email = "", String name = ""}) {
-    return AppUser(uid: uid, email: email, name: name, searchableName: name.toLowerCase());
+  static createWith({String uid = '', String email = '', String name = ''}) {
+    return AppUser(
+      uid: uid,
+      email: email,
+      name: name,
+      searchableName: name.toLowerCase(),
+    );
   }
 
   // Returns a string representation of the `AppUser` instance.

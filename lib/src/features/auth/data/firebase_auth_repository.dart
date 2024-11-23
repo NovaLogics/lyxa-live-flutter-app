@@ -17,7 +17,7 @@ class FirebaseAuthRepository implements AuthRepository {
   /// Logs in the user with email and password
   /// ->
   @override
-  Future<AppUser?> loginWithEmailPassword(
+  Future<AppUser?> loginWithEmailAndPassword(
     String email,
     String password,
   ) async {
@@ -54,7 +54,7 @@ class FirebaseAuthRepository implements AuthRepository {
   /// Registers a new user with name, email, and password
   /// ->
   @override
-  Future<AppUser?> registerWithEmailPassword(
+  Future<AppUser?> registerWithEmailAndPassword(
     String name,
     String email,
     String password,
@@ -115,7 +115,7 @@ class FirebaseAuthRepository implements AuthRepository {
   /// Logs out the current user
   /// ->
   @override
-  Future<void> logout() async {
+  Future<void> logOut() async {
     await firebaseAuth.signOut();
   }
 
@@ -133,8 +133,10 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> saveUser(AppUser user,
-      {String key = HiveKeys.loginDataKey}) async {
+  Future<void> saveUserToLocalStorage({
+    required AppUser user,
+    String key = HiveKeys.loginDataKey,
+  }) async {
     await hiveHelper.save(key, user.toJsonString());
   }
 }

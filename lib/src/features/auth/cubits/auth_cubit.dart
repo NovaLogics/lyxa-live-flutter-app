@@ -36,7 +36,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
 
       final user =
-          await _authRepository.loginWithEmailPassword(email, password);
+          await _authRepository.loginWithEmailAndPassword(email, password);
 
       if (user != null) {
         _currentUser = user;
@@ -54,7 +54,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(AuthLoading());
 
-      final user = await _authRepository.registerWithEmailPassword(
+      final user = await _authRepository.registerWithEmailAndPassword(
           name, email, password);
 
       if (user != null) {
@@ -70,7 +70,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   /// Logs out the current user.
   Future<void> logout() async {
-    await _authRepository.logout();
+    await _authRepository.logOut();
     _currentUser = null;
     emit(Unauthenticated());
   }
@@ -79,9 +79,11 @@ class AuthCubit extends Cubit<AuthState> {
     return await _authRepository.getSavedUser(key: key);
   }
 
-  Future<void> saveUser(AppUser user,
-      {String key = HiveKeys.loginDataKey}) async {
-    await _authRepository.saveUser(user, key: key);
+  Future<void> saveUser({
+    required AppUser user,
+    String key = HiveKeys.loginDataKey,
+  }) async {
+    await _authRepository.saveUserToLocalStorage(user: user, key: key);
   }
 
   /// Helper ->
