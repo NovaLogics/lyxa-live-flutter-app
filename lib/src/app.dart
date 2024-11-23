@@ -86,7 +86,7 @@ class LyxaApp extends StatelessWidget {
       BlocProvider<SliderCubit>(create: (context) => SliderCubit()),
 
       // Error Cubit
-      BlocProvider<ErrorCubit>(create: (context) => ErrorCubit()),
+      BlocProvider<ErrorAlertCubit>(create: (context) => getIt<ErrorAlertCubit>()),
 
       // Loading Cubit
       BlocProvider<LoadingCubit>(create: (context) => getIt<LoadingCubit>()),
