@@ -113,6 +113,7 @@ class LyxaApp extends StatelessWidget {
             children: [
               const HomeScreen(),
               _buildPhotoSliderScreen(),
+              _buildLoadingScreen(),
             ],
           );
         } else {
