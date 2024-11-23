@@ -10,6 +10,7 @@ import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/event_handlers/loading/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
@@ -48,8 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // Body
       body: BlocBuilder<PostCubit, PostState>(
         builder: (context, state) {
+          LoadingCubit.hideLoading();
+          Logger.logDebug(state.toString());
           if (state is PostLoading || state is PostUploading) {
-            return _buildLoadingState();
+            LoadingCubit.showLoading();
+            return const SizedBox();
           } else if (state is PostLoaded) {
             return _buildPostList(state.posts);
           } else if (state is PostError) {
@@ -61,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 
   void _fetchCurrentUserData() async {
     // Initialize cubits
@@ -105,31 +108,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildAppDrawer() {
-    return BlocListener<ProfileCubit, ProfileState>(
-      listener: (context, state) {
-        if (state is ProfileError) {
-          _isLodaingData = false;
-        } else if (state is ProfileLoaded) {
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        Logger.logDebug(state.toString());
+        if (state is ProfileLoaded) {
+          LoadingCubit.hideLoading();
           _profileUser = state.profileUser;
-          _isLodaingData = false;
+          return DrawerUnit(
+            user: _profileUser,
+          );
         } else {
-          _isLodaingData = true;
+          LoadingCubit.showLoading();
+          return const DrawerUnit(
+            user: null,
+          );
         }
       },
-      child: BlocBuilder<ProfileCubit, ProfileState>(
-        builder: (context, state) {
-          if (state is ProfileLoaded) {
-            _profileUser = state.profileUser;
-            return DrawerUnit(
-              user: _profileUser,
-            );
-          } else {
-            return const DrawerUnit(
-              user: null,
-            );
-          }
-        },
-      ),
     );
   }
 
@@ -170,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-        if (_isLodaingData) _buildLoadingState(),
+        // if (_isLodaingData) _buildLoadingState(),
       ],
     );
   }
