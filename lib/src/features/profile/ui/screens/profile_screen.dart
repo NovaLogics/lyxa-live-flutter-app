@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
@@ -10,7 +9,7 @@ import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
-import 'package:lyxa_live/src/shared/event_handlers/loading/widgets/center_loading_unit.dart';
+import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
@@ -48,10 +47,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         if (state is ProfileLoaded) {
+          LoadingCubit.hideLoading();
           return _buildProfileContent(context, state.profileUser);
         } else if (state is ProfileLoading) {
-          return _buildLoadingScreen();
+          LoadingCubit.showLoading();
+          return const SizedBox();
         } else {
+          LoadingCubit.hideLoading();
           return const Scaffold(
             body: Center(
               child: Text(AppStrings.profileNotFoundError),
@@ -116,9 +118,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  Widget _buildLoadingScreen() {
-    return getIt<CenterLoadingUnit>(param1: AppStrings.uploading);
-  }
 
   Widget _buildProfileContent(BuildContext context, ProfileUser user) {
     final isOwnProfile = (widget.displayUserId == _currentAppUser.uid);
