@@ -51,7 +51,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return _buildProfileContent(context, state.profileUser);
         } else if (state is ProfileLoading) {
           LoadingCubit.showLoading();
-          return const SizedBox();
+          return Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+          );
         } else {
           LoadingCubit.hideLoading();
           return const Scaffold(
@@ -117,7 +119,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     });
   }
-
 
   Widget _buildProfileContent(BuildContext context, ProfileUser user) {
     final isOwnProfile = (widget.displayUserId == _currentAppUser.uid);
