@@ -4,18 +4,18 @@ import 'package:lyxa_live/src/core/utils/logger.dart';
 class FirebaseErrorHandler {
   /// Handles a FirebaseAuthException by logging and re-throwing a formatted exception.
   static void handleAuthError(FirebaseAuthException authError) {
-    final String errorMessage = _getMessage(authError.code);
+    final String errorMessage = getMessage(authError.code);
 
-    // Log the error (replace Logger.logError with your logging solution)
+
     Logger.logError('AuthError: ${authError.code}');
     Logger.logError('Message: $errorMessage');
 
-    // Throw the exception with a user-friendly message
+
     throw Exception(errorMessage);
   }
 
   /// Maps Firebase error codes to user-friendly error messages.
-  static String _getMessage(String errorCode) {
+  static String getMessage(String errorCode) {
     switch (errorCode) {
       case 'invalid-credential':
         return 'The credential provided is invalid or has expired. Please try again.';
