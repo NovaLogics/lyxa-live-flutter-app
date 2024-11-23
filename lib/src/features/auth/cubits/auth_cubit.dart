@@ -35,8 +35,10 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(AuthLoading());
 
-      final user =
-          await _authRepository.loginWithEmailAndPassword(email, password);
+      final user = await _authRepository.loginWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       if (user != null) {
         _currentUser = user;
@@ -55,7 +57,10 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
 
       final user = await _authRepository.registerWithEmailAndPassword(
-          name, email, password);
+        name: name,
+        email: email,
+        password: password,
+      );
 
       if (user != null) {
         _currentUser = user;

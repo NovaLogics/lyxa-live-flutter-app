@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 
 import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/firebase_error_util.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
@@ -17,48 +18,71 @@ class FirebaseAuthRepository implements AuthRepository {
   /// Logs in the user with email and password
   /// ->
   @override
-  Future<AppUser?> loginWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
+  Future<AppUser?> loginWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     try {
-      firebaseAuth.setLanguageCode('en');
-      // Sign in user
-      UserCredential userCredential = await firebaseAuth
-          .signInWithEmailAndPassword(email: email, password: password);
+      // Set Firebase language preference
+      firebaseAuth.setLanguageCode(AppStrings.languageCodeEnglish);
 
-      // Fetch user document from Firestore
-      DocumentSnapshot userDoc = await firebaseFirestore
-          .collection(FIRESTORE_COLLECTION_USERS)
-          .doc(userCredential.user!.uid)
-          .get();
-
-      // Create user object
-      AppUser user = AppUser(
-        uid: userCredential.user!.uid,
+      // Authenticate the user
+      final UserCredential userCredential =
+          await firebaseAuth.signInWithEmailAndPassword(
         email: email,
-        name: userDoc.get(AppUserFields.name),
-        searchableName:
-            userDoc.get(AppUserFields.name).toString().toLowerCase(),
+        password: password,
+      );
+
+      final String userId = userCredential.user?.uid ?? '';
+      if (userId.isEmpty) {
+        throw Exception('Failed to retrieve user ID after authentication.');
+      }
+
+      // Retrieve user data from Firestore
+      final DocumentSnapshot<Map<String, dynamic>> userDocument =
+          await firebaseFirestore
+              .collection(FIRESTORE_COLLECTION_USERS)
+              .doc(userId)
+              .get();
+
+      if (!userDocument.exists) {
+        throw Exception('User data not found in Firestore.');
+      }
+
+      final String name =
+          userDocument.data()?[AppUserFields.name] as String? ?? AppStrings.unknown;
+      // Map Firestore document to [AppUser]
+      final AppUser user = AppUser(
+        uid: userId,
+        email: email,
+        name: name,
+        searchableName: name.toLowerCase(),
       );
 
       return user;
-    } on FirebaseAuthException catch (error) {
-      final errorData = FirebaseErrorUtil.getMessage(error.code);
-      Logger.logError(error.code);
-      Logger.logError(errorData);
-      throw Exception(errorData);
+    } on FirebaseAuthException catch (authError) {
+      // Handle Firebase authentication-specific errors
+      final String errorMessage = FirebaseErrorUtil.getMessage(authError.code);
+      Logger.logError('AuthError: ${authError.code}');
+      Logger.logError('Message: $errorMessage');
+      throw Exception(errorMessage);
+    } catch (error, stackTrace) {
+      // Handle general errors
+      Logger.logError(
+        'Unexpected Error: ${error.toString()} | stackTrace: ${stackTrace.toString()}',
+      );
+      throw Exception('An unexpected error occurred. Please try again.');
     }
   }
 
   /// Registers a new user with name, email, and password
   /// ->
   @override
-  Future<AppUser?> registerWithEmailAndPassword(
-    String name,
-    String email,
-    String password,
-  ) async {
+  Future<AppUser?> registerWithEmailAndPassword({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
     try {
       // Sign up user
       UserCredential userCredential = await firebaseAuth
