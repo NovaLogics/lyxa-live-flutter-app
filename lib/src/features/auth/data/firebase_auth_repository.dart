@@ -4,7 +4,6 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/core/utils/firebase_error_util.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
@@ -18,15 +17,19 @@ class FirebaseAuthRepository implements AuthRepository {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  /// Logs in the user with email and password
-  /// ->
+  /// (ƒ) :: Login With Email And Password
+  ///
+  /// Returns a [Result] with the [AppUser] on success or an error on failure
+  ///
+  /// Parameters:
+  /// - [email]: User's email address.
+  /// - [password]: User's password.
   @override
   Future<Result<AppUser>> loginWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     try {
-    
       // Set Firebase language preference
       firebaseAuth.setLanguageCode(AppStrings.languageCodeEnglish);
 
@@ -73,22 +76,37 @@ class FirebaseAuthRepository implements AuthRepository {
     }
   }
 
-  /// Registers a new user with name, email, and password
-  /// ->
+  ///  (ƒ) :: Register With Email And Password
+  ///
+  /// Returns a [Result] with the [AppUser] on success or an error on failure
+  ///
+  /// Parameters:
+  /// - [name]: User's full name.
+  /// - [email]: User's email address.
+  /// - [password]: User's password.
   @override
-  Future<AppUser?> registerWithEmailAndPassword({
+  Future<Result<AppUser>> registerWithEmailAndPassword({
     required String name,
     required String email,
     required String password,
   }) async {
     try {
       // Sign up user
-      UserCredential userCredential = await firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final String? userId = userCredential.user?.uid;
+
+      if (userId == null || userId.isEmpty) {
+        throw Exception(ErrorMessages.failedToRetrieveUserId);
+      }
 
       // Create user object
       AppUser user = AppUser(
-        uid: userCredential.user!.uid,
+        uid: userId,
         email: email,
         name: name,
         searchableName: name.toLowerCase(),
@@ -100,12 +118,12 @@ class FirebaseAuthRepository implements AuthRepository {
           .doc(user.uid)
           .set(user.toJson());
 
-      return user;
-    } on FirebaseAuthException catch (error) {
-      final errorData = FirebaseErrorUtil.getMessage(error.code);
-      Logger.logError(error.code);
-      Logger.logError(errorData);
-      throw Exception(errorData);
+      return Result.success(user);
+    } on FirebaseAuthException catch (authError) {
+      final errorMessage = FirebaseErrorHandler.getMessage(authError.code);
+      return Result.errorMessage(errorMessage);
+    } catch (error) {
+      return Result.error(error);
     }
   }
 
