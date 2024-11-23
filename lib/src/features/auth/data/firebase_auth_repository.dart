@@ -5,7 +5,6 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
-import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result.dart';
@@ -176,19 +175,28 @@ class FirebaseAuthRepository implements AuthRepository {
     await firebaseAuth.signOut();
   }
 
+  /// (ƒ) :: Get Saved User | LocalDB
+  /// ->
+  /// Returns the [AppUser] if found, or Error if not
   @override
-  Future<AppUser?> getSavedUser({String key = HiveKeys.loginDataKey}) async {
-    final String loginData = hiveHelper.getValue<String>(key, '');
-    if (loginData.isNotEmpty) {
+  Future<Result<AppUser>> getSavedUser({
+    required String key,
+  }) async {
+    final String? userData = hiveHelper.get<String>(key);
+    if (userData != null && userData.isNotEmpty) {
       try {
-        return AppUser.fromJsonString(loginData);
-      } catch (e) {
-        Logger.logError(e.toString());
+        final user = AppUser.fromJsonString(userData);
+        return Result.success(user);
+      } catch (error) {
+        return Result.errorMessage(error.toString());
       }
     }
-    return null;
+    return Result.errorMessage(ErrorMessages.userDataNotFound);
   }
 
+  /// (ƒ) :: Save User To Local Storage | LocalDB
+  /// ->
+  /// Saves the [AppUser] to local storage with the specified key
   @override
   Future<void> saveUserToLocalStorage({
     required AppUser user,
