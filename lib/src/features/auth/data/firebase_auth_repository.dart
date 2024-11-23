@@ -34,11 +34,8 @@ class FirebaseAuthRepository implements AuthRepository {
       firebaseAuth.setLanguageCode(AppStrings.languageCodeEnglish);
 
       // Authenticate the user
-      final UserCredential userCredential =
-          await firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final UserCredential userCredential = await firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
 
       final String? userId = userCredential.user?.uid;
 
@@ -92,11 +89,8 @@ class FirebaseAuthRepository implements AuthRepository {
   }) async {
     try {
       // Sign up user
-      UserCredential userCredential =
-          await firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      UserCredential userCredential = await firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
 
       final String? userId = userCredential.user?.uid;
 
@@ -127,33 +121,56 @@ class FirebaseAuthRepository implements AuthRepository {
     }
   }
 
-  /// Retrieves the current logged-in user
+  ///  (ƒ) :: Get Current User
   /// ->
+  /// Returns [Result.success] with the [AppUser] if found,
+  /// or [Result.error] if an error occurs.
   @override
-  Future<AppUser?> getCurrentUser() async {
-    final firebaseUser = firebaseAuth.currentUser;
+  Future<Result<AppUser?>> getCurrentUser() async {
+    try {
+      final firebaseUser = firebaseAuth.currentUser;
 
-    if (firebaseUser == null) return null;
+      // No user logged in
+      if (firebaseUser == null) {
+        return Result.success(null);
+      }
 
-    // Fetch user document from Firestore
-    DocumentSnapshot userDoc = await firebaseFirestore
-        .collection(FIRESTORE_COLLECTION_USERS)
-        .doc(firebaseUser.uid)
-        .get();
+      // Fetch user document from Firestore
+      final userDocument = await firebaseFirestore
+          .collection(FIRESTORE_COLLECTION_USERS)
+          .doc(firebaseUser.uid)
+          .get();
 
-    // Check if user document exists
-    if (!userDoc.exists) return null;
+      if (!userDocument.exists) {
+        throw Exception(ErrorMessages.userDataNotFound);
+      }
 
-    return AppUser(
-      uid: firebaseUser.uid,
-      email: firebaseUser.email!,
-      name: userDoc.get(AppUserFields.name),
-      searchableName: userDoc.get(AppUserFields.name).toString().toLowerCase(),
-    );
+      final data = userDocument.data();
+      if (data == null ||
+          !data.containsKey(AppUserFields.name) ||
+          !data.containsKey(AppUserFields.email)) {
+        throw Exception(ErrorMessages.userDataNotFound);
+      }
+
+      final user = AppUser(
+        uid: firebaseUser.uid,
+        email: data[AppUserFields.email] as String,
+        name: data[AppUserFields.name] as String,
+        searchableName: (data[AppUserFields.name] as String).toLowerCase(),
+      );
+
+      return Result.success(user);
+    } on FirebaseAuthException catch (authError) {
+      return Result.errorMessage(
+          FirebaseErrorHandler.getMessage(authError.code));
+    } catch (error) {
+      return Result.error(error);
+    }
   }
 
-  /// Logs out the current user
+  ///  (ƒ) :: Logout
   /// ->
+  /// Logs out the current user by signing out from Firebase.
   @override
   Future<void> logOut() async {
     await firebaseAuth.signOut();
