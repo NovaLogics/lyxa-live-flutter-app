@@ -20,6 +20,7 @@ import 'package:lyxa_live/src/features/photo_slider/cubits/slider_state.dart';
 import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
+import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
@@ -82,6 +83,9 @@ class LyxaApp extends StatelessWidget {
 
       // Image Slider Cubit
       BlocProvider<SliderCubit>(create: (context) => SliderCubit()),
+
+      // Error Cubit
+      BlocProvider<ErrorCubit>(create: (context) => ErrorCubit()),
     ];
   }
 
@@ -92,7 +96,7 @@ class LyxaApp extends StatelessWidget {
         Logger.logDebug(state.toString());
 
         if (state is Unauthenticated || state is AuthLoading) {
-          // Show Authentication Screen
+          //Show Authentication Screen
           return Stack(
             children: [
               const AuthScreen(),
@@ -102,6 +106,15 @@ class LyxaApp extends StatelessWidget {
                 )
             ],
           );
+          // return Stack(
+          //   children: [
+          //     if (state is Unauthenticated) const AuthScreen(),
+          //     if (state is AuthLoading)
+          //       getIt<CenterLoadingUnit>(
+          //         param1: AppStrings.pleaseWait,
+          //       ),
+          //   ],
+          // );
         } else if (state is Authenticated) {
           // Show Main Home Screen
           return Stack(
