@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/shared/event_handlers/errors/utils/error_messages.dart';
 
 import 'package:lyxa_live/src/shared/event_handlers/errors/utils/error_type.dart';
@@ -24,6 +25,19 @@ class ErrorAlertCubit extends Cubit<ErrorAlertState> {
 
   void hideError() {
     emit(state.copyWith(isVisible: false));
+  }
+
+  static void showErrorMessage({
+    required ErrorType errorType,
+    String? customMessage,
+    required VoidCallback onRetry,
+  }) {
+    getIt<ErrorAlertCubit>().showError(
+        customMessage: customMessage, errorType: errorType, onRetry: onRetry);
+  }
+
+  static void hideErrorMessage() {
+    getIt<ErrorAlertCubit>().hideError();
   }
 
   String _getErrorMessage(ErrorType errorType) {
