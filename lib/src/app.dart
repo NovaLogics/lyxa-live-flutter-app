@@ -127,6 +127,7 @@ class LyxaApp extends StatelessWidget {
       listener: (context, state) {
         // Show error messages if authentication fails
         if (state is AuthError) {
+          Logger.logError(state.message.toString());
           ToastMessengerUnit.showErrorToast(
             context: context,
             message: state.message,

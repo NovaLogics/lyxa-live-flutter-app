@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
@@ -82,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _initializeEmailField() async {
-    final savedUser = await _authCubit.getSavedUser();
+    final savedUser = await _authCubit.getSavedUser(key: HiveKeys.loginDataKey);
     if (savedUser != null) {
       Logger.logDebug(savedUser.toString());
       _emailController.text = savedUser.email;
@@ -96,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       AppUser cachedUser = AppUser.createWith(email: email);
 
-      _authCubit.saveUser(user: cachedUser);
+      _authCubit.saveUserToLocalStorage(user: cachedUser);
       _authCubit.login(email, password);
     }
   }
@@ -170,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
             onTap: () {
               widget.onToggle?.call();
 
-              _authCubit.saveUser(
+              _authCubit.saveUserToLocalStorage(
                 user: AppUser.createWith(email: _emailController.text.trim()),
               );
             },
