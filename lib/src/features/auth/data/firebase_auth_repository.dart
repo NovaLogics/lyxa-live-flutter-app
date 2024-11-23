@@ -9,6 +9,8 @@ import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
+import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_cubit.dart';
+import 'package:lyxa_live/src/shared/event_handlers/errors/utils/error_type.dart';
 
 class FirebaseAuthRepository implements AuthRepository {
   final HiveHelper hiveHelper = getIt<HiveHelper>();
@@ -49,8 +51,8 @@ class FirebaseAuthRepository implements AuthRepository {
         throw Exception('User data not found in Firestore.');
       }
 
-      final String name =
-          userDocument.data()?[AppUserFields.name] as String? ?? AppStrings.unknown;
+      final String name = userDocument.data()?[AppUserFields.name] as String? ??
+          AppStrings.unknown;
       // Map Firestore document to [AppUser]
       final AppUser user = AppUser(
         uid: userId,
@@ -71,7 +73,14 @@ class FirebaseAuthRepository implements AuthRepository {
       Logger.logError(
         'Unexpected Error: ${error.toString()} | stackTrace: ${stackTrace.toString()}',
       );
-      throw Exception('An unexpected error occurred. Please try again.');
+
+      ErrorAlertCubit.showErrorMessage(
+        errorType: ErrorType.authenticationError,
+        onRetry: () {
+          ErrorAlertCubit.hideErrorMessage();
+        },
+      );
+      // throw Exception('An unexpected error occurred. Please try again.');
     }
   }
 
