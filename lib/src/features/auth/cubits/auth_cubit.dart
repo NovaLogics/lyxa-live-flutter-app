@@ -35,7 +35,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> login(String email, String password) async {
     try {
       //emit(AuthLoading());
-      LoadingCubit.showLoading("Loading data...");
+      LoadingCubit.showLoading(message: 'Loading data...');
 
       final user = await _authRepository.loginWithEmailAndPassword(
         email: email,
