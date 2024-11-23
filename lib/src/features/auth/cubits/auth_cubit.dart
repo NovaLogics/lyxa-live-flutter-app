@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
-import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
@@ -163,11 +162,25 @@ class AuthCubit extends Cubit<AuthState> {
     emit(Unauthenticated());
   }
 
-  Future<AppUser?> getSavedUser({String key = HiveKeys.loginDataKey}) async {
-    return await _authRepository.getSavedUser(key: key);
+  /// (ƒ) :: Get Saved User | LocalDB
+  ///
+  /// Returns the [AppUser] if found, or null if not
+  Future<AppUser?> getSavedUser({
+    required String key,
+  }) async {
+    final result = await _authRepository.getSavedUser(key: key);
+
+    if (result.status == Status.success && result.isDataNotEmpty()) {
+      return result.data;
+    }
+
+    return null;
   }
 
-  Future<void> saveUser({
+  /// (ƒ) :: Save User To Local Storage | LocalDB
+  ///
+  /// Saves the [AppUser] to local storage with the specified key
+  Future<void> saveUserToLocalStorage({
     required AppUser user,
     String key = HiveKeys.loginDataKey,
   }) async {
@@ -175,13 +188,6 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   /// Helper ->
-  /// Handles authentication errors by emitting an error state
-  void _handleAuthError(dynamic error) {
-    emit(AuthError(error.toString().replaceFirst('Exception: ', '')));
-    emit(Unauthenticated());
-    Logger.logError(error.toString());
-  }
-
   String getError(String? message) {
     if (message != null && message.isNotEmpty) {
       return message.toString().replaceFirst('Exception: ', '');
