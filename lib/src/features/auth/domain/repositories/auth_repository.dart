@@ -10,7 +10,7 @@ abstract class AuthRepository {
     required String password,
   });
 
-  Future<AppUser?> registerWithEmailAndPassword({
+  Future<Result<AppUser>> registerWithEmailAndPassword({
     required String name,
     required String email,
     required String password,
