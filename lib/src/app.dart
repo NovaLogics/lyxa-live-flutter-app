@@ -21,6 +21,7 @@ import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
 import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_cubit.dart';
+import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
@@ -86,6 +87,9 @@ class LyxaApp extends StatelessWidget {
 
       // Error Cubit
       BlocProvider<ErrorCubit>(create: (context) => ErrorCubit()),
+
+      // Loading Cubit
+      BlocProvider<LoadingCubit>(create: (context) => LoadingCubit()),
     ];
   }
 
