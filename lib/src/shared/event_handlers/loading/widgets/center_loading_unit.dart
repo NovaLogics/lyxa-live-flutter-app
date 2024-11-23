@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_cubit.dart';
+import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_state.dart';
 
 class CenterLoadingUnit extends StatelessWidget {
   final String message;
@@ -14,9 +15,9 @@ class CenterLoadingUnit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoadingCubit, bool>(
-      builder: (context, isVisible) {
-        return isVisible
+    return BlocBuilder<LoadingCubit, LoadingState>(
+      builder: (context, state) {
+        return state.isVisible
             ? Scaffold(
                 backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.6),
                 body: Center(
@@ -37,7 +38,7 @@ class CenterLoadingUnit extends StatelessWidget {
                           ),
                           const SizedBox(height: AppDimens.size24),
                           Text(
-                            message,
+                            state.message,
                             style: TextStyle(
                               fontSize: AppDimens.fontSizeXL20, 
                               letterSpacing: AppDimens.letterSpacingPT11, 
