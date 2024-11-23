@@ -28,13 +28,35 @@ class AuthCubit extends Cubit<AuthState> {
   ///
   /// Emits [Authenticated] if a user is found, otherwise [Unauthenticated].
   Future<void> checkAuthentication() async {
-    final AppUser? user = await _authRepository.getCurrentUser();
+    final result = await _authRepository.getCurrentUser();
 
-    if (user != null) {
-      _currentUser = user;
-      emit(Authenticated(user));
-    } else {
-      emit(Unauthenticated());
+    switch (result.status) {
+      case Status.success:
+        if (result.isDataNotEmpty()) {
+          _currentUser = result.data as AppUser;
+
+          emit(Authenticated(_currentUser));
+        } else {
+          // No user logged in
+          emit(Unauthenticated());
+        }
+        break;
+
+      case Status.errorMessage:
+        emit(AuthError(getError(result.errorMessage)));
+        break;
+
+      case Status.error:
+        ErrorHandler.handleError(
+          result.error,
+          onRetry: () {
+            ErrorAlertCubit.hideErrorMessage();
+          },
+        );
+        break;
+
+      case Status.loading:
+        break;
     }
   }
 
@@ -73,7 +95,6 @@ class AuthCubit extends Cubit<AuthState> {
       case Status.error:
         ErrorHandler.handleError(
           result.error,
-          stackTrace: null,
           onRetry: () {
             ErrorAlertCubit.hideErrorMessage();
           },
@@ -122,7 +143,6 @@ class AuthCubit extends Cubit<AuthState> {
       case Status.error:
         ErrorHandler.handleError(
           result.error,
-          stackTrace: null,
           onRetry: () {
             ErrorAlertCubit.hideErrorMessage();
           },
@@ -134,7 +154,9 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  /// Logs out the current user.
+  /// (ƒ) :: Logout
+  ///
+  /// Logs out the current user and emits [Unauthenticated].
   Future<void> logout() async {
     await _authRepository.logOut();
     _currentUser = AppUser.getDefaultGuestUser();
