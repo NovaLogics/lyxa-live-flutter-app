@@ -3,6 +3,7 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 
 class LoadingCubit extends Cubit<LoadingState> {
+
   LoadingCubit() : super(LoadingState());
 
   void show({String? message}) {
@@ -10,7 +11,9 @@ class LoadingCubit extends Cubit<LoadingState> {
   }
 
   void hide() {
-    emit(state.copyWith(isVisible: false));
+    if(state.isVisible) {
+      emit(state.copyWith(isVisible: false));
+    }
   }
 
   // Add static shortcut methods for convenience
