@@ -112,6 +112,8 @@ class AppStrings {
   static const String save = 'Save';
   static const String dialog = 'dialog';
 
-    static const String languageCodeEnglish = 'en';
-      static const String unknown = 'Unknown';
+  static const String languageCodeEnglish = 'en';
+  static const String unknown = 'Unknown';
+
+  static const String authenticatingPleaseWait = 'Authenticating, please hold on...';
 }
