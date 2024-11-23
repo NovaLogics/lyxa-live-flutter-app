@@ -5,9 +5,9 @@ import 'package:lyxa_live/src/features/post/data/firebase_post_repository.dart';
 import 'package:lyxa_live/src/features/profile/data/firebase_profile_repository.dart';
 import 'package:lyxa_live/src/features/search/data/firebase_search_repository.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
-import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_cubit.dart';
-import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_cubit.dart';
-import 'package:lyxa_live/src/shared/event_handlers/loading/widgets/center_loading_unit.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
 final GetIt getIt = GetIt.instance;

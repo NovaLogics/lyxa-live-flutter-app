@@ -18,12 +18,12 @@ import 'package:lyxa_live/src/features/photo_slider/cubits/slider_state.dart';
 import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
-import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_cubit.dart';
-import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_state.dart';
-import 'package:lyxa_live/src/shared/event_handlers/errors/widgets/error_alert_unit.dart';
-import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_cubit.dart';
-import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_state.dart';
-import 'package:lyxa_live/src/shared/event_handlers/loading/widgets/center_loading_unit.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_state.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/widgets/error_alert_unit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 /// Main Application Entry Point for LyxaApp

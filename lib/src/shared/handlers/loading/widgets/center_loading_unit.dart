@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_cubit.dart';
-import 'package:lyxa_live/src/shared/event_handlers/loading/cubits/loading_state.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 
 class CenterLoadingUnit extends StatelessWidget {
   final String message;
