@@ -6,7 +6,7 @@ import 'package:lyxa_live/src/shared/handlers/errors/utils/error_type.dart';
 
 class ErrorHandler {
   static void handleError(
-    Object error, {
+    Object? error, {
     StackTrace? stackTrace,
     String? customMessage,
     required VoidCallback onRetry,
@@ -14,7 +14,10 @@ class ErrorHandler {
     String errorMessage = "An unexpected error occurred.";
     ErrorType errorType = ErrorType.unknown;
 
-    if (error is NetworkException) {
+    if (error == null) {
+      errorMessage = "An unexpected error occurred.";
+      errorType = ErrorType.unknown;
+    } else if (error is NetworkException) {
       errorMessage = error.message;
       errorType = ErrorType.networkError;
     } else if (error is TimeoutException) {
