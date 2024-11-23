@@ -15,7 +15,7 @@ class LoadingCubit extends Cubit<LoadingState> {
   }
 
   // Add static shortcut methods for convenience
-  static void showLoading(String? message) {
+  static void showLoading({String? message}) {
     getIt<LoadingCubit>().show(message: message);
   }
 
