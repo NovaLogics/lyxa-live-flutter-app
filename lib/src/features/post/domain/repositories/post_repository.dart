@@ -5,29 +5,29 @@ import 'package:lyxa_live/src/shared/entities/result/result.dart';
 abstract class PostRepository {
   Future<Result<List<Post>>> fetchAllPosts();
 
-  Future<Result<bool>> createPost({
-    required Post post,
-  });
-
-  Future<void> deletePost({
-    required String postId,
-  });
-
   Future<Result<List<Post>>> fetchPostsByUserId({
     required String userId,
   });
 
-  Future<void> toggleLikePost({
+  Future<Result<void>> createPost({
+    required Post post,
+  });
+
+  Future<Result<void>> deletePost({
+    required String postId,
+  });
+
+  Future<Result<void>> toggleLikePost({
     required String postId,
     required String userId,
   });
 
-  Future<void> addComment({
+  Future<Result<void>> addComment({
     required String postId,
     required Comment comment,
   });
 
-  Future<void> deleteComment({
+  Future<Result<void>> deleteComment({
     required String postId,
     required String commentId,
   });
