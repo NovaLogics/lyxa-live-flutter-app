@@ -52,17 +52,12 @@ class LyxaApp extends StatelessWidget {
     return [
       // Authentication Cubit
       BlocProvider<AuthCubit>(
-        create: (context) => AuthCubit(
-          authRepository: getIt<FirebaseAuthRepository>(),
-        )..checkAuthentication(),
+        create: (context) => getIt<AuthCubit>()..checkAuthentication(),
       ),
 
       // Profile Cubit
       BlocProvider<ProfileCubit>(
-        create: (context) => ProfileCubit(
-          profileRepository: getIt<FirebaseProfileRepository>(),
-          storageRepository: getIt<FirebaseStorageRepository>(),
-        ),
+        create: (context) => getIt<ProfileCubit>(),
       ),
 
       // Post Cubit

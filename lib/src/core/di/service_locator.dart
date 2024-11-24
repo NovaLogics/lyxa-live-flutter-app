@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
+import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/data/firebase_post_repository.dart';
@@ -34,6 +35,10 @@ void setupServiceLocator() {
       () => FirebaseSearchRepository());
 
   // Register Cubits
+
+  getIt.registerSingleton<AuthCubit>(AuthCubit(
+    authRepository: getIt<FirebaseAuthRepository>(),
+  ));
 
   getIt.registerSingleton<SearchCubit>(
       SearchCubit(searchRepository: getIt<FirebaseSearchRepository>()));
