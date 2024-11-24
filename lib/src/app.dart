@@ -167,8 +167,8 @@ class LyxaApp extends StatelessWidget {
 
         return (state is SliderLoaded)
             ? PhotoSlider(
-                listImagesModel: state.images,
-                current: state.currentIndex,
+                images: state.images,
+                initialIndex: state.currentIndex,
               )
             : const SizedBox.shrink();
       },

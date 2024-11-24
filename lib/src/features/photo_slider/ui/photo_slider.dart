@@ -7,13 +7,13 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 
 class PhotoSlider extends StatefulWidget {
-  final List<String> listImagesModel;
-  final int current;
+  final List<String> images;
+  final int initialIndex;
 
   const PhotoSlider({
     super.key,
-    required this.listImagesModel,
-    required this.current,
+    required this.images,
+    required this.initialIndex,
   });
 
   @override
@@ -26,7 +26,7 @@ class _PhotoSliderState extends State<PhotoSlider> {
   @override
   void initState() {
     super.initState();
-    _current = widget.current;
+    _current = widget.initialIndex;
   }
 
   List<T> map<T>(List list, Function handler) {
@@ -69,16 +69,16 @@ class _PhotoSliderState extends State<PhotoSlider> {
                     _current = index;
                   });
                 },
-                initialPage: widget.current,
+                initialPage: widget.initialIndex,
               ),
-              itemCount: widget.listImagesModel.length,
+              itemCount: widget.images.length,
               itemBuilder: (context, index, realIndex) {
                 return InteractiveViewer(
                   panEnabled: true,
                   minScale: 1.0,
                   maxScale: 4.0,
                   child: CachedNetworkImage(
-                    imageUrl: widget.listImagesModel[index],
+                    imageUrl: widget.images[index],
                     placeholder: (context, url) => const Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -93,10 +93,10 @@ class _PhotoSliderState extends State<PhotoSlider> {
             ),
           ),
           const SizedBox(height: AppDimens.size12),
-          if (widget.listImagesModel.length > 1)
+          if (widget.images.length > 1)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: map<Widget>(widget.listImagesModel, (index, _) {
+              children: map<Widget>(widget.images, (index, _) {
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   width: AppDimens.size8,
