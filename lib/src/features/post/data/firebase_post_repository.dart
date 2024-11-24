@@ -5,7 +5,6 @@ import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/utils/firebase_error_handler.dart';
 
 class FirebasePostRepository implements PostRepository {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -26,9 +25,6 @@ class FirebasePostRepository implements PostRepository {
     } catch (error) {
       return Result.error(error);
     }
-    // catch (error) {
-    //   throw Exception('Error creating post : ${error.toString()}');
-    // }
   }
 
   @override
@@ -43,7 +39,7 @@ class FirebasePostRepository implements PostRepository {
   }
 
   @override
-  Future<List<Post>> fetchAllPosts() async {
+  Future<Result<List<Post>>> fetchAllPosts() async {
     try {
       // Get all posts with most recent posts at the top
       final postSnapshot =
@@ -54,9 +50,11 @@ class FirebasePostRepository implements PostRepository {
           .map((doc) => Post.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
 
-      return allPosts;
+      return Result.success(allPosts);
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception('Error fetching post : ${error.toString()}');
+      return Result.error(error);
     }
   }
 

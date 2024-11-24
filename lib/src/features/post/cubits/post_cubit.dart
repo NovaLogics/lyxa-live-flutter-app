@@ -66,48 +66,37 @@ class PostCubit extends Cubit<PostState> {
       emit(PostError(ErrorMessages.postCreationError));
     }
   }
-  // Future<void> createPost({
-  //   required Post post,
-  //   String? imagePath,
-  //   Uint8List? imageBytes,
-  // }) async {
-  //   String? imageUrl;
-  //   try {
-  //     // Handle image upload for mobile platforms (Using file path)
-  //     if (imagePath != null) {
-  //       emit(PostUploading());
-  //       imageUrl =
-  //           await storageRepository.uploadPostImageMobile(imagePath, post.id);
-  //     }
-  //     // Handle image upload for web platforms (Using file bytes)
-  //     else if (imageBytes != null) {
-  //       emit(PostUploading());
-  //       imageUrl =
-  //           await storageRepository.uploadPostImageWeb(imageBytes, post.id);
-  //     }
-
-  //     // Give image url to post
-  //     final newPost = post.copyWith(imageUrl: imageUrl);
-
-  //     // Create post in the backend
-  //     postRepository.createPost(post: newPost);
-
-  //     // Re-fetch all posts
-  //     fetchAllPosts();
-  //   } catch (error) {
-  //     emit(PostError('Failed to create post : ${error.toString()}'));
-  //   }
-  // }
 
   // Fetch all posts
   Future<void> fetchAllPosts() async {
-    try {
+
       emit(PostLoading());
-      final posts = await postRepository.fetchAllPosts();
-      emit(PostLoaded(posts));
-    } catch (error) {
-      emit(PostError('Failed to fetch posts : ${error.toString()}'));
-    }
+      
+      final result = await postRepository.fetchAllPosts();
+
+
+       switch (result.status) {
+        case Status.success:
+          emit(PostLoaded(result.data ?? List.empty()));
+          break;
+
+        case Status.error:
+          //FIREBASE ERROR
+          if (result.isFirebaseError()) {
+            emit(PostError(result.getFirebaseError()));
+          }
+          //GENERIC ERROR
+          else if (result.isGenericError()) {
+            ErrorHandler.handleError(
+              result.error?.genericError?.error,
+              prefixMessage: ErrorMessages.failToLoadPostError,
+              onRetry: () {
+                ErrorAlertCubit.hideErrorMessage();
+              },
+            );
+          }
+          break;
+
   }
 
   // Delete a post
