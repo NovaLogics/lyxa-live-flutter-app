@@ -1,6 +1,7 @@
 import 'package:lyxa_live/src/shared/entities/result/errors/error_wrapper.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/message_error.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 enum Status {
@@ -37,6 +38,10 @@ class Result<T> {
       errorWrapper = ErrorWrapper(firebaseError: error);
     } else if (error is GenericError) {
       errorWrapper = ErrorWrapper(genericError: error);
+    } else if (error is MessageError) {
+      errorWrapper = ErrorWrapper(messageError: error);
+    } else if (error is String) {
+      errorWrapper = ErrorWrapper(messageError: MessageError(error));
     } else {
       errorWrapper = ErrorWrapper(genericError: GenericError(error: error));
     }
