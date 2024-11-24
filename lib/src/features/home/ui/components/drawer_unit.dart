@@ -32,9 +32,7 @@ class DrawerUnit extends StatelessWidget {
                 const SizedBox(height: AppDimens.size12),
                 _buildDrawerIcon(context),
                 const SizedBox(height: AppDimens.size12),
-                Divider(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+                Divider(color: Theme.of(context).colorScheme.outline),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleHome,
@@ -54,11 +52,8 @@ class DrawerUnit extends StatelessWidget {
                   icon: Icons.settings_outlined,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
-                const SizedBox(
-                    height: AppDimens.size12), // Add space before the spacer
-                Divider(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+                const SizedBox(height: AppDimens.size48),
+                Divider(color: Theme.of(context).colorScheme.outline),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleLogout,

@@ -10,9 +10,9 @@ class DrawerTitleUnit extends StatelessWidget {
 
   const DrawerTitleUnit({
     super.key,
+    this.onTap,
     required this.title,
     required this.icon,
-    this.onTap,
   });
 
   @override
@@ -25,7 +25,7 @@ class DrawerTitleUnit extends StatelessWidget {
         style: AppTextStyles.subtitlePrimary.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
           fontSize: AppDimens.fontSizeMD16,
-          letterSpacing: 1.8,
+          letterSpacing: AppDimens.letterSpacingPT18,
           fontFamily: FONT_MONTSERRAT,
           shadows: [],
         ),
