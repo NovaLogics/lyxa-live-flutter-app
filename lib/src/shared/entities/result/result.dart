@@ -24,6 +24,11 @@ class Result<T> {
     return Result._(data: data, status: Status.success);
   }
 
+  /// Factory constructor for Void Success state
+  factory Result.voidSuccess() {
+    return const Result._(data: null, status: Status.success);
+  }
+
   /// Factory constructor for error state with generic or firebase error
   factory Result.error(Object error) {
     ErrorWrapper errorWrapper;
