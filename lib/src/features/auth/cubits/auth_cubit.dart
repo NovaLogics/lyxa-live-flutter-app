@@ -29,7 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (result.status) {
       case Status.success:
-        if (result.isDataNotEmpty()) {
+        if (result.isDataNotNull()) {
           _currentUser = result.data as AppUser;
           emit(Authenticated(_currentUser));
         } else {
@@ -77,7 +77,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (result.status) {
       case Status.success:
-        if (result.isDataNotEmpty()) {
+        if (result.isDataNotNull()) {
           _currentUser = result.data as AppUser;
 
           emit(Authenticated(_currentUser));
@@ -127,7 +127,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (result.status) {
       case Status.success:
-        if (result.isDataNotEmpty()) {
+        if (result.isDataNotNull()) {
           _currentUser = result.data as AppUser;
           emit(Authenticated(_currentUser));
         } else {
@@ -172,7 +172,7 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     final result = await _authRepository.getSavedUser(key: key);
 
-    if (result.status == Status.success && result.isDataNotEmpty()) {
+    if (result.status == Status.success && result.isDataNotNull()) {
       return result.data;
     }
 
@@ -188,5 +188,4 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     await _authRepository.saveUserToLocalStorage(user: user, key: key);
   }
-
 }

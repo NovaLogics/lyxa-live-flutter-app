@@ -64,7 +64,9 @@ class FirebaseAuthRepository implements AuthRepository {
         searchableName: name.toLowerCase(),
       );
 
-      return Result.success(user);
+      return Result.success(
+        data: user,
+      );
     } on FirebaseAuthException catch (authError) {
       return Result.error(FirebaseError(authError));
     } catch (error) {
@@ -111,7 +113,9 @@ class FirebaseAuthRepository implements AuthRepository {
           .doc(user.uid)
           .set(user.toJson());
 
-       return Result.success(user);
+      return Result.success(
+        data: user,
+      );
     } on FirebaseAuthException catch (authError) {
       return Result.error(FirebaseError(authError));
     } catch (error) {
@@ -130,7 +134,7 @@ class FirebaseAuthRepository implements AuthRepository {
 
       // No user logged in
       if (firebaseUser == null) {
-        return Result.success(null);
+        return Result.success(data: null);
       }
 
       // Fetch user document from Firestore
@@ -157,7 +161,9 @@ class FirebaseAuthRepository implements AuthRepository {
         searchableName: (data[AppUserFields.name] as String).toLowerCase(),
       );
 
-      return Result.success(user);
+      return Result.success(
+        data: user,
+      );
     } on FirebaseAuthException catch (authError) {
       return Result.error(FirebaseError(authError));
     } catch (error) {
@@ -184,7 +190,9 @@ class FirebaseAuthRepository implements AuthRepository {
     if (userData != null && userData.isNotEmpty) {
       try {
         final user = AppUser.fromJsonString(userData);
-        return Result.success(user);
+        return Result.success(
+          data: user,
+        );
       } catch (error) {
         return Result.error(GenericError(error: error));
       }
