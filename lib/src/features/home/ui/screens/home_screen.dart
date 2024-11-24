@@ -50,9 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: BlocBuilder<PostCubit, PostState>(
         builder: (context, state) {
           LoadingCubit.hideLoading();
-          Logger.logDebug(state.toString());
           if (state is PostLoading || state is PostUploading) {
             LoadingCubit.showLoading(message: AppStrings.loadingMessage);
+            return const SizedBox();
+          }
+          else if (state is PostUploading) {
+           LoadingCubit.showLoading(message: AppStrings.uploading);
             return const SizedBox();
           } else if (state is PostLoaded) {
             return _buildPostList(state.posts);
@@ -158,6 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Error state widget
   Widget _buildErrorState(String errorMessage) {
+    Logger.logError(errorMessage.toString());
     return Center(
       child: Text(errorMessage),
     );
