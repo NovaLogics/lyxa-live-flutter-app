@@ -4,7 +4,6 @@ import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
@@ -38,19 +37,24 @@ class AuthCubit extends Cubit<AuthState> {
         }
         break;
 
-      case Status.error:
-        //FIREBASE ERROR
+     case Status.error:
+        // FIREBASE ERROR
         if (result.isFirebaseError()) {
           emit(AuthError(result.getFirebaseAlert()));
-          emit(Unauthenticated());
         }
-        //GENERIC ERROR
+        // GENERIC ERROR
         else if (result.isGenericError()) {
           ErrorHandler.handleError(
-            result.error?.genericError?.error,
-            onRetry: () {
-              ErrorAlertCubit.hideErrorMessage();
-            },
+            result.getGenericErrorData(),
+            onRetry: () {},
+          );
+        } 
+        // KNOWN ERRORS
+        else if (result.isMessageError()) {
+          ErrorHandler.handleError(
+            null,
+            customMessage: result.getMessageErrorAlert(),
+            onRetry: () {},
           );
         }
         emit(Unauthenticated());
@@ -86,19 +90,24 @@ class AuthCubit extends Cubit<AuthState> {
         }
         break;
 
-      case Status.error:
-        //FIREBASE ERROR
+        case Status.error:
+        // FIREBASE ERROR
         if (result.isFirebaseError()) {
           emit(AuthError(result.getFirebaseAlert()));
-          emit(Unauthenticated());
         }
-        //GENERIC ERROR
+        // GENERIC ERROR
         else if (result.isGenericError()) {
           ErrorHandler.handleError(
-            result.error?.genericError?.error,
-            onRetry: () {
-              ErrorAlertCubit.hideErrorMessage();
-            },
+            result.getGenericErrorData(),
+            onRetry: () {},
+          );
+        } 
+        // KNOWN ERRORS
+        else if (result.isMessageError()) {
+          ErrorHandler.handleError(
+            null,
+            customMessage: result.getMessageErrorAlert(),
+            onRetry: () {},
           );
         }
         emit(Unauthenticated());
@@ -136,18 +145,23 @@ class AuthCubit extends Cubit<AuthState> {
         break;
 
       case Status.error:
-        //FIREBASE ERROR
+        // FIREBASE ERROR
         if (result.isFirebaseError()) {
           emit(AuthError(result.getFirebaseAlert()));
-          emit(Unauthenticated());
         }
-        //GENERIC ERROR
+        // GENERIC ERROR
         else if (result.isGenericError()) {
           ErrorHandler.handleError(
-            result.error?.genericError?.error,
-            onRetry: () {
-              ErrorAlertCubit.hideErrorMessage();
-            },
+            result.getGenericErrorData(),
+            onRetry: () {},
+          );
+        } 
+        // KNOWN ERRORS
+        else if (result.isMessageError()) {
+          ErrorHandler.handleError(
+            null,
+            customMessage: result.getMessageErrorAlert(),
+            onRetry: () {},
           );
         }
         emit(Unauthenticated());
