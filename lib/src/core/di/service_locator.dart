@@ -19,6 +19,10 @@ import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 final GetIt getIt = GetIt.instance;
 
 void setupServiceLocator() {
+  // Register Hive | LoaclDB Helper
+
+  getIt.registerFactory(() => HiveHelper());
+
   // Register repositories as singletons
 
   getIt.registerLazySingleton<FirebaseAuthRepository>(
@@ -72,8 +76,6 @@ void setupServiceLocator() {
   getIt.registerSingleton<LoadingCubit>(LoadingCubit());
 
   getIt.registerSingleton<ErrorAlertCubit>(ErrorAlertCubit());
-
-  getIt.registerFactory(() => HiveHelper());
 
   // Register Widgets
 
