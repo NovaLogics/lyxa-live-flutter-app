@@ -10,60 +10,38 @@ import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
-// Post Cubit for State management
 class PostCubit extends Cubit<PostState> {
-  final PostRepository postRepository;
-  final StorageRepository storageRepository;
+  final PostRepository _postRepository;
+  final StorageRepository _storageRepository;
 
   PostCubit({
-    required this.postRepository,
-    required this.storageRepository,
-  }) : super(PostInitial());
+    required PostRepository postRepository,
+    required StorageRepository storageRepository,
+  })  : _storageRepository = storageRepository,
+        _postRepository = postRepository,
+        super(PostInitial());
 
-  // Create a new post
-  Future<void> createPost({
+  Future<void> addPost({
     required Post post,
     Uint8List? imageBytes,
   }) async {
-    emit(PostUploading());
-
-    // Upload image if provided and get the URL
-    final imageUrl =
-        await storageRepository.uploadPostImageWeb(imageBytes, post.id);
-
     try {
-      // Update the post with the image URL
+      emit(PostUploading());
+
+      final imageUrl =
+          await _storageRepository.uploadPostImageWeb(imageBytes, post.id);
+
       final updatedPost = post.copyWith(imageUrl: imageUrl);
 
-      // Create post in the backend
-      final result = await postRepository.addPost(newPost: updatedPost);
+      final result = await _postRepository.addPost(newPost: updatedPost);
 
       switch (result.status) {
         case Status.success:
-          // Re-fetch all posts
-          fetchAllPosts();
+          getAllPosts();
           break;
 
         case Status.error:
-          // FIREBASE ERROR
-          if (result.isFirebaseError()) {
-            emit(PostError(result.getFirebaseAlert()));
-          }
-          // GENERIC ERROR
-          else if (result.isGenericError()) {
-            ErrorHandler.handleError(
-              result.getGenericErrorData(),
-              onRetry: () {},
-            );
-          }
-          // KNOWN ERRORS
-          else if (result.isMessageError()) {
-            ErrorHandler.handleError(
-              null,
-              customMessage: result.getMessageErrorAlert(),
-              onRetry: () {},
-            );
-          }
+          _handleErrors(result: result);
           break;
       }
     } catch (error) {
@@ -72,10 +50,10 @@ class PostCubit extends Cubit<PostState> {
   }
 
   // Fetch all posts
-  Future<void> fetchAllPosts() async {
+  Future<void> getAllPosts() async {
     emit(PostLoading());
 
-    final result = await postRepository.getAllPosts();
+    final result = await _postRepository.getAllPosts();
 
     switch (result.status) {
       case Status.success:
@@ -110,7 +88,7 @@ class PostCubit extends Cubit<PostState> {
   Future<void> deletePost({
     required String postId,
   }) async {
-    final result = await postRepository.removePost(postId: postId);
+    final result = await _postRepository.removePost(postId: postId);
 
     switch (result.status) {
       case Status.success:
@@ -146,7 +124,7 @@ class PostCubit extends Cubit<PostState> {
     required String postId,
     required String userId,
   }) async {
-    final result = await postRepository.togglePostLike(
+    final result = await _postRepository.togglePostLike(
       postId: postId,
       userId: userId,
     );
@@ -185,7 +163,7 @@ class PostCubit extends Cubit<PostState> {
     required String postId,
     required Comment comment,
   }) async {
-    final result = await postRepository.addCommentToPost(
+    final result = await _postRepository.addCommentToPost(
       postId: postId,
       comment: comment,
     );
@@ -224,7 +202,7 @@ class PostCubit extends Cubit<PostState> {
     required String postId,
     required String commentId,
   }) async {
-    final result = await postRepository.removeCommentFromPost(
+    final result = await _postRepository.removeCommentFromPost(
       postId: postId,
       commentId: commentId,
     );
@@ -255,6 +233,31 @@ class PostCubit extends Cubit<PostState> {
           );
         }
         break;
+    }
+  }
+
+  //-> Utils ->
+
+  void _handleErrors({required Result result, String? prefixMessage}) {
+    // FIREBASE ERROR
+    if (result.isFirebaseError()) {
+      emit(PostError(result.getFirebaseAlert()));
+    }
+    // GENERIC ERROR
+    else if (result.isGenericError()) {
+      ErrorHandler.handleError(
+        result.getGenericErrorData(),
+        prefixMessage: prefixMessage,
+        onRetry: () {},
+      );
+    }
+    // KNOWN ERRORS
+    else if (result.isMessageError()) {
+      ErrorHandler.handleError(
+        null,
+        customMessage: result.getMessageErrorAlert(),
+        onRetry: () {},
+      );
     }
   }
 }

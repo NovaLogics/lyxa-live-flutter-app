@@ -9,17 +9,17 @@ import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 class FirebasePostRepository implements PostRepository {
-  final CollectionReference postsCollectionRef =
+  final CollectionReference _postsCollectionRef =
       FirebaseFirestore.instance.collection(FIRESTORE_COLLECTION_POSTS);
 
   @override
   Future<Result<List<Post>>> getAllPosts() async {
     try {
-      final postSnapshot = await postsCollectionRef
+      final postSnapshot = await _postsCollectionRef
           .orderBy(PostFields.timestamp, descending: true)
           .get();
 
-      final List<Post> allPosts = mapSnapshotToPosts(postSnapshot);
+      final List<Post> allPosts = _mapSnapshotToPosts(postSnapshot);
 
       return Result.success(
         data: allPosts,
@@ -36,11 +36,11 @@ class FirebasePostRepository implements PostRepository {
     required String userId,
   }) async {
     try {
-      final postSnapshot = await postsCollectionRef
+      final postSnapshot = await _postsCollectionRef
           .where(PostFields.userId, isEqualTo: userId)
           .get();
 
-      final List<Post> userPosts = mapSnapshotToPosts(postSnapshot);
+      final List<Post> userPosts = _mapSnapshotToPosts(postSnapshot);
 
       return Result.success(
         data: userPosts,
@@ -57,7 +57,7 @@ class FirebasePostRepository implements PostRepository {
     required Post newPost,
   }) async {
     try {
-      await postsCollectionRef.doc(newPost.id).set(newPost.toJson());
+      await _postsCollectionRef.doc(newPost.id).set(newPost.toJson());
 
       return Result.voidSuccess();
     } on FirebaseException catch (error) {
@@ -72,7 +72,7 @@ class FirebasePostRepository implements PostRepository {
     required String postId,
   }) async {
     try {
-      await postsCollectionRef.doc(postId).delete();
+      await _postsCollectionRef.doc(postId).delete();
 
       return Result.voidSuccess();
     } on FirebaseException catch (error) {
@@ -88,7 +88,7 @@ class FirebasePostRepository implements PostRepository {
     required String userId,
   }) async {
     try {
-      final post = await getPostById(postId);
+      final post = await _getPostById(postId);
 
       final isAlreadyLiked = post.likes.contains(userId);
 
@@ -98,7 +98,7 @@ class FirebasePostRepository implements PostRepository {
         post.likes.add(userId);
       }
 
-      await postsCollectionRef
+      await _postsCollectionRef
           .doc(postId)
           .update({PostFields.likes: post.likes});
 
@@ -116,14 +116,14 @@ class FirebasePostRepository implements PostRepository {
     required Comment comment,
   }) async {
     try {
-      final post = await getPostById(postId);
+      final post = await _getPostById(postId);
 
       post.comments.add(comment);
 
       final updatedComments =
           post.comments.map((comment) => comment.toJson()).toList();
 
-      await postsCollectionRef
+      await _postsCollectionRef
           .doc(postId)
           .update({PostFields.comments: updatedComments});
 
@@ -141,14 +141,14 @@ class FirebasePostRepository implements PostRepository {
     required String commentId,
   }) async {
     try {
-      final post = await getPostById(postId);
+      final post = await _getPostById(postId);
 
       post.comments.removeWhere((comment) => comment.id == commentId);
 
       final updatedComments =
           post.comments.map((comment) => comment.toJson()).toList();
 
-      await postsCollectionRef
+      await _postsCollectionRef
           .doc(postId)
           .update({PostFields.comments: updatedComments});
 
@@ -160,10 +160,10 @@ class FirebasePostRepository implements PostRepository {
     }
   }
 
-  // Utils ->
+  //-> Utils ->
 
-  Future<Post> getPostById(String postId) async {
-    final postDoc = await postsCollectionRef.doc(postId).get();
+  Future<Post> _getPostById(String postId) async {
+    final postDoc = await _postsCollectionRef.doc(postId).get();
 
     if (!postDoc.exists) {
       throw Exception(ErrorMsgs.cannotFetchPostError);
@@ -171,7 +171,7 @@ class FirebasePostRepository implements PostRepository {
     return Post.fromJson(postDoc.data() as Map<String, dynamic>);
   }
 
-  List<Post> mapSnapshotToPosts(QuerySnapshot postSnapshot) {
+  List<Post> _mapSnapshotToPosts(QuerySnapshot postSnapshot) {
     return postSnapshot.docs.map((document) {
       final data = document.data() as Map<String, dynamic>;
       return Post.fromJson(data);
