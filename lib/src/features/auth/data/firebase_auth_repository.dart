@@ -7,7 +7,9 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
-import 'package:lyxa_live/src/shared/entities/result.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
+import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/firebase_error_handler.dart';
 
@@ -65,10 +67,9 @@ class FirebaseAuthRepository implements AuthRepository {
 
       return Result.success(user);
     } on FirebaseAuthException catch (authError) {
-      final errorMessage = FirebaseErrorHandler.getMessage(authError.code);
-      return Result.errorMessage(errorMessage);
+      return Result.error(FirebaseError(authError));
     } catch (error) {
-      return Result.error(error);
+      return Result.error(GenericError(error: error));
     }
   }
 
@@ -111,12 +112,11 @@ class FirebaseAuthRepository implements AuthRepository {
           .doc(user.uid)
           .set(user.toJson());
 
-      return Result.success(user);
+       return Result.success(user);
     } on FirebaseAuthException catch (authError) {
-      final errorMessage = FirebaseErrorHandler.getMessage(authError.code);
-      return Result.errorMessage(errorMessage);
+      return Result.error(FirebaseError(authError));
     } catch (error) {
-      return Result.error(error);
+      return Result.error(GenericError(error: error));
     }
   }
 
@@ -160,10 +160,9 @@ class FirebaseAuthRepository implements AuthRepository {
 
       return Result.success(user);
     } on FirebaseAuthException catch (authError) {
-      return Result.errorMessage(
-          FirebaseErrorHandler.getMessage(authError.code));
+      return Result.error(FirebaseError(authError));
     } catch (error) {
-      return Result.error(error);
+      return Result.error(GenericError(error: error));
     }
   }
 
@@ -188,10 +187,10 @@ class FirebaseAuthRepository implements AuthRepository {
         final user = AppUser.fromJsonString(userData);
         return Result.success(user);
       } catch (error) {
-        return Result.errorMessage(error.toString());
+        return Result.error(GenericError(error: error));
       }
     }
-    return Result.errorMessage(ErrorMessages.userDataNotFound);
+    return Result.error(GenericError(message: ErrorMessages.userDataNotFound));
   }
 
   /// (ƒ) :: Save User To Local Storage | LocalDB
