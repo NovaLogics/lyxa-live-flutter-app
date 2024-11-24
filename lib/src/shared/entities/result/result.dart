@@ -41,7 +41,7 @@ class Result<T> {
     } else if (error is MessageError) {
       errorWrapper = ErrorWrapper(messageError: error);
     } else if (error is String) {
-      errorWrapper = ErrorWrapper(messageError: MessageError(error));
+      errorWrapper = ErrorWrapper(messageError: MessageError(message: error));
     } else {
       errorWrapper = ErrorWrapper(genericError: GenericError(error: error));
     }
@@ -67,20 +67,19 @@ class Result<T> {
   }
 
   String getFirebaseAlert() {
-    return error?.firebaseError?.message ?? ErrorMessages.unexpectedError;
+    return error?.firebaseError?.message ?? ErrorMsgs.unexpectedError;
   }
 
   String getMessageErrorAlert() {
-    return error?.messageError?.message ?? ErrorMessages.unexpectedError;
+    return error?.messageError?.message ?? ErrorMsgs.unexpectedError;
   }
 
   String getGenericErrorAlert() {
     if (error?.genericError?.message != null) {
       return error?.genericError?.message?.toString() ??
-          ErrorMessages.unexpectedError;
+          ErrorMsgs.unexpectedError;
     } else {
-      return error?.genericError?.error.toString() ??
-          ErrorMessages.unexpectedError;
+      return error?.genericError?.error.toString() ?? ErrorMsgs.unexpectedError;
     }
   }
 }
