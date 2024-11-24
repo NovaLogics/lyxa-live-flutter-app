@@ -9,6 +9,8 @@ import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
@@ -51,17 +53,13 @@ class _HomeScreenState extends State<HomeScreen> {
           Logger.logDebug(state.toString());
           if (state is PostLoading || state is PostUploading) {
             LoadingCubit.showLoading(message: AppStrings.loadingMessage);
-            return Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-            );
+            return const SizedBox();
           } else if (state is PostLoaded) {
             return _buildPostList(state.posts);
           } else if (state is PostError) {
             return _buildErrorState(state.message);
           } else {
-            return Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-            );
+            return const SizedBox();
           }
         },
       ),
@@ -70,6 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _fetchCurrentUserData() async {
     try {
+      LoadingCubit.showLoading(message: AppStrings.loadingMessage);
+
       ProfileCubit profileCubit = getIt<ProfileCubit>();
 
       final currentUser = getIt<AuthCubit>().currentUser;
@@ -88,8 +88,14 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
     } catch (error) {
-
+      ErrorHandler.handleError(
+        error,
+        onRetry: () {
+          ErrorAlertCubit.hideErrorMessage();
+        },
+      );
     }
+    LoadingCubit.hideLoading();
   }
 
   void _fetchAllPosts() {
