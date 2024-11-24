@@ -66,6 +66,10 @@ class Result<T> {
     return error?.isFirebaseError ?? false;
   }
 
+    bool isMessageError() {
+    return error?.isMessageError ?? false;
+  }
+
   String getFirebaseAlert() {
     return error?.firebaseError?.message ?? ErrorMsgs.unexpectedError;
   }
@@ -81,5 +85,9 @@ class Result<T> {
     } else {
       return error?.genericError?.error.toString() ?? ErrorMsgs.unexpectedError;
     }
+  }
+
+  Object? getGenericErrorData() {
+    return error?.genericError?.error;
   }
 }
