@@ -180,7 +180,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       comments: [],
     );
 
-    context.read<PostCubit>().createPost(post, imageBytes: selectedImage);
+    context.read<PostCubit>().createPost(post: post, imageBytes: selectedImage);
   }
 
   Widget _buildLoadingScreen() {

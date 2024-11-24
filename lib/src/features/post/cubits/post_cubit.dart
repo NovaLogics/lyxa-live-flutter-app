@@ -7,7 +7,6 @@ import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
@@ -182,20 +181,80 @@ class PostCubit extends Cubit<PostState> {
   }
 
   // Add comment to a post
-  Future<void> addComment(String postId, Comment comment) async {
-    try {
-      await postRepository.addComment(postId, comment);
-    } catch (error) {
-      emit(PostError('Failed to add comment: ${error.toString()}'));
+  Future<void> addComment({
+    required String postId,
+    required Comment comment,
+  }) async {
+    final result = await postRepository.addComment(
+      postId: postId,
+      comment: comment,
+    );
+
+    switch (result.status) {
+      case Status.success:
+        break;
+
+      case Status.error:
+        // FIREBASE ERROR
+        if (result.isFirebaseError()) {
+          emit(PostError(result.getFirebaseAlert()));
+        }
+        // GENERIC ERROR
+        else if (result.isGenericError()) {
+          ErrorHandler.handleError(
+            result.getGenericErrorData(),
+            prefixMessage: 'Failed to add comment',
+            onRetry: () {},
+          );
+        }
+        // KNOWN ERRORS
+        else if (result.isMessageError()) {
+          ErrorHandler.handleError(
+            null,
+            customMessage: result.getMessageErrorAlert(),
+            onRetry: () {},
+          );
+        }
+        break;
     }
   }
 
   // Delete comment to a post
-  Future<void> deleteComment(String postId, String commentId) async {
-    try {
-      await postRepository.deleteComment(postId, commentId);
-    } catch (error) {
-      emit(PostError('Failed to delete the comment: ${error.toString()}'));
+  Future<void> deleteComment({
+    required String postId,
+    required String commentId,
+  }) async {
+    final result = await postRepository.deleteComment(
+      postId: postId,
+      commentId: commentId,
+    );
+
+    switch (result.status) {
+      case Status.success:
+        break;
+
+      case Status.error:
+        // FIREBASE ERROR
+        if (result.isFirebaseError()) {
+          emit(PostError(result.getFirebaseAlert()));
+        }
+        // GENERIC ERROR
+        else if (result.isGenericError()) {
+          ErrorHandler.handleError(
+            result.getGenericErrorData(),
+            prefixMessage: 'Failed to delete the comment',
+            onRetry: () {},
+          );
+        }
+        // KNOWN ERRORS
+        else if (result.isMessageError()) {
+          ErrorHandler.handleError(
+            null,
+            customMessage: result.getMessageErrorAlert(),
+            onRetry: () {},
+          );
+        }
+        break;
     }
   }
 }
