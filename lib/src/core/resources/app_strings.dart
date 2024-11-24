@@ -111,6 +111,7 @@ class AppStrings {
   static const String delete = 'Delete';
   static const String save = 'Save';
   static const String dialog = 'dialog';
+   static const closeButtonTooltip = 'Close';
 
   static const String languageCodeEnglish = 'en';
   static const String unknown = 'Unknown';
