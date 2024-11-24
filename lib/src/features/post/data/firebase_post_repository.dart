@@ -15,8 +15,9 @@ class FirebasePostRepository implements PostRepository {
   @override
   Future<Result<List<Post>>> getAllPosts() async {
     try {
-      final postSnapshot =
-          await postsCollectionRef.orderBy('timestamp', descending: true).get();
+      final postSnapshot = await postsCollectionRef
+          .orderBy(PostFields.timestamp, descending: true)
+          .get();
 
       final List<Post> allPosts = mapSnapshotToPosts(postSnapshot);
 
@@ -35,8 +36,9 @@ class FirebasePostRepository implements PostRepository {
     required String userId,
   }) async {
     try {
-      final postSnapshot =
-          await postsCollectionRef.where('userId', isEqualTo: userId).get();
+      final postSnapshot = await postsCollectionRef
+          .where(PostFields.userId, isEqualTo: userId)
+          .get();
 
       final List<Post> userPosts = mapSnapshotToPosts(postSnapshot);
 
@@ -86,15 +88,19 @@ class FirebasePostRepository implements PostRepository {
     required String userId,
   }) async {
     try {
-      final postDoc = await postsCollectionRef.doc(postId).get();
-      if (!postDoc.exists) return Result.error(ErrorMsgs.cannotFetchPostError);
+      final post = await getPostById(postId);
 
-      final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
+      final isAlreadyLiked = post.likes.contains(userId);
 
-      final alreadyLiked = post.likes.contains(userId);
-      alreadyLiked ? post.likes.remove(userId) : post.likes.add(userId);
+      if (isAlreadyLiked) {
+        post.likes.remove(userId);
+      } else {
+        post.likes.add(userId);
+      }
 
-      await postsCollectionRef.doc(postId).update({'likes': post.likes});
+      await postsCollectionRef
+          .doc(postId)
+          .update({PostFields.likes: post.likes});
 
       return Result.voidSuccess();
     } on FirebaseException catch (error) {
@@ -110,21 +116,16 @@ class FirebasePostRepository implements PostRepository {
     required Comment comment,
   }) async {
     try {
-      // Get the post document from firestore
-      final postDoc = await postsCollectionRef.doc(postId).get();
+      final post = await getPostById(postId);
 
-      if (!postDoc.exists) {
-        return Result.error(ErrorMsgs.cannotFetchPostError);
-      }
-      final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
-
-      // Add the new comment
       post.comments.add(comment);
 
-      // Update the post document with the new comment
-      await postsCollectionRef.doc(postId).update({
-        'comments': post.comments.map((comment) => comment.toJson()).toList()
-      });
+      final updatedComments =
+          post.comments.map((comment) => comment.toJson()).toList();
+
+      await postsCollectionRef
+          .doc(postId)
+          .update({PostFields.comments: updatedComments});
 
       return Result.voidSuccess();
     } on FirebaseException catch (error) {
@@ -140,21 +141,16 @@ class FirebasePostRepository implements PostRepository {
     required String commentId,
   }) async {
     try {
-      // Get the post document from firestore
-      final postDoc = await postsCollectionRef.doc(postId).get();
+      final post = await getPostById(postId);
 
-      if (!postDoc.exists) {
-        return Result.error(ErrorMsgs.cannotFetchPostError);
-      }
-      final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
-
-      // Remove the comment
       post.comments.removeWhere((comment) => comment.id == commentId);
 
-      // Update the post document with the new comment
-      await postsCollectionRef.doc(postId).update({
-        'comments': post.comments.map((comment) => comment.toJson()).toList()
-      });
+      final updatedComments =
+          post.comments.map((comment) => comment.toJson()).toList();
+
+      await postsCollectionRef
+          .doc(postId)
+          .update({PostFields.comments: updatedComments});
 
       return Result.voidSuccess();
     } on FirebaseException catch (error) {
@@ -162,6 +158,17 @@ class FirebasePostRepository implements PostRepository {
     } catch (error) {
       return Result.error(GenericError(error: error));
     }
+  }
+
+  // Utils ->
+
+  Future<Post> getPostById(String postId) async {
+    final postDoc = await postsCollectionRef.doc(postId).get();
+
+    if (!postDoc.exists) {
+      throw Exception(ErrorMsgs.cannotFetchPostError);
+    }
+    return Post.fromJson(postDoc.data() as Map<String, dynamic>);
   }
 
   List<Post> mapSnapshotToPosts(QuerySnapshot postSnapshot) {
