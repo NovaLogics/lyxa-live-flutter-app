@@ -8,7 +8,6 @@ import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
@@ -28,7 +27,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final PostCubit _postCubit;
   late final AppUser _currentAppUser;
-  late final ProfileUser _profileUser;
+  ProfileUser? _profileUser;
 
   @override
   void initState() {
@@ -60,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (state is PostError) {
             return _buildErrorState(state.message);
           } else {
-            Scaffold(
+            return Scaffold(
               backgroundColor: Theme.of(context).colorScheme.surface,
             );
           }
@@ -70,17 +69,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _fetchCurrentUserData() async {
-    // Initialize cubits
-    ProfileCubit profileCubit = getIt<ProfileCubit>();
+    try {
+      ProfileCubit profileCubit = getIt<ProfileCubit>();
 
-    final currentUser = getIt<AuthCubit>().currentUser;
-    if (currentUser == null) {
-      throw Exception(ErrorMessages.cannotFetchProfileError);
+      final currentUser = getIt<AuthCubit>().currentUser;
+      if (currentUser == null) {
+        throw Exception(ErrorMessages.cannotFetchProfileError);
+      }
+
+      _currentAppUser = currentUser;
+
+      final profileUser =
+          await profileCubit.getUserProfile(_currentAppUser.uid);
+
+      setState(() {
+        if (profileUser != null) {
+          _profileUser = profileUser;
+        }
+      });
+    } catch (error) {
+
     }
-
-    _currentAppUser = currentUser;
-
-    profileCubit.fetchUserProfile(_currentAppUser.uid);
   }
 
   void _fetchAllPosts() {
@@ -104,22 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildAppDrawer() {
-    return BlocBuilder<ProfileCubit, ProfileState>(
-      builder: (context, state) {
-        Logger.logDebug(state.toString());
-        if (state is ProfileLoaded) {
-          LoadingCubit.hideLoading();
-          _profileUser = state.profileUser;
-          return DrawerUnit(
-            user: _profileUser,
-          );
-        } else {
-          LoadingCubit.showLoading();
-          return const DrawerUnit(
-            user: null,
-          );
-        }
-      },
+    return DrawerUnit(
+      user: _profileUser,
     );
   }
 
@@ -140,23 +135,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Post list display
   Widget _buildPostList(List<Post> posts) {
-    return Stack(
-      children: [
-        (posts.isEmpty)
-            ? const Center(child: Text(AppStrings.noPostAvailableError))
-            : ListView.builder(
-                itemCount: posts.length,
-                itemBuilder: (context, index) {
-                  final post = posts[index];
-                  return PostTileUnit(
-                    post: post,
-                    currentAppUser: _currentAppUser,
-                    onDeletePressed: () => _deletePost(post.id),
-                  );
-                },
-              ),
-      ],
-    );
+    return (posts.isEmpty)
+        ? const Center(child: Text(AppStrings.noPostAvailableError))
+        : ListView.builder(
+            itemCount: posts.length,
+            itemBuilder: (context, index) {
+              final post = posts[index];
+              return PostTileUnit(
+                post: post,
+                currentAppUser: _currentAppUser,
+                onDeletePressed: () => _deletePost(post.id),
+              );
+            },
+          );
   }
 
   // Error state widget
