@@ -111,9 +111,9 @@ class PostCubit extends Cubit<PostState> {
   Future<void> deletePost({
     required String postId,
   }) async {
-    final result =  await postRepository.deletePost(postId:postId);
+    final result = await postRepository.deletePost(postId: postId);
 
-     switch (result.status) {
+    switch (result.status) {
       case Status.success:
         break;
 
@@ -143,11 +143,41 @@ class PostCubit extends Cubit<PostState> {
   }
 
   // Toggle like on a post
-  Future<void> toggleLikePost(String postId, String userId) async {
-    try {
-      await postRepository.toggleLikePost(postId, userId);
-    } catch (error) {
-      emit(PostError('Failed to toggle like: ${error.toString()}'));
+  Future<void> toggleLikePost({
+    required String postId,
+    required String userId,
+  }) async {
+    final result = await postRepository.toggleLikePost(
+      postId: postId,
+      userId: userId,
+    );
+
+    switch (result.status) {
+      case Status.success:
+        break;
+
+      case Status.error:
+        // FIREBASE ERROR
+        if (result.isFirebaseError()) {
+          emit(PostError(result.getFirebaseAlert()));
+        }
+        // GENERIC ERROR
+        else if (result.isGenericError()) {
+          ErrorHandler.handleError(
+            result.getGenericErrorData(),
+            prefixMessage: 'Failed to toggle like',
+            onRetry: () {},
+          );
+        }
+        // KNOWN ERRORS
+        else if (result.isMessageError()) {
+          ErrorHandler.handleError(
+            null,
+            customMessage: result.getMessageErrorAlert(),
+            onRetry: () {},
+          );
+        }
+        break;
     }
   }
 
@@ -166,15 +196,6 @@ class PostCubit extends Cubit<PostState> {
       await postRepository.deleteComment(postId, commentId);
     } catch (error) {
       emit(PostError('Failed to delete the comment: ${error.toString()}'));
-    }
-  }
-
-  /// Helper ->
-  String getError(String? message) {
-    if (message != null && message.isNotEmpty) {
-      return message.toString().replaceFirst('Exception: ', '');
-    } else {
-      return ErrorMsgs.unexpectedError;
     }
   }
 }
