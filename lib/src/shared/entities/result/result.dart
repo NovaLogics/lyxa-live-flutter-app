@@ -1,8 +1,12 @@
 import 'package:lyxa_live/src/shared/entities/result/errors/error_wrapper.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
-enum Status { success, error,  }
+enum Status {
+  success,
+  error,
+}
 
 class Result<T> {
   final T? data;
@@ -44,11 +48,16 @@ class Result<T> {
     return (data != null && data is T);
   }
 
-    bool isGenericError() {
+  bool isGenericError() {
     return error?.isGenericError ?? false;
   }
 
   bool isFirebaseError() {
     return error?.isFirebaseError ?? false;
+  }
+
+  String getFirebaseError() {
+    return error?.firebaseError?.message ??
+        ErrorMessages.unexpectedError;
   }
 }

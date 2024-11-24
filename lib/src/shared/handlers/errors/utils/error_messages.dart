@@ -17,6 +17,9 @@ class ErrorMessages {
   static const String unexpectedError =
       'An unexpected error occurred. Please try again.';
 
+  static const String postCreationError =
+      'Failed to create post. Please try again!';
+
   static const String unknownError = 'Something went wrong. Please try again.';
   static const String networkError =
       'No internet connection. Please check your network.';
