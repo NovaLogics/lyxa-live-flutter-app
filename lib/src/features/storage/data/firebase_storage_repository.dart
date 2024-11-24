@@ -28,7 +28,7 @@ class FirebaseStorageRepository implements StorageRepository {
   }
 
   @override
-  Future<String?> uploadPostImageWeb(Uint8List fileBytes, String fileName) {
+  Future<String?> uploadPostImageWeb(Uint8List? fileBytes, String fileName) {
     return _uploadFileBytes(fileBytes, fileName, STORAGE_PATH_POST_IMAGES);
   }
 
@@ -59,7 +59,8 @@ class FirebaseStorageRepository implements StorageRepository {
 
   // Web platforms (file)
   Future<String?> _uploadFileBytes(
-      Uint8List fileBytes, String fileName, String folder) async {
+      Uint8List? fileBytes, String fileName, String folder) async {
+    if (fileBytes == null) return null;
     try {
       // Find place to store
       final storageRef = storage.ref().child('$folder/$fileName');

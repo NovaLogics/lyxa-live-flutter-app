@@ -97,7 +97,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
     });
 
     // Update like status in the backend
-    _postCubit.toggleLikePost(widget.post.id, _appUserId).catchError((error) {
+    _postCubit
+        .toggleLikePost(postId: widget.post.id, userId: _appUserId)
+        .catchError((error) {
       setState(() {
         ToastMessengerUnit.showErrorToast(
             context: context, message: error.toString());
@@ -167,7 +169,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
       widget.post.comments.add(newComment);
     });
 
-    _postCubit.addComment(widget.post.id, newComment).catchError((error) {
+    _postCubit
+        .addComment(postId: widget.post.id, comment: newComment)
+        .catchError((error) {
       setState(() {
         ToastMessengerUnit.showErrorToast(
             context: context, message: error.toString());
@@ -182,7 +186,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
       widget.post.comments.remove(comment);
     });
 
-    _postCubit.deleteComment(widget.post.id, comment.id).catchError((error) {
+    _postCubit
+        .deleteComment(postId: widget.post.id, commentId: comment.id)
+        .catchError((error) {
       setState(() {
         ToastMessengerUnit.showErrorToast(
             context: context, message: error.toString());
