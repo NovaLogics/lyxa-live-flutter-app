@@ -41,7 +41,7 @@ class AuthCubit extends Cubit<AuthState> {
       case Status.error:
         //FIREBASE ERROR
         if (result.isFirebaseError()) {
-          emit(AuthError(result.getFirebaseError()));
+          emit(AuthError(result.getFirebaseAlert()));
           emit(Unauthenticated());
         }
         //GENERIC ERROR
@@ -89,7 +89,7 @@ class AuthCubit extends Cubit<AuthState> {
       case Status.error:
         //FIREBASE ERROR
         if (result.isFirebaseError()) {
-          emit(AuthError(result.getFirebaseError()));
+          emit(AuthError(result.getFirebaseAlert()));
           emit(Unauthenticated());
         }
         //GENERIC ERROR
@@ -138,7 +138,7 @@ class AuthCubit extends Cubit<AuthState> {
       case Status.error:
         //FIREBASE ERROR
         if (result.isFirebaseError()) {
-          emit(AuthError(result.getFirebaseError()));
+          emit(AuthError(result.getFirebaseAlert()));
           emit(Unauthenticated());
         }
         //GENERIC ERROR

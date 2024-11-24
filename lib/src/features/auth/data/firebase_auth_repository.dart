@@ -40,7 +40,7 @@ class FirebaseAuthRepository implements AuthRepository {
       final String? userId = userCredential.user?.uid;
 
       if (userId == null || userId.isEmpty) {
-        throw Exception(ErrorMessages.failedToRetrieveUserId);
+        return Result.error(ErrorMsgs.failedToRetrieveUserId);
       }
 
       // Retrieve user data from Firestore
@@ -51,7 +51,7 @@ class FirebaseAuthRepository implements AuthRepository {
               .get();
 
       if (!userDocument.exists) {
-        throw Exception(ErrorMessages.userDataNotFound);
+        return Result.error(ErrorMsgs.userDataNotFound);
       }
 
       final String name = userDocument.data()?[AppUserFields.name] as String? ??
@@ -96,7 +96,7 @@ class FirebaseAuthRepository implements AuthRepository {
       final String? userId = userCredential.user?.uid;
 
       if (userId == null || userId.isEmpty) {
-        throw Exception(ErrorMessages.failedToRetrieveUserId);
+        return Result.error(ErrorMsgs.failedToRetrieveUserId);
       }
 
       // Create user object
@@ -110,7 +110,7 @@ class FirebaseAuthRepository implements AuthRepository {
       // Save user data in firestore
       await firebaseFirestore
           .collection(FIRESTORE_COLLECTION_USERS)
-          .doc(user.uid)
+          .doc(userId)
           .set(user.toJson());
 
       return Result.success(
@@ -144,14 +144,14 @@ class FirebaseAuthRepository implements AuthRepository {
           .get();
 
       if (!userDocument.exists) {
-        throw Exception(ErrorMessages.userDataNotFound);
+        return Result.error(ErrorMsgs.userDataNotFound);
       }
 
       final data = userDocument.data();
       if (data == null ||
           !data.containsKey(AppUserFields.name) ||
           !data.containsKey(AppUserFields.email)) {
-        throw Exception(ErrorMessages.userDataNotFound);
+        return Result.error(ErrorMsgs.userDataNotFound);
       }
 
       final user = AppUser(
@@ -187,17 +187,19 @@ class FirebaseAuthRepository implements AuthRepository {
     required String key,
   }) async {
     final String? userData = hiveHelper.get<String>(key);
-    if (userData != null && userData.isNotEmpty) {
-      try {
-        final user = AppUser.fromJsonString(userData);
-        return Result.success(
-          data: user,
-        );
-      } catch (error) {
-        return Result.error(GenericError(error: error));
-      }
+
+    if (userData == null || userData.isEmpty) {
+      return Result.error(ErrorMsgs.userDataNotFound);
     }
-    return Result.error(GenericError(message: ErrorMessages.userDataNotFound));
+
+    try {
+      final user = AppUser.fromJsonString(userData);
+      return Result.success(
+        data: user,
+      );
+    } catch (error) {
+      return Result.error(GenericError(error: error));
+    }
   }
 
   /// (ƒ) :: Save User To Local Storage | LocalDB
