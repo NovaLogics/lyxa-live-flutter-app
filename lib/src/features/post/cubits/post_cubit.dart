@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
@@ -47,71 +46,106 @@ class PostCubit extends Cubit<PostState> {
           break;
 
         case Status.error:
-          //FIREBASE ERROR
+          // FIREBASE ERROR
           if (result.isFirebaseError()) {
-            emit(PostError(getError(result.getFirebaseError())));
+            emit(PostError(result.getFirebaseAlert()));
           }
-          //GENERIC ERROR
+          // GENERIC ERROR
           else if (result.isGenericError()) {
             ErrorHandler.handleError(
-              result.error?.genericError?.error,
-              onRetry: () {
-                ErrorAlertCubit.hideErrorMessage();
-              },
+              result.getGenericErrorData(),
+              onRetry: () {},
+            );
+          }
+          // KNOWN ERRORS
+          else if (result.isMessageError()) {
+            ErrorHandler.handleError(
+              null,
+              customMessage: result.getMessageErrorAlert(),
+              onRetry: () {},
             );
           }
           break;
       }
     } catch (error) {
-      emit(PostError(ErrorMessages.postCreationError));
+      emit(PostError(ErrorMsgs.postCreationError));
     }
   }
 
   // Fetch all posts
   Future<void> fetchAllPosts() async {
+    emit(PostLoading());
 
-      emit(PostLoading());
-      
-      final result = await postRepository.fetchAllPosts();
+    final result = await postRepository.fetchAllPosts();
 
+    switch (result.status) {
+      case Status.success:
+        emit(PostLoaded(result.data ?? List.empty()));
+        break;
 
-       switch (result.status) {
-        case Status.success:
-          emit(PostLoaded(result.data ?? List.empty()));
-          break;
-
-        case Status.error:
-          //FIREBASE ERROR
-          if (result.isFirebaseError()) {
-            emit(PostError(result.getFirebaseError()));
-          }
-          //GENERIC ERROR
-          else if (result.isGenericError()) {
-            ErrorHandler.handleError(
-              result.error?.genericError?.error,
-              prefixMessage: ErrorMessages.failToLoadPostError,
-              onRetry: () {
-                ErrorAlertCubit.hideErrorMessage();
-              },
-            );
-          }
-          break;
-
+      case Status.error:
+        // FIREBASE ERROR
+        if (result.isFirebaseError()) {
+          emit(PostError(result.getFirebaseAlert()));
+        }
+        // GENERIC ERROR
+        else if (result.isGenericError()) {
+          ErrorHandler.handleError(
+            result.getGenericErrorData(),
+            onRetry: () {},
+          );
+        }
+        // KNOWN ERRORS
+        else if (result.isMessageError()) {
+          ErrorHandler.handleError(
+            null,
+            customMessage: result.getMessageErrorAlert(),
+            onRetry: () {},
+          );
+        }
+        break;
+    }
   }
 
   // Delete a post
-  Future<void> deletePost(String postId) async {
-    try {
-      // await postRepository.deletePost(postId);
-    } catch (error) {
-      emit(PostError('Failed to delete post : ${error.toString()}'));
+  Future<void> deletePost({
+    required String postId,
+  }) async {
+    final result =  await postRepository.deletePost(postId:postId);
+
+     switch (result.status) {
+      case Status.success:
+        break;
+
+      case Status.error:
+        // FIREBASE ERROR
+        if (result.isFirebaseError()) {
+          emit(PostError(result.getFirebaseAlert()));
+        }
+        // GENERIC ERROR
+        else if (result.isGenericError()) {
+          ErrorHandler.handleError(
+            result.getGenericErrorData(),
+            prefixMessage: 'Failed to delete post',
+            onRetry: () {},
+          );
+        }
+        // KNOWN ERRORS
+        else if (result.isMessageError()) {
+          ErrorHandler.handleError(
+            null,
+            customMessage: result.getMessageErrorAlert(),
+            onRetry: () {},
+          );
+        }
+        break;
     }
   }
 
   // Toggle like on a post
   Future<void> toggleLikePost(String postId, String userId) async {
     try {
-      //  await postRepository.toggleLikePost(postId, userId);
+      await postRepository.toggleLikePost(postId, userId);
     } catch (error) {
       emit(PostError('Failed to toggle like: ${error.toString()}'));
     }
@@ -120,7 +154,7 @@ class PostCubit extends Cubit<PostState> {
   // Add comment to a post
   Future<void> addComment(String postId, Comment comment) async {
     try {
-      //  await postRepository.addComment(postId, comment);
+      await postRepository.addComment(postId, comment);
     } catch (error) {
       emit(PostError('Failed to add comment: ${error.toString()}'));
     }
@@ -129,7 +163,7 @@ class PostCubit extends Cubit<PostState> {
   // Delete comment to a post
   Future<void> deleteComment(String postId, String commentId) async {
     try {
-      // await postRepository.deleteComment(postId, commentId);
+      await postRepository.deleteComment(postId, commentId);
     } catch (error) {
       emit(PostError('Failed to delete the comment: ${error.toString()}'));
     }
@@ -140,7 +174,7 @@ class PostCubit extends Cubit<PostState> {
     if (message != null && message.isNotEmpty) {
       return message.toString().replaceFirst('Exception: ', '');
     } else {
-      return ErrorMessages.unexpectedError;
+      return ErrorMsgs.unexpectedError;
     }
   }
 }
