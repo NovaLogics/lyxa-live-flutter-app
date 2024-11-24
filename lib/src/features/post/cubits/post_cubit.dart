@@ -21,6 +21,22 @@ class PostCubit extends Cubit<PostState> {
         _postRepository = postRepository,
         super(PostInitial());
 
+  Future<void> getAllPosts() async {
+    emit(PostLoading());
+
+    final result = await _postRepository.getAllPosts();
+
+    switch (result.status) {
+      case Status.success:
+        emit(PostLoaded(result.data ?? List.empty()));
+        break;
+
+      case Status.error:
+        _handleErrors(result: result);
+        break;
+    }
+  }
+
   Future<void> addPost({
     required Post post,
     Uint8List? imageBytes,
@@ -49,42 +65,6 @@ class PostCubit extends Cubit<PostState> {
     }
   }
 
-  // Fetch all posts
-  Future<void> getAllPosts() async {
-    emit(PostLoading());
-
-    final result = await _postRepository.getAllPosts();
-
-    switch (result.status) {
-      case Status.success:
-        emit(PostLoaded(result.data ?? List.empty()));
-        break;
-
-      case Status.error:
-        // FIREBASE ERROR
-        if (result.isFirebaseError()) {
-          emit(PostError(result.getFirebaseAlert()));
-        }
-        // GENERIC ERROR
-        else if (result.isGenericError()) {
-          ErrorHandler.handleError(
-            result.getGenericErrorData(),
-            onRetry: () {},
-          );
-        }
-        // KNOWN ERRORS
-        else if (result.isMessageError()) {
-          ErrorHandler.handleError(
-            null,
-            customMessage: result.getMessageErrorAlert(),
-            onRetry: () {},
-          );
-        }
-        break;
-    }
-  }
-
-  // Delete a post
   Future<void> deletePost({
     required String postId,
   }) async {
@@ -95,31 +75,11 @@ class PostCubit extends Cubit<PostState> {
         break;
 
       case Status.error:
-        // FIREBASE ERROR
-        if (result.isFirebaseError()) {
-          emit(PostError(result.getFirebaseAlert()));
-        }
-        // GENERIC ERROR
-        else if (result.isGenericError()) {
-          ErrorHandler.handleError(
-            result.getGenericErrorData(),
-            prefixMessage: 'Failed to delete post',
-            onRetry: () {},
-          );
-        }
-        // KNOWN ERRORS
-        else if (result.isMessageError()) {
-          ErrorHandler.handleError(
-            null,
-            customMessage: result.getMessageErrorAlert(),
-            onRetry: () {},
-          );
-        }
+        _handleErrors(result: result);
         break;
     }
   }
 
-  // Toggle like on a post
   Future<void> toggleLikePost({
     required String postId,
     required String userId,
@@ -134,26 +94,10 @@ class PostCubit extends Cubit<PostState> {
         break;
 
       case Status.error:
-        // FIREBASE ERROR
-        if (result.isFirebaseError()) {
-          emit(PostError(result.getFirebaseAlert()));
-        }
-        // GENERIC ERROR
-        else if (result.isGenericError()) {
-          ErrorHandler.handleError(
-            result.getGenericErrorData(),
-            prefixMessage: 'Failed to toggle like',
-            onRetry: () {},
-          );
-        }
-        // KNOWN ERRORS
-        else if (result.isMessageError()) {
-          ErrorHandler.handleError(
-            null,
-            customMessage: result.getMessageErrorAlert(),
-            onRetry: () {},
-          );
-        }
+        _handleErrors(
+          result: result,
+          prefixMessage: 'Failed to toggle like',
+        );
         break;
     }
   }
@@ -173,26 +117,10 @@ class PostCubit extends Cubit<PostState> {
         break;
 
       case Status.error:
-        // FIREBASE ERROR
-        if (result.isFirebaseError()) {
-          emit(PostError(result.getFirebaseAlert()));
-        }
-        // GENERIC ERROR
-        else if (result.isGenericError()) {
-          ErrorHandler.handleError(
-            result.getGenericErrorData(),
-            prefixMessage: 'Failed to add comment',
-            onRetry: () {},
-          );
-        }
-        // KNOWN ERRORS
-        else if (result.isMessageError()) {
-          ErrorHandler.handleError(
-            null,
-            customMessage: result.getMessageErrorAlert(),
-            onRetry: () {},
-          );
-        }
+        _handleErrors(
+          result: result,
+          prefixMessage: 'Failed to add comment',
+        );
         break;
     }
   }
@@ -212,26 +140,10 @@ class PostCubit extends Cubit<PostState> {
         break;
 
       case Status.error:
-        // FIREBASE ERROR
-        if (result.isFirebaseError()) {
-          emit(PostError(result.getFirebaseAlert()));
-        }
-        // GENERIC ERROR
-        else if (result.isGenericError()) {
-          ErrorHandler.handleError(
-            result.getGenericErrorData(),
-            prefixMessage: 'Failed to delete the comment',
-            onRetry: () {},
-          );
-        }
-        // KNOWN ERRORS
-        else if (result.isMessageError()) {
-          ErrorHandler.handleError(
-            null,
-            customMessage: result.getMessageErrorAlert(),
-            onRetry: () {},
-          );
-        }
+        _handleErrors(
+          result: result,
+          prefixMessage: 'Failed to delete the comment',
+        );
         break;
     }
   }
