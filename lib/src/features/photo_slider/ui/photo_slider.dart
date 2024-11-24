@@ -30,7 +30,7 @@ class _PhotoSliderState extends State<PhotoSlider> {
     _currentIndex = widget.initialIndex;
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
@@ -39,12 +39,13 @@ class _PhotoSliderState extends State<PhotoSlider> {
     );
   }
 
- // Generic function to map a list into widgets
-  List<T> _mapListToWidgets<T>(List list, T Function(int index, dynamic item) handler) {
+  // Generic function to map a list into widgets
+  List<T> _mapListToWidgets<T>(
+      List list, T Function(int index, dynamic item) handler) {
     return List.generate(list.length, (index) => handler(index, list[index]));
   }
 
-    // AppBar widget
+  // AppBar widget
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
@@ -60,7 +61,7 @@ class _PhotoSliderState extends State<PhotoSlider> {
     );
   }
 
-   // Body widget
+  // Body widget
   Widget _buildBody(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +74,7 @@ class _PhotoSliderState extends State<PhotoSlider> {
     );
   }
 
-   // Carousel Slider widget
+  // Carousel Slider widget
   Widget _buildCarouselSlider(BuildContext context) {
     return Expanded(
       child: CarouselSlider.builder(
@@ -99,11 +100,15 @@ class _PhotoSliderState extends State<PhotoSlider> {
       panEnabled: true,
       minScale: 1.0,
       maxScale: 4.0,
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-        errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.red),
-        fit: BoxFit.contain,
+      child: Center(
+        child: CachedNetworkImage(
+          imageUrl: imageUrl,
+          placeholder: (context, url) =>
+              const Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) =>
+              const Icon(Icons.error, color: Colors.blueGrey),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
@@ -120,7 +125,8 @@ class _PhotoSliderState extends State<PhotoSlider> {
           margin: const EdgeInsets.symmetric(horizontal: AppDimens.size4),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: (_currentIndex == index) ? AppColors.gold400 : AppColors.gold50,
+            color:
+                (_currentIndex == index) ? AppColors.gold400 : AppColors.gold50,
           ),
         );
       }),
