@@ -1,11 +1,11 @@
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
-import 'package:lyxa_live/src/shared/entities/result.dart';
+import 'package:lyxa_live/src/shared/entities/result/result.dart';
 
 abstract class PostRepository {
   Future<Result<List<Post>>> fetchAllPosts();
 
-  Future<void> createPost({
+  Future<Result<bool>> createPost({
     required Post post,
   });
 

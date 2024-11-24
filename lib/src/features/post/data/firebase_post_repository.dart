@@ -3,6 +3,9 @@ import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
+import 'package:lyxa_live/src/shared/entities/result/result.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/firebase_error_handler.dart';
 
 class FirebasePostRepository implements PostRepository {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -12,16 +15,26 @@ class FirebasePostRepository implements PostRepository {
       FirebaseFirestore.instance.collection(FIRESTORE_COLLECTION_POSTS);
 
   @override
-  Future<void> createPost(Post post) async {
+  Future<Result<bool>> createPost({
+    required Post post,
+  }) async {
     try {
       await postCollection.doc(post.id).set(post.toJson());
+      return Result.success(true);
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception('Error creating post : ${error.toString()}');
+      return Result.error(error);
     }
+    // catch (error) {
+    //   throw Exception('Error creating post : ${error.toString()}');
+    // }
   }
 
   @override
-  Future<void> deletePost(String postId) async {
+  Future<void> deletePost({
+    required String postId,
+  }) async {
     try {
       await postCollection.doc(postId).delete();
     } catch (error) {
@@ -48,7 +61,9 @@ class FirebasePostRepository implements PostRepository {
   }
 
   @override
-  Future<List<Post>> fetchPostsByUserId(String userId) async {
+  Future<List<Post>> fetchPostsByUserId({
+    required String userId,
+  }) async {
     try {
       // Fetch posts snapshot with this uid
       final postSnapshot =
@@ -66,7 +81,10 @@ class FirebasePostRepository implements PostRepository {
   }
 
   @override
-  Future<void> toggleLikePost(String postId, String userId) async {
+  Future<void> toggleLikePost({
+    required String postId,
+    required String userId,
+  }) async {
     try {
       // Get the post document from firestore
       final postDoc = await postCollection.doc(postId).get();
@@ -95,7 +113,10 @@ class FirebasePostRepository implements PostRepository {
   }
 
   @override
-  Future<void> addComment(String postId, Comment comment) async {
+  Future<void> addComment({
+    required String postId,
+    required Comment comment,
+  }) async {
     try {
       // Get the post document from firestore
       final postDoc = await postCollection.doc(postId).get();
@@ -119,7 +140,10 @@ class FirebasePostRepository implements PostRepository {
   }
 
   @override
-  Future<void> deleteComment(String postId, String commentId) async {
+  Future<void> deleteComment({
+    required String postId,
+    required String commentId,
+  }) async {
     try {
       // Get the post document from firestore
       final postDoc = await postCollection.doc(postId).get();
