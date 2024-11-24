@@ -22,42 +22,52 @@ void setupServiceLocator() {
   // Register repositories as singletons
 
   getIt.registerLazySingleton<FirebaseAuthRepository>(
-      () => FirebaseAuthRepository());
+    () => FirebaseAuthRepository(),
+  );
 
   getIt.registerLazySingleton<FirebaseProfileRepository>(
-      () => FirebaseProfileRepository());
+    () => FirebaseProfileRepository(),
+  );
 
   getIt.registerLazySingleton<FirebaseStorageRepository>(
-      () => FirebaseStorageRepository());
+    () => FirebaseStorageRepository(),
+  );
 
   getIt.registerLazySingleton<FirebasePostRepository>(
-      () => FirebasePostRepository());
+    () => FirebasePostRepository(),
+  );
 
   getIt.registerLazySingleton<FirebaseSearchRepository>(
-      () => FirebaseSearchRepository());
+    () => FirebaseSearchRepository(),
+  );
 
   // Register Cubits
 
-  getIt.registerSingleton<AuthCubit>(AuthCubit(
-    authRepository: getIt<FirebaseAuthRepository>(),
-  ));
+  getIt.registerSingleton<AuthCubit>(
+    AuthCubit(authRepository: getIt<FirebaseAuthRepository>()),
+  );
 
   getIt.registerSingleton<SearchCubit>(
-      SearchCubit(searchRepository: getIt<FirebaseSearchRepository>()));
+    SearchCubit(searchRepository: getIt<FirebaseSearchRepository>()),
+  );
 
-  getIt.registerSingleton<ProfileCubit>(ProfileCubit(
-    profileRepository: getIt<FirebaseProfileRepository>(),
-    storageRepository: getIt<FirebaseStorageRepository>(),
-  ));
+  getIt.registerSingleton<ProfileCubit>(
+    ProfileCubit(
+      profileRepository: getIt<FirebaseProfileRepository>(),
+      storageRepository: getIt<FirebaseStorageRepository>(),
+    ),
+  );
 
-  getIt.registerSingleton<PostCubit>(PostCubit(
-    postRepository: getIt<FirebasePostRepository>(),
-    storageRepository: getIt<FirebaseStorageRepository>(),
-  ));
+  getIt.registerSingleton<PostCubit>(
+    PostCubit(
+      postRepository: getIt<FirebasePostRepository>(),
+      storageRepository: getIt<FirebaseStorageRepository>(),
+    ),
+  );
 
-    getIt.registerSingleton<ThemeCubit>(ThemeCubit());
+  getIt.registerSingleton<ThemeCubit>(ThemeCubit());
 
-      getIt.registerSingleton<SliderCubit>(SliderCubit());
+  getIt.registerSingleton<SliderCubit>(SliderCubit());
 
   getIt.registerSingleton<LoadingCubit>(LoadingCubit());
 
