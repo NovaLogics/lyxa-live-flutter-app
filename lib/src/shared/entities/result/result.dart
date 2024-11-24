@@ -2,7 +2,7 @@ import 'package:lyxa_live/src/shared/entities/result/errors/error_wrapper.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
 
-enum Status { success, error, loading }
+enum Status { success, error,  }
 
 class Result<T> {
   final T? data;
@@ -35,12 +35,20 @@ class Result<T> {
     return Result._(status: Status.error, error: errorWrapper);
   }
 
-  /// Factory constructor for loading state
-  factory Result.loading() {
-    return const Result._(status: Status.loading);
-  }
+  // /// Factory constructor for loading state
+  // factory Result.loading() {
+  //   return const Result._(status: Status.loading);
+  // }
 
   bool isDataNotEmpty() {
     return (data != null && data is T);
+  }
+
+    bool isGenericError() {
+    return error?.isGenericError ?? false;
+  }
+
+  bool isFirebaseError() {
+    return error?.isFirebaseError ?? false;
   }
 }
