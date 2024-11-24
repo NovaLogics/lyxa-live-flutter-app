@@ -36,7 +36,7 @@ class PostCubit extends Cubit<PostState> {
       final updatedPost = post.copyWith(imageUrl: imageUrl);
 
       // Create post in the backend
-      final result = await postRepository.createPost(post: updatedPost);
+      final result = await postRepository.addPost(newPost: updatedPost);
 
       switch (result.status) {
         case Status.success:
@@ -75,7 +75,7 @@ class PostCubit extends Cubit<PostState> {
   Future<void> fetchAllPosts() async {
     emit(PostLoading());
 
-    final result = await postRepository.fetchAllPosts();
+    final result = await postRepository.getAllPosts();
 
     switch (result.status) {
       case Status.success:
@@ -110,7 +110,7 @@ class PostCubit extends Cubit<PostState> {
   Future<void> deletePost({
     required String postId,
   }) async {
-    final result = await postRepository.deletePost(postId: postId);
+    final result = await postRepository.removePost(postId: postId);
 
     switch (result.status) {
       case Status.success:
@@ -146,7 +146,7 @@ class PostCubit extends Cubit<PostState> {
     required String postId,
     required String userId,
   }) async {
-    final result = await postRepository.toggleLikePost(
+    final result = await postRepository.togglePostLike(
       postId: postId,
       userId: userId,
     );
@@ -185,7 +185,7 @@ class PostCubit extends Cubit<PostState> {
     required String postId,
     required Comment comment,
   }) async {
-    final result = await postRepository.addComment(
+    final result = await postRepository.addCommentToPost(
       postId: postId,
       comment: comment,
     );
@@ -224,7 +224,7 @@ class PostCubit extends Cubit<PostState> {
     required String postId,
     required String commentId,
   }) async {
-    final result = await postRepository.deleteComment(
+    final result = await postRepository.removeCommentFromPost(
       postId: postId,
       commentId: commentId,
     );
