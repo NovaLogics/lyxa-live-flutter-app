@@ -43,16 +43,16 @@ class ErrorAlertCubit extends Cubit<ErrorAlertState> {
   String _getErrorMessage(ErrorType errorType) {
     switch (errorType) {
       case ErrorType.networkError:
-        return ErrorMessages.networkError;
+        return ErrorMsgs.networkError;
       case ErrorType.timeoutError:
-        return ErrorMessages.timeoutError;
+        return ErrorMsgs.timeoutError;
       case ErrorType.authenticationError:
-        return ErrorMessages.authenticationError;
+        return ErrorMsgs.authenticationError;
       case ErrorType.permissionDenied:
-        return ErrorMessages.permissionDeniedError;
+        return ErrorMsgs.permissionDeniedError;
       case ErrorType.unknown:
       default:
-        return ErrorMessages.unknownError;
+        return ErrorMsgs.unknownError;
     }
   }
 }
