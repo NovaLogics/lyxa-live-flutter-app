@@ -37,7 +37,7 @@ class AuthCubit extends Cubit<AuthState> {
         }
         break;
 
-     case Status.error:
+      case Status.error:
         // FIREBASE ERROR
         if (result.isFirebaseError()) {
           emit(AuthError(result.getFirebaseAlert()));
@@ -48,7 +48,7 @@ class AuthCubit extends Cubit<AuthState> {
             result.getGenericErrorData(),
             onRetry: () {},
           );
-        } 
+        }
         // KNOWN ERRORS
         else if (result.isMessageError()) {
           ErrorHandler.handleError(
@@ -90,7 +90,7 @@ class AuthCubit extends Cubit<AuthState> {
         }
         break;
 
-        case Status.error:
+      case Status.error:
         // FIREBASE ERROR
         if (result.isFirebaseError()) {
           emit(AuthError(result.getFirebaseAlert()));
@@ -101,7 +101,7 @@ class AuthCubit extends Cubit<AuthState> {
             result.getGenericErrorData(),
             onRetry: () {},
           );
-        } 
+        }
         // KNOWN ERRORS
         else if (result.isMessageError()) {
           ErrorHandler.handleError(
@@ -155,7 +155,7 @@ class AuthCubit extends Cubit<AuthState> {
             result.getGenericErrorData(),
             onRetry: () {},
           );
-        } 
+        }
         // KNOWN ERRORS
         else if (result.isMessageError()) {
           ErrorHandler.handleError(
