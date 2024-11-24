@@ -1,8 +1,11 @@
 import 'package:get_it/get_it.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
+import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/data/firebase_post_repository.dart';
+import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/data/firebase_profile_repository.dart';
+import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/search/data/firebase_search_repository.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
@@ -14,6 +17,7 @@ final GetIt getIt = GetIt.instance;
 
 void setupServiceLocator() {
   // Register repositories as singletons
+
   getIt.registerLazySingleton<FirebaseAuthRepository>(
       () => FirebaseAuthRepository());
 
@@ -29,11 +33,28 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<FirebaseSearchRepository>(
       () => FirebaseSearchRepository());
 
+  // Register Cubits
+
+  getIt.registerSingleton<SearchCubit>(
+      SearchCubit(searchRepository: getIt<FirebaseSearchRepository>()));
+
+  getIt.registerSingleton<ProfileCubit>(ProfileCubit(
+    profileRepository: getIt<FirebaseProfileRepository>(),
+    storageRepository: getIt<FirebaseStorageRepository>(),
+  ));
+
+  getIt.registerSingleton<PostCubit>(PostCubit(
+    postRepository: getIt<FirebasePostRepository>(),
+    storageRepository: getIt<FirebaseStorageRepository>(),
+  ));
+
   getIt.registerSingleton<LoadingCubit>(LoadingCubit());
 
   getIt.registerSingleton<ErrorAlertCubit>(ErrorAlertCubit());
 
   getIt.registerFactory(() => HiveHelper());
+
+  // Register Widgets
 
   getIt.registerFactoryParam<GradientBackgroundUnit, double, BackgroundStyle>(
     (widthSize, style) => GradientBackgroundUnit(
@@ -45,15 +66,4 @@ void setupServiceLocator() {
   getIt.registerFactoryParam<CenterLoadingUnit, String, void>(
     (message, _) => CenterLoadingUnit(message: message),
   );
-
-  // Register services (e.g., APIs, databases)
-  // getIt.registerLazySingleton<AuthService>(() => AuthService());
-  // AuthCubit(getIt<AuthService>()));
-
-  // final FirebaseAuthRepository authRepository = FirebaseAuthRepository();
-
-  // // Register cubits or blocs
-  // getIt.registerFactory<AuthCubit>(
-  //   () => AuthCubit(authRepository: authRepository),
-  // );
 }

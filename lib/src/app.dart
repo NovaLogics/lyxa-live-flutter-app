@@ -67,30 +67,33 @@ class LyxaApp extends StatelessWidget {
 
       // Post Cubit
       BlocProvider<PostCubit>(
-        create: (context) => PostCubit(
-          postRepository: getIt<FirebasePostRepository>(),
-          storageRepository: getIt<FirebaseStorageRepository>(),
-        ),
+        create: (context) => getIt<PostCubit>(),
       ),
 
       // Search Cubit
       BlocProvider<SearchCubit>(
-        create: (context) =>
-            SearchCubit(searchRepository: getIt<FirebaseSearchRepository>()),
+        create: (context) => getIt<SearchCubit>(),
       ),
 
       // Theme Cubit
-      BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
+      BlocProvider<ThemeCubit>(
+        create: (context) => ThemeCubit(),
+      ),
 
       // Image Slider Cubit
-      BlocProvider<SliderCubit>(create: (context) => SliderCubit()),
+      BlocProvider<SliderCubit>(
+        create: (context) => SliderCubit(),
+      ),
 
       // Error Cubit
       BlocProvider<ErrorAlertCubit>(
-          create: (context) => getIt<ErrorAlertCubit>()),
+        create: (context) => getIt<ErrorAlertCubit>(),
+      ),
 
       // Loading Cubit
-      BlocProvider<LoadingCubit>(create: (context) => getIt<LoadingCubit>()),
+      BlocProvider<LoadingCubit>(
+        create: (context) => getIt<LoadingCubit>(),
+      ),
     ];
   }
 
