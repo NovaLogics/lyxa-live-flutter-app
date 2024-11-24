@@ -340,7 +340,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 post: post,
                 currentAppUser: _currentAppUser,
                 onDeletePressed: () =>
-                    context.read<PostCubit>().deletePost(post.id),
+                    context.read<PostCubit>().deletePost(postId: post.id),
               );
             },
           );

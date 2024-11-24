@@ -1,5 +1,5 @@
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
-import 'package:lyxa_live/src/shared/entities/result.dart';
+import 'package:lyxa_live/src/shared/entities/result/result.dart';
 
 /// Defines Authentication Operations For The App
 /// ->

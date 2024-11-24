@@ -1,6 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 
+class PostFields {
+  static const String id = 'id';
+  static const String userId = 'userId';
+  static const String userName = 'userName';
+  static const String userProfileImageUrl = 'userProfileImageUrl';
+  static const String text = 'text';
+  static const String imageUrl = 'imageUrl';
+  static const String timestamp = 'timestamp';
+  static const String likes = 'likes';
+  static const String comments = 'comments';
+}
+
 class Post {
   final String id;
   final String userId;

@@ -3,142 +3,178 @@ import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
+import 'package:lyxa_live/src/shared/entities/result/result.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 class FirebasePostRepository implements PostRepository {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  // Path Firebase > posts
-  final CollectionReference postCollection =
+  final CollectionReference _postsCollectionRef =
       FirebaseFirestore.instance.collection(FIRESTORE_COLLECTION_POSTS);
 
   @override
-  Future<void> createPost(Post post) async {
+  Future<Result<List<Post>>> getAllPosts() async {
     try {
-      await postCollection.doc(post.id).set(post.toJson());
+      final postSnapshot = await _postsCollectionRef
+          .orderBy(PostFields.timestamp, descending: true)
+          .get();
+
+      final List<Post> allPosts = _mapSnapshotToPosts(postSnapshot);
+
+      return Result.success(
+        data: allPosts,
+      );
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception('Error creating post : ${error.toString()}');
+      return Result.error(GenericError(error: error));
     }
   }
 
   @override
-  Future<void> deletePost(String postId) async {
+  Future<Result<List<Post>>> getPostsForUser({
+    required String userId,
+  }) async {
     try {
-      await postCollection.doc(postId).delete();
+      final postSnapshot = await _postsCollectionRef
+          .where(PostFields.userId, isEqualTo: userId)
+          .get();
+
+      final List<Post> userPosts = _mapSnapshotToPosts(postSnapshot);
+
+      return Result.success(
+        data: userPosts,
+      );
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception('Error deleting post : ${error.toString()}');
+      return Result.error(GenericError(error: error));
     }
   }
 
   @override
-  Future<List<Post>> fetchAllPosts() async {
+  Future<Result<void>> addPost({
+    required Post newPost,
+  }) async {
     try {
-      // Get all posts with most recent posts at the top
-      final postSnapshot =
-          await postCollection.orderBy('timestamp', descending: true).get();
+      await _postsCollectionRef.doc(newPost.id).set(newPost.toJson());
 
-      // Convert each firestore document from json -> list of posts
-      final List<Post> allPosts = postSnapshot.docs
-          .map((doc) => Post.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
-
-      return allPosts;
+      return Result.voidSuccess();
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception('Error fetching post : ${error.toString()}');
+      return Result.error(GenericError(error: error));
     }
   }
 
   @override
-  Future<List<Post>> fetchPostsByUserId(String userId) async {
+  Future<Result<void>> removePost({
+    required String postId,
+  }) async {
     try {
-      // Fetch posts snapshot with this uid
-      final postSnapshot =
-          await postCollection.where('userId', isEqualTo: userId).get();
+      await _postsCollectionRef.doc(postId).delete();
 
-      // Convert each firestore document from json -> list of posts
-      final List<Post> userPosts = postSnapshot.docs
-          .map((doc) => Post.fromJson(doc.data() as Map<String, dynamic>))
-          .toList();
-
-      return userPosts;
+      return Result.voidSuccess();
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception('Error fetching posts by user : ${error.toString()}');
+      return Result.error(GenericError(error: error));
     }
   }
 
   @override
-  Future<void> toggleLikePost(String postId, String userId) async {
+  Future<Result<void>> togglePostLike({
+    required String postId,
+    required String userId,
+  }) async {
     try {
-      // Get the post document from firestore
-      final postDoc = await postCollection.doc(postId).get();
+      final post = await _getPostById(postId);
 
-      if (postDoc.exists) {
-        final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
+      final isAlreadyLiked = post.likes.contains(userId);
 
-        // Check if user has already like this post
-        final hasLiked = post.likes.contains(userId);
-
-        // Update the likes list
-        if (hasLiked) {
-          post.likes.remove(userId); // Unlike
-        } else {
-          post.likes.add(userId); // Like
-        }
-
-        // Update the post document with the new like list
-        await postCollection.doc(postId).update({'likes': post.likes});
+      if (isAlreadyLiked) {
+        post.likes.remove(userId);
       } else {
-        throw Exception('Post not found');
+        post.likes.add(userId);
       }
+
+      await _postsCollectionRef
+          .doc(postId)
+          .update({PostFields.likes: post.likes});
+
+      return Result.voidSuccess();
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception('Error toggling like: ${error.toString()}');
+      return Result.error(GenericError(error: error));
     }
   }
 
   @override
-  Future<void> addComment(String postId, Comment comment) async {
+  Future<Result<void>> addCommentToPost({
+    required String postId,
+    required Comment comment,
+  }) async {
     try {
-      // Get the post document from firestore
-      final postDoc = await postCollection.doc(postId).get();
+      final post = await _getPostById(postId);
 
-      if (postDoc.exists) {
-        final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
+      post.comments.add(comment);
 
-        // Add the new comment
-        post.comments.add(comment);
+      final updatedComments =
+          post.comments.map((comment) => comment.toJson()).toList();
 
-        // Update the post document with the new comment
-        await postCollection.doc(postId).update({
-          'comments': post.comments.map((comment) => comment.toJson()).toList()
-        });
-      } else {
-        throw Exception('Post not found');
-      }
+      await _postsCollectionRef
+          .doc(postId)
+          .update({PostFields.comments: updatedComments});
+
+      return Result.voidSuccess();
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception('Error adding comment: ${error.toString()}');
+      return Result.error(GenericError(error: error));
     }
   }
 
   @override
-  Future<void> deleteComment(String postId, String commentId) async {
+  Future<Result<void>> removeCommentFromPost({
+    required String postId,
+    required String commentId,
+  }) async {
     try {
-      // Get the post document from firestore
-      final postDoc = await postCollection.doc(postId).get();
+      final post = await _getPostById(postId);
 
-      if (postDoc.exists) {
-        final post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
+      post.comments.removeWhere((comment) => comment.id == commentId);
 
-        // Remove the comment
-        post.comments.removeWhere((comment) => comment.id == commentId);
+      final updatedComments =
+          post.comments.map((comment) => comment.toJson()).toList();
 
-        // Update the post document with the new comment
-        await postCollection.doc(postId).update({
-          'comments': post.comments.map((comment) => comment.toJson()).toList()
-        });
-      } else {
-        throw Exception('Post not found');
-      }
+      await _postsCollectionRef
+          .doc(postId)
+          .update({PostFields.comments: updatedComments});
+
+      return Result.voidSuccess();
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception('Error deleting comment: ${error.toString()}');
+      return Result.error(GenericError(error: error));
     }
+  }
+
+  //-> Utils ->
+
+  Future<Post> _getPostById(String postId) async {
+    final postDoc = await _postsCollectionRef.doc(postId).get();
+
+    if (!postDoc.exists) {
+      throw Exception(ErrorMsgs.cannotFetchPostError);
+    }
+    return Post.fromJson(postDoc.data() as Map<String, dynamic>);
+  }
+
+  List<Post> _mapSnapshotToPosts(QuerySnapshot postSnapshot) {
+    return postSnapshot.docs.map((document) {
+      final data = document.data() as Map<String, dynamic>;
+      return Post.fromJson(data);
+    }).toList();
   }
 }

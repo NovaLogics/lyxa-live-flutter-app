@@ -6,94 +6,170 @@ import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
+import 'package:lyxa_live/src/shared/entities/result/result.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
-// Post Cubit for State management
 class PostCubit extends Cubit<PostState> {
-  final PostRepository postRepository;
-  final StorageRepository storageRepository;
+  final PostRepository _postRepository;
+  final StorageRepository _storageRepository;
 
   PostCubit({
-    required this.postRepository,
-    required this.storageRepository,
-  }) : super(PostInitial());
+    required PostRepository postRepository,
+    required StorageRepository storageRepository,
+  })  : _storageRepository = storageRepository,
+        _postRepository = postRepository,
+        super(PostInitial());
 
-  // Create a new post
-  Future<void> createPost(Post post,
-      {String? imagePath, Uint8List? imageBytes}) async {
-    String? imageUrl;
+  Future<void> getAllPosts() async {
+    emit(PostLoading());
+
+    final result = await _postRepository.getAllPosts();
+
+    switch (result.status) {
+      case Status.success:
+        emit(PostLoaded(result.data ?? List.empty()));
+        break;
+
+      case Status.error:
+        _handleErrors(result: result);
+        break;
+    }
+  }
+
+  Future<void> addPost({
+    required Post post,
+    Uint8List? imageBytes,
+  }) async {
     try {
-      // Handle image upload for mobile platforms (Using file path)
-      if (imagePath != null) {
-        emit(PostUploading());
-        imageUrl =
-            await storageRepository.uploadPostImageMobile(imagePath, post.id);
+      emit(PostUploading());
+
+      final imageUrl =
+          await _storageRepository.uploadPostImageWeb(imageBytes, post.id);
+
+      final updatedPost = post.copyWith(imageUrl: imageUrl);
+
+      final result = await _postRepository.addPost(newPost: updatedPost);
+
+      switch (result.status) {
+        case Status.success:
+          getAllPosts();
+          break;
+
+        case Status.error:
+          _handleErrors(result: result);
+          break;
       }
-      // Handle image upload for web platforms (Using file bytes)
-      else if (imageBytes != null) {
-        emit(PostUploading());
-        imageUrl =
-            await storageRepository.uploadPostImageWeb(imageBytes, post.id);
-      }
-
-      // Give image url to post
-      final newPost = post.copyWith(imageUrl: imageUrl);
-
-      // Create post in the backend
-      postRepository.createPost(newPost);
-
-      // Re-fetch all posts
-      fetchAllPosts();
     } catch (error) {
-      emit(PostError('Failed to create post : ${error.toString()}'));
+      emit(PostError(ErrorMsgs.postCreationError));
     }
   }
 
-  // Fetch all posts
-  Future<void> fetchAllPosts() async {
-    try {
-      emit(PostLoading());
-      final posts = await postRepository.fetchAllPosts();
-      emit(PostLoaded(posts));
-    } catch (error) {
-      emit(PostError('Failed to fetch posts : ${error.toString()}'));
+  Future<void> deletePost({
+    required String postId,
+  }) async {
+    final result = await _postRepository.removePost(postId: postId);
+
+    switch (result.status) {
+      case Status.success:
+        break;
+
+      case Status.error:
+        _handleErrors(result: result);
+        break;
     }
   }
 
-  // Delete a post
-  Future<void> deletePost(String postId) async {
-    try {
-      await postRepository.deletePost(postId);
-    } catch (error) {
-      emit(PostError('Failed to delete post : ${error.toString()}'));
-    }
-  }
+  Future<void> toggleLikePost({
+    required String postId,
+    required String userId,
+  }) async {
+    final result = await _postRepository.togglePostLike(
+      postId: postId,
+      userId: userId,
+    );
 
-  // Toggle like on a post
-  Future<void> toggleLikePost(String postId, String userId) async {
-    try {
-      await postRepository.toggleLikePost(postId, userId);
-    } catch (error) {
-      emit(PostError('Failed to toggle like: ${error.toString()}'));
+    switch (result.status) {
+      case Status.success:
+        break;
+
+      case Status.error:
+        _handleErrors(
+          result: result,
+          prefixMessage: 'Failed to toggle like',
+        );
+        break;
     }
   }
 
   // Add comment to a post
-  Future<void> addComment(String postId, Comment comment) async {
-    try {
-      await postRepository.addComment(postId, comment);
+  Future<void> addComment({
+    required String postId,
+    required Comment comment,
+  }) async {
+    final result = await _postRepository.addCommentToPost(
+      postId: postId,
+      comment: comment,
+    );
 
-    } catch (error) {
-      emit(PostError('Failed to add comment: ${error.toString()}'));
+    switch (result.status) {
+      case Status.success:
+        break;
+
+      case Status.error:
+        _handleErrors(
+          result: result,
+          prefixMessage: 'Failed to add comment',
+        );
+        break;
     }
   }
 
   // Delete comment to a post
-  Future<void> deleteComment(String postId, String commentId) async {
-    try {
-      await postRepository.deleteComment(postId, commentId);
+  Future<void> deleteComment({
+    required String postId,
+    required String commentId,
+  }) async {
+    final result = await _postRepository.removeCommentFromPost(
+      postId: postId,
+      commentId: commentId,
+    );
 
-    } catch (error) {
-      emit(PostError('Failed to delete the comment: ${error.toString()}'));
+    switch (result.status) {
+      case Status.success:
+        break;
+
+      case Status.error:
+        _handleErrors(
+          result: result,
+          prefixMessage: 'Failed to delete the comment',
+        );
+        break;
+    }
+  }
+
+  //-> Utils ->
+
+  void _handleErrors({required Result result, String? prefixMessage}) {
+    // FIREBASE ERROR
+    if (result.isFirebaseError()) {
+      emit(PostError(result.getFirebaseAlert()));
+    }
+    // GENERIC ERROR
+    else if (result.isGenericError()) {
+      ErrorHandler.handleError(
+        result.getGenericErrorData(),
+        prefixMessage: prefixMessage,
+        onRetry: () {},
+      );
+    }
+    // KNOWN ERRORS
+    else if (result.isMessageError()) {
+      ErrorHandler.handleError(
+        null,
+        customMessage: result.getMessageErrorAlert(),
+        onRetry: () {},
+      );
     }
   }
 }

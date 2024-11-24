@@ -42,20 +42,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedScaffold(
-      // App Bar
       appBar: _buildAppBar(context),
-      // Drawer
       drawer: _buildAppDrawer(),
-      // Body
       body: BlocBuilder<PostCubit, PostState>(
         builder: (context, state) {
           LoadingCubit.hideLoading();
           if (state is PostLoading || state is PostUploading) {
             LoadingCubit.showLoading(message: AppStrings.loadingMessage);
             return const SizedBox();
-          }
-          else if (state is PostUploading) {
-           LoadingCubit.showLoading(message: AppStrings.uploading);
+          } else if (state is PostUploading) {
+            LoadingCubit.showLoading(message: AppStrings.uploading);
             return const SizedBox();
           } else if (state is PostLoaded) {
             return _buildPostList(state.posts);
@@ -73,11 +69,12 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       LoadingCubit.showLoading(message: AppStrings.loadingMessage);
 
+      AuthCubit authCubit = getIt<AuthCubit>();
       ProfileCubit profileCubit = getIt<ProfileCubit>();
 
-      final currentUser = getIt<AuthCubit>().currentUser;
+      final currentUser = authCubit.currentUser;
       if (currentUser == null) {
-        throw Exception(ErrorMessages.cannotFetchProfileError);
+        throw Exception(ErrorMsgs.cannotFetchProfileError);
       }
 
       _currentAppUser = currentUser;
@@ -102,11 +99,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _fetchAllPosts() {
-    _postCubit.fetchAllPosts();
+    _postCubit.getAllPosts();
   }
 
   void _deletePost(String postId) {
-    _postCubit.deletePost(postId);
+    _postCubit.deletePost(postId: postId);
     _fetchAllPosts();
   }
 

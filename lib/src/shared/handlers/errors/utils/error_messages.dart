@@ -1,4 +1,4 @@
-class ErrorMessages {
+class ErrorMsgs {
   // LOGIN -> Authentication Error Messages
   static const String loginFailedError = 'Login Failed: ';
   static const String loginErrorMessage =
@@ -14,8 +14,17 @@ class ErrorMessages {
   static const cannotFetchProfileError =
       'Cannot fetch profile! Please login again';
 
+  static const cannotFetchPostError =
+      'Cannot fetch post data! Please login again';
+
   static const String unexpectedError =
       'An unexpected error occurred. Please try again.';
+
+  static const String postCreationError =
+      'Failed to create post. Please try again!';
+
+  static const String failToLoadPostError =
+      'Failed to fetch posts. Please try again!';
 
   static const String unknownError = 'Something went wrong. Please try again.';
   static const String networkError =
