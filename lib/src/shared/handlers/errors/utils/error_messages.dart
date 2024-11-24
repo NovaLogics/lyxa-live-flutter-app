@@ -11,7 +11,11 @@ class ErrorMessages {
       'Failed to retrieve user ID after authentication.';
   static const userDataNotFound = 'User data not found in Database.';
 
-  static const String unexpectedError = 'An unexpected error occurred. Please try again.';
+  static const cannotFetchProfileError =
+      'Cannot fetch profile! Please login again';
+
+  static const String unexpectedError =
+      'An unexpected error occurred. Please try again.';
 
   static const String unknownError = 'Something went wrong. Please try again.';
   static const String networkError =

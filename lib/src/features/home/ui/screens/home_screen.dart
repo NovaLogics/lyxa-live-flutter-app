@@ -10,8 +10,8 @@ import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
@@ -28,13 +28,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final PostCubit _postCubit;
   late final AppUser _currentAppUser;
-  ProfileUser? _profileUser;
-  bool _isLodaingData = false;
+  late final ProfileUser _profileUser;
 
   @override
   void initState() {
     super.initState();
-    _postCubit = context.read<PostCubit>();
+    _postCubit = getIt<PostCubit>();
     _fetchAllPosts();
     _fetchCurrentUserData();
   }
@@ -52,14 +51,18 @@ class _HomeScreenState extends State<HomeScreen> {
           LoadingCubit.hideLoading();
           Logger.logDebug(state.toString());
           if (state is PostLoading || state is PostUploading) {
-            LoadingCubit.showLoading();
-            return const SizedBox();
+            LoadingCubit.showLoading(message: AppStrings.loadingMessage);
+            return Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+            );
           } else if (state is PostLoaded) {
             return _buildPostList(state.posts);
           } else if (state is PostError) {
             return _buildErrorState(state.message);
           } else {
-            return const SizedBox();
+            Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+            );
           }
         },
       ),
@@ -68,22 +71,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _fetchCurrentUserData() async {
     // Initialize cubits
-    AuthCubit authCubit = context.read<AuthCubit>();
-    ProfileCubit profileCubit = context.read<ProfileCubit>();
+    ProfileCubit profileCubit = getIt<ProfileCubit>();
 
-    // Ensure current user is not null
-    final currentUser = authCubit.currentUser;
+    final currentUser = getIt<AuthCubit>().currentUser;
     if (currentUser == null) {
-      throw Exception("No authenticated user found. Cannot fetch profile.");
+      throw Exception(ErrorMessages.cannotFetchProfileError);
     }
 
-    // Set the current app user
     _currentAppUser = currentUser;
 
-    // Log user ID
-    Logger.logDebug("Current user ID: ${_currentAppUser.uid}");
-
-    // Fetch profile for the given user ID
     profileCubit.fetchUserProfile(_currentAppUser.uid);
   }
 
@@ -142,11 +138,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Loading state widget
-  Widget _buildLoadingState() {
-    return getIt<CenterLoadingUnit>(param1: AppStrings.pleaseWait);
-  }
-
   // Post list display
   Widget _buildPostList(List<Post> posts) {
     return Stack(
@@ -164,7 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-        // if (_isLodaingData) _buildLoadingState(),
       ],
     );
   }
