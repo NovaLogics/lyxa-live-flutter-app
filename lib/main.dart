@@ -41,5 +41,5 @@ void initServiceLocator() {
 }
 
 void launchApp() {
-  runApp(LyxaApp());
+  runApp(const LyxaApp());
 }

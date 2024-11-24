@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
@@ -41,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _authCubit = context.read<AuthCubit>();
+    _authCubit = getIt<AuthCubit>();
     _initializeEmailField();
   }
 
@@ -82,23 +83,26 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _initializeEmailField() async {
-    final savedUser = await _authCubit.getSavedUser();
-    if (savedUser != null) {
-      Logger.logDebug(savedUser.toString());
-      _emailController.text = savedUser.email;
-    }
+    final savedUser = await _authCubit.getSavedUser(
+      key: HiveKeys.loginDataKey,
+    );
+    if (savedUser == null) return;
+
+    Logger.logDebug(savedUser.toString());
+    _emailController.text = savedUser.email;
   }
 
   void _login() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final String email = _emailController.text.trim();
-      final String password = _passwordController.text.trim();
+    if (_formKey.currentState?.validate() != true) return;
+    // All form fields are valid
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
 
-      AppUser cachedUser = AppUser.createWith(email: email);
-
-      _authCubit.saveUser(user: cachedUser);
-      _authCubit.login(email, password);
-    }
+    _authCubit.saveUserToLocalStorage(
+      key: HiveKeys.loginDataKey,
+      user: AppUser.createWith(email: email),
+    );
+    _authCubit.login(email, password);
   }
 
   Widget _buildTopBanner() {
@@ -170,7 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
             onTap: () {
               widget.onToggle?.call();
 
-              _authCubit.saveUser(
+              _authCubit.saveUserToLocalStorage(
+                key: HiveKeys.loginDataKey,
                 user: AppUser.createWith(email: _emailController.text.trim()),
               );
             },

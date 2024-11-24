@@ -4,23 +4,27 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/core/utils/firebase_error_util.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
-import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
-import 'package:lyxa_live/src/shared/event_handlers/errors/cubits/error_cubit.dart';
-import 'package:lyxa_live/src/shared/event_handlers/errors/utils/error_type.dart';
+import 'package:lyxa_live/src/shared/entities/result.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/firebase_error_handler.dart';
 
 class FirebaseAuthRepository implements AuthRepository {
   final HiveHelper hiveHelper = getIt<HiveHelper>();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  /// Logs in the user with email and password
-  /// ->
+  /// (ƒ) :: Login With Email And Password
+  ///
+  /// Returns a [Result] with the [AppUser] on success or an error on failure
+  ///
+  /// Parameters:
+  /// - [email]: User's email address.
+  /// - [password]: User's password.
   @override
-  Future<AppUser?> loginWithEmailAndPassword({
+  Future<Result<AppUser>> loginWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -29,15 +33,13 @@ class FirebaseAuthRepository implements AuthRepository {
       firebaseAuth.setLanguageCode(AppStrings.languageCodeEnglish);
 
       // Authenticate the user
-      final UserCredential userCredential =
-          await firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final UserCredential userCredential = await firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
 
-      final String userId = userCredential.user?.uid ?? '';
-      if (userId.isEmpty) {
-        throw Exception('Failed to retrieve user ID after authentication.');
+      final String? userId = userCredential.user?.uid;
+
+      if (userId == null || userId.isEmpty) {
+        throw Exception(ErrorMessages.failedToRetrieveUserId);
       }
 
       // Retrieve user data from Firestore
@@ -48,7 +50,7 @@ class FirebaseAuthRepository implements AuthRepository {
               .get();
 
       if (!userDocument.exists) {
-        throw Exception('User data not found in Firestore.');
+        throw Exception(ErrorMessages.userDataNotFound);
       }
 
       final String name = userDocument.data()?[AppUserFields.name] as String? ??
@@ -61,33 +63,25 @@ class FirebaseAuthRepository implements AuthRepository {
         searchableName: name.toLowerCase(),
       );
 
-      return user;
+      return Result.success(user);
     } on FirebaseAuthException catch (authError) {
-      // Handle Firebase authentication-specific errors
-      final String errorMessage = FirebaseErrorUtil.getMessage(authError.code);
-      Logger.logError('AuthError: ${authError.code}');
-      Logger.logError('Message: $errorMessage');
-      throw Exception(errorMessage);
-    } catch (error, stackTrace) {
-      // Handle general errors
-      Logger.logError(
-        'Unexpected Error: ${error.toString()} | stackTrace: ${stackTrace.toString()}',
-      );
-
-      ErrorAlertCubit.showErrorMessage(
-        errorType: ErrorType.authenticationError,
-        onRetry: () {
-          ErrorAlertCubit.hideErrorMessage();
-        },
-      );
-      // throw Exception('An unexpected error occurred. Please try again.');
+      final errorMessage = FirebaseErrorHandler.getMessage(authError.code);
+      return Result.errorMessage(errorMessage);
+    } catch (error) {
+      return Result.error(error);
     }
   }
 
-  /// Registers a new user with name, email, and password
-  /// ->
+  ///  (ƒ) :: Register With Email And Password
+  ///
+  /// Returns a [Result] with the [AppUser] on success or an error on failure
+  ///
+  /// Parameters:
+  /// - [name]: User's full name.
+  /// - [email]: User's email address.
+  /// - [password]: User's password.
   @override
-  Future<AppUser?> registerWithEmailAndPassword({
+  Future<Result<AppUser>> registerWithEmailAndPassword({
     required String name,
     required String email,
     required String password,
@@ -97,9 +91,15 @@ class FirebaseAuthRepository implements AuthRepository {
       UserCredential userCredential = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
 
+      final String? userId = userCredential.user?.uid;
+
+      if (userId == null || userId.isEmpty) {
+        throw Exception(ErrorMessages.failedToRetrieveUserId);
+      }
+
       // Create user object
       AppUser user = AppUser(
-        uid: userCredential.user!.uid,
+        uid: userId,
         email: email,
         name: name,
         searchableName: name.toLowerCase(),
@@ -111,60 +111,92 @@ class FirebaseAuthRepository implements AuthRepository {
           .doc(user.uid)
           .set(user.toJson());
 
-      return user;
-    } on FirebaseAuthException catch (error) {
-      final errorData = FirebaseErrorUtil.getMessage(error.code);
-      Logger.logError(error.code);
-      Logger.logError(errorData);
-      throw Exception(errorData);
+      return Result.success(user);
+    } on FirebaseAuthException catch (authError) {
+      final errorMessage = FirebaseErrorHandler.getMessage(authError.code);
+      return Result.errorMessage(errorMessage);
+    } catch (error) {
+      return Result.error(error);
     }
   }
 
-  /// Retrieves the current logged-in user
+  ///  (ƒ) :: Get Current User
   /// ->
+  /// Returns [Result.success] with the [AppUser] if found,
+  /// or [Result.error] if an error occurs.
   @override
-  Future<AppUser?> getCurrentUser() async {
-    final firebaseUser = firebaseAuth.currentUser;
+  Future<Result<AppUser?>> getCurrentUser() async {
+    try {
+      final firebaseUser = firebaseAuth.currentUser;
 
-    if (firebaseUser == null) return null;
+      // No user logged in
+      if (firebaseUser == null) {
+        return Result.success(null);
+      }
 
-    // Fetch user document from Firestore
-    DocumentSnapshot userDoc = await firebaseFirestore
-        .collection(FIRESTORE_COLLECTION_USERS)
-        .doc(firebaseUser.uid)
-        .get();
+      // Fetch user document from Firestore
+      final userDocument = await firebaseFirestore
+          .collection(FIRESTORE_COLLECTION_USERS)
+          .doc(firebaseUser.uid)
+          .get();
 
-    // Check if user document exists
-    if (!userDoc.exists) return null;
+      if (!userDocument.exists) {
+        throw Exception(ErrorMessages.userDataNotFound);
+      }
 
-    return AppUser(
-      uid: firebaseUser.uid,
-      email: firebaseUser.email!,
-      name: userDoc.get(AppUserFields.name),
-      searchableName: userDoc.get(AppUserFields.name).toString().toLowerCase(),
-    );
+      final data = userDocument.data();
+      if (data == null ||
+          !data.containsKey(AppUserFields.name) ||
+          !data.containsKey(AppUserFields.email)) {
+        throw Exception(ErrorMessages.userDataNotFound);
+      }
+
+      final user = AppUser(
+        uid: firebaseUser.uid,
+        email: data[AppUserFields.email] as String,
+        name: data[AppUserFields.name] as String,
+        searchableName: (data[AppUserFields.name] as String).toLowerCase(),
+      );
+
+      return Result.success(user);
+    } on FirebaseAuthException catch (authError) {
+      return Result.errorMessage(
+          FirebaseErrorHandler.getMessage(authError.code));
+    } catch (error) {
+      return Result.error(error);
+    }
   }
 
-  /// Logs out the current user
+  ///  (ƒ) :: Logout
   /// ->
+  /// Logs out the current user by signing out from Firebase.
   @override
   Future<void> logOut() async {
     await firebaseAuth.signOut();
   }
 
+  /// (ƒ) :: Get Saved User | LocalDB
+  /// ->
+  /// Returns the [AppUser] if found, or Error if not
   @override
-  Future<AppUser?> getSavedUser({String key = HiveKeys.loginDataKey}) async {
-    final String loginData = hiveHelper.getValue<String>(key, '');
-    if (loginData.isNotEmpty) {
+  Future<Result<AppUser>> getSavedUser({
+    required String key,
+  }) async {
+    final String? userData = hiveHelper.get<String>(key);
+    if (userData != null && userData.isNotEmpty) {
       try {
-        return AppUser.fromJsonString(loginData);
-      } catch (e) {
-        Logger.logError(e.toString());
+        final user = AppUser.fromJsonString(userData);
+        return Result.success(user);
+      } catch (error) {
+        return Result.errorMessage(error.toString());
       }
     }
-    return null;
+    return Result.errorMessage(ErrorMessages.userDataNotFound);
   }
 
+  /// (ƒ) :: Save User To Local Storage | LocalDB
+  /// ->
+  /// Saves the [AppUser] to local storage with the specified key
   @override
   Future<void> saveUserToLocalStorage({
     required AppUser user,

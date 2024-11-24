@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:lyxa_live/src/shared/event_handlers/errors/utils/error_type.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_type.dart';
 
 class ErrorAlertState {
   final bool isVisible;

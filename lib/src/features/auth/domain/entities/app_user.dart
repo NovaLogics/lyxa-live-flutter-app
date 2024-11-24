@@ -50,6 +50,15 @@ class AppUser {
     );
   }
 
+  static getDefaultGuestUser() {
+    return AppUser(
+      uid: '',
+      email: 'Guest@lyxa.com',
+      name: 'Guest',
+      searchableName: 'guest',
+    );
+  }
+
   // Returns a string representation of the `AppUser` instance.
   @override
   String toString() {
