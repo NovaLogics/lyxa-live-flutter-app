@@ -72,12 +72,12 @@ class LyxaApp extends StatelessWidget {
 
       // Theme Cubit
       BlocProvider<ThemeCubit>(
-        create: (context) => ThemeCubit(),
+        create: (context) => getIt<ThemeCubit>(),
       ),
 
       // Image Slider Cubit
       BlocProvider<SliderCubit>(
-        create: (context) => SliderCubit(),
+        create: (context) => getIt<SliderCubit>(),
       ),
 
       // Error Cubit

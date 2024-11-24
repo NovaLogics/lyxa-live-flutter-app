@@ -1,7 +1,9 @@
 import 'package:get_it/get_it.dart';
+import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
+import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/data/firebase_post_repository.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
@@ -52,6 +54,10 @@ void setupServiceLocator() {
     postRepository: getIt<FirebasePostRepository>(),
     storageRepository: getIt<FirebaseStorageRepository>(),
   ));
+
+    getIt.registerSingleton<ThemeCubit>(ThemeCubit());
+
+      getIt.registerSingleton<SliderCubit>(SliderCubit());
 
   getIt.registerSingleton<LoadingCubit>(LoadingCubit());
 
