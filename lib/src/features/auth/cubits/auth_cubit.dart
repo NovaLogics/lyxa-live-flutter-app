@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
@@ -43,6 +42,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       case Status.errorMessage:
         emit(AuthError(getError(result.errorMessage)));
+         emit(Unauthenticated());
         break;
 
       case Status.error:
@@ -52,6 +52,7 @@ class AuthCubit extends Cubit<AuthState> {
             ErrorAlertCubit.hideErrorMessage();
           },
         );
+         emit(Unauthenticated());
         break;
 
       case Status.loading:
@@ -89,6 +90,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       case Status.errorMessage:
         emit(AuthError(getError(result.errorMessage)));
+        emit(Unauthenticated());
         break;
 
       case Status.error:
@@ -98,6 +100,7 @@ class AuthCubit extends Cubit<AuthState> {
             ErrorAlertCubit.hideErrorMessage();
           },
         );
+        emit(Unauthenticated());
         break;
 
       case Status.loading:
@@ -137,6 +140,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       case Status.errorMessage:
         emit(AuthError(getError(result.errorMessage)));
+        emit(Unauthenticated());
         break;
 
       case Status.error:
@@ -146,6 +150,7 @@ class AuthCubit extends Cubit<AuthState> {
             ErrorAlertCubit.hideErrorMessage();
           },
         );
+        emit(Unauthenticated());
         break;
 
       case Status.loading:
@@ -181,8 +186,8 @@ class AuthCubit extends Cubit<AuthState> {
   ///
   /// Saves the [AppUser] to local storage with the specified key
   Future<void> saveUserToLocalStorage({
+    required String key,
     required AppUser user,
-    String key = HiveKeys.loginDataKey,
   }) async {
     await _authRepository.saveUserToLocalStorage(user: user, key: key);
   }
