@@ -19,17 +19,18 @@ class CenterLoadingUnit extends StatelessWidget {
       builder: (context, state) {
         return state.isVisible
             ? Scaffold(
-                backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.6),
+                backgroundColor:
+                    Theme.of(context).colorScheme.surface.withOpacity(0.6),
                 body: Center(
                   child: Card(
                     color: Theme.of(context).colorScheme.surface,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppDimens.radiusMD12), 
+                      borderRadius: BorderRadius.circular(AppDimens.radiusMD12),
                     ),
-                    elevation: AppDimens.elevationMD8, 
+                    elevation: AppDimens.elevationMD8,
                     shadowColor: Theme.of(context).colorScheme.primary,
                     child: Padding(
-                      padding: const EdgeInsets.all(AppDimens.size56), 
+                      padding: const EdgeInsets.all(AppDimens.size56),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -37,13 +38,22 @@ class CenterLoadingUnit extends StatelessWidget {
                             color: Theme.of(context).colorScheme.onSecondary,
                           ),
                           const SizedBox(height: AppDimens.size24),
-                          Text(
-                            state.message,
-                            style: TextStyle(
-                              fontSize: AppDimens.fontSizeXL20, 
-                              letterSpacing: AppDimens.letterSpacingPT11, 
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.onSecondary,
+                          SizedBox(
+                            width: AppDimens.size240,
+                            child: Text(
+                              state.message,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: AppDimens.fontSizeXL20,
+                                letterSpacing: AppDimens.letterSpacingPT11,
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary,
+                              ),
+                              maxLines: null, // Allows unlimited lines
+                              overflow: TextOverflow
+                                  .visible, // Ensures the text remains visible
+                              softWrap: true, // Wraps the text within the width
                             ),
                           ),
                         ],
@@ -52,7 +62,8 @@ class CenterLoadingUnit extends StatelessWidget {
                   ),
                 ),
               )
-            : const SizedBox.shrink(); // Return an empty widget when not visible
+            : const SizedBox
+                .shrink(); // Return an empty widget when not visible
       },
     );
   }
