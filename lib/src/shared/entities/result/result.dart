@@ -20,7 +20,7 @@ class Result<T> {
   });
 
   /// Factory constructor for success state
-  factory Result.success(T data) {
+  factory Result.success({required T data}) {
     return Result._(data: data, status: Status.success);
   }
 
@@ -44,7 +44,7 @@ class Result<T> {
   //   return const Result._(status: Status.loading);
   // }
 
-  bool isDataNotEmpty() {
+  bool isDataNotNull() {
     return (data != null && data is T);
   }
 
@@ -57,7 +57,6 @@ class Result<T> {
   }
 
   String getFirebaseError() {
-    return error?.firebaseError?.message ??
-        ErrorMessages.unexpectedError;
+    return error?.firebaseError?.message ?? ErrorMessages.unexpectedError;
   }
 }
