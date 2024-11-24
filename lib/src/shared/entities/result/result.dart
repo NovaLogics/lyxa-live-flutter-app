@@ -66,7 +66,21 @@ class Result<T> {
     return error?.isFirebaseError ?? false;
   }
 
-  String getFirebaseError() {
+  String getFirebaseAlert() {
     return error?.firebaseError?.message ?? ErrorMessages.unexpectedError;
+  }
+
+  String getMessageErrorAlert() {
+    return error?.messageError?.message ?? ErrorMessages.unexpectedError;
+  }
+
+  String getGenericErrorAlert() {
+    if (error?.genericError?.message != null) {
+      return error?.genericError?.message?.toString() ??
+          ErrorMessages.unexpectedError;
+    } else {
+      return error?.genericError?.error.toString() ??
+          ErrorMessages.unexpectedError;
+    }
   }
 }
