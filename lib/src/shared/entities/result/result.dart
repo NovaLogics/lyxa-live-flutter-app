@@ -1,25 +1,38 @@
+import 'package:lyxa_live/src/shared/entities/result/errors/error_wrapper.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
+
+enum Status { success, error, loading }
+
 class Result<T> {
   final T? data;
   final Status status;
-  final Object? error;
-  final String? errorMessage;
+  final ErrorWrapper? error;
 
-  const Result._(
-      {this.data, required this.status, this.error, this.errorMessage});
+  const Result._({
+    this.data,
+    required this.status,
+    this.error,
+  });
 
   /// Factory constructor for success state
   factory Result.success(T data) {
     return Result._(data: data, status: Status.success);
   }
 
-  /// Factory constructor for error state
+  /// Factory constructor for error state with generic or firebase error
   factory Result.error(Object error) {
-    return Result._(status: Status.error, error: error);
-  }
+    ErrorWrapper errorWrapper;
 
-  /// Factory constructor for error Message state
-  factory Result.errorMessage(String errorMessage) {
-    return Result._(status: Status.errorMessage, errorMessage: errorMessage);
+    if (error is FirebaseError) {
+      errorWrapper = ErrorWrapper(firebaseError: error);
+    } else if (error is GenericError) {
+      errorWrapper = ErrorWrapper(genericError: error);
+    } else {
+      errorWrapper = ErrorWrapper(genericError: GenericError(error: error));
+    }
+
+    return Result._(status: Status.error, error: errorWrapper);
   }
 
   /// Factory constructor for loading state
@@ -31,6 +44,3 @@ class Result<T> {
     return (data != null && data is T);
   }
 }
-
-/// Enum to represent the state of the result
-enum Status { loading, success, error, errorMessage }
