@@ -8,7 +8,6 @@ import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 class PostCubit extends Cubit<PostState> {
   final PostRepository _postRepository;
@@ -24,15 +23,15 @@ class PostCubit extends Cubit<PostState> {
   Future<void> getAllPosts() async {
     emit(PostLoading());
 
-    final result = await _postRepository.getAllPosts();
+    final getPostsResult = await _postRepository.getAllPosts();
 
-    switch (result.status) {
+    switch (getPostsResult.status) {
       case Status.success:
-        emit(PostLoaded(result.data ?? List.empty()));
+        emit(PostLoaded(getPostsResult.data ?? List.empty()));
         break;
 
       case Status.error:
-        _handleErrors(result: result);
+        _handleErrors(result: getPostsResult);
         break;
     }
   }
@@ -41,27 +40,30 @@ class PostCubit extends Cubit<PostState> {
     required Post post,
     Uint8List? imageBytes,
   }) async {
-    try {
-      emit(PostUploading());
+    emit(PostUploading());
 
-      final imageUrl =
-          await _storageRepository.uploadPostImageWeb(imageBytes, post.id);
+    final imageUploadResult = await _storageRepository.uploadPostImage(
+      imageFileBytes: imageBytes,
+      fileName: post.id,
+    );
 
-      final updatedPost = post.copyWith(imageUrl: imageUrl);
+    if (imageUploadResult.status == Status.error) {
+      _handleErrors(result: imageUploadResult);
+      return;
+    }
 
-      final result = await _postRepository.addPost(newPost: updatedPost);
+    final updatedPost = post.copyWith(imageUrl: imageUploadResult.data);
 
-      switch (result.status) {
-        case Status.success:
-          getAllPosts();
-          break;
+    final postUploadResult = await _postRepository.addPost(newPost: updatedPost);
 
-        case Status.error:
-          _handleErrors(result: result);
-          break;
-      }
-    } catch (error) {
-      emit(PostError(ErrorMsgs.postCreationError));
+    switch (postUploadResult.status) {
+      case Status.success:
+        getAllPosts();
+        break;
+
+      case Status.error:
+        _handleErrors(result: postUploadResult);
+        break;
     }
   }
 
@@ -102,7 +104,6 @@ class PostCubit extends Cubit<PostState> {
     }
   }
 
-  // Add comment to a post
   Future<void> addComment({
     required String postId,
     required Comment comment,
@@ -125,7 +126,6 @@ class PostCubit extends Cubit<PostState> {
     }
   }
 
-  // Delete comment to a post
   Future<void> deleteComment({
     required String postId,
     required String commentId,
@@ -148,7 +148,7 @@ class PostCubit extends Cubit<PostState> {
     }
   }
 
-  //-> Utils ->
+  // HELPER FUNCTIONS ▼
 
   void _handleErrors({required Result result, String? prefixMessage}) {
     // FIREBASE ERROR

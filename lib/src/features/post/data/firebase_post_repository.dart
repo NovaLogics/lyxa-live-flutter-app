@@ -160,7 +160,7 @@ class FirebasePostRepository implements PostRepository {
     }
   }
 
-  //-> Utils ->
+  // HELPER FUNCTIONS ▼
 
   Future<Post> _getPostById(String postId) async {
     final postDoc = await _postsCollectionRef.doc(postId).get();
