@@ -37,6 +37,11 @@ class Post {
     required this.comments,
   });
 
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
   Post copyWith({String? imageUrl}) {
     return Post(
       id: id,
@@ -51,38 +56,35 @@ class Post {
     );
   }
 
-  //Convert Post -> json
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'userId': userId,
-      'userName': userName,
-      'userProfileImageUrl': userProfileImageUrl,
-      'text': text,
-      'imageUrl': imageUrl,
-      'timestamp': Timestamp.fromDate(timestamp),
-      'likes': likes,
-      'comments': comments.map((comment) => comment.toJson()).toList(),
+      PostFields.id: id,
+      PostFields.userId: userId,
+      PostFields.userName: userName,
+      PostFields.userProfileImageUrl: userProfileImageUrl,
+      PostFields.text: text,
+      PostFields.imageUrl: imageUrl,
+      PostFields.timestamp: Timestamp.fromDate(timestamp),
+      PostFields.likes: likes,
+      PostFields.comments: comments.map((comment) => comment.toJson()).toList(),
     };
   }
 
-  //Convert json -> Post
   factory Post.fromJson(Map<String, dynamic> json) {
-    // Prepare comments
-    final List<Comment> comments = (json['comments'] as List<dynamic>?)
+    final List<Comment> comments = (json[PostFields.comments] as List<dynamic>?)
             ?.map((commentJson) => Comment.fromJson(commentJson))
             .toList() ??
         [];
 
     return Post(
-      id: json['id'],
-      userId: json['userId'],
-      userName: json['userName'],
-      userProfileImageUrl: json['userProfileImageUrl'],
-      text: json['text'],
-      imageUrl: json['imageUrl'],
-      timestamp: (json['timestamp'] as Timestamp).toDate(),
-      likes: List<String>.from(json['likes'] ?? []),
+      id: json[PostFields.id],
+      userId: json[PostFields.userId],
+      userName: json[PostFields.userName],
+      userProfileImageUrl: json[PostFields.userProfileImageUrl],
+      text: json[PostFields.text],
+      imageUrl: json[PostFields.imageUrl],
+      timestamp: (json[PostFields.timestamp] as Timestamp).toDate(),
+      likes: List<String>.from(json[PostFields.likes] ?? []),
       comments: comments,
     );
   }
