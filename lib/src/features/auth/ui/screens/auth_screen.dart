@@ -8,7 +8,6 @@ import 'package:lyxa_live/src/features/auth/ui/screens/register_screen.dart';
 /// AuthScreen:
 /// -> Displays either the Login or Register page with the ability to toggle between them
 class AuthScreen extends StatefulWidget {
-  
   const AuthScreen({super.key});
 
   @override
@@ -26,16 +25,16 @@ class _AuthScreenState extends State<AuthScreen> {
       backgroundStyle: BackgroundStyle.auth,
       body: _isLoginPage
           ? LoginScreen(
-              onToggle: _toggleAuthenticationPage,
+              onToggleScreen: _toggleAuthScreen,
             )
           : RegisterScreen(
-              onToggle: _toggleAuthenticationPage,
+              onToggle: _toggleAuthScreen,
             ),
     );
   }
 
   /// Toggles between the login and register pages
-  void _toggleAuthenticationPage() {
+  void _toggleAuthScreen() {
     setState(() {
       _isLoginPage = !_isLoginPage;
     });

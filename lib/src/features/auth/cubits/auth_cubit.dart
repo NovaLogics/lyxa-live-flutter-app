@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/utils/hive_helper.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
@@ -114,6 +116,16 @@ class AuthCubit extends Cubit<AuthState> {
       storageKey: storageKey,
       user: user,
     );
+  }
+
+  Future<AppUser> getSavedLoginUser() async {
+    final savedUser = await getSavedUser(
+      storageKey: HiveKeys.loginDataKey,
+    );
+    if (savedUser == null) AppUser.createWith();
+
+    Logger.logDebug(savedUser.toString());
+    return savedUser as AppUser;
   }
 
   //-> HELPER FUNCTIONS ->
