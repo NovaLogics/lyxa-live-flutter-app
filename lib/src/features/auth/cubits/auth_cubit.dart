@@ -7,7 +7,8 @@ import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
-/// AuthCubit: Handles authentication state management
+/// AUTH CUBIT: 
+/// Handles authentication state management
 /// ->
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _authRepository;
@@ -17,46 +18,25 @@ class AuthCubit extends Cubit<AuthState> {
       : _authRepository = authRepository,
         super(AuthInitial());
 
-  /// Retrieves the current authenticated user.
   AppUser? get currentUser => _currentUser;
 
-  /// (ƒ) :: Check Authentication
-  ///
-  /// Emits [Authenticated] if a user is found, otherwise [Unauthenticated].
   Future<void> checkAuthentication() async {
-    final result = await _authRepository.getCurrentUser();
+    final currentUserResult = await _authRepository.getCurrentUser();
 
-    switch (result.status) {
+    switch (currentUserResult.status) {
       case Status.success:
-        if (result.isDataNotNull()) {
-          _currentUser = result.data as AppUser;
+        final user = currentUserResult.data;
+
+        if (user != null) {
+          _currentUser = user;
           emit(Authenticated(_currentUser));
         } else {
-          // No user logged in
           emit(Unauthenticated());
         }
         break;
 
       case Status.error:
-        // FIREBASE ERROR
-        if (result.isFirebaseError()) {
-          emit(AuthError(result.getFirebaseAlert()));
-        }
-        // GENERIC ERROR
-        else if (result.isGenericError()) {
-          ErrorHandler.handleError(
-            result.getGenericErrorData(),
-            onRetry: () {},
-          );
-        }
-        // KNOWN ERRORS
-        else if (result.isMessageError()) {
-          ErrorHandler.handleError(
-            null,
-            customMessage: result.getMessageErrorAlert(),
-            onRetry: () {},
-          );
-        }
+        _handleErrors(result: currentUserResult);
         emit(Unauthenticated());
         break;
     }
@@ -201,5 +181,30 @@ class AuthCubit extends Cubit<AuthState> {
     required AppUser user,
   }) async {
     await _authRepository.saveUserToLocalStorage(user: user, key: key);
+  }
+
+  //-> HELPER FUNCTIONS ->
+
+  void _handleErrors({required Result result, String? prefixMessage}) {
+    // FIREBASE ERROR
+    if (result.isFirebaseError()) {
+      emit(AuthError(result.getFirebaseAlert()));
+    }
+    // GENERIC ERROR
+    else if (result.isGenericError()) {
+      ErrorHandler.handleError(
+        result.getGenericErrorData(),
+        prefixMessage: prefixMessage,
+        onRetry: () {},
+      );
+    }
+    // KNOWN ERRORS
+    else if (result.isMessageError()) {
+      ErrorHandler.handleError(
+        null,
+        customMessage: result.getMessageErrorAlert(),
+        onRetry: () {},
+      );
+    }
   }
 }
