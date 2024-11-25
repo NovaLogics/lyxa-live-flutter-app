@@ -117,11 +117,9 @@ class FirebaseAuthRepository implements AuthRepository {
       if (userData == null || userData.isEmpty) {
         return Result.error(ErrorMsgs.userDataNotFound);
       }
-
-      final user = AppUser.fromJsonString(userData);
-
+      
       return Result.success(
-        data: user,
+        data: AppUser.fromJsonString(userData),
       );
     } catch (error) {
       return Result.error(GenericError(error: error));

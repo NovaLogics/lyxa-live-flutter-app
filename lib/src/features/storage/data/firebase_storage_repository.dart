@@ -48,15 +48,15 @@ class FirebaseStorageRepository implements StorageRepository {
         folder: STORAGE_PATH_PROFILE_IMAGES,
       );
 
-      return Result.success(
-        data: downloadUrl,
-      );
+      return Result.success(data: downloadUrl);
     } on FirebaseException catch (error) {
       return Result.error(FirebaseError(error));
     } catch (error) {
       return Result.error(GenericError(error: error));
     }
   }
+
+  //•▼ LEGACY CODE ▼•
 
   // Profile Pictures
   //-> upload profile pictures to storage
@@ -66,12 +66,17 @@ class FirebaseStorageRepository implements StorageRepository {
   }
 
   @override
-  Future<String?> uploadProfileImageWeb(Uint8List fileBytes, String fileName) {
-    return _uploadFileBytes(
-      fileBytes: fileBytes,
-      fileName: fileName,
-      folder: STORAGE_PATH_PROFILE_IMAGES,
-    );
+  Future<String?> uploadProfileImageWeb(
+      Uint8List fileBytes, String fileName) async {
+    try {
+      return _uploadFileBytes(
+        fileBytes: fileBytes,
+        fileName: fileName,
+        folder: STORAGE_PATH_PROFILE_IMAGES,
+      );
+    } catch (error) {
+      return null;
+    }
   }
 
   // Post Pictures
@@ -82,12 +87,17 @@ class FirebaseStorageRepository implements StorageRepository {
   }
 
   @override
-  Future<String?> uploadPostImageWeb(Uint8List fileBytes, String fileName) {
-    return _uploadFileBytes(
-      fileBytes: fileBytes,
-      fileName: fileName,
-      folder: STORAGE_PATH_POST_IMAGES,
-    );
+  Future<String?> uploadPostImageWeb(
+      Uint8List fileBytes, String fileName) async {
+    try {
+      return _uploadFileBytes(
+        fileBytes: fileBytes,
+        fileName: fileName,
+        folder: STORAGE_PATH_POST_IMAGES,
+      );
+    } catch (error) {
+      return null;
+    }
   }
 
   // Helper Methods
