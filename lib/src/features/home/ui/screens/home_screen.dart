@@ -29,7 +29,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final PostCubit _postCubit;
   late final AppUser _currentAppUser;
-  ProfileUser? _profileUser;
+  late ProfileUser _profileUser;
 
   @override
   void initState() {

@@ -27,7 +27,7 @@ import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class UploadPostScreen extends StatefulWidget {
-  final ProfileUser? profileUser;
+  final ProfileUser profileUser;
 
   const UploadPostScreen({
     super.key,
@@ -40,7 +40,16 @@ class UploadPostScreen extends StatefulWidget {
 
 class _UploadPostScreenState extends State<UploadPostScreen> {
   final TextEditingController _captionController = TextEditingController();
+  late final PostCubit _postCubit;
   Uint8List? _selectedImage;
+
+  ProfileUser get profileUser => widget.profileUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _postCubit = getIt<PostCubit>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +84,11 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         );
       },
       listener: (context, state) {
-        if (state is PostLoading || state is PostUploading) {
+        if (state is PostLoading) {
           return LoadingCubit.showLoading(message: AppStrings.loadingMessage);
+        }
+        if (state is PostUploading) {
+          return LoadingCubit.showLoading(message: AppStrings.uploading);
         } else if (state is PostLoaded) {
           Navigator.pop(context);
         }
@@ -164,34 +176,33 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 
-  /// Handles post creation and upload
   void _createAndUploadPost() {
-    final caption = _captionController.text.trim();
+    final captionText = _captionController.text.trim();
 
-    if (_selectedImage == null || caption.isEmpty) {
-      ToastMessengerUnit.showToast(
+    if (_selectedImage == null || captionText.isEmpty) {
+      ToastMessengerUnit.showErrorToast(
         context: context,
         message: AppStrings.errorImageAndCaptionRequired,
-        icon: Icons.error,
-        backgroundColor: AppColors.bluePurple900L1,
-        textColor: AppColors.whiteShade,
       );
       return;
     }
 
     final post = Post(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
-      userId: widget.profileUser!.uid,
-      userName: widget.profileUser!.name,
-      userProfileImageUrl: widget.profileUser!.profileImageUrl,
-      text: caption,
+      userId: profileUser.uid,
+      userName: profileUser.name,
+      userProfileImageUrl: profileUser.profileImageUrl,
+      captionText: captionText,
       imageUrl: '',
       timestamp: DateTime.now(),
       likes: [],
       comments: [],
     );
 
-    context.read<PostCubit>().addPost(post: post, imageBytes: _selectedImage);
+    _postCubit.addPost(
+      post: post,
+      imageBytes: _selectedImage,
+    );
   }
 
   Widget _buildLoadingScreen() {
@@ -263,7 +274,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
   Widget _buildCaptionInput() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingLG24),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

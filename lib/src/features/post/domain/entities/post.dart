@@ -6,7 +6,7 @@ class PostFields {
   static const String userId = 'userId';
   static const String userName = 'userName';
   static const String userProfileImageUrl = 'userProfileImageUrl';
-  static const String text = 'text';
+  static const String captionText = 'captionText';
   static const String imageUrl = 'imageUrl';
   static const String timestamp = 'timestamp';
   static const String likes = 'likes';
@@ -18,7 +18,7 @@ class Post {
   final String userId;
   final String userName;
   final String userProfileImageUrl;
-  final String text;
+  final String captionText;
   final String imageUrl;
   final DateTime timestamp;
 
@@ -30,7 +30,7 @@ class Post {
     required this.userId,
     required this.userName,
     required this.userProfileImageUrl,
-    required this.text,
+    required this.captionText,
     required this.imageUrl,
     required this.timestamp,
     required this.likes,
@@ -48,7 +48,7 @@ class Post {
       userId: userId,
       userName: userName,
       userProfileImageUrl: userProfileImageUrl,
-      text: text,
+      captionText: captionText,
       imageUrl: imageUrl ?? this.imageUrl,
       timestamp: timestamp,
       likes: likes,
@@ -62,7 +62,7 @@ class Post {
       PostFields.userId: userId,
       PostFields.userName: userName,
       PostFields.userProfileImageUrl: userProfileImageUrl,
-      PostFields.text: text,
+      PostFields.captionText: captionText,
       PostFields.imageUrl: imageUrl,
       PostFields.timestamp: Timestamp.fromDate(timestamp),
       PostFields.likes: likes,
@@ -81,7 +81,7 @@ class Post {
       userId: json[PostFields.userId],
       userName: json[PostFields.userName],
       userProfileImageUrl: json[PostFields.userProfileImageUrl],
-      text: json[PostFields.text],
+      captionText: json[PostFields.captionText],
       imageUrl: json[PostFields.imageUrl],
       timestamp: (json[PostFields.timestamp] as Timestamp).toDate(),
       likes: List<String>.from(json[PostFields.likes] ?? []),
