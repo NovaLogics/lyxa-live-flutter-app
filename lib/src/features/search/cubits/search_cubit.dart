@@ -1,11 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/features/search/domain/search_repository.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_state.dart';
+import 'package:lyxa_live/src/shared/entities/result/result.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  final SearchRepository searchRepository;
+  static const String debugTag = 'SearchCubit';
+  final SearchRepository _searchRepository;
 
-  SearchCubit({required this.searchRepository}) : super(SearchInitial());
+  SearchCubit({required SearchRepository searchRepository})
+      : _searchRepository = searchRepository,
+        super(SearchInitial());
 
   Future<void> searchUsers(String query) async {
     if (query.isEmpty) {
@@ -13,12 +18,45 @@ class SearchCubit extends Cubit<SearchState> {
       return;
     }
 
-    try {
-      emit(SearchLoading());
-      final users = await searchRepository.searchUsers(query);
-      emit(SearchLoaded(users.data ?? []));
-    } catch (error) {
-         emit(SearchError('Error fetch search results'));
+    final userSearchResult = await _searchRepository.searchUsers(query);
+
+    switch (userSearchResult.status) {
+      case Status.success:
+        emit(SearchLoaded(userSearchResult.data ?? []));
+        break;
+
+      case Status.error:
+        _handleErrors(
+          result: userSearchResult,
+          tag: '$debugTag: searchUsers()',
+        );
+        break;
+    }
+  }
+
+  void _handleErrors(
+      {required Result result, String? prefixMessage, String? tag}) {
+    // FIREBASE ERROR
+    if (result.isFirebaseError()) {
+      emit(SearchError(result.getFirebaseAlert()));
+    }
+    // GENERIC ERROR
+    else if (result.isGenericError()) {
+      ErrorHandler.handleError(
+        result.getGenericErrorData(),
+        prefixMessage: prefixMessage,
+        tag: tag ?? debugTag,
+        onRetry: () {},
+      );
+    }
+    // KNOWN ERRORS
+    else if (result.isMessageError()) {
+      ErrorHandler.handleError(
+        null,
+        tag: tag ?? debugTag,
+        customMessage: result.getMessageErrorAlert(),
+        onRetry: () {},
+      );
     }
   }
 }
