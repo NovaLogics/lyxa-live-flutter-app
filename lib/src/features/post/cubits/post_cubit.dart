@@ -15,6 +15,7 @@ import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 
 class PostCubit extends Cubit<PostState> {
+  static const String debugTag = 'PostCubit';
   final PostRepository _postRepository;
   final StorageRepository _storageRepository;
 
@@ -36,7 +37,10 @@ class PostCubit extends Cubit<PostState> {
         break;
 
       case Status.error:
-        _handleErrors(result: getPostsResult);
+        _handleErrors(
+          result: getPostsResult,
+          tag: '$debugTag: getAllPosts()',
+        );
         break;
     }
   }
@@ -53,7 +57,10 @@ class PostCubit extends Cubit<PostState> {
     );
 
     if (imageUploadResult.status == Status.error) {
-      _handleErrors(result: imageUploadResult);
+      _handleErrors(
+        result: imageUploadResult,
+        tag: '$debugTag: addPost()::imageUploadResult',
+      );
       return;
     }
 
@@ -68,7 +75,10 @@ class PostCubit extends Cubit<PostState> {
         break;
 
       case Status.error:
-        _handleErrors(result: postUploadResult);
+        _handleErrors(
+          result: postUploadResult,
+          tag: '$debugTag: addPost()::postUploadResult',
+        );
         break;
     }
   }
@@ -83,7 +93,8 @@ class PostCubit extends Cubit<PostState> {
         break;
 
       case Status.error:
-        _handleErrors(result: result);
+        _handleErrors(result: result,
+          tag: '$debugTag: deletePost()',);
         break;
     }
   }
@@ -105,6 +116,7 @@ class PostCubit extends Cubit<PostState> {
         _handleErrors(
           result: result,
           prefixMessage: 'Failed to toggle like',
+          tag: '$debugTag: toggleLikePost()',
         );
         break;
     }
@@ -127,6 +139,7 @@ class PostCubit extends Cubit<PostState> {
         _handleErrors(
           result: result,
           prefixMessage: 'Failed to add comment',
+          tag: '$debugTag: addComment()',
         );
         break;
     }
@@ -149,6 +162,7 @@ class PostCubit extends Cubit<PostState> {
         _handleErrors(
           result: result,
           prefixMessage: 'Failed to delete the comment',
+          tag: '$debugTag: deleteComment()',
         );
         break;
     }
@@ -182,7 +196,8 @@ class PostCubit extends Cubit<PostState> {
 
   // HELPER FUNCTIONS ▼
 
-  void _handleErrors({required Result result, String? prefixMessage}) {
+  void _handleErrors(
+      {required Result result, String? prefixMessage, String? tag}) {
     // FIREBASE ERROR
     if (result.isFirebaseError()) {
       emit(PostError(result.getFirebaseAlert()));
@@ -192,6 +207,7 @@ class PostCubit extends Cubit<PostState> {
       ErrorHandler.handleError(
         result.getGenericErrorData(),
         prefixMessage: prefixMessage,
+        tag: tag,
         onRetry: () {},
       );
     }
@@ -199,6 +215,7 @@ class PostCubit extends Cubit<PostState> {
     else if (result.isMessageError()) {
       ErrorHandler.handleError(
         null,
+        tag: tag,
         customMessage: result.getMessageErrorAlert(),
         onRetry: () {},
       );

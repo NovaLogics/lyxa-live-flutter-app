@@ -100,12 +100,12 @@ class Post {
         List.empty();
 
     return Post(
-      id: json[PostFields.id],
-      userId: json[PostFields.userId],
-      userName: json[PostFields.userName],
-      userProfileImageUrl: json[PostFields.userProfileImageUrl],
-      captionText: json[PostFields.captionText],
-      imageUrl: json[PostFields.imageUrl],
+      id: json[PostFields.id] ?? '',
+      userId: json[PostFields.userId] ?? '',
+      userName: json[PostFields.userName] ?? '',
+      userProfileImageUrl: json[PostFields.userProfileImageUrl] ?? '',
+      captionText: json[PostFields.captionText] ?? json['text'] ?? '',
+      imageUrl: json[PostFields.imageUrl] ?? '',
       timestamp: (json[PostFields.timestamp] as Timestamp).toDate(),
       likes: List<String>.from(json[PostFields.likes] ?? []),
       comments: comments,

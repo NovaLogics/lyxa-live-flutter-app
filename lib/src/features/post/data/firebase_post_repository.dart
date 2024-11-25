@@ -19,10 +19,10 @@ class FirebasePostRepository implements PostRepository {
           .orderBy(PostFields.timestamp, descending: true)
           .get();
 
-      final List<Post> allPosts = _mapSnapshotToPosts(postSnapshot);
+      final List<Post>? allPosts = _mapSnapshotToPosts(postSnapshot);
 
       return Result.success(
-        data: allPosts,
+        data: allPosts ?? List.empty(),
       );
     } on FirebaseException catch (error) {
       return Result.error(FirebaseError(error));
@@ -40,10 +40,10 @@ class FirebasePostRepository implements PostRepository {
           .where(PostFields.userId, isEqualTo: userId)
           .get();
 
-      final List<Post> userPosts = _mapSnapshotToPosts(postSnapshot);
+      final List<Post>? userPosts = _mapSnapshotToPosts(postSnapshot);
 
       return Result.success(
-        data: userPosts,
+        data: userPosts ?? List.empty(),
       );
     } on FirebaseException catch (error) {
       return Result.error(FirebaseError(error));
@@ -171,10 +171,10 @@ class FirebasePostRepository implements PostRepository {
     return Post.fromJson(postDoc.data() as Map<String, dynamic>);
   }
 
-  List<Post> _mapSnapshotToPosts(QuerySnapshot postSnapshot) {
-    return postSnapshot.docs.map((document) {
-      final data = document.data() as Map<String, dynamic>;
-      return Post.fromJson(data);
-    }).toList();
+  List<Post>? _mapSnapshotToPosts(QuerySnapshot postSnapshot) {
+    return postSnapshot.docs
+        .map((document) =>
+            Post.fromJson(document.data() as Map<String, dynamic>))
+        .toList();
   }
 }
