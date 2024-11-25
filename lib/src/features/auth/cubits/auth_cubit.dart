@@ -118,9 +118,11 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  Future<AppUser> getSavedLoginUser() async {
+  Future<AppUser> getSavedUserOrDefault({
+    required String storageKey,
+  }) async {
     final savedUser = await getSavedUser(
-      storageKey: HiveKeys.loginDataKey,
+      storageKey: storageKey,
     );
     if (savedUser == null) AppUser.createWith();
 

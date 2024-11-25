@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _authCubit = getIt<AuthCubit>();
-    _initializeEmailField();
+    _initFields();
   }
 
   @override
@@ -74,8 +74,10 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _initializeEmailField() async {
-    final savedUser = await _authCubit.getSavedLoginUser();
+  void _initFields() async {
+    final savedUser = await _authCubit.getSavedUserOrDefault(
+      storageKey: HiveKeys.loginDataKey,
+    );
     _emailController.text = savedUser.email;
   }
 
