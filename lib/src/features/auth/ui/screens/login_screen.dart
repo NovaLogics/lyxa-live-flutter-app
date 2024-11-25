@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _initializeEmailField() async {
     final savedUser = await _authCubit.getSavedUser(
-      key: HiveKeys.loginDataKey,
+      storageKey: HiveKeys.loginDataKey,
     );
     if (savedUser == null) return;
 
@@ -99,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final String password = _passwordController.text.trim();
 
     _authCubit.saveUserToLocalStorage(
-      key: HiveKeys.loginDataKey,
+      storageKey: HiveKeys.loginDataKey,
       user: AppUser.createWith(email: email),
     );
     _authCubit.login(email, password);
@@ -175,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
               widget.onToggle?.call();
 
               _authCubit.saveUserToLocalStorage(
-                key: HiveKeys.loginDataKey,
+                storageKey: HiveKeys.loginDataKey,
                 user: AppUser.createWith(email: _emailController.text.trim()),
               );
             },

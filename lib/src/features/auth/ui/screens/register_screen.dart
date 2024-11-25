@@ -91,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _initializeFields() async {
     final savedUser = await _authCubit.getSavedUser(
-      key: HiveKeys.signUpDataKey,
+      storageKey: HiveKeys.signUpDataKey,
     );
     if (savedUser == null) return;
 
@@ -109,7 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     try {
       _authCubit.saveUserToLocalStorage(
-        key: HiveKeys.signUpDataKey,
+        storageKey: HiveKeys.signUpDataKey,
         user: AppUser.createWith(name: name, email: email),
       );
       _authCubit.register(name, email, password);
@@ -226,7 +226,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               widget.onToggle?.call();
 
               _authCubit.saveUserToLocalStorage(
-                key: HiveKeys.signUpDataKey,
+                storageKey: HiveKeys.signUpDataKey,
                 user: AppUser.createWith(
                   name: _nameController.text.trim(),
                   email: _emailController.text.trim(),

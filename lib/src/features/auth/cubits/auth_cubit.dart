@@ -114,26 +114,28 @@ class AuthCubit extends Cubit<AuthState> {
     emit(Unauthenticated());
   }
 
-
   Future<AppUser?> getSavedUser({
-    required String key,
+    required String storageKey,
   }) async {
-    final savedUserResult = await _authRepository.getSavedUser(key: key);
+    final savedUserResult =
+        await _authRepository.getSavedUser(storageKey: storageKey);
 
-    if (savedUserResult.status == Status.success 
-    && savedUserResult.isDataNotNull()) {
+    if (savedUserResult.status == Status.success &&
+        savedUserResult.isDataNotNull()) {
       return savedUserResult.data;
     }
 
     return null;
   }
 
-
   Future<void> saveUserToLocalStorage({
-    required String key,
+    required String storageKey,
     required AppUser user,
   }) async {
-    await _authRepository.saveUserToLocalStorage(user: user, key: key);
+    await _authRepository.saveUserToLocalStorage(
+      storageKey: storageKey,
+      user: user,
+    );
   }
 
   //-> HELPER FUNCTIONS ->
