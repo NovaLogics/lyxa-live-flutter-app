@@ -1,5 +1,17 @@
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 
+class ProfileUserFields {
+  static const String uid = 'uid';
+  static const String email = 'email';
+  static const String name = 'name';
+  static const String searchableName = 'searchableName';
+  static const String bio = 'bio';
+  static const String profileImageUrl = 'profileImageUrl';
+  static const String followers = 'followers';
+  static const String following = 'following';
+  static const String isPrivate = 'isPrivate';
+}
+
 class ProfileUser extends AppUser {
   final String bio;
   final String profileImageUrl;
@@ -41,19 +53,18 @@ class ProfileUser extends AppUser {
   }
 
   static ProfileUser getDefaultGuestUser() {
-  return ProfileUser(
-    uid: '', 
-    email: '', 
-    name: '', 
-    searchableName: '', 
-    bio: '', 
-    profileImageUrl: '', 
-    followers: [], 
-    following: [], 
-    isPrivate: false,
-  );
-}
-
+    return ProfileUser(
+      uid: '',
+      email: '',
+      name: '',
+      searchableName: '',
+      bio: '',
+      profileImageUrl: '',
+      followers: [],
+      following: [],
+      isPrivate: false,
+    );
+  }
 
   //Convert ProfileUser -> json
   @override
