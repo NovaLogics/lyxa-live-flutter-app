@@ -1,6 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
@@ -54,7 +59,8 @@ class PostCubit extends Cubit<PostState> {
 
     final updatedPost = post.copyWith(imageUrl: imageUploadResult.data);
 
-    final postUploadResult = await _postRepository.addPost(newPost: updatedPost);
+    final postUploadResult =
+        await _postRepository.addPost(newPost: updatedPost);
 
     switch (postUploadResult.status) {
       case Status.success:
@@ -148,6 +154,32 @@ class PostCubit extends Cubit<PostState> {
     }
   }
 
+  Future<Uint8List?> getProcessedImage({
+    required FilePickerResult? pickedFile,
+    required bool isWebPlatform,
+  }) async {
+    if (pickedFile == null) return null;
+
+    if (isWebPlatform) {
+      // WEB
+      return pickedFile.files.single.bytes;
+    } else {
+      // MOBILE
+      final filePath = pickedFile.files.single.path!;
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: filePath,
+        compressFormat: ImageCompressFormat.jpg,
+        uiSettings: _getImageCropperSettings(),
+      );
+
+      if (croppedFile == null) return null;
+
+      final compressedImage = await _compressImage(croppedFile.path);
+
+      return compressedImage;
+    }
+  }
+
   // HELPER FUNCTIONS ▼
 
   void _handleErrors({required Result result, String? prefixMessage}) {
@@ -171,5 +203,40 @@ class PostCubit extends Cubit<PostState> {
         onRetry: () {},
       );
     }
+  }
+
+  /// Returns platform specific image cropper settings
+  List<PlatformUiSettings> _getImageCropperSettings() {
+    return [
+      AndroidUiSettings(
+        toolbarTitle: AppStrings.cropperTitle,
+        toolbarColor: Colors.deepPurple,
+        toolbarWidgetColor: Colors.white,
+        lockAspectRatio: true,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio4x3,
+        ],
+      ),
+      IOSUiSettings(
+        title: AppStrings.cropperTitle,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio4x3,
+        ],
+      ),
+    ];
+  }
+
+  /// Compresses image to reduce size
+  Future<Uint8List?> _compressImage(String filePath) async {
+    return await FlutterImageCompress.compressWithFile(
+      filePath,
+      minWidth: 800,
+      minHeight: 800,
+      quality: 90,
+    );
   }
 }

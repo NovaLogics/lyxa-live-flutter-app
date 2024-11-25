@@ -21,9 +21,8 @@ class Post {
   final String captionText;
   final String imageUrl;
   final DateTime timestamp;
-
-  final List<String> likes; // Store uIds
-  final List<Comment> comments; // Store comment objects
+  final List<String> likes;
+  final List<Comment> comments;
 
   Post({
     required this.id,
@@ -42,17 +41,41 @@ class Post {
     return toJson().toString();
   }
 
-  Post copyWith({String? imageUrl}) {
+  static Post getDefault() {
     return Post(
-      id: id,
-      userId: userId,
-      userName: userName,
-      userProfileImageUrl: userProfileImageUrl,
-      captionText: captionText,
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      userId: '',
+      userName: '',
+      userProfileImageUrl: '',
+      captionText: '',
+      imageUrl: '',
+      timestamp: DateTime.now(),
+      likes: List.empty(),
+      comments: List.empty(),
+    );
+  }
+
+  Post copyWith({
+    String? id,
+    String? userId,
+    String? userName,
+    String? userProfileImageUrl,
+    String? captionText,
+    String? imageUrl,
+    DateTime? timestamp,
+    List<String>? likes,
+    List<Comment>? comments,
+  }) {
+    return Post(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      userName: userName ?? this.userName,
+      userProfileImageUrl: userProfileImageUrl ?? this.userProfileImageUrl,
+      captionText: captionText ?? this.captionText,
       imageUrl: imageUrl ?? this.imageUrl,
-      timestamp: timestamp,
-      likes: likes,
-      comments: comments,
+      timestamp: timestamp ?? this.timestamp,
+      likes: likes ?? this.likes,
+      comments: comments ?? this.comments,
     );
   }
 
@@ -74,7 +97,7 @@ class Post {
     final List<Comment> comments = (json[PostFields.comments] as List<dynamic>?)
             ?.map((commentJson) => Comment.fromJson(commentJson))
             .toList() ??
-        [];
+        List.empty();
 
     return Post(
       id: json[PostFields.id],

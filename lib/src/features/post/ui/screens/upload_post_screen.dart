@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
@@ -16,6 +14,8 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/center_loading_unit.dart';
@@ -85,10 +85,14 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       },
       listener: (context, state) {
         if (state is PostLoading) {
-          return LoadingCubit.showLoading(message: AppStrings.loadingMessage);
+          return LoadingCubit.showLoading(
+            message: AppStrings.loadingMessage,
+          );
         }
         if (state is PostUploading) {
-          return LoadingCubit.showLoading(message: AppStrings.uploading);
+          return LoadingCubit.showLoading(
+            message: AppStrings.uploading,
+          );
         } else if (state is PostLoaded) {
           Navigator.pop(context);
         }
@@ -97,7 +101,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 
-  /// Handles image selection, cropping, and compression
   Future<void> _handleImageSelection() async {
     try {
       final pickedFile = await FilePicker.platform.pickFiles(
@@ -105,75 +108,22 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         withData: kIsWeb,
       );
 
-      if (pickedFile == null) return;
+      final processedImage = await _postCubit.getProcessedImage(
+        pickedFile: pickedFile,
+        isWebPlatform: kIsWeb,
+      );
 
-      if (kIsWeb) {
-        // Handle web image selection
-        setState(() {
-          _selectedImage = pickedFile.files.single.bytes;
-        });
-      } else {
-        // Handle mobile image selection and cropping
-        await _processMobileImage(pickedFile.files.single.path!);
-      }
-      Logger.logDebug(AppStrings.imagePickedSuccessfully);
-    } catch (error) {
-      Logger.logError(error.toString());
-    }
-  }
+      if (processedImage == null) throw Exception(ErrorMsgs.imageFileEmpty);
 
-  /// Processes mobile images by cropping and compressing
-  Future<void> _processMobileImage(String filePath) async {
-    final croppedFile = await ImageCropper().cropImage(
-      sourcePath: filePath,
-      compressFormat: ImageCompressFormat.jpg,
-      compressQuality: 95,
-      uiSettings: _getImageCropperSettings(),
-    );
-
-    if (croppedFile == null) return;
-
-    final compressedImage = await _compressImage(croppedFile.path);
-    if (compressedImage != null) {
       setState(() {
-        _selectedImage = compressedImage;
+        _selectedImage = processedImage;
       });
+    } catch (error) {
+      ErrorHandler.handleError(
+        error,
+        onRetry: () {},
+      );
     }
-  }
-
-  /// Returns platform specific image cropper settings
-  List<PlatformUiSettings> _getImageCropperSettings() {
-    return [
-      AndroidUiSettings(
-        toolbarTitle: AppStrings.cropperTitle,
-        toolbarColor: Colors.deepPurple,
-        toolbarWidgetColor: Colors.white,
-        lockAspectRatio: true,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio16x9,
-          CropAspectRatioPreset.ratio4x3,
-        ],
-      ),
-      IOSUiSettings(
-        title: AppStrings.cropperTitle,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio16x9,
-          CropAspectRatioPreset.ratio4x3,
-        ],
-      ),
-    ];
-  }
-
-  /// Compresses image to reduce size
-  Future<Uint8List?> _compressImage(String filePath) async {
-    return await FlutterImageCompress.compressWithFile(
-      filePath,
-      minWidth: 800,
-      minHeight: 800,
-      quality: 85,
-    );
   }
 
   void _createAndUploadPost() {
@@ -187,20 +137,15 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       return;
     }
 
-    final post = Post(
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
+    final newPost = Post.getDefault().copyWith(
       userId: profileUser.uid,
       userName: profileUser.name,
       userProfileImageUrl: profileUser.profileImageUrl,
       captionText: captionText,
-      imageUrl: '',
-      timestamp: DateTime.now(),
-      likes: [],
-      comments: [],
     );
 
     _postCubit.addPost(
-      post: post,
+      post: newPost,
       imageBytes: _selectedImage,
     );
   }
