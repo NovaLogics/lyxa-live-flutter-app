@@ -1,6 +1,18 @@
 import 'dart:typed_data';
 
+import 'package:lyxa_live/src/shared/entities/result/result.dart';
+
 abstract class StorageRepository {
+  Future<Result<String?>> uploadProfileImage({
+    required Uint8List? imageFileBytes,
+    required String fileName,
+  });
+
+  Future<Result<String?>> uploadPostImage({
+    required Uint8List? imageFileBytes,
+    required String fileName,
+  });
+
   // Upload profile images on mobile platforms
   Future<String?> uploadProfileImageMobile(String path, String fileName);
 
