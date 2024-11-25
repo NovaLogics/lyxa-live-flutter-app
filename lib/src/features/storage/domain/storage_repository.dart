@@ -23,5 +23,5 @@ abstract class StorageRepository {
   Future<String?> uploadPostImageMobile(String path, String fileName);
 
   // Upload post images on web platforms
-  Future<String?> uploadPostImageWeb(Uint8List? fileBytes, String fileName);
+  Future<String?> uploadPostImageWeb(Uint8List fileBytes, String fileName);
 }
