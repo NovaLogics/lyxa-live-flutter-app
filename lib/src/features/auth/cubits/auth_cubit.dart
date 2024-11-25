@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
@@ -7,9 +8,11 @@ import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
-/// AuthCubit: Handles authentication state management
+/// AUTH CUBIT:
+/// Handles authentication state management
 /// ->
 class AuthCubit extends Cubit<AuthState> {
+  static const String debugTag = 'AuthCubit';
   final AuthRepository _authRepository;
   AppUser _currentUser = AppUser.getDefaultGuestUser();
 
@@ -17,189 +20,169 @@ class AuthCubit extends Cubit<AuthState> {
       : _authRepository = authRepository,
         super(AuthInitial());
 
-  /// Retrieves the current authenticated user.
   AppUser? get currentUser => _currentUser;
 
-  /// (ƒ) :: Check Authentication
-  ///
-  /// Emits [Authenticated] if a user is found, otherwise [Unauthenticated].
-  Future<void> checkAuthentication() async {
-    final result = await _authRepository.getCurrentUser();
+  Future<void> checkAuth() async {
+    final currentUserResult = await _authRepository.getCurrentUser();
 
-    switch (result.status) {
+    switch (currentUserResult.status) {
       case Status.success:
-        if (result.isDataNotNull()) {
-          _currentUser = result.data as AppUser;
-          emit(Authenticated(_currentUser));
-        } else {
-          // No user logged in
-          emit(Unauthenticated());
-        }
+        _handleAuthStatus(userData: currentUserResult.data);
         break;
 
       case Status.error:
-        // FIREBASE ERROR
-        if (result.isFirebaseError()) {
-          emit(AuthError(result.getFirebaseAlert()));
-        }
-        // GENERIC ERROR
-        else if (result.isGenericError()) {
-          ErrorHandler.handleError(
-            result.getGenericErrorData(),
-            onRetry: () {},
-          );
-        }
-        // KNOWN ERRORS
-        else if (result.isMessageError()) {
-          ErrorHandler.handleError(
-            null,
-            customMessage: result.getMessageErrorAlert(),
-            onRetry: () {},
-          );
-        }
+        _handleErrors(
+          result: currentUserResult,
+          tag: '$debugTag: checkAuth()',
+        );
         emit(Unauthenticated());
         break;
     }
   }
 
-  /// (ƒ) :: Login
-  ///
-  /// Emits [Authenticated] on success,
-  /// or [Unauthenticated] / [AuthError] on failure.
   Future<void> login(
     String email,
     String password,
   ) async {
-    LoadingCubit.showLoading(message: AppStrings.authenticatingMsg);
+    _showLoading();
 
-    final result = await _authRepository.loginWithEmailAndPassword(
+    final loginResult = await _authRepository.loginWithEmailAndPassword(
       email: email,
       password: password,
     );
 
-    LoadingCubit.hideLoading();
+    _hideLoading();
 
-    switch (result.status) {
+    switch (loginResult.status) {
       case Status.success:
-        if (result.isDataNotNull()) {
-          _currentUser = result.data as AppUser;
-
-          emit(Authenticated(_currentUser));
-        } else {
-          emit(Unauthenticated());
-        }
+        _handleAuthStatus(userData: loginResult.data);
         break;
 
       case Status.error:
-        // FIREBASE ERROR
-        if (result.isFirebaseError()) {
-          emit(AuthError(result.getFirebaseAlert()));
-        }
-        // GENERIC ERROR
-        else if (result.isGenericError()) {
-          ErrorHandler.handleError(
-            result.getGenericErrorData(),
-            onRetry: () {},
-          );
-        }
-        // KNOWN ERRORS
-        else if (result.isMessageError()) {
-          ErrorHandler.handleError(
-            null,
-            customMessage: result.getMessageErrorAlert(),
-            onRetry: () {},
-          );
-        }
+        _handleErrors(
+          result: loginResult,
+          tag: '$debugTag: login()',
+        );
         emit(Unauthenticated());
         break;
     }
   }
 
-  /// (ƒ) :: Register
-  ///
-  /// Emits [Authenticated] on success,
-  /// or [Unauthenticated] / [AuthError] on failure.
   Future<void> register(
     String name,
     String email,
     String password,
   ) async {
-    LoadingCubit.showLoading(message: AppStrings.authenticatingMsg);
+    _showLoading();
 
-    final result = await _authRepository.registerWithEmailAndPassword(
+    final registerResult = await _authRepository.registerWithEmailAndPassword(
       name: name,
       email: email,
       password: password,
     );
 
-    LoadingCubit.hideLoading();
+    _hideLoading();
 
-    switch (result.status) {
+    switch (registerResult.status) {
       case Status.success:
-        if (result.isDataNotNull()) {
-          _currentUser = result.data as AppUser;
-          emit(Authenticated(_currentUser));
-        } else {
-          emit(Unauthenticated());
-        }
+        _handleAuthStatus(userData: registerResult.data);
         break;
 
       case Status.error:
-        // FIREBASE ERROR
-        if (result.isFirebaseError()) {
-          emit(AuthError(result.getFirebaseAlert()));
-        }
-        // GENERIC ERROR
-        else if (result.isGenericError()) {
-          ErrorHandler.handleError(
-            result.getGenericErrorData(),
-            onRetry: () {},
-          );
-        }
-        // KNOWN ERRORS
-        else if (result.isMessageError()) {
-          ErrorHandler.handleError(
-            null,
-            customMessage: result.getMessageErrorAlert(),
-            onRetry: () {},
-          );
-        }
+        _handleErrors(
+          result: registerResult,
+          tag: '$debugTag: register()',
+        );
         emit(Unauthenticated());
         break;
     }
   }
 
-  /// (ƒ) :: Logout
-  ///
-  /// Logs out the current user and emits [Unauthenticated].
   Future<void> logout() async {
     await _authRepository.logOut();
     _currentUser = AppUser.getDefaultGuestUser();
     emit(Unauthenticated());
   }
 
-  /// (ƒ) :: Get Saved User | LocalDB
-  ///
-  /// Returns the [AppUser] if found, or null if not
   Future<AppUser?> getSavedUser({
-    required String key,
+    required String storageKey,
   }) async {
-    final result = await _authRepository.getSavedUser(key: key);
+    final savedUserResult =
+        await _authRepository.getSavedUser(storageKey: storageKey);
 
-    if (result.status == Status.success && result.isDataNotNull()) {
-      return result.data;
+    if (savedUserResult.status == Status.success &&
+        savedUserResult.isDataNotNull()) {
+      return savedUserResult.data;
     }
-
     return null;
   }
 
-  /// (ƒ) :: Save User To Local Storage | LocalDB
-  ///
-  /// Saves the [AppUser] to local storage with the specified key
   Future<void> saveUserToLocalStorage({
-    required String key,
+    required String storageKey,
     required AppUser user,
   }) async {
-    await _authRepository.saveUserToLocalStorage(user: user, key: key);
+    await _authRepository.saveUserToLocalStorage(
+      storageKey: storageKey,
+      user: user,
+    );
+  }
+
+  Future<AppUser> getSavedUserOrDefault({
+    required String storageKey,
+  }) async {
+    final savedUser = await getSavedUser(
+      storageKey: storageKey,
+    );
+    if (savedUser == null) AppUser.createWith();
+
+    Logger.logDebug(savedUser.toString());
+    return savedUser as AppUser;
+  }
+
+  // HELPER FUNCTIONS ▼
+
+  void _showLoading() {
+    LoadingCubit.showLoading(
+      message: AppStrings.authenticatingMsg,
+    );
+  }
+
+  void _hideLoading() {
+    LoadingCubit.hideLoading();
+  }
+
+  void _handleAuthStatus({required AppUser? userData}) {
+    if (userData != null) {
+      _currentUser = userData;
+      emit(Authenticated(_currentUser));
+    } else {
+      emit(Unauthenticated());
+    }
+  }
+
+  void _handleErrors(
+      {required Result result, String? prefixMessage, String? tag}) {
+    // FIREBASE ERROR
+    if (result.isFirebaseError()) {
+      emit(AuthError(result.getFirebaseAlert()));
+    }
+    // GENERIC ERROR
+    else if (result.isGenericError()) {
+      ErrorHandler.handleError(
+        result.getGenericErrorData(),
+        prefixMessage: prefixMessage,
+        tag: tag ?? debugTag,
+        onRetry: () {},
+      );
+    }
+    // KNOWN ERRORS
+    else if (result.isMessageError()) {
+      ErrorHandler.handleError(
+        null,
+        tag: tag ?? debugTag,
+        customMessage: result.getMessageErrorAlert(),
+        onRetry: () {},
+      );
+    }
   }
 }

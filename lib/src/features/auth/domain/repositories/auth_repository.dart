@@ -20,11 +20,11 @@ abstract class AuthRepository {
   Future<void> logOut();
 
   Future<Result<AppUser>> getSavedUser({
-    required String key,
+    required String storageKey,
   });
 
   Future<void> saveUserToLocalStorage({
+    required String storageKey,
     required AppUser user,
-    required String key,
   });
 }

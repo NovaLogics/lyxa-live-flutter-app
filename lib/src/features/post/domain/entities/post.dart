@@ -6,7 +6,7 @@ class PostFields {
   static const String userId = 'userId';
   static const String userName = 'userName';
   static const String userProfileImageUrl = 'userProfileImageUrl';
-  static const String text = 'text';
+  static const String captionText = 'captionText';
   static const String imageUrl = 'imageUrl';
   static const String timestamp = 'timestamp';
   static const String likes = 'likes';
@@ -18,71 +18,96 @@ class Post {
   final String userId;
   final String userName;
   final String userProfileImageUrl;
-  final String text;
+  final String captionText;
   final String imageUrl;
   final DateTime timestamp;
-
-  final List<String> likes; // Store uIds
-  final List<Comment> comments; // Store comment objects
+  final List<String> likes;
+  final List<Comment> comments;
 
   Post({
     required this.id,
     required this.userId,
     required this.userName,
     required this.userProfileImageUrl,
-    required this.text,
+    required this.captionText,
     required this.imageUrl,
     required this.timestamp,
     required this.likes,
     required this.comments,
   });
 
-  Post copyWith({String? imageUrl}) {
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  static Post getDefault() {
     return Post(
-      id: id,
-      userId: userId,
-      userName: userName,
-      userProfileImageUrl: userProfileImageUrl,
-      text: text,
-      imageUrl: imageUrl ?? this.imageUrl,
-      timestamp: timestamp,
-      likes: likes,
-      comments: comments,
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      userId: '',
+      userName: '',
+      userProfileImageUrl: '',
+      captionText: '',
+      imageUrl: '',
+      timestamp: DateTime.now(),
+      likes: List.empty(),
+      comments: List.empty(),
     );
   }
 
-  //Convert Post -> json
+  Post copyWith({
+    String? id,
+    String? userId,
+    String? userName,
+    String? userProfileImageUrl,
+    String? captionText,
+    String? imageUrl,
+    DateTime? timestamp,
+    List<String>? likes,
+    List<Comment>? comments,
+  }) {
+    return Post(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      userName: userName ?? this.userName,
+      userProfileImageUrl: userProfileImageUrl ?? this.userProfileImageUrl,
+      captionText: captionText ?? this.captionText,
+      imageUrl: imageUrl ?? this.imageUrl,
+      timestamp: timestamp ?? this.timestamp,
+      likes: likes ?? this.likes,
+      comments: comments ?? this.comments,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'userId': userId,
-      'userName': userName,
-      'userProfileImageUrl': userProfileImageUrl,
-      'text': text,
-      'imageUrl': imageUrl,
-      'timestamp': Timestamp.fromDate(timestamp),
-      'likes': likes,
-      'comments': comments.map((comment) => comment.toJson()).toList(),
+      PostFields.id: id,
+      PostFields.userId: userId,
+      PostFields.userName: userName,
+      PostFields.userProfileImageUrl: userProfileImageUrl,
+      PostFields.captionText: captionText,
+      PostFields.imageUrl: imageUrl,
+      PostFields.timestamp: Timestamp.fromDate(timestamp),
+      PostFields.likes: likes,
+      PostFields.comments: comments.map((comment) => comment.toJson()).toList(),
     };
   }
 
-  //Convert json -> Post
   factory Post.fromJson(Map<String, dynamic> json) {
-    // Prepare comments
-    final List<Comment> comments = (json['comments'] as List<dynamic>?)
+    final List<Comment> comments = (json[PostFields.comments] as List<dynamic>?)
             ?.map((commentJson) => Comment.fromJson(commentJson))
             .toList() ??
-        [];
+        List.empty();
 
     return Post(
-      id: json['id'],
-      userId: json['userId'],
-      userName: json['userName'],
-      userProfileImageUrl: json['userProfileImageUrl'],
-      text: json['text'],
-      imageUrl: json['imageUrl'],
-      timestamp: (json['timestamp'] as Timestamp).toDate(),
-      likes: List<String>.from(json['likes'] ?? []),
+      id: json[PostFields.id] ?? '',
+      userId: json[PostFields.userId] ?? '',
+      userName: json[PostFields.userName] ?? '',
+      userProfileImageUrl: json[PostFields.userProfileImageUrl] ?? '',
+      captionText: json[PostFields.captionText] ?? json['text'] ?? '',
+      imageUrl: json[PostFields.imageUrl] ?? '',
+      timestamp: (json[PostFields.timestamp] as Timestamp).toDate(),
+      likes: List<String>.from(json[PostFields.likes] ?? []),
       comments: comments,
     );
   }

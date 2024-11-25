@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
@@ -12,6 +10,7 @@ class ErrorHandler {
     StackTrace? stackTrace,
     String? customMessage,
     String? prefixMessage,
+    String? tag,
     required VoidCallback onRetry,
   }) {
     String errorMessage = "An unexpected error occurred.";
@@ -37,12 +36,15 @@ class ErrorHandler {
       errorMessage = customMessage;
     }
 
-    if (prefixMessage == null || prefixMessage.isEmpty) {
+    if (prefixMessage != null && prefixMessage.isNotEmpty) {
       errorMessage = '$prefixMessage : \n $errorMessage';
     }
 
     Logger.logError(
-      'Unexpected Error: ${error.toString()} | stackTrace: ${stackTrace.toString()}',
+      'Unexpected Error: \n|> ${error.toString()}', tag: tag?? 'Logger'
+    );
+    Logger.logError(
+      'StackTrace:> ${stackTrace.toString()}', tag: tag?? 'Logger'
     );
 
     ErrorAlertCubit.showErrorMessage(

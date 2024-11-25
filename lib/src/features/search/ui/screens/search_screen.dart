@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/shared/widgets/user_tile_unit.dart';
@@ -16,17 +17,12 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
-  late final SearchCubit _searchCubit = context.read<SearchCubit>();
-
-  // Trigger search when text changes
-  void _onSearchChanged() {
-    final query = _searchController.text.toLowerCase();
-    _searchCubit.searchUsers(query);
-  }
+  late final SearchCubit _searchCubit;
 
   @override
   void initState() {
     super.initState();
+    _searchCubit = getIt<SearchCubit>();
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -44,7 +40,11 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  // Build the AppBar with a search input field
+  void _onSearchChanged() {
+    final query = _searchController.text.trim().toLowerCase();
+    _searchCubit.searchUsers(query);
+  }
+
   AppBar _buildAppBar() {
     return AppBar(
       centerTitle: true,
@@ -55,17 +55,6 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  // Widget _buildBackButton() {
-  //   return GestureDetector(
-  //     onTap: () => Navigator.of(context).pop(),
-  //     child: const Icon(
-  //       Icons.arrow_back_outlined,
-  //       size: AppDimens.size24,
-  //     ),
-  //   );
-  // }
-
-  // Search input field
   Widget _buildSearchBar() {
     return SizedBox(
       width: AppDimens.size280,
@@ -82,7 +71,6 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  // Build search results based on the state
   Widget _buildSearchResults() {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
@@ -98,7 +86,6 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  // Build the user list if users are found
   Widget _buildUserList(SearchLoaded state) {
     if (state.users.isEmpty) {
       return const Center(child: Text(AppStrings.noUserFoundMessage));

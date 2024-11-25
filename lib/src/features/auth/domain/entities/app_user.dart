@@ -26,6 +26,11 @@ class AppUser {
     required this.searchableName,
   });
 
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
   // Creates an `AppUser` instance from a JSON map.
   factory AppUser.fromJson(Map<String, dynamic> json) =>
       _$AppUserFromJson(json);
@@ -33,15 +38,18 @@ class AppUser {
   // Converts the `AppUser` instance into a JSON map.
   Map<String, dynamic> toJson() => _$AppUserToJson(this);
 
-  // Convert AppUser to JSON string
-  String toJsonString() => jsonEncode(toJson());
-
   // Create AppUser from JSON string
   factory AppUser.fromJsonString(String jsonString) {
     return AppUser.fromJson(jsonDecode(jsonString) as Map<String, dynamic>);
   }
 
-  static createWith({String uid = '', String email = '', String name = ''}) {
+  String toJsonString() => jsonEncode(toJson());
+
+  static createWith({
+    String uid = AppUserConstants.defaultValue,
+    String email = AppUserConstants.defaultValue,
+    String name = AppUserConstants.defaultValue,
+  }) {
     return AppUser(
       uid: uid,
       email: email,
@@ -52,16 +60,17 @@ class AppUser {
 
   static getDefaultGuestUser() {
     return AppUser(
-      uid: '',
-      email: 'Guest@lyxa.com',
-      name: 'Guest',
-      searchableName: 'guest',
+      uid: AppUserConstants.defaultValue,
+      email: AppUserConstants.defaultEmail,
+      name: AppUserConstants.defaultName,
+      searchableName: AppUserConstants.defaultSearchableName,
     );
   }
+}
 
-  // Returns a string representation of the `AppUser` instance.
-  @override
-  String toString() {
-    return toJson().toString();
-  }
+class AppUserConstants {
+  static const String defaultValue = '';
+  static const String defaultEmail = 'Guest@lyxa.com';
+  static const String defaultName = 'Guest';
+  static const String defaultSearchableName = 'guest';
 }

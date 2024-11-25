@@ -109,19 +109,17 @@ class FirebaseAuthRepository implements AuthRepository {
 
   @override
   Future<Result<AppUser>> getSavedUser({
-    required String key,
+    required String storageKey,
   }) async {
     try {
-      final String? userData = _hiveHelper.get<String>(key);
+      final String? userData = _hiveHelper.get<String>(storageKey);
 
       if (userData == null || userData.isEmpty) {
         return Result.error(ErrorMsgs.userDataNotFound);
       }
-
-      final user = AppUser.fromJsonString(userData);
-
+      
       return Result.success(
-        data: user,
+        data: AppUser.fromJsonString(userData),
       );
     } catch (error) {
       return Result.error(GenericError(error: error));
@@ -131,12 +129,12 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   Future<void> saveUserToLocalStorage({
     required AppUser user,
-    required String key,
+    required String storageKey,
   }) async {
-    await _hiveHelper.save(key, user.toJsonString());
+    await _hiveHelper.save(storageKey, user.toJsonString());
   }
 
-  //-> Utils ->
+  //-> HELPER FUNCTIONS ->
 
   Future<AppUser> _getUserById(String userId) async {
     final userDocument = await _userCollectionRef.doc(userId).get();

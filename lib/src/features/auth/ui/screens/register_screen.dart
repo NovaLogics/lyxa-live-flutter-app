@@ -3,7 +3,6 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
-import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
@@ -12,7 +11,6 @@ import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
-import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 
@@ -29,7 +27,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _registrationFormKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -42,7 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void initState() {
     super.initState();
     _authCubit = getIt<AuthCubit>();
-    _initializeFields();
+    _initFields();
   }
 
   @override
@@ -53,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           horizontal: AppDimens.paddingLG24,
         ),
         child: Form(
-          key: _formKey,
+          key: _registrationFormKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -89,49 +87,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void _initializeFields() async {
-    final savedUser = await _authCubit.getSavedUser(
-      key: HiveKeys.signUpDataKey,
+  void _initFields() async {
+    final savedUser = await _authCubit.getSavedUserOrDefault(
+      storageKey: HiveKeys.signUpDataKey,
     );
-    if (savedUser == null) return;
-
-    Logger.logDebug(savedUser.toString());
     _nameController.text = savedUser.name;
     _emailController.text = savedUser.email;
   }
 
   void _register() {
-    if (_formKey.currentState?.validate() != true) return;
-    // All form fields are valid
+    if (_registrationFormKey.currentState?.validate() != true) return;
+
     final String name = _nameController.text.trim();
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
 
-    try {
-      _authCubit.saveUserToLocalStorage(
-        key: HiveKeys.signUpDataKey,
-        user: AppUser.createWith(name: name, email: email),
-      );
-      _authCubit.register(name, email, password);
-    } catch (error) {
-      ToastMessengerUnit.showErrorToast(
-        context: context,
-        message: AppStrings.registerErrorMessage,
-      );
-    }
+    _authCubit.saveUserToLocalStorage(
+      storageKey: HiveKeys.signUpDataKey,
+      user: AppUser.createWith(name: name, email: email),
+    );
+    _authCubit.register(name, email, password);
   }
 
-  String? _validateMainPassword(String? value) {
+  String? _validateMainPassword(String? password) {
     return Validator.validatePasswordFileds(
-      value,
-      _confirmPasswordController.text.trim(),
+      password: password,
+      confirmPassword: _confirmPasswordController.text.trim(),
     );
   }
 
-  String? _validateConfirmPassword(String? value) {
+  String? _validateConfirmPassword(String? password) {
     return Validator.validatePasswordFileds(
-      value,
-      _passwordController.text.trim(),
+      password: password,
+      confirmPassword: _passwordController.text.trim(),
     );
   }
 
@@ -208,9 +196,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildLoginLink() {
     return Padding(
       padding: const EdgeInsets.only(
-        bottom: AppDimens.size48,
-        top: AppDimens.size32,
-      ),
+          bottom: AppDimens.size48, top: AppDimens.size32),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -226,7 +212,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               widget.onToggle?.call();
 
               _authCubit.saveUserToLocalStorage(
-                key: HiveKeys.signUpDataKey,
+                storageKey: HiveKeys.signUpDataKey,
                 user: AppUser.createWith(
                   name: _nameController.text.trim(),
                   email: _emailController.text.trim(),

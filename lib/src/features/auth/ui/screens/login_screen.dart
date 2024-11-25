@@ -3,7 +3,6 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
-import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
@@ -13,19 +12,12 @@ import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 
-/*
-LOGIN SCREEN:
-Allows existing users to log in with email and password. 
--> After successful login, users are redirected to the Home Screen.
--> New users can navigate to the Register Screen.
-*/
-
 class LoginScreen extends StatefulWidget {
-  final VoidCallback? onToggle;
+  final VoidCallback? onToggleScreen;
 
   const LoginScreen({
     super.key,
-    required this.onToggle,
+    required this.onToggleScreen,
   });
 
   @override
@@ -33,7 +25,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _loginCredentialsFormKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -43,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _authCubit = getIt<AuthCubit>();
-    _initializeEmailField();
+    _initFields();
   }
 
   @override
@@ -53,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
         horizontal: AppDimens.paddingLG24,
       ),
       child: Form(
-        key: _formKey,
+        key: _loginCredentialsFormKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -82,24 +74,21 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _initializeEmailField() async {
-    final savedUser = await _authCubit.getSavedUser(
-      key: HiveKeys.loginDataKey,
+  void _initFields() async {
+    final savedUser = await _authCubit.getSavedUserOrDefault(
+      storageKey: HiveKeys.loginDataKey,
     );
-    if (savedUser == null) return;
-
-    Logger.logDebug(savedUser.toString());
     _emailController.text = savedUser.email;
   }
 
   void _login() {
-    if (_formKey.currentState?.validate() != true) return;
-    // All form fields are valid
+    if (_loginCredentialsFormKey.currentState?.validate() != true) return;
+
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
 
     _authCubit.saveUserToLocalStorage(
-      key: HiveKeys.loginDataKey,
+      storageKey: HiveKeys.loginDataKey,
       user: AppUser.createWith(email: email),
     );
     _authCubit.login(email, password);
@@ -159,9 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildRegisterLink() {
     return Padding(
       padding: const EdgeInsets.only(
-        bottom: AppDimens.size48,
-        top: AppDimens.size32,
-      ),
+          bottom: AppDimens.size48, top: AppDimens.size32),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -172,10 +159,10 @@ class _LoginScreenState extends State<LoginScreen> {
           const SizedBox(width: AppDimens.size8),
           GestureDetector(
             onTap: () {
-              widget.onToggle?.call();
+              widget.onToggleScreen?.call();
 
               _authCubit.saveUserToLocalStorage(
-                key: HiveKeys.loginDataKey,
+                storageKey: HiveKeys.loginDataKey,
                 user: AppUser.createWith(email: _emailController.text.trim()),
               );
             },

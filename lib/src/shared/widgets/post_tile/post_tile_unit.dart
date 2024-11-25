@@ -484,7 +484,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 maxHeight: 100, minWidth: double.infinity), // Limit height
             child: SingleChildScrollView(
               child: Text(
-                widget.post.text,
+                widget.post.captionText,
                 style: AppTextStyles.textStylePost.copyWith(
                   color: Theme.of(context).colorScheme.inversePrimary,
                   fontSize: AppDimens.fontSizeRG14,

@@ -12,15 +12,17 @@ class Validator {
     }
   }
 
-  static String? validatePasswordFileds(
-      String? value, String confirmPasswordText) {
-    if (value == null || value.isEmpty) {
+  static String? validatePasswordFileds({
+    required String? password,
+    required String confirmPassword,
+  }) {
+    if (password == null || password.isEmpty) {
       return "Password cannot be empty";
-    } else if (value.length < 6) {
+    } else if (password.length < 6) {
       return "Password should be at least 6 characters";
-    } else if (value.length > 15) {
+    } else if (password.length > 15) {
       return "Password should not be greater than 15 characters";
-    } else if (value != confirmPasswordText) {
+    } else if (password != confirmPassword) {
       return "Passwords do not match!";
     } else {
       return null;

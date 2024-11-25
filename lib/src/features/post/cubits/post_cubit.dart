@@ -1,6 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
@@ -8,9 +13,9 @@ import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 class PostCubit extends Cubit<PostState> {
+  static const String debugTag = 'PostCubit';
   final PostRepository _postRepository;
   final StorageRepository _storageRepository;
 
@@ -24,15 +29,18 @@ class PostCubit extends Cubit<PostState> {
   Future<void> getAllPosts() async {
     emit(PostLoading());
 
-    final result = await _postRepository.getAllPosts();
+    final getPostsResult = await _postRepository.getAllPosts();
 
-    switch (result.status) {
+    switch (getPostsResult.status) {
       case Status.success:
-        emit(PostLoaded(result.data ?? List.empty()));
+        emit(PostLoaded(getPostsResult.data ?? List.empty()));
         break;
 
       case Status.error:
-        _handleErrors(result: result);
+        _handleErrors(
+          result: getPostsResult,
+          tag: '$debugTag: getAllPosts()',
+        );
         break;
     }
   }
@@ -41,27 +49,37 @@ class PostCubit extends Cubit<PostState> {
     required Post post,
     Uint8List? imageBytes,
   }) async {
-    try {
-      emit(PostUploading());
+    emit(PostUploading());
 
-      final imageUrl =
-          await _storageRepository.uploadPostImageWeb(imageBytes, post.id);
+    final imageUploadResult = await _storageRepository.uploadPostImage(
+      imageFileBytes: imageBytes,
+      fileName: post.id,
+    );
 
-      final updatedPost = post.copyWith(imageUrl: imageUrl);
+    if (imageUploadResult.status == Status.error) {
+      _handleErrors(
+        result: imageUploadResult,
+        tag: '$debugTag: addPost()::imageUploadResult',
+      );
+      return;
+    }
 
-      final result = await _postRepository.addPost(newPost: updatedPost);
+    final updatedPost = post.copyWith(imageUrl: imageUploadResult.data);
 
-      switch (result.status) {
-        case Status.success:
-          getAllPosts();
-          break;
+    final postUploadResult =
+        await _postRepository.addPost(newPost: updatedPost);
 
-        case Status.error:
-          _handleErrors(result: result);
-          break;
-      }
-    } catch (error) {
-      emit(PostError(ErrorMsgs.postCreationError));
+    switch (postUploadResult.status) {
+      case Status.success:
+        getAllPosts();
+        break;
+
+      case Status.error:
+        _handleErrors(
+          result: postUploadResult,
+          tag: '$debugTag: addPost()::postUploadResult',
+        );
+        break;
     }
   }
 
@@ -75,7 +93,8 @@ class PostCubit extends Cubit<PostState> {
         break;
 
       case Status.error:
-        _handleErrors(result: result);
+        _handleErrors(result: result,
+          tag: '$debugTag: deletePost()',);
         break;
     }
   }
@@ -97,12 +116,12 @@ class PostCubit extends Cubit<PostState> {
         _handleErrors(
           result: result,
           prefixMessage: 'Failed to toggle like',
+          tag: '$debugTag: toggleLikePost()',
         );
         break;
     }
   }
 
-  // Add comment to a post
   Future<void> addComment({
     required String postId,
     required Comment comment,
@@ -120,12 +139,12 @@ class PostCubit extends Cubit<PostState> {
         _handleErrors(
           result: result,
           prefixMessage: 'Failed to add comment',
+          tag: '$debugTag: addComment()',
         );
         break;
     }
   }
 
-  // Delete comment to a post
   Future<void> deleteComment({
     required String postId,
     required String commentId,
@@ -143,14 +162,42 @@ class PostCubit extends Cubit<PostState> {
         _handleErrors(
           result: result,
           prefixMessage: 'Failed to delete the comment',
+          tag: '$debugTag: deleteComment()',
         );
         break;
     }
   }
 
-  //-> Utils ->
+  Future<Uint8List?> getProcessedImage({
+    required FilePickerResult? pickedFile,
+    required bool isWebPlatform,
+  }) async {
+    if (pickedFile == null) return null;
 
-  void _handleErrors({required Result result, String? prefixMessage}) {
+    if (isWebPlatform) {
+      // WEB
+      return pickedFile.files.single.bytes;
+    } else {
+      // MOBILE
+      final filePath = pickedFile.files.single.path!;
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: filePath,
+        compressFormat: ImageCompressFormat.jpg,
+        uiSettings: _getImageCropperSettings(),
+      );
+
+      if (croppedFile == null) return null;
+
+      final compressedImage = await _compressImage(croppedFile.path);
+
+      return compressedImage;
+    }
+  }
+
+  // HELPER FUNCTIONS ▼
+
+  void _handleErrors(
+      {required Result result, String? prefixMessage, String? tag}) {
     // FIREBASE ERROR
     if (result.isFirebaseError()) {
       emit(PostError(result.getFirebaseAlert()));
@@ -160,6 +207,7 @@ class PostCubit extends Cubit<PostState> {
       ErrorHandler.handleError(
         result.getGenericErrorData(),
         prefixMessage: prefixMessage,
+        tag: tag,
         onRetry: () {},
       );
     }
@@ -167,9 +215,45 @@ class PostCubit extends Cubit<PostState> {
     else if (result.isMessageError()) {
       ErrorHandler.handleError(
         null,
+        tag: tag,
         customMessage: result.getMessageErrorAlert(),
         onRetry: () {},
       );
     }
+  }
+
+  /// Returns platform specific image cropper settings
+  List<PlatformUiSettings> _getImageCropperSettings() {
+    return [
+      AndroidUiSettings(
+        toolbarTitle: AppStrings.cropperTitle,
+        toolbarColor: Colors.deepPurple,
+        toolbarWidgetColor: Colors.white,
+        lockAspectRatio: true,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio4x3,
+        ],
+      ),
+      IOSUiSettings(
+        title: AppStrings.cropperTitle,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio4x3,
+        ],
+      ),
+    ];
+  }
+
+  /// Compresses image to reduce size
+  Future<Uint8List?> _compressImage(String filePath) async {
+    return await FlutterImageCompress.compressWithFile(
+      filePath,
+      minWidth: 800,
+      minHeight: 800,
+      quality: 90,
+    );
   }
 }

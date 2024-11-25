@@ -27,9 +27,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  static const String debugTag = 'HomeScreen';
   late final PostCubit _postCubit;
   late final AppUser _currentAppUser;
-  ProfileUser? _profileUser;
+  ProfileUser _profileUser = ProfileUser.getDefaultGuestUser();
 
   @override
   void initState() {
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: BlocBuilder<PostCubit, PostState>(
         builder: (context, state) {
           LoadingCubit.hideLoading();
-          if (state is PostLoading || state is PostUploading) {
+          if (state is PostLoading) {
             LoadingCubit.showLoading(message: AppStrings.loadingMessage);
             return const SizedBox();
           } else if (state is PostUploading) {
@@ -90,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (error) {
       ErrorHandler.handleError(
         error,
+        tag: debugTag,
         onRetry: () {
           ErrorAlertCubit.hideErrorMessage();
         },
@@ -119,12 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildAppDrawer() {
-    return DrawerUnit(
-      user: _profileUser,
-    );
+    return DrawerUnit(user: _profileUser);
   }
 
-  // App Bar
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -139,7 +138,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Post list display
   Widget _buildPostList(List<Post> posts) {
     return (posts.isEmpty)
         ? const Center(child: Text(AppStrings.noPostAvailableError))
@@ -156,7 +154,6 @@ class _HomeScreenState extends State<HomeScreen> {
           );
   }
 
-  // Error state widget
   Widget _buildErrorState(String errorMessage) {
     Logger.logError(errorMessage.toString());
     return Center(

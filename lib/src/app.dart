@@ -40,61 +40,50 @@ class LyxaApp extends StatelessWidget {
     );
   }
 
-  /// Define BLoC Providers for Dependency Injection
-  /// & State management [Auth, Profile, Post, Search, Theme]
-  /// ->
   List<BlocProvider> _buildProviders() {
     return [
-      // Authentication Cubit
+      // AUTH CUBIT
       BlocProvider<AuthCubit>(
-        create: (context) => getIt<AuthCubit>()..checkAuthentication(),
+        create: (context) => getIt<AuthCubit>()..checkAuth(),
       ),
-
-      // Profile Cubit
+      // PROFILE CUBIT
       BlocProvider<ProfileCubit>(
         create: (context) => getIt<ProfileCubit>(),
       ),
-
-      // Post Cubit
+      // POST CUBIT
       BlocProvider<PostCubit>(
         create: (context) => getIt<PostCubit>(),
       ),
-
-      // Search Cubit
+      // SEARCH CUBIT
       BlocProvider<SearchCubit>(
         create: (context) => getIt<SearchCubit>(),
       ),
-
-      // Theme Cubit
+      // THEME CUBIT
       BlocProvider<ThemeCubit>(
         create: (context) => getIt<ThemeCubit>(),
       ),
-
-      // Image Slider Cubit
+      // IMAGE SLIDER CUBIT
       BlocProvider<SliderCubit>(
         create: (context) => getIt<SliderCubit>(),
       ),
-
-      // Error Cubit
+      // ERROR CUBIT
       BlocProvider<ErrorAlertCubit>(
         create: (context) => getIt<ErrorAlertCubit>(),
       ),
-
-      // Loading Cubit
+      // LOADING CUBIT
       BlocProvider<LoadingCubit>(
         create: (context) => getIt<LoadingCubit>(),
       ),
     ];
   }
 
-  /// Displays the appropriate screen based on the user's authentication status.
   Widget _buildMainScreen() {
     return BlocConsumer<AuthCubit, AuthState>(
       builder: (context, state) {
         Logger.logDebug(state.toString());
 
+        // SHOW AUTH SCREEN
         if (state is Unauthenticated) {
-          //Show Authentication Screen
           return Stack(
             children: [
               const AuthScreen(),
@@ -102,8 +91,9 @@ class LyxaApp extends StatelessWidget {
               _buildErrorDisplayScreen(),
             ],
           );
-        } else if (state is Authenticated) {
-          // Show Main Home Screen
+        }
+        // SHOW MAIN/HOME SCREEN
+        else if (state is Authenticated) {
           return Stack(
             children: [
               const HomeScreen(),
@@ -112,13 +102,14 @@ class LyxaApp extends StatelessWidget {
               _buildErrorDisplayScreen(),
             ],
           );
-        } else {
-          // Show Loading Indicator
+        }
+        // SHOW LOADING INDICATOR
+        else {
           return _buildLoadingScreen();
         }
       },
       listener: (context, state) {
-        // Show error messages if authentication fails
+        // SHOW ERROR IF AUTHENTICATION FAILS
         if (state is AuthError) {
           Logger.logError(state.message.toString());
           ToastMessengerUnit.showErrorToast(
@@ -132,20 +123,19 @@ class LyxaApp extends StatelessWidget {
 
   Widget _buildErrorDisplayScreen() {
     return BlocConsumer<ErrorAlertCubit, ErrorAlertState>(
+      listener: (context, state) {},
       builder: (context, state) {
         return Visibility(
           visible: state.isVisible,
           child: const ErrorAlertUnit(),
         );
       },
-      listener: (BuildContext context, ErrorAlertState state) {
-        Logger.logDebug(state.errorMessage.toString());
-      },
     );
   }
 
   Widget _buildLoadingScreen() {
     return BlocConsumer<LoadingCubit, LoadingState>(
+      listener: (context, state) {},
       builder: (context, state) {
         return Visibility(
           visible: state.isVisible,
@@ -154,31 +144,19 @@ class LyxaApp extends StatelessWidget {
           ),
         );
       },
-      listener: (BuildContext context, LoadingState state) {
-        Logger.logDebug(state.isVisible.toString());
-      },
     );
   }
 
   Widget _buildPhotoSliderScreen() {
     return BlocConsumer<SliderCubit, SliderState>(
+      listener: (context, state) {},
       builder: (context, state) {
-        Logger.logDebug(state.toString());
-
         return (state is SliderLoaded)
             ? PhotoSlider(
                 images: state.images,
                 initialIndex: state.currentIndex,
               )
             : const SizedBox.shrink();
-      },
-      listener: (context, state) {
-        if (state is SliderError) {
-          ToastMessengerUnit.showErrorToast(
-            context: context,
-            message: state.message,
-          );
-        }
       },
     );
   }
