@@ -25,14 +25,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (currentUserResult.status) {
       case Status.success:
-        final user = currentUserResult.data;
-
-        if (user != null) {
-          _currentUser = user;
-          emit(Authenticated(_currentUser));
-        } else {
-          emit(Unauthenticated());
-        }
+        _handleAuthStatus(userData: currentUserResult.data);
         break;
 
       case Status.error:
@@ -46,25 +39,18 @@ class AuthCubit extends Cubit<AuthState> {
     String email,
     String password,
   ) async {
-    LoadingCubit.showLoading(message: AppStrings.authenticatingMsg);
+    _showLoading();
 
     final loginResult = await _authRepository.loginWithEmailAndPassword(
       email: email,
       password: password,
     );
 
-    LoadingCubit.hideLoading();
+    _hideLoading();
 
     switch (loginResult.status) {
       case Status.success:
-        final user = loginResult.data;
-
-        if (user != null) {
-          _currentUser = user;
-          emit(Authenticated(_currentUser));
-        } else {
-          emit(Unauthenticated());
-        }
+        _handleAuthStatus(userData: loginResult.data);
         break;
 
       case Status.error:
@@ -79,7 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
     String email,
     String password,
   ) async {
-    LoadingCubit.showLoading(message: AppStrings.authenticatingMsg);
+    _showLoading();
 
     final registerResult = await _authRepository.registerWithEmailAndPassword(
       name: name,
@@ -87,18 +73,11 @@ class AuthCubit extends Cubit<AuthState> {
       password: password,
     );
 
-    LoadingCubit.hideLoading();
+    _hideLoading();
 
     switch (registerResult.status) {
       case Status.success:
-        final user = registerResult.data;
-
-        if (user != null) {
-          _currentUser = user;
-          emit(Authenticated(_currentUser));
-        } else {
-          emit(Unauthenticated());
-        }
+        _handleAuthStatus(userData: registerResult.data);
         break;
 
       case Status.error:
@@ -124,7 +103,6 @@ class AuthCubit extends Cubit<AuthState> {
         savedUserResult.isDataNotNull()) {
       return savedUserResult.data;
     }
-
     return null;
   }
 
@@ -139,6 +117,25 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   //-> HELPER FUNCTIONS ->
+
+  void _showLoading() {
+    LoadingCubit.showLoading(
+      message: AppStrings.authenticatingMsg,
+    );
+  }
+
+  void _hideLoading() {
+    LoadingCubit.hideLoading();
+  }
+
+  void _handleAuthStatus({required AppUser? userData}) {
+    if (userData != null) {
+      _currentUser = userData;
+      emit(Authenticated(_currentUser));
+    } else {
+      emit(Unauthenticated());
+    }
+  }
 
   void _handleErrors({required Result result, String? prefixMessage}) {
     // FIREBASE ERROR
