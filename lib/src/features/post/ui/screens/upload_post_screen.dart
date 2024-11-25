@@ -38,6 +38,7 @@ class UploadPostScreen extends StatefulWidget {
 }
 
 class _UploadPostScreenState extends State<UploadPostScreen> {
+  static const String debugTag = 'UploadPostScreen';
   final TextEditingController _captionController = TextEditingController();
   late final PostCubit _postCubit;
   Uint8List? _selectedImage;
@@ -86,6 +87,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     } catch (error) {
       ErrorHandler.handleError(
         error,
+        tag: debugTag,
         onRetry: () {},
       );
     }

@@ -27,9 +27,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  static const String debugTag = 'HomeScreen';
   late final PostCubit _postCubit;
   late final AppUser _currentAppUser;
-  late ProfileUser _profileUser;
+  ProfileUser _profileUser = ProfileUser.getDefaultGuestUser();
 
   @override
   void initState() {
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: BlocBuilder<PostCubit, PostState>(
         builder: (context, state) {
           LoadingCubit.hideLoading();
-          if (state is PostLoading || state is PostUploading) {
+          if (state is PostLoading) {
             LoadingCubit.showLoading(message: AppStrings.loadingMessage);
             return const SizedBox();
           } else if (state is PostUploading) {
@@ -90,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (error) {
       ErrorHandler.handleError(
         error,
+        tag: debugTag,
         onRetry: () {
           ErrorAlertCubit.hideErrorMessage();
         },

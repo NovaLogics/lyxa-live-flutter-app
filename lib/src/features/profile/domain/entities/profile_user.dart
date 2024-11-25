@@ -40,6 +40,21 @@ class ProfileUser extends AppUser {
     );
   }
 
+  static ProfileUser getDefaultGuestUser() {
+  return ProfileUser(
+    uid: '', 
+    email: '', 
+    name: '', 
+    searchableName: '', 
+    bio: '', 
+    profileImageUrl: '', 
+    followers: [], 
+    following: [], 
+    isPrivate: false,
+  );
+}
+
+
   //Convert ProfileUser -> json
   @override
   Map<String, dynamic> toJson() {
