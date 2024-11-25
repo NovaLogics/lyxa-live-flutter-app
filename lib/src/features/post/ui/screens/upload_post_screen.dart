@@ -7,7 +7,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
-import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
@@ -67,40 +66,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     super.dispose();
   }
 
-  Widget _buildUploadPostScreen() {
-    return BlocConsumer<PostCubit, PostState>(
-      builder: (context, state) {
-        return ScrollableScaffold(
-          appBar: _buildAppBar(),
-          body: Column(
-            children: [
-              _buildImagePreview(),
-              _buildPickImageButton(),
-              const SizedBox(height: AppDimens.size28),
-              _buildCaptionInput(),
-              const SizedBox(height: AppDimens.size72),
-            ],
-          ),
-        );
-      },
-      listener: (context, state) {
-        if (state is PostLoading) {
-          return LoadingCubit.showLoading(
-            message: AppStrings.loadingMessage,
-          );
-        }
-        if (state is PostUploading) {
-          return LoadingCubit.showLoading(
-            message: AppStrings.uploading,
-          );
-        } else if (state is PostLoaded) {
-          Navigator.pop(context);
-        }
-        LoadingCubit.hideLoading();
-      },
-    );
-  }
-
   Future<void> _handleImageSelection() async {
     try {
       final pickedFile = await FilePicker.platform.pickFiles(
@@ -150,8 +115,46 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 
+  void _showLoading(String message) {
+    return LoadingCubit.showLoading(message: message);
+  }
+
+  void _hideLoading() {
+    LoadingCubit.hideLoading();
+  }
+
+  Widget _buildUploadPostScreen() {
+    return BlocConsumer<PostCubit, PostState>(
+      builder: (context, state) {
+        return ScrollableScaffold(
+          appBar: _buildAppBar(),
+          body: Column(
+            children: [
+              _buildImagePreview(),
+              _buildPickImageButton(),
+              const SizedBox(height: AppDimens.size28),
+              _buildCaptionInput(),
+              const SizedBox(height: AppDimens.size72),
+            ],
+          ),
+        );
+      },
+      listener: (context, state) {
+        _hideLoading();
+        if (state is PostLoading) {
+          _showLoading(AppStrings.loadingMessage);
+        } else if (state is PostUploading) {
+          _showLoading(AppStrings.uploading);
+        } else if (state is PostLoaded) {
+          Navigator.pop(context);
+        }
+      },
+    );
+  }
+
   Widget _buildLoadingScreen() {
     return BlocConsumer<LoadingCubit, LoadingState>(
+      listener: (context, state) {},
       builder: (context, state) {
         return Visibility(
           visible: state.isVisible,
@@ -159,9 +162,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
             message: state.message,
           ),
         );
-      },
-      listener: (BuildContext context, LoadingState state) {
-        Logger.logDebug(state.isVisible.toString());
       },
     );
   }
@@ -171,9 +171,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       title: const Text(AppStrings.createPost),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
+        onPressed: () => Navigator.of(context).pop(),
       ),
       actions: [
         IconButton(
