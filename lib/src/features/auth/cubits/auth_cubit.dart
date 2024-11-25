@@ -12,6 +12,7 @@ import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart'
 /// Handles authentication state management
 /// ->
 class AuthCubit extends Cubit<AuthState> {
+  static const String debugTag = 'AuthCubit';
   final AuthRepository _authRepository;
   AppUser _currentUser = AppUser.getDefaultGuestUser();
 
@@ -21,7 +22,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   AppUser? get currentUser => _currentUser;
 
-  Future<void> checkAuthentication() async {
+  Future<void> checkAuth() async {
     final currentUserResult = await _authRepository.getCurrentUser();
 
     switch (currentUserResult.status) {
@@ -30,7 +31,10 @@ class AuthCubit extends Cubit<AuthState> {
         break;
 
       case Status.error:
-        _handleErrors(result: currentUserResult);
+        _handleErrors(
+          result: currentUserResult,
+          tag: '$debugTag: checkAuth()',
+        );
         emit(Unauthenticated());
         break;
     }
@@ -55,7 +59,10 @@ class AuthCubit extends Cubit<AuthState> {
         break;
 
       case Status.error:
-        _handleErrors(result: loginResult);
+        _handleErrors(
+          result: loginResult,
+          tag: '$debugTag: login()',
+        );
         emit(Unauthenticated());
         break;
     }
@@ -82,7 +89,10 @@ class AuthCubit extends Cubit<AuthState> {
         break;
 
       case Status.error:
-        _handleErrors(result: registerResult);
+        _handleErrors(
+          result: registerResult,
+          tag: '$debugTag: register()',
+        );
         emit(Unauthenticated());
         break;
     }
@@ -129,7 +139,7 @@ class AuthCubit extends Cubit<AuthState> {
     return savedUser as AppUser;
   }
 
-  //-> HELPER FUNCTIONS ->
+  // HELPER FUNCTIONS ▼
 
   void _showLoading() {
     LoadingCubit.showLoading(
@@ -150,7 +160,8 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void _handleErrors({required Result result, String? prefixMessage}) {
+  void _handleErrors(
+      {required Result result, String? prefixMessage, String? tag}) {
     // FIREBASE ERROR
     if (result.isFirebaseError()) {
       emit(AuthError(result.getFirebaseAlert()));
@@ -160,6 +171,7 @@ class AuthCubit extends Cubit<AuthState> {
       ErrorHandler.handleError(
         result.getGenericErrorData(),
         prefixMessage: prefixMessage,
+        tag: tag ?? debugTag,
         onRetry: () {},
       );
     }
@@ -167,6 +179,7 @@ class AuthCubit extends Cubit<AuthState> {
     else if (result.isMessageError()) {
       ErrorHandler.handleError(
         null,
+        tag: tag ?? debugTag,
         customMessage: result.getMessageErrorAlert(),
         onRetry: () {},
       );
