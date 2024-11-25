@@ -119,12 +119,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildAppDrawer() {
-    return DrawerUnit(
-      user: _profileUser,
-    );
+    return DrawerUnit(user: _profileUser);
   }
 
-  // App Bar
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -139,7 +136,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Post list display
   Widget _buildPostList(List<Post> posts) {
     return (posts.isEmpty)
         ? const Center(child: Text(AppStrings.noPostAvailableError))
@@ -156,7 +152,6 @@ class _HomeScreenState extends State<HomeScreen> {
           );
   }
 
-  // Error state widget
   Widget _buildErrorState(String errorMessage) {
     Logger.logError(errorMessage.toString());
     return Center(
