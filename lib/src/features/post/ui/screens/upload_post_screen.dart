@@ -16,6 +16,8 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
@@ -37,16 +39,28 @@ class UploadPostScreen extends StatefulWidget {
 }
 
 class _UploadPostScreenState extends State<UploadPostScreen> {
-  final TextEditingController captionController = TextEditingController();
-  Uint8List? selectedImage;
+  final TextEditingController _captionController = TextEditingController();
+  Uint8List? _selectedImage;
 
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        _buildUploadPostScreen(),
+        _buildLoadingScreen(),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _captionController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildUploadPostScreen() {
     return BlocConsumer<PostCubit, PostState>(
       builder: (context, state) {
-        if (state is PostLoading || state is PostUploading) {
-          return _buildLoadingScreen();
-        }
         return ScrollableScaffold(
           appBar: _buildAppBar(),
           body: Column(
@@ -61,17 +75,14 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         );
       },
       listener: (context, state) {
-        if (state is PostLoaded) {
+        if (state is PostLoading || state is PostUploading) {
+          return LoadingCubit.showLoading(message: AppStrings.loadingMessage);
+        } else if (state is PostLoaded) {
           Navigator.pop(context);
         }
+        LoadingCubit.hideLoading();
       },
     );
-  }
-
-  @override
-  void dispose() {
-    captionController.dispose();
-    super.dispose();
   }
 
   /// Handles image selection, cropping, and compression
@@ -87,7 +98,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       if (kIsWeb) {
         // Handle web image selection
         setState(() {
-          selectedImage = pickedFile.files.single.bytes;
+          _selectedImage = pickedFile.files.single.bytes;
         });
       } else {
         // Handle mobile image selection and cropping
@@ -113,7 +124,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     final compressedImage = await _compressImage(croppedFile.path);
     if (compressedImage != null) {
       setState(() {
-        selectedImage = compressedImage;
+        _selectedImage = compressedImage;
       });
     }
   }
@@ -155,9 +166,9 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
   /// Handles post creation and upload
   void _createAndUploadPost() {
-    final caption = captionController.text.trim();
+    final caption = _captionController.text.trim();
 
-    if (selectedImage == null || caption.isEmpty) {
+    if (_selectedImage == null || caption.isEmpty) {
       ToastMessengerUnit.showToast(
         context: context,
         message: AppStrings.errorImageAndCaptionRequired,
@@ -180,11 +191,23 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       comments: [],
     );
 
-    context.read<PostCubit>().addPost(post: post, imageBytes: selectedImage);
+    context.read<PostCubit>().addPost(post: post, imageBytes: _selectedImage);
   }
 
   Widget _buildLoadingScreen() {
-    return getIt<CenterLoadingUnit>(param1: AppStrings.uploading);
+    return BlocConsumer<LoadingCubit, LoadingState>(
+      builder: (context, state) {
+        return Visibility(
+          visible: state.isVisible,
+          child: CenterLoadingUnit(
+            message: state.message,
+          ),
+        );
+      },
+      listener: (BuildContext context, LoadingState state) {
+        Logger.logDebug(state.isVisible.toString());
+      },
+    );
   }
 
   AppBar _buildAppBar() {
@@ -206,11 +229,11 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   }
 
   Widget _buildImagePreview() {
-    return selectedImage != null
+    return _selectedImage != null
         ? Padding(
             padding: const EdgeInsets.all(AppDimens.paddingRG8),
             child: Image.memory(
-              selectedImage!,
+              _selectedImage!,
               width: double.infinity,
               fit: BoxFit.contain,
             ),
@@ -250,7 +273,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           ),
           const SizedBox(height: AppDimens.spacingSM4),
           MultilineTextFieldUnit(
-            controller: captionController,
+            controller: _captionController,
             labelText: AppStrings.captionLabel,
             hintText: AppStrings.captionHint,
             maxLength: MAX_LENGTH_POST_FIELD,
