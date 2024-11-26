@@ -100,7 +100,7 @@ class UserListView extends StatelessWidget {
       itemBuilder: (context, index) {
         final uid = uids[index];
         return FutureBuilder(
-          future: context.read<ProfileCubit>().getUserProfileById(uid),
+          future: context.read<ProfileCubit>().getUserProfileById(userId: uid),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const ListTile(title: Text(AppStrings.loadingMessage));

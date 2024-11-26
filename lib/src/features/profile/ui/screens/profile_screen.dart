@@ -32,7 +32,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late final ProfileCubit _profileCubit;
-  late final ProfileUser _currentAppUser;
+  ProfileUser _currentAppUser = ProfileUser.getGuestUser();
 
   get _appUserId => _currentAppUser.uid;
 
@@ -78,9 +78,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _fetchUserProfile(String profileUserId) async {
+    _showLoading(AppStrings.loadingMessage);
     _currentAppUser = await _profileCubit.getCurrentUser();
 
     _profileCubit.loadUserProfileById(userId: profileUserId);
+    _hideLoading();
   }
 
   void _handleFollowButtonPressed() {
