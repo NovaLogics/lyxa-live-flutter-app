@@ -134,7 +134,7 @@ class FirebaseAuthRepository implements AuthRepository {
     await _hiveHelper.save(storageKey, user.toJsonString());
   }
 
-  //-> HELPER FUNCTIONS ->
+  // HELPER FUNCTIONS ▼
 
   Future<AppUser> _getUserById(String userId) async {
     final userDocument = await _userCollectionRef.doc(userId).get();

@@ -1,9 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
+import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
@@ -14,10 +17,14 @@ import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart'
 class AuthCubit extends Cubit<AuthState> {
   static const String debugTag = 'AuthCubit';
   final AuthRepository _authRepository;
+  final StorageRepository _storageRepository;
   AppUser _currentUser = AppUser.getDefaultGuestUser();
 
-  AuthCubit({required AuthRepository authRepository})
-      : _authRepository = authRepository,
+  AuthCubit({
+    required AuthRepository authRepository,
+    required StorageRepository storageRepository,
+  })  : _authRepository = authRepository,
+        _storageRepository = storageRepository,
         super(AuthInitial());
 
   AppUser? get currentUser => _currentUser;
@@ -150,6 +157,28 @@ class AuthCubit extends Cubit<AuthState> {
   void _hideLoading() {
     LoadingCubit.hideLoading();
   }
+
+  void uploadDeafultUserAvatar(String userId) async {
+  const assetPath = 'assets/images/default_avatar.jpg';
+  Uint8List imageBytes = await getImageBytesFromAssets(assetPath);
+
+   final imageUploadResult = await _storageRepository.uploadPostImage(
+      imageFileBytes: imageBytes,
+      fileName: userId,
+    );
+
+    if (imageUploadResult.status == Status.error) {
+      _handleErrors(
+        result: imageUploadResult,
+        tag: '$debugTag: addPost()::imageUploadResult',
+      );
+      return;
+    }
+}
+
+
+  
+
 
   void _handleAuthStatus({required AppUser? userData}) {
     if (userData != null) {
