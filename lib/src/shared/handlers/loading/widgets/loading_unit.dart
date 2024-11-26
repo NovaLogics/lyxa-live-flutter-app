@@ -67,8 +67,8 @@ class LoadingUnit extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppDimens.size44,
-              vertical: AppDimens.size56,
+              horizontal: AppDimens.size40,
+              vertical: AppDimens.size48,
             ),
             child: _buildLoadingContent(context, message),
           ),

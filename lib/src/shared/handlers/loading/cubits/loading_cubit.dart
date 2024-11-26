@@ -18,7 +18,7 @@ class LoadingCubit extends Cubit<LoadingState> {
 
     if (timeout != null) {
       _loadingScreenHideTimer = Timer(timeout, () {
-        hide(); 
+        hide();
       });
     }
   }
@@ -27,7 +27,7 @@ class LoadingCubit extends Cubit<LoadingState> {
     if (state.isVisible) {
       _loadingScreenHideTimer?.cancel();
 
-      _visibilityDelayTimer = Timer(const Duration(seconds: 2), () {
+      _visibilityDelayTimer = Timer(const Duration(seconds: 1), () {
         emit(state.copyWith(isVisible: false));
       });
     }
@@ -40,13 +40,12 @@ class LoadingCubit extends Cubit<LoadingState> {
     return super.close();
   }
 
-
   static void showLoading({String? message, Duration? timeout}) {
-    getIt<LoadingCubit>().show(message: message, timeout: const Duration(seconds: 15));
+    getIt<LoadingCubit>()
+        .show(message: message, timeout: const Duration(seconds: 15));
   }
 
   static void hideLoading() {
     getIt<LoadingCubit>().hide();
   }
 }
-
