@@ -84,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Logger.logDebug("Current user ID: ${_currentAppUser.uid}");
 
     // Fetch profile for the given user ID
-    _profileCubit.fetchUserProfile(profileUserId);
+    _profileCubit.loadUserProfileById(profileUserId);
   }
 
   /// Handles the follow/unfollow button press.

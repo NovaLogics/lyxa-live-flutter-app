@@ -11,6 +11,7 @@ import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 
 // PROFILE STATE MANAGEMENT
 class ProfileCubit extends Cubit<ProfileState> {
+  static const String debugTag = 'ProfileCubit';
   final ProfileRepository _profileRepository;
   final StorageRepository _storageRepository;
 
@@ -21,26 +22,38 @@ class ProfileCubit extends Cubit<ProfileState> {
         _profileRepository = profileRepository,
         super(ProfileInitial());
 
-  // Fetch user profile using repository -> useful for loading profile pages
-  Future<void> fetchUserProfile(String uid) async {
-    try {
-      emit(ProfileLoading());
-      final user = await _profileRepository.getUserProfileById(uid);
+  Future<void> loadUserProfileById(String userId) async {
+    emit(ProfileLoading());
 
-      if (user != null) {
-        emit(ProfileLoaded(user));
-      } else {
-        emit(ProfileError(AppStrings.userNotFoundError));
-      }
-    } catch (error) {
-      emit(ProfileError(error.toString()));
+    final getUserResult =
+        await _profileRepository.getUserProfileById(userId: userId);
+
+    switch (getUserResult.status) {
+      case Status.success:
+        if (getUserResult.data != null) {
+          emit(ProfileLoaded(getUserResult.data as ProfileUser));
+        } else {
+          emit(ProfileError(AppStrings.userNotFoundError));
+        }
+        break;
+
+      case Status.error:
+        _handleErrors(
+          result: getUserResult,
+          tag: '$debugTag: getUserProfileById()',
+        );
+        break;
     }
   }
 
-  // Return user profile given uid -> useful for loading many profiles for posts
-  Future<ProfileUser?> getUserProfile(String uid) async {
-    final user = await _profileRepository.getUserProfileById(uid);
-    return user;
+  Future<ProfileUser?> getUserProfileById(String userId) async {
+    final getUserResult =
+        await _profileRepository.getUserProfileById(userId: userId);
+
+    if (getUserResult.isDataNotNull()) {
+      return getUserResult.data as ProfileUser;
+    }
+    return null;
   }
 
   // Update bio / profile picture
@@ -94,7 +107,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       await _profileRepository.updateProfile(updatedProfile);
 
       // Re-fetch updated profile
-      await fetchUserProfile(uid);
+      await loadUserProfileById(uid);
     } catch (error) {
       emit(ProfileError('Error updating profile: ${error.toString()}'));
     }
@@ -109,7 +122,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-    // HELPER FUNCTIONS ▼
+  // HELPER FUNCTIONS ▼
 
   void _handleErrors(
       {required Result result, String? prefixMessage, String? tag}) {
