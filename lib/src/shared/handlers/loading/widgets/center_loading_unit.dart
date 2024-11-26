@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 
-class CenterLoadingUnit extends StatelessWidget {
+class CenterLoadingUnit extends StatefulWidget {
   final String message;
 
   const CenterLoadingUnit({
@@ -14,13 +15,18 @@ class CenterLoadingUnit extends StatelessWidget {
   });
 
   @override
+  State<CenterLoadingUnit> createState() => _CenterLoadingUnitState();
+}
+
+class _CenterLoadingUnitState extends State<CenterLoadingUnit> {
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoadingCubit, LoadingState>(
       builder: (context, state) {
         return state.isVisible
             ? Scaffold(
                 backgroundColor:
-                    Theme.of(context).colorScheme.surface.withOpacity(0.6),
+                    Theme.of(context).colorScheme.surface.withOpacity(0.7),
                 body: Center(
                   child: Card(
                     color: Theme.of(context).colorScheme.surface,
@@ -39,7 +45,7 @@ class CenterLoadingUnit extends StatelessWidget {
                           ),
                           const SizedBox(height: AppDimens.size24),
                           SizedBox(
-                            width: AppDimens.size240,
+                            width: AppDimens.size220,
                             child: Text(
                               state.message,
                               textAlign: TextAlign.center,
@@ -47,8 +53,8 @@ class CenterLoadingUnit extends StatelessWidget {
                                 fontSize: AppDimens.fontSizeXL20,
                                 letterSpacing: AppDimens.letterSpacingPT11,
                                 fontWeight: FontWeight.bold,
-                                color:
-                                    Theme.of(context).colorScheme.onSecondary,
+                                fontFamily: FONT_RALEWAY,
+                                color: Theme.of(context).colorScheme.onTertiary,
                               ),
                               maxLines: null, // Allows unlimited lines
                               overflow: TextOverflow
