@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
@@ -24,16 +25,26 @@ class DrawerTitleUnit extends StatelessWidget {
         title,
         style: AppTextStyles.subtitlePrimary.copyWith(
           color: Theme.of(context).colorScheme.onSecondary,
-          fontSize: AppDimens.fontSizeMD16,
           letterSpacing: AppDimens.letterSpacingPT18,
-          fontFamily: FONT_MONTSERRAT,
+          fontSize: AppDimens.fontSizeLG18,
+          fontFamily: FONT_RALEWAY,
+          fontWeight: FontWeight.w600,
           shadows: [],
         ),
       ),
-      leading: Icon(
-        icon,
-        color: theme.colorScheme.onPrimary,
+      leading: SvgPicture.asset(
+        ICON_HOME_BORDER,
+        colorFilter: ColorFilter.mode(
+          Theme.of(context).colorScheme.onPrimary,
+          BlendMode.srcIn,
+        ),
+        width: AppDimens.size24,
+        height: AppDimens.size24,
       ),
+      // Icon(
+      //   icon,
+      //   color: theme.colorScheme.onPrimary,
+      // ),
       onTap: onTap,
     );
   }
