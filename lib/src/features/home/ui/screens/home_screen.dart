@@ -75,16 +75,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _initScreen() async {
-    _showLoading(AppStrings.loadingMessage);
-
+    _showLoading(
+      AppStrings.loadingMessage,
+    );
     final profileUser = await _postCubit.getCurrentUser();
 
     setState(() {
       _currentUser = profileUser;
     });
-
     _hideLoading();
-
     _fetchAllPosts();
   }
 
