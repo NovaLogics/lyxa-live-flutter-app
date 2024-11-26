@@ -22,23 +22,27 @@ class LoadingUnit extends StatefulWidget {
 
 class _LoadingUnitState extends State<LoadingUnit> {
   bool _isVisible = false;
-  Timer? _visibilityTimer;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoadingCubit, LoadingState>(
       builder: (context, state) {
-        // Manage visibility with delay
-        if (state.isVisible) {
-          // Cancel any existing timers
-          _visibilityTimer?.cancel();
-          if (!_isVisible) setState(() => _isVisible = true);
-        } else if (_isVisible) {
-          _visibilityTimer?.cancel();
-          _visibilityTimer = Timer(const Duration(seconds: 2), () {
-            setState(() => _isVisible = false);
-          });
-        }
+        // Schedule the visibility change after the build phase
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (state.isVisible && !_isVisible) {
+            setState(() {
+              _isVisible = true;
+            });
+          } else if (!state.isVisible && _isVisible) {
+            Future.delayed(const Duration(seconds: 2), () {
+              if (!state.isVisible) {
+                setState(() {
+                  _isVisible = false;
+                });
+              }
+            });
+          }
+        });
 
         return _isVisible
             ? Scaffold(
@@ -53,7 +57,7 @@ class _LoadingUnitState extends State<LoadingUnit> {
                     elevation: AppDimens.elevationMD8,
                     shadowColor: Theme.of(context).colorScheme.primary,
                     child: Padding(
-                      padding: const EdgeInsets.all(AppDimens.size56),
+                      padding: const EdgeInsets.all(AppDimens.size44),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -69,7 +73,7 @@ class _LoadingUnitState extends State<LoadingUnit> {
                               style: TextStyle(
                                 fontSize: AppDimens.fontSizeXL20,
                                 letterSpacing: AppDimens.letterSpacingPT11,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 fontFamily: FONT_RALEWAY,
                                 color: Theme.of(context).colorScheme.onTertiary,
                               ),
@@ -84,16 +88,8 @@ class _LoadingUnitState extends State<LoadingUnit> {
                   ),
                 ),
               )
-            // Return an empty widget when not visible
             : const SizedBox.shrink();
       },
     );
-  }
-
-  @override
-  void dispose() {
-    // Clean up the timer
-    _visibilityTimer?.cancel();
-    super.dispose();
   }
 }
