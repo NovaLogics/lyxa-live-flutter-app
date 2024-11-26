@@ -87,7 +87,7 @@ class DrawerUnit extends StatelessWidget {
 
   Widget _buildHeadingText(BuildContext context) {
     return Text(
-      TextUtil.toSentenceCaseMultiple(user.name),
+      user.name,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
       style: AppTextStyles.headingSecondary.copyWith(

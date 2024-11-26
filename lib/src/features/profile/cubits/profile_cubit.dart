@@ -31,6 +31,10 @@ class ProfileCubit extends Cubit<ProfileState> {
         _profileRepository = profileRepository,
         super(ProfileInitial());
 
+  void resetUser() {
+    _currentAppProfileUser = null;
+  }
+
   Future<ProfileUser> getCurrentUser() async {
     if (_currentAppProfileUser != null) {
       return _currentAppProfileUser as ProfileUser;
@@ -135,7 +139,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         result: updateProfileResult,
         tag: '$debugTag: updateProfile()::updateProfileResult',
       );
-       _hideLoading();
+      _hideLoading();
       return;
     }
 
