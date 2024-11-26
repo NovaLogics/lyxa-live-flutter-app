@@ -1,5 +1,4 @@
-import 'dart:typed_data';
-
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
@@ -159,10 +158,10 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void uploadDeafultUserAvatar(String userId) async {
-  const assetPath = 'assets/images/default_avatar.jpg';
-  Uint8List imageBytes = await getImageBytesFromAssets(assetPath);
+    const assetPath = 'assets/images/default_avatar.jpg';
+    Uint8List imageBytes = await getImageBytesFromAssets(assetPath);
 
-   final imageUploadResult = await _storageRepository.uploadPostImage(
+    final imageUploadResult = await _storageRepository.uploadProfileImage(
       imageFileBytes: imageBytes,
       fileName: userId,
     );
@@ -174,16 +173,23 @@ class AuthCubit extends Cubit<AuthState> {
       );
       return;
     }
-}
+  }
 
+  Future<Uint8List> getImageBytesFromAssets(String assetPath) async {
+    try {
+      final ByteData byteData = await rootBundle.load(assetPath);
 
-  
-
+      return byteData.buffer.asUint8List();
+    } catch (e) {
+      throw Exception('Failed to load asset: $e');
+    }
+  }
 
   void _handleAuthStatus({required AppUser? userData}) {
     if (userData != null) {
       _currentUser = userData;
       emit(Authenticated(_currentUser));
+      uploadDeafultUserAvatar(_currentUser.uid);
     } else {
       emit(Unauthenticated());
     }
