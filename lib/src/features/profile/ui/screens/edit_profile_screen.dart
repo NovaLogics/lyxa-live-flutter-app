@@ -211,7 +211,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     if (pickedImage != null || newBio != null) {
       profileCubit.updateProfile(
-          uid: uid, updatedBio: newBio, imageWebBytes: pickedImage);
+          userId: uid, updatedBio: newBio, imageWebBytes: pickedImage);
     } else {
       Navigator.pop(context);
     }

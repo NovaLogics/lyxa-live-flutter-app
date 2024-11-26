@@ -1,19 +1,23 @@
 import 'dart:typed_data';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 // PROFILE STATE MANAGEMENT
 class ProfileCubit extends Cubit<ProfileState> {
   static const String debugTag = 'ProfileCubit';
   final ProfileRepository _profileRepository;
   final StorageRepository _storageRepository;
+  ProfileUser? _currentAppProfileUser;
 
   ProfileCubit({
     required ProfileRepository profileRepository,
@@ -21,6 +25,29 @@ class ProfileCubit extends Cubit<ProfileState> {
   })  : _storageRepository = storageRepository,
         _profileRepository = profileRepository,
         super(ProfileInitial());
+
+  Future<ProfileUser> getCurrentUser() async {
+    if (_currentAppProfileUser != null) {
+      return _currentAppProfileUser as ProfileUser;
+    } else {
+      return await _getCurrentUser();
+    }
+  }
+
+  Future<ProfileUser> _getCurrentUser() async {
+    final currentUser = getIt<AuthCubit>().currentUser;
+    if (currentUser == null) {
+      throw Exception(ErrorMsgs.cannotFetchProfileError);
+    }
+
+    _currentAppProfileUser = await getUserProfileById(userId: currentUser.uid);
+
+    if (_currentAppProfileUser == null) {
+      throw Exception(ErrorMsgs.cannotFetchProfileError);
+    }
+
+    return _currentAppProfileUser as ProfileUser;
+  }
 
   Future<void> loadUserProfileById({required String userId}) async {
     emit(ProfileLoading());
@@ -57,18 +84,29 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> updateProfile({
-    required String uid,
+    required String userId,
     String? updatedBio,
-    String? imageMobilePath,
-    Uint8List? imageWebBytes,
+    Uint8List? imageBytes,
   }) async {
     try {
       emit(ProfileLoading());
-      // Fetch current user profile
-      final currentUser = await _profileRepository.getUserProfileById(uid);
+      final currentUser = await _profileRepository.getUserProfileById(userId);
 
       if (currentUser == null) {
         emit(ProfileError(AppStrings.failedToFetchUserError));
+        return;
+      }
+
+      final imageUploadResult = await _storageRepository.uploadProfileImage(
+        imageFileBytes: imageBytes,
+        fileName: userId,
+      );
+
+      if (imageUploadResult.status == Status.error) {
+        _handleErrors(
+          result: imageUploadResult,
+          tag: '$debugTag: addPost()::imageUploadResult',
+        );
         return;
       }
 
@@ -81,13 +119,13 @@ class ProfileCubit extends Cubit<ProfileState> {
         if (imageMobilePath != null) {
           // Upload
           imageDownloadUrl = await _storageRepository.uploadProfileImageMobile(
-              imageMobilePath, uid);
+              imageMobilePath, userId);
         }
         // Web
         else if (imageWebBytes != null) {
           // Upload
           imageDownloadUrl = await _storageRepository.uploadProfileImageWeb(
-              imageWebBytes, uid);
+              imageWebBytes, userId);
         }
 
         if (imageDownloadUrl == null) {
@@ -106,7 +144,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       await _profileRepository.updateProfile(updatedProfile);
 
       // Re-fetch updated profile
-      await loadUserProfileById(uid);
+      await loadUserProfileById(userId);
     } catch (error) {
       emit(ProfileError('Error updating profile: ${error.toString()}'));
     }
