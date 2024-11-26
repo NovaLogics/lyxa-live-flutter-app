@@ -6,19 +6,19 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 
-class CenterLoadingUnit extends StatefulWidget {
+class LoadingUnit extends StatefulWidget {
   final String message;
 
-  const CenterLoadingUnit({
+  const LoadingUnit({
     super.key,
     this.message = AppStrings.pleaseWait,
   });
 
   @override
-  State<CenterLoadingUnit> createState() => _CenterLoadingUnitState();
+  State<LoadingUnit> createState() => _LoadingUnitState();
 }
 
-class _CenterLoadingUnitState extends State<CenterLoadingUnit> {
+class _LoadingUnitState extends State<LoadingUnit> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoadingCubit, LoadingState>(
