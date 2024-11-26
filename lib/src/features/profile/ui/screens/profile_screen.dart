@@ -164,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => EditProfileScreen(user: user),
+                    builder: (_) => EditProfileScreen(currentUser: user),
                   ),
                 ),
                 icon: const Icon(Icons.settings_outlined),

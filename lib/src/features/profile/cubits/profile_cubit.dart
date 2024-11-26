@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -174,5 +177,40 @@ class ProfileCubit extends Cubit<ProfileState> {
         onRetry: () {},
       );
     }
+  }
+
+   /// Returns platform specific image cropper settings
+  List<PlatformUiSettings> _getImageCropperSettings() {
+    return [
+      AndroidUiSettings(
+        toolbarTitle: AppStrings.cropperTitle,
+        toolbarColor: Colors.deepPurple,
+        toolbarWidgetColor: Colors.white,
+        lockAspectRatio: true,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio4x3,
+        ],
+      ),
+      IOSUiSettings(
+        title: AppStrings.cropperTitle,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio4x3,
+        ],
+      ),
+    ];
+  }
+
+  /// Compresses image to reduce size
+  Future<Uint8List?> _compressImage(String filePath) async {
+    return await FlutterImageCompress.compressWithFile(
+      filePath,
+      minWidth: 800,
+      minHeight: 800,
+      quality: 90,
+    );
   }
 }

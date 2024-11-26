@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
@@ -15,7 +14,9 @@ import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
-import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
@@ -24,11 +25,11 @@ import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  final ProfileUser user;
+  final ProfileUser currentUser;
 
   const EditProfileScreen({
     super.key,
-    required this.user,
+    required this.currentUser,
   });
 
   @override
@@ -45,23 +46,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        if (state is ProfileLoading) {
-          return _buildLoadingScreen();
-        } else {
-          return _buildEditScreen();
-        }
+        return Stack(
+          children: [
+            _buildEditScreen(),
+            _buildLoadingScreen(),
+          ],
+        );
       },
       listener: (context, state) {
         // Show Error
         if (state is ProfileError) {
-          ToastMessengerUnit.showToast(
+          ToastMessengerUnit.showErrorToast(
             context: context,
             message: state.message,
-            icon: Icons.error,
-            backgroundColor: AppColors.bluePurple900L1,
-            textColor: AppColors.whiteShade,
-            shadowColor: AppColors.blackShade,
-            duration: ToastDuration.second5,
           );
         } else if (state is ProfileLoaded) {
           Navigator.pop(context);
@@ -70,55 +67,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  // SCREEN -> Loading
+  void _showLoading(String message) {
+    return LoadingCubit.showLoading(message: message);
+  }
+
+  void _hideLoading() {
+    LoadingCubit.hideLoading();
+  }
+
   Widget _buildLoadingScreen() {
-    return const Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(),
-            Text(AppStrings.updating),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // SCREEN -> Edit
-  Widget _buildEditScreen() {
-    bioTextController.text = widget.user.bio;
-    return Scaffold(
-      body: Stack(
-        children: [
-          _buildBackground(),
-          _buildContent(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBackground() {
-    return RepaintBoundary(
-      child: getIt<GradientBackgroundUnit>(
-        param1: AppDimens.containerSize400,
-        param2: BackgroundStyle.main,
-      ),
-    );
-  }
-
-  Widget _buildContent() {
-    return ScrollableScaffold(
-      appBar: AppBar(
-        title: const Text(AppStrings.editProfile),
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        actions: [
-          IconButton(
-            onPressed: updateProfile,
-            icon: const Icon(Icons.upload),
+    return BlocConsumer<LoadingCubit, LoadingState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Visibility(
+          visible: state.isVisible,
+          child: CenterLoadingUnit(
+            message: state.message,
           ),
-        ],
-      ),
+        );
+      },
+    );
+  }
+
+  Widget _buildEditScreen() {
+    bioTextController.text = widget.currentUser.bio;
+    return ScrollableScaffold(
+      appBar: _buildAppBar(),
       body: Column(
         children: [
           const SizedBox(height: AppDimens.size24),
@@ -130,6 +104,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           const SizedBox(height: AppDimens.size72),
         ],
       ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: const Text(AppStrings.editProfile),
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      actions: [
+        IconButton(
+          onPressed: updateProfile,
+          icon: const Icon(Icons.upload),
+        ),
+      ],
     );
   }
 
@@ -204,7 +191,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void updateProfile() async {
     final profileCubit = context.read<ProfileCubit>();
-    final String uid = widget.user.uid;
+    final String uid = widget.currentUser.uid;
     final String? newBio = bioTextController.text.isNotEmpty
         ? bioTextController.text.toString().trim()
         : null;
@@ -241,7 +228,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     fit: BoxFit.cover,
                   )
                 : CachedNetworkImage(
-                    imageUrl: widget.user.profileImageUrl,
+                    imageUrl: widget.currentUser.profileImageUrl,
                     fit: BoxFit.cover,
                     placeholder: (context, url) =>
                         const CircularProgressIndicator(),
