@@ -34,29 +34,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late final ProfileCubit _profileCubit;
   late final ProfileUser _currentAppUser;
 
-  get displayUserId => widget.displayUserId;
+  get _appUserId => _currentAppUser.uid;
+
+  get _displayUserId => widget.displayUserId;
 
   @override
   void initState() {
     super.initState();
     _profileCubit = getIt<ProfileCubit>();
-    _fetchUserProfile(displayUserId);
+    _fetchUserProfile(_displayUserId);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        if (state is ProfileLoaded) {
-          LoadingCubit.hideLoading();
-          return _buildProfileContent(context, state.profileUser);
-        } else if (state is ProfileLoading) {
-          LoadingCubit.showLoading();
+        _hideLoading();
+        if (state is ProfileLoading) {
+          _showLoading(AppStrings.loadingMessage);
           return Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.surface,
-          );
+              backgroundColor: Theme.of(context).colorScheme.surface);
+        } else if (state is ProfileLoaded) {
+          return _buildProfileContent(context, state.profileUser);
         } else {
-          LoadingCubit.hideLoading();
           return const Scaffold(
             body: Center(
               child: Text(AppStrings.profileNotFoundError),
@@ -67,43 +67,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  void _showLoading(String message) {
+    LoadingCubit.showLoading(message: message);
+  }
+
+  void _hideLoading() {
+    LoadingCubit.hideLoading();
+  }
+
   void _fetchUserProfile(String profileUserId) async {
     _currentAppUser = await _profileCubit.getCurrentUser();
-
-    Logger.logDebug("Current user ID: ${_currentAppUser.uid}");
 
     _profileCubit.loadUserProfileById(userId: profileUserId);
   }
 
-  /// Handles the follow/unfollow button press.
   void _handleFollowButtonPressed() {
     final profileState = _profileCubit.state;
 
     if (profileState is! ProfileLoaded) return;
 
     final profileUser = profileState.profileUser;
-    final isFollowing = profileUser.followers.contains(_currentAppUser.uid);
+    final isAlreadyFollowing = profileUser.followers.contains(_appUserId);
 
-    // Optimistically update UI
     setState(() {
-      if (isFollowing) {
-        profileUser.followers.remove(_currentAppUser.uid);
-      } else {
-        profileUser.followers.add(_currentAppUser.uid);
-      }
+      isAlreadyFollowing
+          ? profileUser.followers.remove(_appUserId)
+          : profileUser.followers.add(_appUserId);
     });
 
-    // Perform follow/unfollow logic and handle errors
     _profileCubit
-        .toggleFollow(_currentAppUser.uid, widget.displayUserId)
+        .toggleFollow(appUserId: _appUserId, targetUserId: _displayUserId)
         .catchError((_) {
-      // Revert optimistic UI changes if the operation fails
       setState(() {
-        if (isFollowing) {
-          profileUser.followers.add(_currentAppUser.uid);
-        } else {
-          profileUser.followers.remove(_currentAppUser.uid);
-        }
+        isAlreadyFollowing
+            ? profileUser.followers.add(_appUserId)
+            : profileUser.followers.remove(_appUserId);
       });
     });
   }
