@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
@@ -8,7 +6,7 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 
-class LoadingUnit extends StatefulWidget {
+class LoadingUnit extends StatelessWidget {
   final String message;
 
   const LoadingUnit({
@@ -17,37 +15,13 @@ class LoadingUnit extends StatefulWidget {
   });
 
   @override
-  State<LoadingUnit> createState() => _LoadingUnitState();
-}
-
-class _LoadingUnitState extends State<LoadingUnit> {
-  bool _isVisible = false;
-
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoadingCubit, LoadingState>(
       builder: (context, state) {
-        // Schedule the visibility change after the build phase
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (state.isVisible && !_isVisible) {
-            setState(() {
-              _isVisible = true;
-            });
-          } else if (!state.isVisible && _isVisible) {
-            Future.delayed(const Duration(seconds: 2), () {
-              if (!state.isVisible) {
-                setState(() {
-                  _isVisible = false;
-                });
-              }
-            });
-          }
-        });
-
-        return _isVisible
+        return state.isVisible
             ? Scaffold(
                 backgroundColor:
-                    Theme.of(context).colorScheme.surface.withOpacity(0.7),
+                    Theme.of(context).colorScheme.surface.withOpacity(0.6),
                 body: Center(
                   child: Card(
                     color: Theme.of(context).colorScheme.surface,
@@ -57,7 +31,7 @@ class _LoadingUnitState extends State<LoadingUnit> {
                     elevation: AppDimens.elevationMD8,
                     shadowColor: Theme.of(context).colorScheme.primary,
                     child: Padding(
-                      padding: const EdgeInsets.all(AppDimens.size44),
+                      padding: const EdgeInsets.all(AppDimens.size56),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -66,20 +40,22 @@ class _LoadingUnitState extends State<LoadingUnit> {
                           ),
                           const SizedBox(height: AppDimens.size24),
                           SizedBox(
-                            width: AppDimens.size220,
+                            width: AppDimens.size240,
                             child: Text(
                               state.message,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: AppDimens.fontSizeXL20,
                                 letterSpacing: AppDimens.letterSpacingPT11,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.bold,
                                 fontFamily: FONT_RALEWAY,
-                                color: Theme.of(context).colorScheme.onTertiary,
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary,
                               ),
-                              maxLines: null,
-                              overflow: TextOverflow.visible,
-                              softWrap: true,
+                              maxLines: null, // Allows unlimited lines
+                              overflow: TextOverflow
+                                  .visible, // Ensures the text remains visible
+                              softWrap: true, // Wraps the text within the width
                             ),
                           ),
                         ],
@@ -88,7 +64,8 @@ class _LoadingUnitState extends State<LoadingUnit> {
                   ),
                 ),
               )
-            : const SizedBox.shrink();
+            : const SizedBox
+                .shrink(); // Return an empty widget when not visible
       },
     );
   }
