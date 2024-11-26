@@ -22,7 +22,7 @@ class _ProfileImageState extends State<ProfileImage> {
   }
 
   void _startFadeInTimer() {
-    Timer(const Duration(milliseconds: 1500), () {
+    Timer(const Duration(seconds: 1), () {
       setState(() {
         _isVisible = true;
       });

@@ -18,14 +18,12 @@ class DrawerTitleUnit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return ListTile(
       title: Text(
         title,
         style: AppTextStyles.subtitlePrimary.copyWith(
           color: Theme.of(context).colorScheme.onSecondary,
-          letterSpacing: AppDimens.letterSpacingPT18,
+          letterSpacing: AppDimens.letterSpacingPT13,
           fontSize: AppDimens.fontSizeLG18,
           fontFamily: FONT_RALEWAY,
           fontWeight: FontWeight.w600,
@@ -35,16 +33,12 @@ class DrawerTitleUnit extends StatelessWidget {
       leading: SvgPicture.asset(
         iconSrc,
         colorFilter: ColorFilter.mode(
-          Theme.of(context).colorScheme.onPrimary,
+          Theme.of(context).colorScheme.onSecondary,
           BlendMode.srcIn,
         ),
         width: AppDimens.size24,
         height: AppDimens.size24,
       ),
-      // Icon(
-      //   icon,
-      //   color: theme.colorScheme.onPrimary,
-      // ),
       onTap: onTap,
     );
   }

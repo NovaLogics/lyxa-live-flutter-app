@@ -31,12 +31,20 @@ class DrawerUnit extends StatelessWidget {
               children: [
                 const SizedBox(height: AppDimens.size12),
                 _buildDrawerIcon(context),
-                const SizedBox(height: AppDimens.size12),
-                _buildHeadingText(context),
-                const SizedBox(height: AppDimens.size12),
+                const SizedBox(height: AppDimens.size8),
                 Divider(
                     thickness: 0.5,
-                    color: Theme.of(context).colorScheme.outline),
+                    color: Theme.of(context).colorScheme.primary),
+                const SizedBox(height: AppDimens.size8),
+                _buildHeadingText(context),
+                const SizedBox(height: AppDimens.size8),
+                Padding(
+                  padding: const EdgeInsets.only(right: AppDimens.size80),
+                  child: Divider(
+                      thickness: 0.5,
+                      color: Theme.of(context).colorScheme.primary),
+                ),
+                const SizedBox(height: AppDimens.size8),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleHome,
@@ -56,16 +64,22 @@ class DrawerUnit extends StatelessWidget {
                   iconSrc: ICON_SETTINGS_BORDER,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
-                const SizedBox(height: AppDimens.size48),
-                Divider(
-                    thickness: 0.5,
-                    color: Theme.of(context).colorScheme.outline),
+                const SizedBox(height: AppDimens.size20),
+                Padding(
+                  padding: const EdgeInsets.only(right: AppDimens.size80),
+                  child: Divider(
+                      thickness: 0.5,
+                      color: Theme.of(context).colorScheme.primary),
+                ),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleLogout,
                   iconSrc: ICON_LOGOUT_BORDER,
                   onTap: () => _logout(context),
                 ),
+                Divider(
+                    thickness: 0.5,
+                    color: Theme.of(context).colorScheme.primary),
                 const SizedBox(height: AppDimens.size12),
               ],
             ),
@@ -90,9 +104,9 @@ class DrawerUnit extends StatelessWidget {
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
       style: AppTextStyles.headingSecondary.copyWith(
-        color: Theme.of(context).colorScheme.onSecondary,
+        color: Theme.of(context).colorScheme.onPrimary,
         fontSize: AppDimens.fontSizeXL20,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
         letterSpacing: AppDimens.letterSpacingPT10,
         shadows: [],
       ),
