@@ -91,7 +91,21 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (registerResult.status) {
       case Status.success:
-        _handleAuthStatus(userData: registerResult.data);
+        if (registerResult.data != null) {
+          _showLoading();
+          _currentUser = registerResult.data as AppUser;
+          final link = await uploadDeafultUserAvatar(_currentUser.uid);
+          if (link != null) {
+          await  _authRepository.updateProfileImageUrl(
+              userId: _currentUser.uid,
+              profileImageUrl: link,
+            );
+          }
+          _hideLoading();
+          emit(Authenticated(_currentUser));
+        } else {
+          emit(Unauthenticated());
+        }
         break;
 
       case Status.error:
@@ -157,7 +171,7 @@ class AuthCubit extends Cubit<AuthState> {
     LoadingCubit.hideLoading();
   }
 
-  void uploadDeafultUserAvatar(String userId) async {
+  Future<String?> uploadDeafultUserAvatar(String userId) async {
     const assetPath = 'assets/images/default_avatar.jpg';
     Uint8List imageBytes = await getImageBytesFromAssets(assetPath);
 
@@ -171,8 +185,9 @@ class AuthCubit extends Cubit<AuthState> {
         result: imageUploadResult,
         tag: '$debugTag: addPost()::imageUploadResult',
       );
-      return;
+      return null;
     }
+    return imageUploadResult.data;
   }
 
   Future<Uint8List> getImageBytesFromAssets(String assetPath) async {
@@ -189,7 +204,6 @@ class AuthCubit extends Cubit<AuthState> {
     if (userData != null) {
       _currentUser = userData;
       emit(Authenticated(_currentUser));
-      uploadDeafultUserAvatar(_currentUser.uid);
     } else {
       emit(Unauthenticated());
     }

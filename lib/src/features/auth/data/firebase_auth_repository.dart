@@ -7,6 +7,7 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
@@ -83,6 +84,21 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<bool> updateProfileImageUrl({
+    required String userId,
+    required String profileImageUrl,
+  }) async {
+    try {
+      await _userCollectionRef
+          .doc(userId)
+          .update({ProfileUserFields.profileImageUrl: profileImageUrl});
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  @override
   Future<Result<AppUser?>> getCurrentUser() async {
     try {
       final firebaseUser = _firebaseAuth.currentUser;
@@ -117,7 +133,7 @@ class FirebaseAuthRepository implements AuthRepository {
       if (userData == null || userData.isEmpty) {
         return Result.error(ErrorMsgs.userDataNotFound);
       }
-      
+
       return Result.success(
         data: AppUser.fromJsonString(userData),
       );
