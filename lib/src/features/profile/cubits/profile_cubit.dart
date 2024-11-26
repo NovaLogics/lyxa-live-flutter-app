@@ -39,14 +39,25 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (currentUser == null) {
       throw Exception(ErrorMsgs.cannotFetchProfileError);
     }
-
-    _currentAppProfileUser = await getUserProfileById(userId: currentUser.uid);
+    _currentAppProfileUser = await getUserProfileById(
+      userId: currentUser.uid,
+    );
 
     if (_currentAppProfileUser == null) {
       throw Exception(ErrorMsgs.cannotFetchProfileError);
     }
 
     return _currentAppProfileUser as ProfileUser;
+  }
+
+  Future<ProfileUser?> getUserProfileById({required String userId}) async {
+    final getUserResult =
+        await _profileRepository.getUserProfileById(userId: userId);
+
+    if (getUserResult.isDataNotNull()) {
+      return getUserResult.data as ProfileUser;
+    }
+    return null;
   }
 
   Future<void> loadUserProfileById({required String userId}) async {
@@ -73,30 +84,17 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<ProfileUser?> getUserProfileById({required String userId}) async {
-    final getUserResult =
-        await _profileRepository.getUserProfileById(userId: userId);
-
-    if (getUserResult.isDataNotNull()) {
-      return getUserResult.data as ProfileUser;
-    }
-    return null;
-  }
-
   Future<void> updateProfile({
     required String userId,
     String? updatedBio,
     Uint8List? imageBytes,
   }) async {
-    try {
-      emit(ProfileLoading());
-      final currentUser = await _profileRepository.getUserProfileById(userId);
+    emit(ProfileLoading());
+    final currentUser = await getCurrentUser();
 
-      if (currentUser == null) {
-        emit(ProfileError(AppStrings.failedToFetchUserError));
-        return;
-      }
+    String? imageDownloadUrl;
 
+    if (imageBytes != null) {
       final imageUploadResult = await _storageRepository.uploadProfileImage(
         imageFileBytes: imageBytes,
         fileName: userId,
@@ -110,44 +108,17 @@ class ProfileCubit extends Cubit<ProfileState> {
         return;
       }
 
-      // Profile picture update
-      String? imageDownloadUrl;
-
-      // Ensure there is an image
-      if (imageMobilePath != null || imageWebBytes != null) {
-        // Mobile
-        if (imageMobilePath != null) {
-          // Upload
-          imageDownloadUrl = await _storageRepository.uploadProfileImageMobile(
-              imageMobilePath, userId);
-        }
-        // Web
-        else if (imageWebBytes != null) {
-          // Upload
-          imageDownloadUrl = await _storageRepository.uploadProfileImageWeb(
-              imageWebBytes, userId);
-        }
-
-        if (imageDownloadUrl == null) {
-          emit(ProfileError('Failed to upload image'));
-          return;
-        }
-      }
-
-      // Update new profile
-      final updatedProfile = currentUser.copyWith(
-        newBio: updatedBio ?? currentUser.bio,
-        newProfileImageUrl: imageDownloadUrl ?? currentUser.profileImageUrl,
-      );
-
-      // Update in Repository
-      await _profileRepository.updateProfile(updatedProfile);
-
-      // Re-fetch updated profile
-      await loadUserProfileById(userId);
-    } catch (error) {
-      emit(ProfileError('Error updating profile: ${error.toString()}'));
+      imageDownloadUrl = imageUploadResult.data as String;
     }
+
+    final updatedProfile = currentUser.copyWith(
+      newBio: updatedBio ?? currentUser.bio,
+      newProfileImageUrl: imageDownloadUrl ?? currentUser.profileImageUrl,
+    );
+
+    await _profileRepository.updateProfile(updatedProfile: updatedProfile);
+
+    await loadUserProfileById(userId: userId);
   }
 
   // Toggle follow/unfollow
