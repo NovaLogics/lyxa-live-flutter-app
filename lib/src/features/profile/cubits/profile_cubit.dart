@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -151,6 +152,32 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+  Future<Uint8List?> getProcessedImage({
+    required FilePickerResult? pickedFile,
+    required bool isWebPlatform,
+  }) async {
+    if (pickedFile == null) return null;
+
+    if (isWebPlatform) {
+      // WEB
+      return pickedFile.files.single.bytes;
+    } else {
+      // MOBILE
+      final filePath = pickedFile.files.single.path!;
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: filePath,
+        compressFormat: ImageCompressFormat.jpg,
+        uiSettings: _getImageCropperSettings(),
+      );
+
+      if (croppedFile == null) return null;
+
+      final compressedImage = await _compressImage(croppedFile.path);
+
+      return compressedImage;
+    }
+  }
+
   // HELPER FUNCTIONS ▼
 
   void _handleErrors(
@@ -179,19 +206,17 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-   /// Returns platform specific image cropper settings
+  /// Returns platform specific image cropper settings
   List<PlatformUiSettings> _getImageCropperSettings() {
     return [
       AndroidUiSettings(
         toolbarTitle: AppStrings.cropperTitle,
         toolbarColor: Colors.deepPurple,
         toolbarWidgetColor: Colors.white,
+        initAspectRatio: CropAspectRatioPreset.square,
+        cropStyle: CropStyle.circle,
         lockAspectRatio: true,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio16x9,
-          CropAspectRatioPreset.ratio4x3,
-        ],
+        aspectRatioPresets: [CropAspectRatioPreset.square],
       ),
       IOSUiSettings(
         title: AppStrings.cropperTitle,

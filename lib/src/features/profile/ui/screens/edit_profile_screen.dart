@@ -75,6 +75,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     LoadingCubit.hideLoading();
   }
 
+  
+
   Widget _buildLoadingScreen() {
     return BlocConsumer<LoadingCubit, LoadingState>(
       listener: (context, state) {},
