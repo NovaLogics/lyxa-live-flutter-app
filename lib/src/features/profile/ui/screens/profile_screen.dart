@@ -51,7 +51,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        _hideLoading();
         return Stack(
           children: [
             if (state is! ProfileLoaded)
@@ -70,20 +69,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _showLoading(String message) {
-    LoadingCubit.showLoading(message: message);
-  }
-
-  void _hideLoading() {
-    LoadingCubit.hideLoading();
-  }
-
   void _fetchUserProfile(String profileUserId) async {
-    _showLoading(AppStrings.loadingMessage);
     _currentAppUser = await _profileCubit.getCurrentUser();
 
     _profileCubit.loadUserProfileById(userId: profileUserId);
-    _hideLoading();
   }
 
   void _handleFollowButtonPressed() {
