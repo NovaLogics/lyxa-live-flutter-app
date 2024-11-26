@@ -103,7 +103,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       if (imageUploadResult.status == Status.error) {
         _handleErrors(
           result: imageUploadResult,
-          tag: '$debugTag: addPost()::imageUploadResult',
+          tag: '$debugTag: updateProfile()::imageUploadResult',
         );
         return;
       }
@@ -116,17 +116,35 @@ class ProfileCubit extends Cubit<ProfileState> {
       newProfileImageUrl: imageDownloadUrl ?? currentUser.profileImageUrl,
     );
 
-    await _profileRepository.updateProfile(updatedProfile: updatedProfile);
+    final updateProfileResult = await _profileRepository.updateProfile(
+      updatedProfile: updatedProfile,
+    );
+
+    if (updateProfileResult.status == Status.error) {
+      _handleErrors(
+        result: updateProfileResult,
+        tag: '$debugTag: updateProfile()::updateProfileResult',
+      );
+      return;
+    }
 
     await loadUserProfileById(userId: userId);
   }
 
-  // Toggle follow/unfollow
-  Future<void> toggleFollow(String currentUid, String targetUid) async {
-    try {
-      await _profileRepository.toggleFollow(currentUid, targetUid);
-    } catch (error) {
-      emit(ProfileError('Error toggling follow: ${error.toString()}'));
+  Future<void> toggleFollow({
+    required String appUserId,
+    required String targetUserId,
+  }) async {
+    final toggleFollowResult = await _profileRepository.toggleFollow(
+      appUserId: appUserId,
+      targetUserId: targetUserId,
+    );
+
+    if (toggleFollowResult.status == Status.error) {
+      _handleErrors(
+        result: toggleFollowResult,
+        tag: '$debugTag: toggleFollow()',
+      );
     }
   }
 
