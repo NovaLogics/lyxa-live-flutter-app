@@ -19,7 +19,7 @@ abstract class AuthRepository {
 
   Future<void> logOut();
 
-  Future<bool> updateProfileImageUrl({
+  Future<Result<bool>> updateProfileImageUrl({
     required String userId,
     required String profileImageUrl,
   });

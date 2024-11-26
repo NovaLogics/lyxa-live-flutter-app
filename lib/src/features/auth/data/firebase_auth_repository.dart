@@ -84,7 +84,7 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<bool> updateProfileImageUrl({
+  Future<Result<bool>> updateProfileImageUrl({
     required String userId,
     required String profileImageUrl,
   }) async {
@@ -92,9 +92,13 @@ class FirebaseAuthRepository implements AuthRepository {
       await _userCollectionRef
           .doc(userId)
           .update({ProfileUserFields.profileImageUrl: profileImageUrl});
-      return true;
+       return Result.success(
+        data: true,
+      );
+    } on FirebaseAuthException catch (authError) {
+      return Result.error(FirebaseError(authError));
     } catch (error) {
-      return false;
+      return Result.error(GenericError(error: error));
     }
   }
 

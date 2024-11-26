@@ -94,13 +94,7 @@ class AuthCubit extends Cubit<AuthState> {
         if (registerResult.data != null) {
           _showLoading();
           _currentUser = registerResult.data as AppUser;
-          final link = await uploadDeafultUserAvatar(_currentUser.uid);
-          if (link != null) {
-          await  _authRepository.updateProfileImageUrl(
-              userId: _currentUser.uid,
-              profileImageUrl: link,
-            );
-          }
+          await _uploadDeafultUserAvatar(_currentUser.uid);
           _hideLoading();
           emit(Authenticated(_currentUser));
         } else {
@@ -171,26 +165,35 @@ class AuthCubit extends Cubit<AuthState> {
     LoadingCubit.hideLoading();
   }
 
-  Future<String?> uploadDeafultUserAvatar(String userId) async {
+  Future<bool> _uploadDeafultUserAvatar(String userId) async {
     const assetPath = 'assets/images/default_avatar.jpg';
-    Uint8List imageBytes = await getImageBytesFromAssets(assetPath);
+    Uint8List imageBytes = await _getImageBytesFromAssets(assetPath);
 
     final imageUploadResult = await _storageRepository.uploadProfileImage(
       imageFileBytes: imageBytes,
       fileName: userId,
     );
 
+    final imageUrl = imageUploadResult.data ?? '';
+
     if (imageUploadResult.status == Status.error) {
       _handleErrors(
         result: imageUploadResult,
         tag: '$debugTag: addPost()::imageUploadResult',
       );
-      return null;
+      return false;
+    } else if (imageUrl.isEmpty) {
+      return false;
     }
-    return imageUploadResult.data;
+
+    await _authRepository.updateProfileImageUrl(
+      userId: _currentUser.uid,
+      profileImageUrl: imageUrl,
+    );
+    return true;
   }
 
-  Future<Uint8List> getImageBytesFromAssets(String assetPath) async {
+  Future<Uint8List> _getImageBytesFromAssets(String assetPath) async {
     try {
       final ByteData byteData = await rootBundle.load(assetPath);
 
