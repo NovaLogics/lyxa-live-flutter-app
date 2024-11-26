@@ -22,7 +22,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         _profileRepository = profileRepository,
         super(ProfileInitial());
 
-  Future<void> loadUserProfileById(String userId) async {
+  Future<void> loadUserProfileById({required String userId}) async {
     emit(ProfileLoading());
 
     final getUserResult =
@@ -46,7 +46,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<ProfileUser?> getUserProfileById(String userId) async {
+  Future<ProfileUser?> getUserProfileById({required String userId}) async {
     final getUserResult =
         await _profileRepository.getUserProfileById(userId: userId);
 
@@ -56,10 +56,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     return null;
   }
 
-  // Update bio / profile picture
   Future<void> updateProfile({
     required String uid,
-    String? newBio,
+    String? updatedBio,
     String? imageMobilePath,
     Uint8List? imageWebBytes,
   }) async {
@@ -99,7 +98,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       // Update new profile
       final updatedProfile = currentUser.copyWith(
-        newBio: newBio ?? currentUser.bio,
+        newBio: updatedBio ?? currentUser.bio,
         newProfileImageUrl: imageDownloadUrl ?? currentUser.profileImageUrl,
       );
 

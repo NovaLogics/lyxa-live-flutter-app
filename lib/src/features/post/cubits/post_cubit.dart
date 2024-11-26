@@ -38,7 +38,7 @@ class PostCubit extends Cubit<PostState> {
     }
 
     final profileUser =
-        await getIt<ProfileCubit>().getUserProfileById(currentUser.uid);
+        await getIt<ProfileCubit>().getUserProfileById(userId: currentUser.uid);
 
     if (profileUser == null) {
       throw Exception(ErrorMsgs.cannotFetchProfileError);
