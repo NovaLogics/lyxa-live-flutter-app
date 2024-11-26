@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
+import 'package:lyxa_live/src/shared/entities/result/result.dart';
 
 class FirebaseProfileRepository implements ProfileRepository {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
-  Future<ProfileUser?> fetchUserProfile(String uid) async {
+ Future<Result<ProfileUser?>>  fetchUserProfile(String uid) async {
     try {
       // Get user document from Firestore
       final userDoc = await firebaseFirestore
@@ -42,7 +43,7 @@ class FirebaseProfileRepository implements ProfileRepository {
   }
 
   @override
-  Future<void> updateProfile(ProfileUser updatedProfile) async {
+  Future<Result<void>> updateProfile(ProfileUser updatedProfile) async {
     try {
       // Convert update profile to json to store in Firestore
       await firebaseFirestore
@@ -58,7 +59,7 @@ class FirebaseProfileRepository implements ProfileRepository {
   }
 
   @override
-  Future<void> toggleFollow(String currentUid, String targetUid) async {
+  Future<Result<void>> toggleFollow(String currentUid, String targetUid) async {
     try {
       // Get user document from Firestore
       final currentUserDoc = await firebaseFirestore
