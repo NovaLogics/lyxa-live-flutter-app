@@ -47,13 +47,13 @@ class DrawerUnit extends StatelessWidget {
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleSearch,
-                  iconSrc: ICON_HOME_BORDER,
+                  iconSrc: ICON_SEARCH_BORDER,
                   onTap: () => _navigateToSearchScreen(context),
                 ),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleSettings,
-                  iconSrc: ICON_HOME_BORDER,
+                  iconSrc: ICON_SETTINGS_BORDER,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
                 const SizedBox(height: AppDimens.size48),
@@ -63,7 +63,7 @@ class DrawerUnit extends StatelessWidget {
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleLogout,
-                  iconSrc: ICON_HOME_BORDER,
+                  iconSrc: ICON_LOGOUT_BORDER,
                   onTap: () => _logout(context),
                 ),
                 const SizedBox(height: AppDimens.size12),
@@ -103,7 +103,7 @@ class DrawerUnit extends StatelessWidget {
     return _buildDrawerItem(
       context,
       title: AppStrings.titleProfile,
-      iconSrc: ICON_HOME_BORDER,
+      iconSrc: ICON_PROFILE_BORDER,
       onTap: () => _navigateToProfileScreen(context, user.uid),
     );
   }

@@ -22,6 +22,10 @@ const String ICON_COMMENT_FILLED = '$_ICON_PATH/ic_comment_filled.svg';
 const String ICON_SETTINGS_STYLE_1 = '$_ICON_PATH/ic_settings_style_1.svg';
 
 const String ICON_HOME_BORDER = '$_ICON_PATH/ic_home_border.svg';
+const String ICON_PROFILE_BORDER = '$_ICON_PATH/ic_profile_border.svg';
+const String ICON_SEARCH_BORDER = '$_ICON_PATH/ic_search_border.svg';
+const String ICON_SETTINGS_BORDER = '$_ICON_PATH/ic_settings_border.svg';
+const String ICON_LOGOUT_BORDER = '$_ICON_PATH/ic_logout_border.svg';
 
 // APP FONTS
 const String FONT_RALEWAY = 'Raleway';
