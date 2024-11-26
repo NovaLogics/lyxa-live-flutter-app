@@ -2,43 +2,38 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 class FirebaseProfileRepository implements ProfileRepository {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
- Future<Result<ProfileUser?>>  fetchUserProfile(String uid) async {
+  Future<Result<ProfileUser?>> getUserProfileById({
+    required String userId,
+  }) async {
     try {
-      // Get user document from Firestore
-      final userDoc = await firebaseFirestore
+      final userDocument = await firebaseFirestore
           .collection(FIRESTORE_COLLECTION_USERS)
-          .doc(uid)
+          .doc(userId)
           .get();
 
-      if (userDoc.exists) {
-        final userData = userDoc.data();
-
-        if (userData != null) {
-          // Fetch followes & following
-          final followers = List<String>.from(userData['followers'] ?? []);
-          final following = List<String>.from(userData['following'] ?? []);
-
-          return ProfileUser(
-            uid: uid,
-            email: userData['email'],
-            name: userData['name'],
-            searchableName: userData['searchableName'],
-            bio: userData['bio'] ?? '',
-            profileImageUrl: userData['profileImageUrl'].toString(),
-            followers: followers,
-            following: following,
-          );
-        }
+      if (!userDocument.exists || userDocument.data() == null) {
+        throw Exception(ErrorMsgs.cannotFetchProfileError);
       }
-      return null;
+
+      final profileUser =
+          ProfileUser.fromJson(userDocument.data() as Map<String, dynamic>);
+
+      return Result.success(
+        data: profileUser,
+      );
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      return null;
+      return Result.error(GenericError(error: error));
     }
   }
 

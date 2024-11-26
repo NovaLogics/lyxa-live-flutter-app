@@ -2,7 +2,7 @@ import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 
 abstract class ProfileRepository {
-  Future<Result<ProfileUser?>> fetchUserProfile({
+  Future<Result<ProfileUser?>> getUserProfileById({
     required String userId,
   });
 

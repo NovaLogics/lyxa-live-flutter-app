@@ -21,7 +21,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> fetchUserProfile(String uid) async {
     try {
       emit(ProfileLoading());
-      final user = await profileRepository.fetchUserProfile(uid);
+      final user = await profileRepository.getUserProfileById(uid);
 
       if (user != null) {
         emit(ProfileLoaded(user));
@@ -35,7 +35,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   // Return user profile given uid -> useful for loading many profiles for posts
   Future<ProfileUser?> getUserProfile(String uid) async {
-    final user = await profileRepository.fetchUserProfile(uid);
+    final user = await profileRepository.getUserProfileById(uid);
     return user;
   }
 
@@ -49,7 +49,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       emit(ProfileLoading());
       // Fetch current user profile
-      final currentUser = await profileRepository.fetchUserProfile(uid);
+      final currentUser = await profileRepository.getUserProfileById(uid);
 
       if (currentUser == null) {
         emit(ProfileError(AppStrings.failedToFetchUserError));
@@ -101,7 +101,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       await profileRepository.toggleFollow(currentUid, targetUid);
     } catch (error) {
-         emit(ProfileError('Error toggling follow: ${error.toString()}'));
+      emit(ProfileError('Error toggling follow: ${error.toString()}'));
     }
   }
 }
