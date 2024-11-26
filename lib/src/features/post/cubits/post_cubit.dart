@@ -7,7 +7,6 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
@@ -17,7 +16,6 @@ import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart
 import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 class PostCubit extends Cubit<PostState> {
   static const String debugTag = 'PostCubit';
@@ -32,18 +30,7 @@ class PostCubit extends Cubit<PostState> {
         super(PostInitial());
 
   Future<ProfileUser> getCurrentUser() async {
-    final currentUser = getIt<AuthCubit>().currentUser;
-    if (currentUser == null) {
-      throw Exception(ErrorMsgs.cannotFetchProfileError);
-    }
-
-    final profileUser =
-        await getIt<ProfileCubit>().getUserProfileById(userId: currentUser.uid);
-
-    if (profileUser == null) {
-      throw Exception(ErrorMsgs.cannotFetchProfileError);
-    }
-
+    final profileUser = await getIt<ProfileCubit>().getCurrentUser();
     return profileUser;
   }
 
