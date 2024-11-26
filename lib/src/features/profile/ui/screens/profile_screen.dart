@@ -8,6 +8,7 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/features/profile/ui/components/profile_image.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
@@ -53,14 +54,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (context, state) {
         return Stack(
           children: [
-            if (state is! ProfileLoaded)
-              _buildEmptyContent(
-                displayText: AppStrings.profileNotFoundError,
-              ),
             if (state is ProfileLoaded)
               _buildProfileContent(
                 context,
                 state.profileUser,
+              ),
+            if (state is! ProfileLoaded)
+              _buildEmptyContent(
+                displayText: AppStrings.profileNotFoundError,
               ),
             _buildLoadingScreen(),
           ],
@@ -180,38 +181,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfilePicture(ProfileUser user) {
-    return Center(
-      child: Material(
-        elevation: AppDimens.elevationSM2,
-        shape: const CircleBorder(),
-        color: Theme.of(context).colorScheme.outline,
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimens.paddingXS1),
-          child: CachedNetworkImage(
-            imageUrl: user.profileImageUrl,
-            placeholder: (_, __) => const CircularProgressIndicator(),
-            errorWidget: (_, __, ___) => SizedBox(
-              height: AppDimens.imageSize120,
-              child: Icon(
-                Icons.person_rounded,
-                size: AppDimens.iconSizeXXL96,
-                color: Theme.of(context).colorScheme.onSecondary,
-              ),
-            ),
-            imageBuilder: (_, imageProvider) => Container(
-              height: AppDimens.imageSize120,
-              width: AppDimens.imageSize120,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+    return ProfileImage(
+      imageUrl: user.profileImageUrl,
     );
   }
 

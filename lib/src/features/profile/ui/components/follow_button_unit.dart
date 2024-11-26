@@ -15,7 +15,6 @@ class FollowButtonUnit extends StatelessWidget {
   });
 
   // Build UI
-  // Build UI
   @override
   Widget build(BuildContext context) {
     return Padding(
