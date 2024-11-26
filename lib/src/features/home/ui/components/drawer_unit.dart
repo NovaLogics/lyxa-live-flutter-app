@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -24,7 +24,6 @@ class DrawerUnit extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: SafeArea(
         child: SingleChildScrollView(
-          // Make the drawer scrollable
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
             child: Column(
@@ -70,41 +69,11 @@ class DrawerUnit extends StatelessWidget {
   }
 
   Widget _buildDrawerIcon(BuildContext context) {
-    return Material(
-      elevation: AppDimens.elevationSM2,
-      shape: const CircleBorder(),
-      color: Theme.of(context).colorScheme.outline,
-      child: Padding(
-        padding: const EdgeInsets.all(1),
-        child: (user?.profileImageUrl != null)
-            ? CachedNetworkImage(
-                imageUrl: user?.profileImageUrl ?? '',
-                placeholder: (_, __) => const SizedBox(
-                    width: AppDimens.iconSizeXXL96,
-                    child: CircularProgressIndicator()),
-                errorWidget: (_, __, ___) => Icon(
-                  Icons.person_rounded,
-                  size: AppDimens.iconSizeXXL96,
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-                imageBuilder: (_, imageProvider) => Container(
-                  height: AppDimens.iconSizeXXL96,
-                  width: AppDimens.iconSizeXXL96,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              )
-            : Icon(
-                Icons.person_rounded,
-                size: AppDimens.iconSizeXXL96,
-                color: Theme.of(context).colorScheme.onSecondary,
-              ),
-      ),
+    return Image.asset(
+      IMAGE_LYXA_BANNER,
+      height: AppDimens.iconSizeXXL128,
+      width: AppDimens.iconSizeXXL128,
+      fit: BoxFit.cover,
     );
   }
 
