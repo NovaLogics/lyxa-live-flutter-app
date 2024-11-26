@@ -6,14 +6,14 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 
 class DrawerTitleUnit extends StatelessWidget {
   final String title;
-  final IconData icon;
+  final String iconSrc;
   final VoidCallback? onTap;
 
   const DrawerTitleUnit({
     super.key,
     this.onTap,
     required this.title,
-    required this.icon,
+    required this.iconSrc,
   });
 
   @override
@@ -33,7 +33,7 @@ class DrawerTitleUnit extends StatelessWidget {
         ),
       ),
       leading: SvgPicture.asset(
-        ICON_HOME_BORDER,
+        iconSrc,
         colorFilter: ColorFilter.mode(
           Theme.of(context).colorScheme.onPrimary,
           BlendMode.srcIn,

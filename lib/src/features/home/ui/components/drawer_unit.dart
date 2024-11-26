@@ -40,20 +40,20 @@ class DrawerUnit extends StatelessWidget {
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleHome,
-                  icon: Icons.home_outlined,
+                  iconSrc: ICON_HOME_BORDER,
                   onTap: () => Navigator.of(context).pop(),
                 ),
                 _buildProfileSection(context),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleSearch,
-                  icon: Icons.search_outlined,
+                  iconSrc: ICON_HOME_BORDER,
                   onTap: () => _navigateToSearchScreen(context),
                 ),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleSettings,
-                  icon: Icons.settings_outlined,
+                  iconSrc: ICON_HOME_BORDER,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
                 const SizedBox(height: AppDimens.size48),
@@ -63,7 +63,7 @@ class DrawerUnit extends StatelessWidget {
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleLogout,
-                  icon: Icons.login,
+                  iconSrc: ICON_HOME_BORDER,
                   onTap: () => _logout(context),
                 ),
                 const SizedBox(height: AppDimens.size12),
@@ -103,7 +103,7 @@ class DrawerUnit extends StatelessWidget {
     return _buildDrawerItem(
       context,
       title: AppStrings.titleProfile,
-      icon: Icons.person_outline,
+      iconSrc: ICON_HOME_BORDER,
       onTap: () => _navigateToProfileScreen(context, user.uid),
     );
   }
@@ -111,12 +111,12 @@ class DrawerUnit extends StatelessWidget {
   Widget _buildDrawerItem(
     BuildContext context, {
     required String title,
-    required IconData icon,
+    required String iconSrc,
     required VoidCallback onTap,
   }) {
     return DrawerTitleUnit(
       title: title,
-      icon: icon,
+      iconSrc: iconSrc,
       onTap: onTap,
     );
   }
