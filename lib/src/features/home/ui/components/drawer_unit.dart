@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_title_unit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
@@ -11,11 +12,11 @@ import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
 import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
 
 class DrawerUnit extends StatelessWidget {
-  final ProfileUser? user;
+  final ProfileUser user;
 
   const DrawerUnit({
     super.key,
-    this.user,
+    required this.user,
   });
 
   @override
@@ -31,7 +32,11 @@ class DrawerUnit extends StatelessWidget {
                 const SizedBox(height: AppDimens.size12),
                 _buildDrawerIcon(context),
                 const SizedBox(height: AppDimens.size12),
-                Divider(color: Theme.of(context).colorScheme.outline),
+                _buildHeadingText(context),
+                const SizedBox(height: AppDimens.size12),
+                Divider(
+                    thickness: 0.5,
+                    color: Theme.of(context).colorScheme.outline),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleHome,
@@ -52,7 +57,9 @@ class DrawerUnit extends StatelessWidget {
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
                 const SizedBox(height: AppDimens.size48),
-                Divider(color: Theme.of(context).colorScheme.outline),
+                Divider(
+                    thickness: 0.5,
+                    color: Theme.of(context).colorScheme.outline),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleLogout,
@@ -77,24 +84,25 @@ class DrawerUnit extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileSection(BuildContext context) {
-    String? userId;
-    if (user?.uid != null) {
-      userId = user!.uid;
-    } else {
-      final userData = context.read<AuthCubit>().currentUser;
-      userId = userData!.uid;
-    }
+  Widget _buildHeadingText(BuildContext context) {
+    return Text(
+      user.name,
+      style: AppTextStyles.headingSecondary.copyWith(
+        color: Theme.of(context).colorScheme.onSecondary,
+        fontSize: AppDimens.fontSizeXL20,
+        fontWeight: FontWeight.bold,
+        letterSpacing: AppDimens.letterSpacingPT10,
+        shadows: [],
+      ),
+    );
+  }
 
+  Widget _buildProfileSection(BuildContext context) {
     return _buildDrawerItem(
       context,
       title: AppStrings.titleProfile,
       icon: Icons.person_outline,
-      onTap: () {
-        if (userId != null) {
-          _navigateToProfileScreen(context, userId);
-        }
-      },
+      onTap: () => _navigateToProfileScreen(context, user.uid),
     );
   }
 

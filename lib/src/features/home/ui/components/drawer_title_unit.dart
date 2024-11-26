@@ -23,7 +23,7 @@ class DrawerTitleUnit extends StatelessWidget {
       title: Text(
         title,
         style: AppTextStyles.subtitlePrimary.copyWith(
-          color: Theme.of(context).colorScheme.inversePrimary,
+          color: Theme.of(context).colorScheme.onSecondary,
           fontSize: AppDimens.fontSizeMD16,
           letterSpacing: AppDimens.letterSpacingPT18,
           fontFamily: FONT_MONTSERRAT,
