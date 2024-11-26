@@ -1,13 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
-import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
@@ -32,14 +31,16 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late final AuthCubit _authCubit;
   late final ProfileCubit _profileCubit;
-  late final AppUser _currentAppUser;
+  late final ProfileUser _currentAppUser;
+
+  get displayUserId => widget.displayUserId;
 
   @override
   void initState() {
     super.initState();
-    _fetchUserProfile(widget.displayUserId);
+    _profileCubit = getIt<ProfileCubit>();
+    _fetchUserProfile(displayUserId);
   }
 
   @override
@@ -67,24 +68,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _fetchUserProfile(String profileUserId) async {
-    // Initialize cubits
-    _authCubit = context.read<AuthCubit>();
-    _profileCubit = context.read<ProfileCubit>();
+    _currentAppUser = await _profileCubit.getCurrentUser();
 
-    // Ensure current user is not null
-    final currentUser = _authCubit.currentUser;
-    if (currentUser == null) {
-      throw Exception("No authenticated user found. Cannot fetch profile.");
-    }
-
-    // Set the current app user
-    _currentAppUser = currentUser;
-
-    // Log user ID
     Logger.logDebug("Current user ID: ${_currentAppUser.uid}");
 
-    // Fetch profile for the given user ID
-    _profileCubit.loadUserProfileById(profileUserId);
+    _profileCubit.loadUserProfileById(userId: profileUserId);
   }
 
   /// Handles the follow/unfollow button press.
