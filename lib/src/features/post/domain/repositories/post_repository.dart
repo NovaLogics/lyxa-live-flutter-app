@@ -1,11 +1,8 @@
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 
 abstract class PostRepository {
-  Future<Result<ProfileUser>> getCurrentUser();
-
   Future<Result<List<Post>>> getAllPosts();
 
   Future<Result<List<Post>>> getPostsForUser({
