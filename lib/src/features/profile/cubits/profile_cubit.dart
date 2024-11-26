@@ -15,6 +15,7 @@ import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
 // PROFILE STATE MANAGEMENT
 class ProfileCubit extends Cubit<ProfileState> {
@@ -65,10 +66,12 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> loadUserProfileById({required String userId}) async {
-    emit(ProfileLoading());
+    _showLoading(AppStrings.loadingMessage);
 
     final getUserResult =
         await _profileRepository.getUserProfileById(userId: userId);
+
+    _hideLoading();
 
     switch (getUserResult.status) {
       case Status.success:
@@ -93,7 +96,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     String? updatedBio,
     Uint8List? imageBytes,
   }) async {
-    emit(ProfileLoading());
+    _showLoading(AppStrings.updating);
+
     final currentUser = await getCurrentUser();
 
     String? imageDownloadUrl;
@@ -109,6 +113,8 @@ class ProfileCubit extends Cubit<ProfileState> {
           result: imageUploadResult,
           tag: '$debugTag: updateProfile()::imageUploadResult',
         );
+
+        _hideLoading();
         return;
       }
 
@@ -129,6 +135,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         result: updateProfileResult,
         tag: '$debugTag: updateProfile()::updateProfileResult',
       );
+       _hideLoading();
       return;
     }
 
@@ -179,6 +186,14 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   // HELPER FUNCTIONS ▼
+
+  void _showLoading(String message) {
+    return LoadingCubit.showLoading(message: message);
+  }
+
+  void _hideLoading() {
+    LoadingCubit.hideLoading();
+  }
 
   void _handleErrors(
       {required Result result, String? prefixMessage, String? tag}) {

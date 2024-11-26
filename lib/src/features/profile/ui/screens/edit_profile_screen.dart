@@ -5,15 +5,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:image_cropper/image_cropper.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
-import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/center_loading_unit.dart';
@@ -37,9 +37,16 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  PlatformFile? imagePickedFile;
-  Uint8List? pickedImage;
+  static const String debugTag = 'EditProfileScreen';
   final bioTextController = TextEditingController();
+  late final ProfileCubit _profileCubit;
+  Uint8List? _selectedImage;
+
+  @override
+  void initState() {
+    super.initState();
+    _profileCubit = getIt<ProfileCubit>();
+  }
 
   // BUILD UI
   @override
@@ -67,15 +74,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  void _showLoading(String message) {
-    return LoadingCubit.showLoading(message: message);
-  }
+  Future<void> _handleImageSelection() async {
+    try {
+      final pickedFile = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: kIsWeb,
+      );
 
-  void _hideLoading() {
-    LoadingCubit.hideLoading();
-  }
+      final processedImage = await _profileCubit.getProcessedImage(
+        pickedFile: pickedFile,
+        isWebPlatform: kIsWeb,
+      );
 
-  
+      if (processedImage == null) throw Exception(ErrorMsgs.imageFileEmpty);
+
+      setState(() {
+        _selectedImage = processedImage;
+      });
+    } catch (error) {
+      ErrorHandler.handleError(
+        error,
+        tag: debugTag,
+        onRetry: () {},
+      );
+    }
+  }
 
   Widget _buildLoadingScreen() {
     return BlocConsumer<LoadingCubit, LoadingState>(
@@ -122,75 +145,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Future<void> pickCropCompressImage() async {
-    try {
-      final pickedFile = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        withData: kIsWeb,
-      );
-
-      if (pickedFile == null) return;
-
-      // Platform -> WEB
-      if (kIsWeb) {
-        setState(() {
-          pickedImage = pickedFile.files.single.bytes;
-        });
-      }
-      // Platform -> MOBILE
-      else {
-        final croppedFile = await ImageCropper().cropImage(
-          sourcePath: pickedFile.files.single.path!,
-          compressFormat: ImageCompressFormat.jpg,
-          compressQuality: 95,
-          uiSettings: _getCropperSettings(),
-        );
-
-        if (croppedFile == null) return;
-
-        final compressedImage = await compressImage(croppedFile.path);
-        if (compressedImage != null) {
-          setState(() {
-            pickedImage = compressedImage;
-          });
-          Logger.logDebug(AppStrings.imagePickedSuccessfully);
-        }
-      }
-    } catch (error) {
-      Logger.logError(error.toString());
-    }
-  }
-
-  List<PlatformUiSettings> _getCropperSettings() {
-    return [
-      AndroidUiSettings(
-        toolbarTitle: AppStrings.cropperToolbarTitle,
-        toolbarColor: Colors.deepPurple,
-        toolbarWidgetColor: Colors.white,
-        initAspectRatio: CropAspectRatioPreset.square,
-        cropStyle: CropStyle.circle,
-        lockAspectRatio: true,
-        aspectRatioPresets: [CropAspectRatioPreset.square],
-      ),
-      IOSUiSettings(
-        title: AppStrings.cropperTitle,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.square
-        ],
-      ),
-    ];
-  }
-
-  Future<Uint8List?> compressImage(String filePath) async {
-    return await FlutterImageCompress.compressWithFile(
-      filePath,
-      minWidth: 800,
-      minHeight: 800,
-      quality: 85,
-    );
-  }
-
   void updateProfile() async {
     final profileCubit = context.read<ProfileCubit>();
     final String uid = widget.currentUser.uid;
@@ -198,9 +152,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ? bioTextController.text.toString().trim()
         : null;
 
-    if (pickedImage != null || newBio != null) {
+    if (_selectedImage != null || newBio != null) {
       profileCubit.updateProfile(
-          userId: uid, updatedBio: newBio, imageBytes: pickedImage);
+          userId: uid, updatedBio: newBio, imageBytes: _selectedImage);
     } else {
       Navigator.pop(context);
     }
@@ -222,9 +176,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               shape: BoxShape.circle,
             ),
             clipBehavior: Clip.hardEdge,
-            child: (pickedImage != null)
+            child: (_selectedImage != null)
                 ? Image.memory(
-                    pickedImage!,
+                    _selectedImage!,
                     width: AppDimens.imageSize180,
                     height: AppDimens.imageSize180,
                     fit: BoxFit.cover,
@@ -249,8 +203,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget _buildPickImageButton() {
     return Center(
       child: GradientButton(
-        text: AppStrings.pickImage,
-        onPressed: pickCropCompressImage,
+        text: AppStrings.pickImage.toUpperCase(),
+        onPressed: _handleImageSelection,
         textStyle: AppTextStyles.buttonTextPrimary.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
