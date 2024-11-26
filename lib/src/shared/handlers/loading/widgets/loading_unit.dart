@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
@@ -19,11 +21,26 @@ class LoadingUnit extends StatefulWidget {
 }
 
 class _LoadingUnitState extends State<LoadingUnit> {
+  bool _isVisible = false;
+  Timer? _visibilityTimer;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoadingCubit, LoadingState>(
       builder: (context, state) {
-        return state.isVisible
+        // Manage visibility with delay
+        if (state.isVisible) {
+          // Cancel any existing timers
+          _visibilityTimer?.cancel();
+          if (!_isVisible) setState(() => _isVisible = true);
+        } else if (_isVisible) {
+          _visibilityTimer?.cancel();
+          _visibilityTimer = Timer(const Duration(seconds: 2), () {
+            setState(() => _isVisible = false);
+          });
+        }
+
+        return _isVisible
             ? Scaffold(
                 backgroundColor:
                     Theme.of(context).colorScheme.surface.withOpacity(0.7),
@@ -56,10 +73,9 @@ class _LoadingUnitState extends State<LoadingUnit> {
                                 fontFamily: FONT_RALEWAY,
                                 color: Theme.of(context).colorScheme.onTertiary,
                               ),
-                              maxLines: null, // Allows unlimited lines
-                              overflow: TextOverflow
-                                  .visible, // Ensures the text remains visible
-                              softWrap: true, // Wraps the text within the width
+                              maxLines: null,
+                              overflow: TextOverflow.visible,
+                              softWrap: true,
                             ),
                           ),
                         ],
@@ -68,9 +84,16 @@ class _LoadingUnitState extends State<LoadingUnit> {
                   ),
                 ),
               )
-            : const SizedBox
-                .shrink(); // Return an empty widget when not visible
+            // Return an empty widget when not visible
+            : const SizedBox.shrink();
       },
     );
+  }
+
+  @override
+  void dispose() {
+    // Clean up the timer
+    _visibilityTimer?.cancel();
+    super.dispose();
   }
 }
