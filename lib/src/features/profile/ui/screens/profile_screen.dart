@@ -225,7 +225,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildProfileStats(ProfileUser user) {
+  Widget _buildProfileStats(ProfileUser displayUser) {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
         int postCount = 0;
@@ -239,14 +239,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.all(AppDimens.paddingRG8),
           child: ProfileStatsUnit(
             postCount: postCount,
-            followerCount: user.followers.length,
-            followingCount: user.following.length,
+            followerCount: displayUser.followers.length,
+            followingCount: displayUser.following.length,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => FollowerScreen(
-                  followers: user.followers,
-                  following: user.following,
+                  followers: displayUser.followers,
+                  following: displayUser.following,
                 ),
               ),
             ),
