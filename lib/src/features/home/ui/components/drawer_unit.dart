@@ -4,6 +4,7 @@ import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/utils/text_util.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_title_unit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
@@ -86,7 +87,9 @@ class DrawerUnit extends StatelessWidget {
 
   Widget _buildHeadingText(BuildContext context) {
     return Text(
-      user.name,
+      TextUtil.toSentenceCaseMultiple(user.name),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
       style: AppTextStyles.headingSecondary.copyWith(
         color: Theme.of(context).colorScheme.onSecondary,
         fontSize: AppDimens.fontSizeXL20,
