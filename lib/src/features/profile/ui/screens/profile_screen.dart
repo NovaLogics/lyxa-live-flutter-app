@@ -338,7 +338,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               final post = userPosts[index];
               return PostTileUnit(
                 post: post,
-                currentAppUser: _currentAppUser,
+                currentUser: ProfileUser
+                    .getGuestUser(), // TODO Fix this // _currentAppUser,
                 onDeletePressed: () =>
                     context.read<PostCubit>().deletePost(postId: post.id),
               );
