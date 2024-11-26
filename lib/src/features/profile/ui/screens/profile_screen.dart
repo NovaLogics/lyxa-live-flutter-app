@@ -51,16 +51,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (context, state) {
         _hideLoading();
         if (state is ProfileLoading) {
-          _showLoading(AppStrings.loadingMessage);
-          return Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.surface);
+          _showLoading(
+            AppStrings.loadingMessage,
+          );
+          return _buildEmptyContent();
         } else if (state is ProfileLoaded) {
-          return _buildProfileContent(context, state.profileUser);
+          return _buildProfileContent(
+            context,
+            state.profileUser,
+          );
         } else {
-          return const Scaffold(
-            body: Center(
-              child: Text(AppStrings.profileNotFoundError),
-            ),
+          return _buildEmptyContent(
+            displayText: AppStrings.profileNotFoundError,
           );
         }
       },
@@ -107,9 +109,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileContent(BuildContext context, ProfileUser user) {
-    final isOwnProfile = (widget.displayUserId == _currentAppUser.uid);
-    Logger.logDebug(
-        '$isOwnProfile  ${widget.displayUserId} = ${_currentAppUser.uid} ');
+    final isOwnProfile = (_displayUserId == _appUserId);
+    Logger.logDebug('$isOwnProfile  $_displayUserId = $_appUserId ');
 
     return ConstrainedScaffold(
       appBar: _buildAppBar(context, user, isOwnProfile),
@@ -131,6 +132,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _buildEmptyContent({String? displayText = ''}) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: Center(
+        child: Text(displayText ?? ''),
+      ),
+    );
+  }
+
   AppBar _buildAppBar(
       BuildContext context, ProfileUser user, bool isOwnProfile) {
     return AppBar(
@@ -146,12 +156,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
       actions: [
         isOwnProfile
             ? IconButton(
@@ -164,9 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: const Icon(Icons.settings_outlined),
                 iconSize: AppDimens.iconSizeSM24,
               )
-            : const SizedBox(
-                width: AppDimens.iconSizeMD32,
-              ),
+            : const SizedBox(width: AppDimens.iconSizeMD32),
       ],
     );
   }
@@ -227,9 +229,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         int postCount = 0;
 
         if (state is PostLoaded) {
-          postCount = state.posts
-              .where((post) => post.userId == widget.displayUserId)
-              .length;
+          postCount =
+              state.posts.where((post) => post.userId == _displayUserId).length;
         }
 
         return Padding(
@@ -256,7 +257,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildFollowActionSection(ProfileUser user) {
     return FollowButtonUnit(
       onPressed: _handleFollowButtonPressed,
-      isFollowing: user.followers.contains(_currentAppUser.uid),
+      isFollowing: user.followers.contains(_appUserId),
     );
   }
 
@@ -324,8 +325,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               final post = userPosts[index];
               return PostTileUnit(
                 post: post,
-                currentUser: ProfileUser
-                    .getGuestUser(), // TODO Fix this // _currentAppUser,
+                currentUser: _currentAppUser,
                 onDeletePressed: () =>
                     context.read<PostCubit>().deletePost(postId: post.id),
               );
