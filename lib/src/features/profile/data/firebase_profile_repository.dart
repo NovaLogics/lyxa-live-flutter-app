@@ -38,18 +38,22 @@ class FirebaseProfileRepository implements ProfileRepository {
   }
 
   @override
-  Future<Result<void>> updateProfile(ProfileUser updatedProfile) async {
+  Future<Result<void>> updateProfile({
+    required ProfileUser updatedProfile,
+  }) async {
     try {
-      // Convert update profile to json to store in Firestore
       await firebaseFirestore
           .collection(FIRESTORE_COLLECTION_USERS)
           .doc(updatedProfile.uid)
           .update({
-        'bio': updatedProfile.bio,
-        'profileImageUrl': updatedProfile.profileImageUrl,
+        ProfileUserFields.bio: updatedProfile.bio,
+        ProfileUserFields.profileImageUrl: updatedProfile.profileImageUrl,
       });
+      return Result.voidSuccess();
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception(error);
+      return Result.error(GenericError(error: error));
     }
   }
 
