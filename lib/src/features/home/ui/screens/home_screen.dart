@@ -3,15 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
-import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
@@ -27,17 +21,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  static const String debugTag = 'HomeScreen';
   late final PostCubit _postCubit;
-  late final AppUser _currentAppUser;
-  ProfileUser _profileUser = ProfileUser.getDefaultGuestUser();
+  ProfileUser _currentUser = ProfileUser.getGuestUser();
 
   @override
   void initState() {
     super.initState();
     _postCubit = getIt<PostCubit>();
-    _fetchAllPosts();
-    _fetchCurrentUserData();
+    _initScreen();
   }
 
   @override
@@ -47,12 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: _buildAppDrawer(),
       body: BlocBuilder<PostCubit, PostState>(
         builder: (context, state) {
-          LoadingCubit.hideLoading();
+          _hideLoading();
           if (state is PostLoading) {
-            LoadingCubit.showLoading(message: AppStrings.loadingMessage);
+            _showLoading(AppStrings.loadingMessage);
             return const SizedBox();
           } else if (state is PostUploading) {
-            LoadingCubit.showLoading(message: AppStrings.uploading);
+            _showLoading(AppStrings.uploading);
             return const SizedBox();
           } else if (state is PostLoaded) {
             return _buildPostList(state.posts);
@@ -66,37 +57,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _fetchCurrentUserData() async {
-    try {
-      LoadingCubit.showLoading(message: AppStrings.loadingMessage);
+  void _showLoading(String message) {
+    LoadingCubit.showLoading(message: message);
+  }
 
-      AuthCubit authCubit = getIt<AuthCubit>();
-      ProfileCubit profileCubit = getIt<ProfileCubit>();
-
-      final currentUser = authCubit.currentUser;
-      if (currentUser == null) {
-        throw Exception(ErrorMsgs.cannotFetchProfileError);
-      }
-
-      _currentAppUser = currentUser;
-
-      final profileUser =
-          await profileCubit.getUserProfile(_currentAppUser.uid);
-
-      setState(() {
-        if (profileUser != null) {
-          _profileUser = profileUser;
-        }
-      });
-    } catch (error) {
-      ErrorHandler.handleError(
-        error,
-        tag: debugTag,
-        onRetry: () {
-          ErrorAlertCubit.hideErrorMessage();
-        },
-      );
-    }
+  void _hideLoading() {
     LoadingCubit.hideLoading();
   }
 
@@ -109,19 +74,30 @@ class _HomeScreenState extends State<HomeScreen> {
     _fetchAllPosts();
   }
 
+  void _initScreen() async {
+    _showLoading(
+      AppStrings.loadingMessage,
+    );
+    final profileUser = await _postCubit.getCurrentUser();
+
+    setState(() {
+      _currentUser = profileUser;
+    });
+    _hideLoading();
+    _fetchAllPosts();
+  }
+
   void _navigateToUploadPostScreen() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UploadPostScreen(
-          profileUser: _profileUser,
-        ),
+        builder: (context) => UploadPostScreen(profileUser: _currentUser),
       ),
     );
   }
 
   Widget _buildAppDrawer() {
-    return DrawerUnit(user: _profileUser);
+    return DrawerUnit(user: _currentUser);
   }
 
   AppBar _buildAppBar(BuildContext context) {
@@ -147,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
               final post = posts[index];
               return PostTileUnit(
                 post: post,
-                currentAppUser: _currentAppUser,
+                currentUser: _currentUser,
                 onDeletePressed: () => _deletePost(post.id),
               );
             },

@@ -1,7 +1,3 @@
-/*
-Profile State
-*/
-
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 
 abstract class ProfileState {}

@@ -7,14 +7,15 @@ import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class FollowerScreen extends StatelessWidget {
-  final List<String> followers;
-  final List<String> following;
+  final List<String> _followers;
+  final List<String> _following;
 
   const FollowerScreen({
     super.key,
-    required this.followers,
-    required this.following,
-  });
+    required List<String> followers,
+    required List<String> following,
+  })  : _following = following,
+        _followers = followers;
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +26,11 @@ class FollowerScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             UserListView(
-              uids: followers,
+              userIds: _followers,
               emptyMessage: AppStrings.noFollowersMessage,
             ),
             UserListView(
-              uids: following,
+              userIds: _following,
               emptyMessage: AppStrings.noFollowingMessage,
             ),
           ],
@@ -58,7 +59,6 @@ class FollowerScreen extends StatelessWidget {
   //   );
   // }
 
-  /// Builds a custom TabBar
   Widget _buildCustomTabBar(BuildContext context) {
     return SizedBox(
       width: AppDimens.size280,
@@ -76,31 +76,30 @@ class FollowerScreen extends StatelessWidget {
   }
 }
 
-/// Displays a list of users with support for empty states and loading states
 class UserListView extends StatelessWidget {
-  final List<String> uids;
+  final List<String> userIds;
   final String emptyMessage;
 
   const UserListView({
     super.key,
-    required this.uids,
+    required this.userIds,
     required this.emptyMessage,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (uids.isEmpty) {
+    if (userIds.isEmpty) {
       return Center(
         child: Text(emptyMessage),
       );
     }
 
     return ListView.builder(
-      itemCount: uids.length,
+      itemCount: userIds.length,
       itemBuilder: (context, index) {
-        final uid = uids[index];
+        final uid = userIds[index];
         return FutureBuilder(
-          future: context.read<ProfileCubit>().getUserProfile(uid),
+          future: context.read<ProfileCubit>().getUserProfileById(userId: uid),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const ListTile(title: Text(AppStrings.loadingMessage));

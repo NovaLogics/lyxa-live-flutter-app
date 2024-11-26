@@ -48,7 +48,9 @@ void setupServiceLocator() {
   // Register Cubits
 
   getIt.registerSingleton<AuthCubit>(
-    AuthCubit(authRepository: getIt<FirebaseAuthRepository>()),
+    AuthCubit(
+        authRepository: getIt<FirebaseAuthRepository>(),
+        storageRepository: getIt<FirebaseStorageRepository>()),
   );
 
   getIt.registerSingleton<SearchCubit>(

@@ -1,11 +1,17 @@
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
-
-/*
-Profile Repository
-*/
+import 'package:lyxa_live/src/shared/entities/result/result.dart';
 
 abstract class ProfileRepository {
-  Future<ProfileUser?> fetchUserProfile(String uid);
-  Future<void> updateProfile(ProfileUser updatedProfile);
-  Future<void> toggleFollow(String currentUid, String targetUid);
+  Future<Result<ProfileUser?>> getUserProfileById({
+    required String userId,
+  });
+
+  Future<Result<void>> updateProfile({
+    required ProfileUser updatedProfile,
+  });
+
+  Future<Result<void>> toggleFollow({
+    required String appUserId,
+    required String targetUserId,
+  });
 }

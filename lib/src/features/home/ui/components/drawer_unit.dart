@@ -1,8 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/utils/text_util.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_title_unit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
@@ -11,11 +13,11 @@ import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
 import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
 
 class DrawerUnit extends StatelessWidget {
-  final ProfileUser? user;
+  final ProfileUser user;
 
   const DrawerUnit({
     super.key,
-    this.user,
+    required this.user,
   });
 
   @override
@@ -24,7 +26,6 @@ class DrawerUnit extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: SafeArea(
         child: SingleChildScrollView(
-          // Make the drawer scrollable
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
             child: Column(
@@ -32,7 +33,11 @@ class DrawerUnit extends StatelessWidget {
                 const SizedBox(height: AppDimens.size12),
                 _buildDrawerIcon(context),
                 const SizedBox(height: AppDimens.size12),
-                Divider(color: Theme.of(context).colorScheme.outline),
+                _buildHeadingText(context),
+                const SizedBox(height: AppDimens.size12),
+                Divider(
+                    thickness: 0.5,
+                    color: Theme.of(context).colorScheme.outline),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleHome,
@@ -53,7 +58,9 @@ class DrawerUnit extends StatelessWidget {
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
                 const SizedBox(height: AppDimens.size48),
-                Divider(color: Theme.of(context).colorScheme.outline),
+                Divider(
+                    thickness: 0.5,
+                    color: Theme.of(context).colorScheme.outline),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleLogout,
@@ -70,62 +77,35 @@ class DrawerUnit extends StatelessWidget {
   }
 
   Widget _buildDrawerIcon(BuildContext context) {
-    return Material(
-      elevation: AppDimens.elevationSM2,
-      shape: const CircleBorder(),
-      color: Theme.of(context).colorScheme.outline,
-      child: Padding(
-        padding: const EdgeInsets.all(1),
-        child: (user?.profileImageUrl != null)
-            ? CachedNetworkImage(
-                imageUrl: user?.profileImageUrl ?? '',
-                placeholder: (_, __) => const SizedBox(
-                    width: AppDimens.iconSizeXXL96,
-                    child: CircularProgressIndicator()),
-                errorWidget: (_, __, ___) => Icon(
-                  Icons.person_rounded,
-                  size: AppDimens.iconSizeXXL96,
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-                imageBuilder: (_, imageProvider) => Container(
-                  height: AppDimens.iconSizeXXL96,
-                  width: AppDimens.iconSizeXXL96,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              )
-            : Icon(
-                Icons.person_rounded,
-                size: AppDimens.iconSizeXXL96,
-                color: Theme.of(context).colorScheme.onSecondary,
-              ),
+    return Image.asset(
+      IMAGE_LYXA_BANNER,
+      height: AppDimens.iconSizeXXL128,
+      width: AppDimens.iconSizeXXL128,
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _buildHeadingText(BuildContext context) {
+    return Text(
+      TextUtil.toSentenceCaseMultiple(user.name),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      style: AppTextStyles.headingSecondary.copyWith(
+        color: Theme.of(context).colorScheme.onSecondary,
+        fontSize: AppDimens.fontSizeXL20,
+        fontWeight: FontWeight.bold,
+        letterSpacing: AppDimens.letterSpacingPT10,
+        shadows: [],
       ),
     );
   }
 
   Widget _buildProfileSection(BuildContext context) {
-    String? userId;
-    if (user?.uid != null) {
-      userId = user!.uid;
-    } else {
-      final userData = context.read<AuthCubit>().currentUser;
-      userId = userData!.uid;
-    }
-
     return _buildDrawerItem(
       context,
       title: AppStrings.titleProfile,
       icon: Icons.person_outline,
-      onTap: () {
-        if (userId != null) {
-          _navigateToProfileScreen(context, userId);
-        }
-      },
+      onTap: () => _navigateToProfileScreen(context, user.uid),
     );
   }
 

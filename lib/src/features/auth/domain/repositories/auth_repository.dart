@@ -19,6 +19,11 @@ abstract class AuthRepository {
 
   Future<void> logOut();
 
+  Future<Result<bool>> updateProfileImageUrl({
+    required String userId,
+    required String profileImageUrl,
+  });
+
   Future<Result<AppUser>> getSavedUser({
     required String storageKey,
   });

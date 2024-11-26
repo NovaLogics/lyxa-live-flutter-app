@@ -52,7 +52,7 @@ class ProfileUser extends AppUser {
     );
   }
 
-  static ProfileUser getDefaultGuestUser() {
+  static ProfileUser getGuestUser() {
     return ProfileUser(
       uid: '',
       email: '',

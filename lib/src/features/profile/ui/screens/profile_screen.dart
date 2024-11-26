@@ -1,15 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
-import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
@@ -32,98 +33,90 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late final AuthCubit _authCubit;
   late final ProfileCubit _profileCubit;
-  late final AppUser _currentAppUser;
+  ProfileUser _currentAppUser = ProfileUser.getGuestUser();
+
+  get _appUserId => _currentAppUser.uid;
+
+  get _displayUserId => widget.displayUserId;
 
   @override
   void initState() {
     super.initState();
-    _fetchUserProfile(widget.displayUserId);
+    _profileCubit = getIt<ProfileCubit>();
+    _fetchUserProfile(_displayUserId);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        if (state is ProfileLoaded) {
-          LoadingCubit.hideLoading();
-          return _buildProfileContent(context, state.profileUser);
-        } else if (state is ProfileLoading) {
-          LoadingCubit.showLoading();
-          return Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.surface,
-          );
-        } else {
-          LoadingCubit.hideLoading();
-          return const Scaffold(
-            body: Center(
-              child: Text(AppStrings.profileNotFoundError),
-            ),
-          );
-        }
+        return Stack(
+          children: [
+            if (state is! ProfileLoaded)
+              _buildEmptyContent(
+                displayText: AppStrings.profileNotFoundError,
+              ),
+            if (state is ProfileLoaded)
+              _buildProfileContent(
+                context,
+                state.profileUser,
+              ),
+            _buildLoadingScreen(),
+          ],
+        );
       },
     );
   }
 
   void _fetchUserProfile(String profileUserId) async {
-    // Initialize cubits
-    _authCubit = context.read<AuthCubit>();
-    _profileCubit = context.read<ProfileCubit>();
+    _currentAppUser = await _profileCubit.getCurrentUser();
 
-    // Ensure current user is not null
-    final currentUser = _authCubit.currentUser;
-    if (currentUser == null) {
-      throw Exception("No authenticated user found. Cannot fetch profile.");
-    }
-
-    // Set the current app user
-    _currentAppUser = currentUser;
-
-    // Log user ID
-    Logger.logDebug("Current user ID: ${_currentAppUser.uid}");
-
-    // Fetch profile for the given user ID
-    _profileCubit.fetchUserProfile(profileUserId);
+    _profileCubit.loadUserProfileById(userId: profileUserId);
   }
 
-  /// Handles the follow/unfollow button press.
   void _handleFollowButtonPressed() {
     final profileState = _profileCubit.state;
 
     if (profileState is! ProfileLoaded) return;
 
     final profileUser = profileState.profileUser;
-    final isFollowing = profileUser.followers.contains(_currentAppUser.uid);
+    final isAlreadyFollowing = profileUser.followers.contains(_appUserId);
 
-    // Optimistically update UI
     setState(() {
-      if (isFollowing) {
-        profileUser.followers.remove(_currentAppUser.uid);
-      } else {
-        profileUser.followers.add(_currentAppUser.uid);
-      }
+      isAlreadyFollowing
+          ? profileUser.followers.remove(_appUserId)
+          : profileUser.followers.add(_appUserId);
     });
 
-    // Perform follow/unfollow logic and handle errors
     _profileCubit
-        .toggleFollow(_currentAppUser.uid, widget.displayUserId)
+        .toggleFollow(appUserId: _appUserId, targetUserId: _displayUserId)
         .catchError((_) {
-      // Revert optimistic UI changes if the operation fails
       setState(() {
-        if (isFollowing) {
-          profileUser.followers.add(_currentAppUser.uid);
-        } else {
-          profileUser.followers.remove(_currentAppUser.uid);
-        }
+        isAlreadyFollowing
+            ? profileUser.followers.add(_appUserId)
+            : profileUser.followers.remove(_appUserId);
       });
     });
   }
 
+  Widget _buildLoadingScreen() {
+    return BlocConsumer<LoadingCubit, LoadingState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Visibility(
+          visible: state.isVisible,
+          child: CenterLoadingUnit(
+            message: state.message,
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildProfileContent(BuildContext context, ProfileUser user) {
-    final isOwnProfile = (widget.displayUserId == _currentAppUser.uid);
-    Logger.logDebug(
-        '$isOwnProfile  ${widget.displayUserId} = ${_currentAppUser.uid} ');
+    final isOwnProfile = (_displayUserId == _appUserId);
+    Logger.logDebug('$isOwnProfile  $_displayUserId = $_appUserId ');
 
     return ConstrainedScaffold(
       appBar: _buildAppBar(context, user, isOwnProfile),
@@ -145,6 +138,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _buildEmptyContent({String? displayText = ''}) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: Center(
+        child: Text(displayText ?? ''),
+      ),
+    );
+  }
+
   AppBar _buildAppBar(
       BuildContext context, ProfileUser user, bool isOwnProfile) {
     return AppBar(
@@ -160,27 +162,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
       actions: [
         isOwnProfile
             ? IconButton(
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => EditProfileScreen(user: user),
+                    builder: (_) => EditProfileScreen(currentUser: user),
                   ),
                 ),
                 icon: const Icon(Icons.settings_outlined),
                 iconSize: AppDimens.iconSizeSM24,
               )
-            : const SizedBox(
-                width: AppDimens.iconSizeMD32,
-              ),
+            : const SizedBox(width: AppDimens.iconSizeMD32),
       ],
     );
   }
@@ -235,29 +229,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildProfileStats(ProfileUser user) {
+  Widget _buildProfileStats(ProfileUser displayUser) {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
         int postCount = 0;
 
         if (state is PostLoaded) {
-          postCount = state.posts
-              .where((post) => post.userId == widget.displayUserId)
-              .length;
+          postCount =
+              state.posts.where((post) => post.userId == _displayUserId).length;
         }
 
         return Padding(
           padding: const EdgeInsets.all(AppDimens.paddingRG8),
           child: ProfileStatsUnit(
             postCount: postCount,
-            followerCount: user.followers.length,
-            followingCount: user.following.length,
+            followerCount: displayUser.followers.length,
+            followingCount: displayUser.following.length,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => FollowerScreen(
-                  followers: user.followers,
-                  following: user.following,
+                  followers: displayUser.followers,
+                  following: displayUser.following,
                 ),
               ),
             ),
@@ -270,7 +263,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildFollowActionSection(ProfileUser user) {
     return FollowButtonUnit(
       onPressed: _handleFollowButtonPressed,
-      isFollowing: user.followers.contains(_currentAppUser.uid),
+      isFollowing: user.followers.contains(_appUserId),
     );
   }
 
@@ -338,7 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               final post = userPosts[index];
               return PostTileUnit(
                 post: post,
-                currentAppUser: _currentAppUser,
+                currentUser: _currentAppUser,
                 onDeletePressed: () =>
                     context.read<PostCubit>().deletePost(postId: post.id),
               );

@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
+import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
@@ -25,6 +28,11 @@ class PostCubit extends Cubit<PostState> {
   })  : _storageRepository = storageRepository,
         _postRepository = postRepository,
         super(PostInitial());
+
+  Future<ProfileUser> getCurrentUser() async {
+    final profileUser = await getIt<ProfileCubit>().getCurrentUser();
+    return profileUser;
+  }
 
   Future<void> getAllPosts() async {
     emit(PostLoading());
@@ -93,8 +101,10 @@ class PostCubit extends Cubit<PostState> {
         break;
 
       case Status.error:
-        _handleErrors(result: result,
-          tag: '$debugTag: deletePost()',);
+        _handleErrors(
+          result: result,
+          tag: '$debugTag: deletePost()',
+        );
         break;
     }
   }

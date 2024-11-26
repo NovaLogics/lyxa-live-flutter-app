@@ -2,120 +2,114 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
+import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
+import 'package:lyxa_live/src/shared/entities/result/result.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 class FirebaseProfileRepository implements ProfileRepository {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
-  Future<ProfileUser?> fetchUserProfile(String uid) async {
+  Future<Result<ProfileUser?>> getUserProfileById({
+    required String userId,
+  }) async {
     try {
-      // Get user document from Firestore
-      final userDoc = await firebaseFirestore
+      final userDocument = await firebaseFirestore
           .collection(FIRESTORE_COLLECTION_USERS)
-          .doc(uid)
+          .doc(userId)
           .get();
 
-      if (userDoc.exists) {
-        final userData = userDoc.data();
-
-        if (userData != null) {
-          // Fetch followes & following
-          final followers = List<String>.from(userData['followers'] ?? []);
-          final following = List<String>.from(userData['following'] ?? []);
-
-          return ProfileUser(
-            uid: uid,
-            email: userData['email'],
-            name: userData['name'],
-            searchableName: userData['searchableName'],
-            bio: userData['bio'] ?? '',
-            profileImageUrl: userData['profileImageUrl'].toString(),
-            followers: followers,
-            following: following,
-          );
-        }
+      if (!userDocument.exists || userDocument.data() == null) {
+        throw Exception(ErrorMsgs.cannotFetchProfileError);
       }
-      return null;
+
+      final profileUser =
+          ProfileUser.fromJson(userDocument.data() as Map<String, dynamic>);
+
+      return Result.success(
+        data: profileUser,
+      );
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      return null;
+      return Result.error(GenericError(error: error));
     }
   }
 
   @override
-  Future<void> updateProfile(ProfileUser updatedProfile) async {
+  Future<Result<void>> updateProfile({
+    required ProfileUser updatedProfile,
+  }) async {
     try {
-      // Convert update profile to json to store in Firestore
       await firebaseFirestore
           .collection(FIRESTORE_COLLECTION_USERS)
           .doc(updatedProfile.uid)
           .update({
-        'bio': updatedProfile.bio,
-        'profileImageUrl': updatedProfile.profileImageUrl,
+        ProfileUserFields.bio: updatedProfile.bio,
+        ProfileUserFields.profileImageUrl: updatedProfile.profileImageUrl,
       });
+      return Result.voidSuccess();
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception(error);
+      return Result.error(GenericError(error: error));
     }
   }
 
   @override
-  Future<void> toggleFollow(String currentUid, String targetUid) async {
+  Future<Result<void>> toggleFollow({
+    required String appUserId,
+    required String targetUserId,
+  }) async {
     try {
-      // Get user document from Firestore
-      final currentUserDoc = await firebaseFirestore
+      final appUserDocumentRef = firebaseFirestore
           .collection(FIRESTORE_COLLECTION_USERS)
-          .doc(currentUid)
-          .get();
+          .doc(appUserId);
 
-      final targetUserDoc = await firebaseFirestore
+      final targetUserDocumentRef = firebaseFirestore
           .collection(FIRESTORE_COLLECTION_USERS)
-          .doc(targetUid)
-          .get();
+          .doc(targetUserId);
 
-      if (currentUserDoc.exists && targetUserDoc.exists) {
-        final currentUserData = currentUserDoc.data();
-        final targetUserData = targetUserDoc.data();
+      final appUserDocument = await appUserDocumentRef.get();
 
-        if (currentUserData != null && targetUserData != null) {
-          final List<String> currentFollowing =
-              List<String>.from(currentUserData['following'] ?? []);
+      final targetUserDocument = await targetUserDocumentRef.get();
 
-          // Check if the current user is already following the target user
-
-          if (currentFollowing.contains(targetUid)) {
-            // Unfollow
-            await firebaseFirestore
-                .collection(FIRESTORE_COLLECTION_USERS)
-                .doc(currentUid)
-                .update({
-              'following': FieldValue.arrayRemove([targetUid])
-            });
-
-            await firebaseFirestore
-                .collection(FIRESTORE_COLLECTION_USERS)
-                .doc(targetUid)
-                .update({
-              'followers': FieldValue.arrayRemove([currentUid])
-            });
-          } else {
-            // Follow
-            await firebaseFirestore
-                .collection(FIRESTORE_COLLECTION_USERS)
-                .doc(currentUid)
-                .update({
-              'following': FieldValue.arrayUnion([targetUid])
-            });
-
-            await firebaseFirestore
-                .collection(FIRESTORE_COLLECTION_USERS)
-                .doc(targetUid)
-                .update({
-              'followers': FieldValue.arrayUnion([currentUid])
-            });
-          }
-        }
+      if (!appUserDocument.exists ||
+          !targetUserDocument.exists ||
+          appUserDocument.data() == null ||
+          targetUserDocument.data() == null) {
+        throw Exception(ErrorMsgs.cannotFetchProfileError);
       }
+
+      final List<String> currentFollowingUserList = List<String>.from(
+          appUserDocument.data()?[ProfileUserFields.following] ?? []);
+
+      // UNFOLLOW
+      if (currentFollowingUserList.contains(targetUserId)) {
+        await appUserDocumentRef.update({
+          ProfileUserFields.following: FieldValue.arrayRemove([targetUserId])
+        });
+
+        await targetUserDocumentRef.update({
+          ProfileUserFields.followers: FieldValue.arrayRemove([appUserId])
+        });
+      }
+      // FOLLOW
+      else {
+        await appUserDocumentRef.update({
+          ProfileUserFields.following: FieldValue.arrayUnion([targetUserId])
+        });
+
+        await targetUserDocumentRef.update({
+          ProfileUserFields.followers: FieldValue.arrayUnion([appUserId])
+        });
+      }
+      return Result.voidSuccess();
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
     } catch (error) {
-      throw Exception(error);
+      return Result.error(GenericError(error: error));
     }
   }
 }
