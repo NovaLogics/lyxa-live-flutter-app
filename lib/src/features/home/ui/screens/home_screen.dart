@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static const String debugTag = 'HomeScreen';
   late final PostCubit _postCubit;
   late final AppUser _currentAppUser;
-  ProfileUser _profileUser = ProfileUser.getDefaultGuestUser();
+  ProfileUser _profileUser = ProfileUser.getGuestUser();
 
   @override
   void initState() {
