@@ -9,6 +9,8 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/widgets/center_loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
@@ -50,21 +52,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         _hideLoading();
-        if (state is ProfileLoading) {
-          _showLoading(
-            AppStrings.loadingMessage,
-          );
-          return _buildEmptyContent();
-        } else if (state is ProfileLoaded) {
-          return _buildProfileContent(
-            context,
-            state.profileUser,
-          );
-        } else {
-          return _buildEmptyContent(
-            displayText: AppStrings.profileNotFoundError,
-          );
-        }
+        return Stack(
+          children: [
+            if (state is! ProfileLoaded)
+              _buildEmptyContent(
+                displayText: AppStrings.profileNotFoundError,
+              ),
+            if (state is ProfileLoaded)
+              _buildProfileContent(
+                context,
+                state.profileUser,
+              ),
+            _buildLoadingScreen(),
+          ],
+        );
       },
     );
   }
@@ -108,6 +109,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : profileUser.followers.remove(_appUserId);
       });
     });
+  }
+
+  Widget _buildLoadingScreen() {
+    return BlocConsumer<LoadingCubit, LoadingState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Visibility(
+          visible: state.isVisible,
+          child: CenterLoadingUnit(
+            message: state.message,
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildProfileContent(BuildContext context, ProfileUser user) {
