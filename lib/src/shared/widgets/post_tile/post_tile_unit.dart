@@ -7,8 +7,8 @@ import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/utils/date_time_util.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
@@ -20,13 +20,13 @@ import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class PostTileUnit extends StatefulWidget {
   final Post post;
-  final AppUser currentAppUser;
+  final ProfileUser currentUser;
   final VoidCallback? onDeletePressed;
 
   const PostTileUnit({
     super.key,
     required this.post,
-    required this.currentAppUser,
+    required this.currentUser,
     required this.onDeletePressed,
   });
 
@@ -39,7 +39,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
   late final PostCubit _postCubit = context.read<PostCubit>();
   bool _isOwnPost = false;
 
-  String get _appUserId => widget.currentAppUser.uid;
+  String get _appUserId => widget.currentUser.uid;
 
   @override
   void initState() {
@@ -158,7 +158,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       postId: widget.post.id,
       userId: _appUserId,
-      userName: widget.currentAppUser.name,
+      userName: widget.currentUser.name,
       text: comment,
       timestamp: DateTime.now(),
     );
@@ -527,7 +527,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) => CommentTileUnit(
                 comment: post.comments[index],
-                currentAppUser: widget.currentAppUser,
+                currentAppUser: widget.currentUser,
                 onDeletePressed: (comment) {
                   _deleteSelectedComment(comment);
                 },

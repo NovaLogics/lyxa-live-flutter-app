@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
@@ -23,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final PostCubit _postCubit;
-  ProfileUser _currentProfileUser = ProfileUser.getGuestUser();
+  ProfileUser _currentUser = ProfileUser.getGuestUser();
 
   @override
   void initState() {
@@ -80,11 +79,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final profileUser = await _postCubit.getCurrentUser();
 
-    _hideLoading();
-
     setState(() {
-      _currentProfileUser = profileUser;
+      _currentUser = profileUser;
     });
+
+    _hideLoading();
 
     _fetchAllPosts();
   }
@@ -93,14 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            UploadPostScreen(profileUser: _currentProfileUser),
+        builder: (context) => UploadPostScreen(profileUser: _currentUser),
       ),
     );
   }
 
   Widget _buildAppDrawer() {
-    return DrawerUnit(user: _currentProfileUser);
+    return DrawerUnit(user: _currentUser);
   }
 
   AppBar _buildAppBar(BuildContext context) {
@@ -126,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
               final post = posts[index];
               return PostTileUnit(
                 post: post,
-                currentAppUser: _currentAppUser,
+                currentUser: _currentUser,
                 onDeletePressed: () => _deletePost(post.id),
               );
             },
