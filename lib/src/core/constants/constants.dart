@@ -1,5 +1,3 @@
-
-
 // DATA STORAGE PATHS
 const String hiveBoxLyxa = 'lyxaAppBox';
 const String firebaseUsersCollectionPath = 'users';
@@ -7,12 +5,7 @@ const String firebasePostsCollectionPath = 'posts';
 const String firebaseProfileImageStoragePath = 'profile_images';
 const String firebasePostImageStoragePath = 'post_images';
 
-// BASE RESOURCE PATHS
-const String _imagePath = 'assets/images';
 const String _iconPath = 'assets/icons';
-
-// IMAGE PATHS
-const String IMAGE_LYXA_BANNER = '$_imagePath/lyxa_banner.png';
 
 // ICON PATHS
 const String ICON_HEART_FILLED = '$_iconPath/ic_heart_filled.svg';

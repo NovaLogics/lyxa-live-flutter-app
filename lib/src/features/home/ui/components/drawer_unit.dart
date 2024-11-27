@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/resources/app_assets.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
@@ -91,7 +92,7 @@ class DrawerUnit extends StatelessWidget {
 
   Widget _buildDrawerIcon(BuildContext context) {
     return Image.asset(
-      IMAGE_LYXA_BANNER,
+      AppAssets.Images.logoMainLyxa,
       height: AppDimens.iconSizeXXL128,
       width: AppDimens.iconSizeXXL128,
       fit: BoxFit.cover,
