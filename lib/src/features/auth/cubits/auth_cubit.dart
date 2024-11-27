@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
+import 'package:lyxa_live/src/core/resources/app_images.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
@@ -19,7 +20,7 @@ class AuthCubit extends Cubit<AuthState> {
   static const String debugTag = 'AuthCubit';
   final AuthRepository _authRepository;
   final StorageRepository _storageRepository;
-  AppUser _currentUser = AppUser.getDefaultGuestUser();
+  AppUser? _currentUser;
 
   AuthCubit({
     required AuthRepository authRepository,
@@ -93,12 +94,14 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (registerResult.status) {
       case Status.success:
-        if (registerResult.data != null) {
+        if (registerResult.isDataNotNull()) {
           _showLoading();
           _currentUser = registerResult.data as AppUser;
-          await _uploadDeafultUserAvatar(_currentUser.uid);
+          await _uploadDeafultUserAvatar(_currentUser!.uid);
+          Logger.logDebug(_currentUser!.toJsonString(),
+              tag: '$debugTag: register() User');
           _hideLoading();
-          emit(Authenticated(_currentUser));
+          emit(Authenticated(_currentUser!));
         } else {
           emit(Unauthenticated());
         }
@@ -117,7 +120,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> logout() async {
     await _authRepository.logOut();
     _currentUser = AppUser.getDefaultGuestUser();
-     getIt<ProfileCubit>().resetUser();
+    getIt<ProfileCubit>().resetUser();
     emit(Unauthenticated());
   }
 
@@ -169,8 +172,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<bool> _uploadDeafultUserAvatar(String userId) async {
-    const assetPath = 'assets/images/default_avatar.jpg';
-    Uint8List imageBytes = await _getImageBytesFromAssets(assetPath);
+    Uint8List imageBytes =
+        await _getImageBytesFromAssets(AppImages.defaultAvatar);
 
     final imageUploadResult = await _storageRepository.uploadProfileImage(
       imageFileBytes: imageBytes,
@@ -182,17 +185,24 @@ class AuthCubit extends Cubit<AuthState> {
     if (imageUploadResult.status == Status.error) {
       _handleErrors(
         result: imageUploadResult,
-        tag: '$debugTag: addPost()::imageUploadResult',
+        tag: '$debugTag: _uploadDeafultUserAvatar()::imageUploadResult',
       );
       return false;
     } else if (imageUrl.isEmpty) {
       return false;
     }
 
-    await _authRepository.updateProfileImageUrl(
-      userId: _currentUser.uid,
+    final updateUrlResult = await _authRepository.updateProfileImageUrl(
+      userId: userId,
       profileImageUrl: imageUrl,
     );
+    if (updateUrlResult.status == Status.error) {
+      _handleErrors(
+        result: imageUploadResult,
+        tag: '$debugTag: _uploadDeafultUserAvatar()::updateUrlResult',
+      );
+      return false;
+    }
     return true;
   }
 
@@ -209,7 +219,7 @@ class AuthCubit extends Cubit<AuthState> {
   void _handleAuthStatus({required AppUser? userData}) {
     if (userData != null) {
       _currentUser = userData;
-      emit(Authenticated(_currentUser));
+      emit(Authenticated(_currentUser!));
     } else {
       emit(Unauthenticated());
     }
