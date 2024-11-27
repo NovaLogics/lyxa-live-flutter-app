@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _deletePost(String postId) {
     _postCubit.deletePost(postId: postId);
-    _fetchAllPosts();
+    //_fetchAllPosts();
   }
 
   void _initScreen() async {
