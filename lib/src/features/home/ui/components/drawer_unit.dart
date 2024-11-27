@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_icons.dart';
@@ -41,34 +40,29 @@ class DrawerUnit extends StatelessWidget {
                 addSpacing(height: AppDimens.size8),
                 _addDivider(context, isShortDivider: true),
                 addSpacing(height: AppDimens.size8),
-                _buildDrawerItem(
-                  context,
+                DrawerTitleUnit(
                   title: AppStrings.titleHome,
                   iconSrc: AppIcons.homeOutlined,
                   onTap: () => Navigator.of(context).pop(),
                 ),
-                _buildDrawerItem(
-                  context,
+                DrawerTitleUnit(
                   title: AppStrings.titleProfile,
                   iconSrc: AppIcons.profileOutlined,
                   onTap: () => _navigateToProfileScreen(context, user.uid),
                 ),
-                _buildDrawerItem(
-                  context,
+                DrawerTitleUnit(
                   title: AppStrings.titleSearch,
                   iconSrc: AppIcons.searchOutlined,
                   onTap: () => _navigateToSearchScreen(context),
                 ),
-                _buildDrawerItem(
-                  context,
+                DrawerTitleUnit(
                   title: AppStrings.titleSettings,
                   iconSrc: AppIcons.settingsOutlinedStl2,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
                 addSpacing(height: AppDimens.size20),
                 _addDivider(context, isShortDivider: true),
-                _buildDrawerItem(
-                  context,
+                DrawerTitleUnit(
                   title: AppStrings.titleLogout,
                   iconSrc: AppIcons.logoutOutlined,
                   onTap: () => _logout(),
@@ -109,19 +103,6 @@ class DrawerUnit extends StatelessWidget {
       style: AppStyles.titlePrimary.copyWith(
         color: Theme.of(context).colorScheme.onPrimary,
       ),
-    );
-  }
-
-  Widget _buildDrawerItem(
-    BuildContext context, {
-    required String title,
-    required String iconSrc,
-    required VoidCallback onTap,
-  }) {
-    return DrawerTitleUnit(
-      title: title,
-      iconSrc: iconSrc,
-      onTap: onTap,
     );
   }
 
