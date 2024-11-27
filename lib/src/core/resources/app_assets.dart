@@ -1,36 +1,9 @@
-
 // ignore_for_file: constant_identifier_names
 
 class AppAssets {
   const AppAssets._();
-
- 
-  
   static const Icons = _AppIcons();
-
-  // BASE RESOURCE PATHS
-  static const String imagePath = 'assets/images';
-  static const String iconPath = 'assets/icons';
-
-  // IMAGE PATHS
-  static const String imageLyxaBanner = '$imagePath/lyxa_banner.png';
-
-  // ICON PATHS
-  static const String iconHeartSolid = '$iconPath/ic_heart_filled.svg';
-  static const String iconHeartOutlined = '$iconPath/ic_heart_border.svg';
-
-  static const String iconCommentOutlined = '$iconPath/ic_comment_border.svg';
-  static const String iconCommentSolid = '$iconPath/ic_comment_filled.svg';
-
-  static const String iconSettingsOutlinedStl1 =
-      '$iconPath/ic_settings_style_1.svg';
-  static const String iconSettingsOutlinedStl2 =
-      '$iconPath/ic_settings_border.svg';
-
-  static const String iconHomeBorder = '$iconPath/ic_home_border.svg';
-  static const String iconProfileBorder = '$iconPath/ic_profile_border.svg';
-  static const String iconSearchBorder = '$iconPath/ic_search_border.svg';
-  static const String iconLogoutBorder = '$iconPath/ic_logout_border.svg';
+  static const Images = _AppImages();
 
   // APP FONTS
   static const String fontRaleway = 'Raleway';
@@ -48,5 +21,18 @@ class _AppIcons {
   final String commentSolid = '$_iconPath/ic_comment_filled.svg';
   final String commentOutlined = '$_iconPath/ic_comment_border.svg';
 
-  
+  final String settingsOutlinedStl1 = '$_iconPath/ic_settings_style_1.svg';
+  final String settingsOutlinedStl2 = '$_iconPath/ic_settings_border.svg';
+
+  final String homeOutlined = '$_iconPath/ic_home_border.svg';
+  final String profileOutlined = '$_iconPath/ic_profile_border.svg';
+  final String searchOutlined = '$_iconPath/ic_search_border.svg';
+  final String logoutOutlined = '$_iconPath/ic_logout_border.svg';
+}
+
+class _AppImages {
+  const _AppImages();
+  static const String _imagePath = 'assets/images';
+
+  final String logoMainLyxa = '$_imagePath/lyxa_banner.png';
 }
