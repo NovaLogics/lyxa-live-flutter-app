@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_icons.dart';
 import 'package:lyxa_live/src/core/resources/app_images.dart';
@@ -11,6 +12,7 @@ import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
 import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
+import 'package:lyxa_live/src/shared/spacers_unit.dart';
 
 class DrawerUnit extends StatelessWidget {
   final ProfileUser user;
@@ -30,29 +32,27 @@ class DrawerUnit extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: AppDimens.size24),
             child: Column(
               children: [
-                const SizedBox(height: AppDimens.size12),
+                addSpacing(height: AppDimens.size12),
                 _buildDrawerIcon(context),
-                const SizedBox(height: AppDimens.size8),
-                Divider(
-                    thickness: 0.5,
-                    color: Theme.of(context).colorScheme.primary),
-                const SizedBox(height: AppDimens.size8),
+                addSpacing(height: AppDimens.size8),
+                _addDivider(context, isShortDivider: false),
+                addSpacing(height: AppDimens.size8),
                 _buildHeadingText(context),
-                const SizedBox(height: AppDimens.size8),
-                Padding(
-                  padding: const EdgeInsets.only(right: AppDimens.size80),
-                  child: Divider(
-                      thickness: 0.5,
-                      color: Theme.of(context).colorScheme.primary),
-                ),
-                const SizedBox(height: AppDimens.size8),
+                addSpacing(height: AppDimens.size8),
+                _addDivider(context, isShortDivider: true),
+                addSpacing(height: AppDimens.size8),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleHome,
                   iconSrc: AppIcons.homeOutlined,
                   onTap: () => Navigator.of(context).pop(),
                 ),
-                _buildProfileSection(context),
+                _buildDrawerItem(
+                  context,
+                  title: AppStrings.titleProfile,
+                  iconSrc: AppIcons.profileOutlined,
+                  onTap: () => _navigateToProfileScreen(context, user.uid),
+                ),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleSearch,
@@ -65,28 +65,30 @@ class DrawerUnit extends StatelessWidget {
                   iconSrc: AppIcons.settingsOutlinedStl2,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
-                const SizedBox(height: AppDimens.size20),
-                Padding(
-                  padding: const EdgeInsets.only(right: AppDimens.size80),
-                  child: Divider(
-                      thickness: 0.5,
-                      color: Theme.of(context).colorScheme.primary),
-                ),
+                addSpacing(height: AppDimens.size20),
+                _addDivider(context, isShortDivider: true),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleLogout,
                   iconSrc: AppIcons.logoutOutlined,
-                  onTap: () => _logout(context),
+                  onTap: () => _logout(),
                 ),
-                Divider(
-                    thickness: 0.5,
-                    color: Theme.of(context).colorScheme.primary),
-                const SizedBox(height: AppDimens.size12),
+                _addDivider(context, isShortDivider: false),
+                addSpacing(height: AppDimens.size12),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _addDivider(BuildContext context, {required bool isShortDivider}) {
+    final padding = (isShortDivider ? AppDimens.size80 : 0.0);
+    return Padding(
+      padding: EdgeInsets.only(right: padding),
+      child:
+          Divider(thickness: 0.5, color: Theme.of(context).colorScheme.primary),
     );
   }
 
@@ -107,15 +109,6 @@ class DrawerUnit extends StatelessWidget {
       style: AppStyles.titlePrimary.copyWith(
         color: Theme.of(context).colorScheme.onPrimary,
       ),
-    );
-  }
-
-  Widget _buildProfileSection(BuildContext context) {
-    return _buildDrawerItem(
-      context,
-      title: AppStrings.titleProfile,
-      iconSrc: AppIcons.profileOutlined,
-      onTap: () => _navigateToProfileScreen(context, user.uid),
     );
   }
 
@@ -158,7 +151,7 @@ class DrawerUnit extends StatelessWidget {
     );
   }
 
-  void _logout(BuildContext context) {
-    context.read<AuthCubit>().logout();
+  void _logout() {
+    getIt<AuthCubit>().logout();
   }
 }
