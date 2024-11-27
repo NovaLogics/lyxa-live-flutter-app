@@ -31,6 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   late final AuthCubit _authCubit;
 
+  String get _email => _emailController.text.trim();
+  String get _password => _passwordController.text.trim();
+
   @override
   void initState() {
     super.initState();
@@ -84,14 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login() {
     if (_loginCredentialsFormKey.currentState?.validate() != true) return;
 
-    final String email = _emailController.text.trim();
-    final String password = _passwordController.text.trim();
-
     _authCubit.saveUserToLocalStorage(
       storageKey: HiveKeys.loginDataKey,
-      user: AppUser.createWith(email: email),
+      user: AppUser.createWith(email: _email),
     );
-    _authCubit.login(email, password);
+    _authCubit.login(_email, _password);
   }
 
   Widget _buildTopBanner() {
@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               _authCubit.saveUserToLocalStorage(
                 storageKey: HiveKeys.loginDataKey,
-                user: AppUser.createWith(email: _emailController.text.trim()),
+                user: AppUser.createWith(email: _email),
               );
             },
             child: const Text(
