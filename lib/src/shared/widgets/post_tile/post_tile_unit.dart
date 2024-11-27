@@ -291,7 +291,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     // Username
                     Text(
                       widget.post.userName.toString().trim(),
-                      style: AppTextStyles.textStylePost.copyWith(
+                      style: AppStyles.textStylePost.copyWith(
                         color: Theme.of(context).colorScheme.inversePrimary,
                       ),
                     ),
@@ -300,7 +300,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       padding: const EdgeInsets.only(left: 1),
                       child: Text(
                         DateTimeUtil.datetimeAgo(widget.post.timestamp),
-                        style: AppTextStyles.textStylePostWithNumbers.copyWith(
+                        style: AppStyles.textStylePostWithNumbers.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                           fontSize: AppDimens.fontSizeSM12,
                           fontWeight: FontWeight.w400,
@@ -407,7 +407,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 // Like count
                 Text(
                   widget.post.likes.length.toString(),
-                  style: AppTextStyles.textStylePostWithNumbers.copyWith(
+                  style: AppStyles.textStylePostWithNumbers.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
@@ -442,7 +442,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           const SizedBox(width: AppDimens.size4),
           Text(
             widget.post.comments.length.toString(),
-            style: AppTextStyles.textStylePostWithNumbers.copyWith(
+            style: AppStyles.textStylePostWithNumbers.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
@@ -451,7 +451,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           Text(
             DateTimeUtil.formatDate(widget.post.timestamp,
                 format: DateTimeStyles.customShortDate),
-            style: AppTextStyles.textStylePostWithNumbers.copyWith(
+            style: AppStyles.textStylePostWithNumbers.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.w400,
             ),
@@ -474,7 +474,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
         children: [
           Text(
             widget.post.userName,
-            style: AppTextStyles.textStylePost.copyWith(
+            style: AppStyles.textStylePost.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
               fontSize: AppDimens.fontSizeRG14,
             ),
@@ -486,11 +486,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
             child: SingleChildScrollView(
               child: Text(
                 widget.post.captionText,
-                style: AppTextStyles.textStylePost.copyWith(
+                style: AppStyles.textStylePost.copyWith(
                   color: Theme.of(context).colorScheme.inversePrimary,
                   fontSize: AppDimens.fontSizeRG14,
                   letterSpacing: 0.7,
-                  shadows: AppTextStyles.shadowStyle2,
+                  shadows: AppStyles.shadowStyle2,
                 ),
                 maxLines: 5,
                 softWrap: true,

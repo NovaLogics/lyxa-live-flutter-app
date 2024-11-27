@@ -2,24 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_fonts.dart';
 
-class AppTextStyles {
+class AppStyles {
   /// Headings
   /// ->
   static const TextStyle headingPrimary = TextStyle(
     color: AppColors.whitePure,
     fontSize: AppDimens.fontSizeXXL42,
     fontWeight: FontWeight.w500,
-    letterSpacing: 0.1,
-    fontFamily: FONT_DYNALIGHT,
+    letterSpacing: AppDimens.letterSpacingPT01,
+    fontFamily: AppFonts.dynalight,
     shadows: shadowStyle1,
   );
 
   static const TextStyle headingSecondary = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeLG18,
-    fontFamily: FONT_RALEWAY,
+    fontFamily: AppFonts.raleway,
     shadows: shadowStyle1,
+  );
+
+  /// Subtitles
+  /// ->
+  static const TextStyle titlePrimary = TextStyle(
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeXL20,
+    fontFamily: AppFonts.raleway,
+    fontWeight: FontWeight.w600,
+    letterSpacing: AppDimens.letterSpacingPT10,
   );
 
   /// Subtitles
@@ -81,4 +92,6 @@ class AppTextStyles {
       color: Colors.white30,
     ),
   ];
+
+  static const List<Shadow> shadowStyleEmpty = [];
 }

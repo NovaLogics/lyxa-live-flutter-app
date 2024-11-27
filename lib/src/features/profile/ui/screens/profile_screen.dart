@@ -153,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       title: Center(
         child: Text(
           user.name,
-          style: AppTextStyles.textStylePost.copyWith(
+          style: AppStyles.textStylePost.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.bold,
             fontSize: AppDimens.fontSizeXL20,
@@ -189,11 +189,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Center(
       child: Text(
         user.email,
-        style: AppTextStyles.subtitlePrimary.copyWith(
+        style: AppStyles.subtitlePrimary.copyWith(
           color: Theme.of(context).colorScheme.onPrimary,
           fontWeight: FontWeight.normal,
           fontFamily: FONT_MONTSERRAT,
-          shadows: AppTextStyles.shadowStyle2,
+          shadows: AppStyles.shadowStyle2,
         ),
       ),
     );
@@ -245,10 +245,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.symmetric(horizontal: AppDimens.size32),
           child: Text(
             AppStrings.storylineDecoText,
-            style: AppTextStyles.subtitleSecondary.copyWith(
+            style: AppStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.w300,
-              shadows: AppTextStyles.shadowStyle2,
+              shadows: AppStyles.shadowStyle2,
             ),
           ),
         ),

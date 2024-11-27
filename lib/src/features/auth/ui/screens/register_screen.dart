@@ -136,7 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildHeadingText() {
     return Text(
       AppStrings.createAccountMessage,
-      style: AppTextStyles.headingSecondary.copyWith(
+      style: AppStyles.headingSecondary.copyWith(
         color: AppColors.white100,
         fontSize: AppDimens.fontSizeXXL24,
       ),
@@ -184,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return GradientButton(
       text: AppStrings.signUp.toUpperCase(),
       onPressed: _register,
-      textStyle: AppTextStyles.buttonTextPrimary.copyWith(
+      textStyle: AppStyles.buttonTextPrimary.copyWith(
         color: Theme.of(context).colorScheme.inversePrimary,
       ),
       icon: Icon(
@@ -203,7 +203,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: [
           const Text(
             AppStrings.alreadyAMember,
-            style: AppTextStyles.subtitleSecondary,
+            style: AppStyles.subtitleSecondary,
           ),
           const SizedBox(
             width: AppDimens.size8,
@@ -222,7 +222,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             },
             child: const Text(
               AppStrings.loginNow,
-              style: AppTextStyles.subtitlePrimary,
+              style: AppStyles.subtitlePrimary,
             ),
           ),
         ],

@@ -106,14 +106,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildHeadingText() {
     return const Text(
       AppStrings.welcomeBack,
-      style: AppTextStyles.headingPrimary,
+      style: AppStyles.headingPrimary,
     );
   }
 
   Widget _buildSubheadingText() {
     return const Text(
       AppStrings.itsTimeToShareYourStory,
-      style: AppTextStyles.headingSecondary,
+      style: AppStyles.headingSecondary,
     );
   }
 
@@ -135,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return GradientButton(
       text: AppStrings.login.toUpperCase(),
       onPressed: _login,
-      textStyle: AppTextStyles.buttonTextPrimary.copyWith(
+      textStyle: AppStyles.buttonTextPrimary.copyWith(
         color: Theme.of(context).colorScheme.inversePrimary,
       ),
       icon: Icon(
@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           const Text(
             AppStrings.notAMember,
-            style: AppTextStyles.subtitleSecondary,
+            style: AppStyles.subtitleSecondary,
           ),
           const SizedBox(width: AppDimens.size8),
           GestureDetector(
@@ -168,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             child: const Text(
               AppStrings.registerNow,
-              style: AppTextStyles.subtitlePrimary,
+              style: AppStyles.subtitlePrimary,
             ),
           ),
         ],

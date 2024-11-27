@@ -48,7 +48,7 @@ class FollowButtonUnit extends StatelessWidget {
                 isFollowing
                     ? AppStrings.unfollowUpperCase
                     : AppStrings.followUpperCase,
-                style: AppTextStyles.buttonTextPrimary.copyWith(
+                style: AppStyles.buttonTextPrimary.copyWith(
                   color: AppColors.deepPurple50,
                   fontSize: AppDimens.fontSizeRG14,
                   letterSpacing: 1.2,

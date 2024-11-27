@@ -18,19 +18,19 @@ class UserTileUnit extends StatelessWidget {
     return ListTile(
       title: Text(
         user.name,
-        style: AppTextStyles.textStylePost.copyWith(
+        style: AppStyles.textStylePost.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
           fontWeight: FontWeight.bold,
         ),
       ),
       subtitle: Text(
         user.email,
-        style: AppTextStyles.subtitlePrimary.copyWith(
+        style: AppStyles.subtitlePrimary.copyWith(
           color: Theme.of(context).colorScheme.onSecondary,
           fontWeight: FontWeight.bold,
           fontFamily: FONT_MONTSERRAT,
           fontSize: AppDimens.fontSizeSM12,
-          shadows: AppTextStyles.shadowStyle2,
+          shadows: AppStyles.shadowStyle2,
         ),
       ),
       leading: Icon(

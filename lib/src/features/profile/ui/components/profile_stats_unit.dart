@@ -55,8 +55,7 @@ class ProfileStatsUnit extends StatelessWidget {
                         children: [
                           Text(
                             postCount.toString(),
-                            style:
-                                AppTextStyles.textStylePostWithNumbers.copyWith(
+                            style: AppStyles.textStylePostWithNumbers.copyWith(
                               color: Theme.of(context).colorScheme.onTertiary,
                               fontWeight: FontWeight.bold,
                               fontSize: AppDimens.fontSizeMD16,
@@ -65,7 +64,7 @@ class ProfileStatsUnit extends StatelessWidget {
                           const SizedBox(height: AppDimens.size4),
                           Text(
                             AppStrings.postsUpperCase,
-                            style: AppTextStyles.textStylePost.copyWith(
+                            style: AppStyles.textStylePost.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
                               fontSize: AppDimens.fontSizeSM12,
@@ -81,8 +80,7 @@ class ProfileStatsUnit extends StatelessWidget {
                         children: [
                           Text(
                             followerCount.toString(),
-                            style:
-                                AppTextStyles.textStylePostWithNumbers.copyWith(
+                            style: AppStyles.textStylePostWithNumbers.copyWith(
                               color: Theme.of(context).colorScheme.onTertiary,
                               fontWeight: FontWeight.bold,
                               fontSize: AppDimens.fontSizeMD16,
@@ -91,7 +89,7 @@ class ProfileStatsUnit extends StatelessWidget {
                           const SizedBox(height: AppDimens.size4),
                           Text(
                             AppStrings.followersUpperCase,
-                            style: AppTextStyles.textStylePost.copyWith(
+                            style: AppStyles.textStylePost.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
                               fontSize: AppDimens.fontSizeSM12,
@@ -108,8 +106,7 @@ class ProfileStatsUnit extends StatelessWidget {
                         children: [
                           Text(
                             followingCount.toString(),
-                            style:
-                                AppTextStyles.textStylePostWithNumbers.copyWith(
+                            style: AppStyles.textStylePostWithNumbers.copyWith(
                               color: Theme.of(context).colorScheme.onTertiary,
                               fontWeight: FontWeight.bold,
                               fontSize: AppDimens.fontSizeMD16,
@@ -118,7 +115,7 @@ class ProfileStatsUnit extends StatelessWidget {
                           const SizedBox(height: AppDimens.size4),
                           Text(
                             AppStrings.followingUpperCase,
-                            style: AppTextStyles.textStylePost.copyWith(
+                            style: AppStyles.textStylePost.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
                               fontSize: AppDimens.fontSizeSM12,

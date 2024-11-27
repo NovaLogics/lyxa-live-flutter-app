@@ -23,7 +23,7 @@ class StoryLineUnit extends StatelessWidget {
         text.isNotEmpty
             ? text
             : AppStrings.emptyStoryLineMessage, // Placeholder text
-        style: AppTextStyles.textStylePost.copyWith(
+        style: AppStyles.textStylePost.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
         maxLines: 5, // Limit to 5 lines

@@ -206,7 +206,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       child: GradientButton(
         text: AppStrings.pickImageButton.toUpperCase(),
         onPressed: _handleImageSelection,
-        textStyle: AppTextStyles.buttonTextPrimary.copyWith(
+        textStyle: AppStyles.buttonTextPrimary.copyWith(
           color: AppColors.whitePure,
         ),
         icon: const Icon(
@@ -225,7 +225,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         children: [
           const Text(
             AppStrings.caption,
-            style: AppTextStyles.subtitleSecondary,
+            style: AppStyles.subtitleSecondary,
           ),
           const SizedBox(height: AppDimens.spacingSM4),
           MultilineTextFieldUnit(

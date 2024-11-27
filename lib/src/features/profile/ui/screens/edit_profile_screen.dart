@@ -205,7 +205,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       child: GradientButton(
         text: AppStrings.pickImage.toUpperCase(),
         onPressed: _handleImageSelection,
-        textStyle: AppTextStyles.buttonTextPrimary.copyWith(
+        textStyle: AppStyles.buttonTextPrimary.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
         icon: Icon(Icons.filter,
@@ -222,7 +222,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         children: [
           Text(
             AppStrings.storylineDecoText,
-            style: AppTextStyles.subtitleSecondary.copyWith(
+            style: AppStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
               shadows: [],

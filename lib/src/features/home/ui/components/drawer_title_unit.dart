@@ -21,7 +21,7 @@ class DrawerTitleUnit extends StatelessWidget {
     return ListTile(
       title: Text(
         title,
-        style: AppTextStyles.subtitlePrimary.copyWith(
+        style: AppStyles.subtitlePrimary.copyWith(
           color: Theme.of(context).colorScheme.onSecondary,
           letterSpacing: AppDimens.letterSpacingPT13,
           fontSize: AppDimens.fontSizeLG18,
