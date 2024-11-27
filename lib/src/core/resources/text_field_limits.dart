@@ -1,4 +1,6 @@
 class TextFieldLimits {
+  const TextFieldLimits._();
+
   static const int defaultLimit = 100;
   static const int postField = 500;
   static const int emailField = 128;
