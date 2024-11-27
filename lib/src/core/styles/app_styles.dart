@@ -52,9 +52,19 @@ class AppStyles {
     shadows: shadowStyle1,
   );
 
+  /// Label Text
+  /// ->
+  static const TextStyle labelPrimary = TextStyle(
+    color: AppColors.blueGrey50,
+    letterSpacing: AppDimens.letterSpacingPT07,
+    fontWeight: FontWeight.bold,
+    fontFamily: AppFonts.montserrat,
+    fontSize: AppDimens.fontSizeSM12,
+    shadows: AppStyles.shadowStyle2,
+  );
+
   /// Custom Text Styles
   /// ->
-
   static const TextStyle textStylePost = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeRG14,
@@ -76,17 +86,6 @@ class AppStyles {
     fontWeight: FontWeight.w600,
     fontFamily: AppFonts.montserrat,
     letterSpacing: AppDimens.letterSpacingPT05,
-  );
-
-  /// Label Text
-  /// ->
-  static const TextStyle labelPrimary = TextStyle(
-    color: AppColors.blueGrey50,
-    letterSpacing: AppDimens.letterSpacingPT07,
-    fontWeight: FontWeight.bold,
-    fontFamily: AppFonts.montserrat,
-    fontSize: AppDimens.fontSizeSM12,
-    shadows: AppStyles.shadowStyle2,
   );
 
   /// Button Text

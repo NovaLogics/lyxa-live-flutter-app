@@ -474,7 +474,6 @@ class _PostTileUnitState extends State<PostTileUnit> {
             widget.post.userName,
             style: AppStyles.textStylePost.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
-              fontSize: AppDimens.fontSizeRG14,
             ),
           ),
           const SizedBox(height: AppDimens.size4),
@@ -486,8 +485,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 widget.post.captionText,
                 style: AppStyles.textStylePost.copyWith(
                   color: Theme.of(context).colorScheme.inversePrimary,
-                  fontSize: AppDimens.fontSizeRG14,
-                  letterSpacing: 0.7,
+                  letterSpacing: AppDimens.letterSpacingPT07,
                   shadows: AppStyles.shadowStyle2,
                 ),
                 maxLines: 5,
