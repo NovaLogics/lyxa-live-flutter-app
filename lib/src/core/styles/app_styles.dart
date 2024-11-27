@@ -88,7 +88,7 @@ class AppStyles {
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeRG14,
     fontWeight: FontWeight.w600,
-    fontFamily: AppFonts.raleway,
+    fontFamily: AppFonts.montserrat,
   );
 
   static const TextStyle textSubtitlePost = TextStyle(
