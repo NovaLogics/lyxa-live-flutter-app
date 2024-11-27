@@ -28,7 +28,7 @@ class _AuthScreenState extends State<AuthScreen> {
               onToggleScreen: _toggleAuthScreen,
             )
           : RegisterScreen(
-              onToggle: _toggleAuthScreen,
+              onToggleScreen: _toggleAuthScreen,
             ),
     );
   }

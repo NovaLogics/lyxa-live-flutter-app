@@ -17,11 +17,11 @@ import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 
 class RegisterScreen extends StatefulWidget {
-  final VoidCallback? onToggle;
+  final VoidCallback? onToggleScreen;
 
   const RegisterScreen({
     super.key,
-    required this.onToggle,
+    required this.onToggleScreen,
   });
 
   @override
@@ -103,16 +103,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _handleSignUp() {
     if (_registrationFormKey.currentState?.validate() != true) return;
     _saveUserToLocalStorage();
-    
+
     _authCubit.register(
-      _name,
-      _email,
-      _password,
+      name: _name,
+      email: _email,
+      password: _password,
     );
   }
 
   void _handleLoginLinkClick() {
-    widget.onToggle?.call();
+    widget.onToggleScreen?.call();
     _saveUserToLocalStorage();
   }
 
