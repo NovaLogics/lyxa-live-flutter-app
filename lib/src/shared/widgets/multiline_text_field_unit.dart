@@ -22,6 +22,7 @@ class MultilineTextFieldUnit extends StatelessWidget {
     return TextField(
       controller: controller,
       maxLines: 5,
+      textCapitalization: TextCapitalization.sentences,
       maxLength: maxLength,
       style: TextStyle(
         color: Theme.of(context).colorScheme.inversePrimary,

@@ -212,9 +212,13 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             AppStrings.caption,
-            style: AppStyles.subtitleSecondary,
+            style: AppStyles.subtitleSecondary.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+              shadows: AppStyles.shadowStyleEmpty,
+            ),
           ),
           addSpacing(height: AppDimens.spacingSM4),
           MultilineTextFieldUnit(

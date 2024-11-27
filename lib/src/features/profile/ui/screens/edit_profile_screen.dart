@@ -104,6 +104,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void _handleProfileUpdate() async {
     if (_selectedImage != null || _bio.isNotEmpty) {
+      FocusScope.of(context).unfocus();
+
       _profileCubit.updateProfile(
         userId: _currentUser.uid,
         updatedBio: _bio,
