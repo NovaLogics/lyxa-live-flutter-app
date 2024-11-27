@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
@@ -132,6 +134,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
 
       imageDownloadUrl = imageUploadResult.data as String;
+      //await DefaultCacheManager().emptyCache();
+      await CachedNetworkImage.evictFromCache(currentUser.profileImageUrl);
     }
 
     final updatedProfile = currentUser.copyWith(
@@ -143,8 +147,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       updatedProfile: updatedProfile,
     );
 
-      Logger.logDebug(updatedProfile.toJsonString(),
-              tag: '$debugTag: updateProfile() User');
+    Logger.logDebug(updatedProfile.toJsonString(),
+        tag: '$debugTag: updateProfile() User');
 
     if (updateProfileResult.status == Status.error) {
       _handleErrors(
