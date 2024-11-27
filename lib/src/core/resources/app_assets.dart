@@ -2,13 +2,10 @@
 
 class AppAssets {
   const AppAssets._();
+
   static const Icons = _AppIcons();
   static const Images = _AppImages();
-
-  // APP FONTS
-  static const String fontRaleway = 'Raleway';
-  static const String fontDynalight = 'Dynalight';
-  static const String fontMontserrat = 'Montserrat';
+  static const Fonts = _AppFonts();
 }
 
 class _AppIcons {
@@ -35,4 +32,11 @@ class _AppImages {
   static const String _imagePath = 'assets/images';
 
   final String logoMainLyxa = '$_imagePath/lyxa_banner.png';
+}
+
+class _AppFonts {
+  const _AppFonts();
+  final String raleway = 'Raleway';
+  final String dynalight = 'Dynalight';
+  final String montserrat = 'Montserrat';
 }
