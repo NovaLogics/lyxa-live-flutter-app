@@ -1,8 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
@@ -12,6 +11,7 @@ import 'package:lyxa_live/src/features/profile/ui/components/profile_image.dart'
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
@@ -38,7 +38,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ProfileUser _currentAppUser = ProfileUser.getGuestUser();
 
   get _appUserId => _currentAppUser.uid;
-
   get _displayUserId => widget.displayUserId;
 
   @override
@@ -124,15 +123,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ListView(
         children: [
           _buildProfilePicture(user),
-          const SizedBox(height: AppDimens.size16),
+          addSpacing(height: AppDimens.size16),
           _buildEmailSection(user),
-          const SizedBox(height: AppDimens.size8),
+          addSpacing(height: AppDimens.size8),
           _buildProfileStats(user),
-          if (!isOwnProfile) const SizedBox(height: AppDimens.size8),
+          if (!isOwnProfile) addSpacing(height: AppDimens.size8),
           if (!isOwnProfile) _buildFollowActionSection(user),
-          const SizedBox(height: AppDimens.size12),
+          addSpacing(height: AppDimens.size12),
           _buildStoryLineSection(user.bio),
-          const SizedBox(height: AppDimens.size24),
+          addSpacing(height: AppDimens.size24),
           _buildPostSection(context),
         ],
       ),
@@ -151,18 +150,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   AppBar _buildAppBar(
       BuildContext context, ProfileUser user, bool isOwnProfile) {
     return AppBar(
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       title: Center(
         child: Text(
           user.name,
-          style: AppTextStyles.textStylePost.copyWith(
+          style: AppStyles.textSubtitlePost.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
-            fontWeight: FontWeight.bold,
             fontSize: AppDimens.fontSizeXL20,
           ),
         ),
       ),
-      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface,
       actions: [
         isOwnProfile
             ? IconButton(
@@ -175,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: const Icon(Icons.settings_outlined),
                 iconSize: AppDimens.iconSizeSM24,
               )
-            : const SizedBox(width: AppDimens.iconSizeMD32),
+            : addSpacing(width: AppDimens.iconSizeMD32),
       ],
     );
   }
@@ -190,11 +188,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Center(
       child: Text(
         user.email,
-        style: AppTextStyles.subtitlePrimary.copyWith(
+        style: AppStyles.subtitlePrimary.copyWith(
           color: Theme.of(context).colorScheme.onPrimary,
           fontWeight: FontWeight.normal,
           fontFamily: FONT_MONTSERRAT,
-          shadows: AppTextStyles.shadowStyle2,
+          shadows: AppStyles.shadowStyle2,
         ),
       ),
     );
@@ -203,12 +201,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildProfileStats(ProfileUser displayUser) {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
-        int postCount = 0;
-
-        if (state is PostLoaded) {
-          postCount =
-              state.posts.where((post) => post.userId == _displayUserId).length;
-        }
+        int postCount = (state is PostLoaded)
+            ? state.posts.where((post) => post.userId == _displayUserId).length
+            : 0;
 
         return Padding(
           padding: const EdgeInsets.all(AppDimens.paddingRG8),
@@ -246,10 +241,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.symmetric(horizontal: AppDimens.size32),
           child: Text(
             AppStrings.storylineDecoText,
-            style: AppTextStyles.subtitleSecondary.copyWith(
+            style: AppStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.w300,
-              shadows: AppTextStyles.shadowStyle2,
+              shadows: AppStyles.shadowStyle2,
             ),
           ),
         ),

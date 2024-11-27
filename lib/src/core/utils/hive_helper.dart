@@ -20,7 +20,7 @@ class HiveHelper {
 
   /// Initialize Hive and open the box
   Future<void> initialize() async {
-    _box = await Hive.openBox(HIVE_BOX_LYXA);
+    _box = await Hive.openBox(hiveBoxLyxa);
     delete(HiveKeys.loginDataKey);
     delete(HiveKeys.signUpDataKey);
   }

@@ -5,11 +5,11 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
@@ -18,6 +18,7 @@ import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
@@ -104,6 +105,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       return;
     }
 
+    FocusScope.of(context).unfocus();
+
     final newPost = Post.getDefault().copyWith(
       userId: profileUser.uid,
       userName: profileUser.name,
@@ -117,14 +120,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 
-  void _showLoading(String message) {
-    return LoadingCubit.showLoading(message: message);
-  }
-
-  void _hideLoading() {
-    LoadingCubit.hideLoading();
-  }
-
   Widget _buildUploadPostScreen() {
     return BlocConsumer<PostCubit, PostState>(
       builder: (context, state) {
@@ -134,20 +129,15 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
             children: [
               _buildImagePreview(),
               _buildPickImageButton(),
-              const SizedBox(height: AppDimens.size28),
+              addSpacing(height: AppDimens.size28),
               _buildCaptionInput(),
-              const SizedBox(height: AppDimens.size72),
+              addSpacing(height: AppDimens.size72),
             ],
           ),
         );
       },
       listener: (context, state) {
-        _hideLoading();
-        if (state is PostLoading) {
-          _showLoading(AppStrings.loadingMessage);
-        } else if (state is PostUploading) {
-          _showLoading(AppStrings.uploading);
-        } else if (state is PostLoaded) {
+        if (state is PostLoaded) {
           Navigator.pop(context);
         }
       },
@@ -170,6 +160,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
   AppBar _buildAppBar() {
     return AppBar(
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       title: const Text(AppStrings.createPost),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
@@ -206,9 +198,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       child: GradientButton(
         text: AppStrings.pickImageButton.toUpperCase(),
         onPressed: _handleImageSelection,
-        textStyle: AppTextStyles.buttonTextPrimary.copyWith(
-          color: AppColors.whitePure,
-        ),
         icon: const Icon(
           Icons.filter,
           color: AppColors.whitePure,
@@ -225,14 +214,14 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         children: [
           const Text(
             AppStrings.caption,
-            style: AppTextStyles.subtitleSecondary,
+            style: AppStyles.subtitleSecondary,
           ),
-          const SizedBox(height: AppDimens.spacingSM4),
+          addSpacing(height: AppDimens.spacingSM4),
           MultilineTextFieldUnit(
             controller: _captionController,
             labelText: AppStrings.captionLabel,
             hintText: AppStrings.captionHint,
-            maxLength: MAX_LENGTH_POST_FIELD,
+            maxLength: TextFieldLimits.postField,
           ),
         ],
       ),

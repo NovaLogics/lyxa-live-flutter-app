@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 
 class MultilineTextFieldUnit extends StatelessWidget {
   final TextEditingController controller;
@@ -13,7 +14,7 @@ class MultilineTextFieldUnit extends StatelessWidget {
     required this.controller,
     required this.hintText,
     required this.labelText,
-    this.maxLength = MAX_LENGTH_DEFAULT,
+    this.maxLength = TextFieldLimits.defaultLimit,
   });
 
   @override

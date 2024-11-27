@@ -2,9 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lyxa_live/src/core/resources/app_icons.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
+import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/core/utils/date_time_util.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
@@ -123,7 +124,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           controller: _commentTextController,
           hintText: AppStrings.typeComment,
           labelText: AppStrings.addComment,
-          maxLength: MAX_LENGTH_COMMENTS_FIELD,
+          maxLength: TextFieldLimits.commentsField,
         ),
         actions: [
           // CANCEL BUTTON
@@ -290,7 +291,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     // Username
                     Text(
                       widget.post.userName.toString().trim(),
-                      style: AppTextStyles.textStylePost.copyWith(
+                      style: AppStyles.textTitlePost.copyWith(
                         color: Theme.of(context).colorScheme.inversePrimary,
                       ),
                     ),
@@ -299,11 +300,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       padding: const EdgeInsets.only(left: 1),
                       child: Text(
                         DateTimeUtil.datetimeAgo(widget.post.timestamp),
-                        style: AppTextStyles.textStylePostWithNumbers.copyWith(
+                        style: AppStyles.textNumberStyle2.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                           fontSize: AppDimens.fontSizeSM12,
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 0.1,
+                          letterSpacing: AppDimens.letterSpacingPT01,
                         ),
                       ),
                     ),
@@ -321,7 +321,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           GestureDetector(
             onTap: _showDeleteOptions,
             child: SvgPicture.asset(
-              ICON_SETTINGS_STYLE_1,
+              AppIcons.settingsOutlinedStl1,
               colorFilter: ColorFilter.mode(
                 Theme.of(context).colorScheme.primary,
                 BlendMode.srcIn,
@@ -389,8 +389,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
                         Theme.of(context).colorScheme.surface.withOpacity(0.4),
                     child: SvgPicture.asset(
                       widget.post.likes.contains(_appUserId)
-                          ? ICON_HEART_FILLED
-                          : ICON_HEART_BORDER,
+                          ? AppIcons.likeHeartSolid
+                          : AppIcons.likeHeartOutlined,
                       colorFilter: ColorFilter.mode(
                         (widget.post.likes.contains(_appUserId)
                             ? Theme.of(context).colorScheme.primary
@@ -406,7 +406,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 // Like count
                 Text(
                   widget.post.likes.length.toString(),
-                  style: AppTextStyles.textStylePostWithNumbers.copyWith(
+                  style: AppStyles.textNumberStyle2.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
@@ -425,8 +425,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
                   Theme.of(context).colorScheme.surface.withOpacity(0.4),
               child: SvgPicture.asset(
                 widget.post.comments.isNotEmpty
-                    ? ICON_COMMENT_FILLED
-                    : ICON_COMMENT_BORDER,
+                    ? AppIcons.commentSolid
+                    : AppIcons.commentOutlined,
                 colorFilter: ColorFilter.mode(
                   widget.post.comments.isNotEmpty
                       ? Theme.of(context).colorScheme.primary
@@ -441,7 +441,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           const SizedBox(width: AppDimens.size4),
           Text(
             widget.post.comments.length.toString(),
-            style: AppTextStyles.textStylePostWithNumbers.copyWith(
+            style: AppStyles.textNumberStyle2.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
@@ -450,9 +450,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
           Text(
             DateTimeUtil.formatDate(widget.post.timestamp,
                 format: DateTimeStyles.customShortDate),
-            style: AppTextStyles.textStylePostWithNumbers.copyWith(
+            style: AppStyles.textNumberStyle2.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.w400,
             ),
           ),
         ],
@@ -473,9 +472,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
         children: [
           Text(
             widget.post.userName,
-            style: AppTextStyles.textStylePost.copyWith(
+            style: AppStyles.textTitlePost.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
-              fontSize: AppDimens.fontSizeRG14,
             ),
           ),
           const SizedBox(height: AppDimens.size4),
@@ -485,11 +483,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
             child: SingleChildScrollView(
               child: Text(
                 widget.post.captionText,
-                style: AppTextStyles.textStylePost.copyWith(
+                style: AppStyles.textTitlePost.copyWith(
                   color: Theme.of(context).colorScheme.inversePrimary,
-                  fontSize: AppDimens.fontSizeRG14,
-                  letterSpacing: 0.7,
-                  shadows: AppTextStyles.shadowStyle2,
+                  letterSpacing: AppDimens.letterSpacingPT07,
+                  shadows: AppStyles.shadowStyle2,
                 ),
                 maxLines: 5,
                 softWrap: true,

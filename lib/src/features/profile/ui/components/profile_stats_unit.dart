@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 
 class ProfileStatsUnit extends StatelessWidget {
   final int postCount;
   final int followerCount;
   final int followingCount;
-  final void Function()? onTap;
+  final VoidCallback? onTap;
 
   const ProfileStatsUnit({
     super.key,
@@ -17,123 +18,90 @@ class ProfileStatsUnit extends StatelessWidget {
     required this.onTap,
   });
 
-// Build UI
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Post
-          Container(
-            padding: const EdgeInsets.all(1),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Colors.blueAccent,
-                  Colors.deepPurpleAccent,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(12),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(1),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [
+                Colors.blueAccent,
+                Colors.deepPurpleAccent,
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    //Posts
-                    SizedBox(
-                      width: 104,
-                      child: Column(
-                        children: [
-                          Text(
-                            postCount.toString(),
-                            style:
-                                AppTextStyles.textStylePostWithNumbers.copyWith(
-                              color: Theme.of(context).colorScheme.onTertiary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.fontSizeMD16,
-                            ),
-                          ),
-                          const SizedBox(height: AppDimens.size4),
-                          Text(
-                            AppStrings.postsUpperCase,
-                            style: AppTextStyles.textStylePost.copyWith(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.fontSizeSM12,
-                            ),
-                          ),
-                        ],
-                      ),
+            borderRadius: BorderRadius.circular(AppDimens.radiusMD12),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(AppDimens.radiusMD12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(AppDimens.paddingRG8),
+              child: Row(
+                children: [
+                  //Post Count
+                  _buildDisplayUnit(
+                    context,
+                    count: postCount.toString(),
+                    label: AppStrings.postsUpperCase,
+                  ),
+                  // Followers
+                  GestureDetector(
+                    onTap: onTap,
+                    child: _buildDisplayUnit(
+                      context,
+                      count: followerCount.toString(),
+                      label: AppStrings.followersUpperCase,
                     ),
-                    // Followers
-                    SizedBox(
-                      width: 104,
-                      child: Column(
-                        children: [
-                          Text(
-                            followerCount.toString(),
-                            style:
-                                AppTextStyles.textStylePostWithNumbers.copyWith(
-                              color: Theme.of(context).colorScheme.onTertiary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.fontSizeMD16,
-                            ),
-                          ),
-                          const SizedBox(height: AppDimens.size4),
-                          Text(
-                            AppStrings.followersUpperCase,
-                            style: AppTextStyles.textStylePost.copyWith(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.fontSizeSM12,
-                            ),
-                          ),
-                        ],
-                      ),
+                  ),
+                  // Following
+                  GestureDetector(
+                    onTap: onTap,
+                    child: _buildDisplayUnit(
+                      context,
+                      count: followingCount.toString(),
+                      label: AppStrings.followingUpperCase,
                     ),
-
-                    // Following
-                    SizedBox(
-                      width: 104,
-                      child: Column(
-                        children: [
-                          Text(
-                            followingCount.toString(),
-                            style:
-                                AppTextStyles.textStylePostWithNumbers.copyWith(
-                              color: Theme.of(context).colorScheme.onTertiary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.fontSizeMD16,
-                            ),
-                          ),
-                          const SizedBox(height: AppDimens.size4),
-                          Text(
-                            AppStrings.followingUpperCase,
-                            style: AppTextStyles.textStylePost.copyWith(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: AppDimens.fontSizeSM12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
+}
+
+Widget _buildDisplayUnit(
+  BuildContext context, {
+  required String count,
+  required String label,
+}) {
+  return SizedBox(
+    width: 104,
+    child: Column(
+      children: [
+        Text(
+          count,
+          style: AppStyles.textNumberStyle1.copyWith(
+            color: Theme.of(context).colorScheme.onTertiary,
+          ),
+        ),
+        addSpacing(height: AppDimens.size4),
+        Text(
+          label,
+          style: AppStyles.textSubtitlePost.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+      ],
+    ),
+  );
 }

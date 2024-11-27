@@ -9,7 +9,6 @@ class SliderCubit extends Cubit<SliderState> {
       images,
       currentIndex,
     ));
-    // emit(SliderVisibility(true));
   }
 
   void hideSlider() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 
 class ButtonUnit extends StatelessWidget {
   final void Function()? onTap;
@@ -23,10 +24,7 @@ class ButtonUnit extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: AppDimens.fontSizeLG18,
-            ),
+            style: AppStyles.buttonTextPrimary,
           ),
         ),
       ),

@@ -16,6 +16,7 @@ import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart
 import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
 class PostCubit extends Cubit<PostState> {
   static const String debugTag = 'PostCubit';
@@ -30,12 +31,14 @@ class PostCubit extends Cubit<PostState> {
         super(PostInitial());
 
   Future<ProfileUser> getCurrentUser() async {
+    _showLoading(AppStrings.loadingMessage);
     final profileUser = await getIt<ProfileCubit>().getCurrentUser();
+     _hideLoading();
     return profileUser;
   }
 
   Future<void> getAllPosts() async {
-    emit(PostLoading());
+    _showLoading(AppStrings.loadingMessage);
 
     final getPostsResult = await _postRepository.getAllPosts();
 
@@ -51,13 +54,14 @@ class PostCubit extends Cubit<PostState> {
         );
         break;
     }
+    _hideLoading();
   }
 
   Future<void> addPost({
     required Post post,
     Uint8List? imageBytes,
   }) async {
-    emit(PostUploading());
+    _showLoading(AppStrings.uploading);
 
     final imageUploadResult = await _storageRepository.uploadPostImage(
       imageFileBytes: imageBytes,
@@ -69,6 +73,7 @@ class PostCubit extends Cubit<PostState> {
         result: imageUploadResult,
         tag: '$debugTag: addPost()::imageUploadResult',
       );
+      _hideLoading();
       return;
     }
 
@@ -89,6 +94,7 @@ class PostCubit extends Cubit<PostState> {
         );
         break;
     }
+    _hideLoading();
   }
 
   Future<void> deletePost({
@@ -205,6 +211,14 @@ class PostCubit extends Cubit<PostState> {
   }
 
   // HELPER FUNCTIONS ▼
+
+  void _showLoading(String message) {
+    LoadingCubit.showLoading(message: message);
+  }
+
+  void _hideLoading() {
+    LoadingCubit.hideLoading();
+  }
 
   void _handleErrors(
       {required Result result, String? prefixMessage, String? tag}) {

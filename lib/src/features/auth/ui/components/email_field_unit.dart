@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
@@ -22,7 +22,7 @@ class EmailFieldUnit extends StatelessWidget {
         color: Theme.of(context).colorScheme.onPrimary,
       ),
       validator: Validator.validateEmail,
-      maxLength: MAX_LENGTH_EMAIL_FIELD,
+      maxLength: TextFieldLimits.emailField,
     );
   }
 }

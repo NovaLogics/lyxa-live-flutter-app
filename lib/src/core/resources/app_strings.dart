@@ -97,8 +97,8 @@ class AppStrings {
   static const String uploading = 'Uploading...';
   static const String errorFetchingImage =
       'Error picking or compressing image.';
-  static const String pickImage = 'Pick Image';
-  static const String editProfile = 'Edit Profile';
+  static const String pickImage = 'PICK IMAGE';
+  static const String editProfile = 'EDIT PROFILE';
   static const String addYourStorylineBio = 'Add your bio / storyline';
   static const String cropperToolbarTitle = 'Profile Image Cropper';
 

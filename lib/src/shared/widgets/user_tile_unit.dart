@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
@@ -18,19 +17,15 @@ class UserTileUnit extends StatelessWidget {
     return ListTile(
       title: Text(
         user.name,
-        style: AppTextStyles.textStylePost.copyWith(
+        style: AppStyles.textTitlePost.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
           fontWeight: FontWeight.bold,
         ),
       ),
       subtitle: Text(
         user.email,
-        style: AppTextStyles.subtitlePrimary.copyWith(
+        style: AppStyles.labelPrimary.copyWith(
           color: Theme.of(context).colorScheme.onSecondary,
-          fontWeight: FontWeight.bold,
-          fontFamily: FONT_MONTSERRAT,
-          fontSize: AppDimens.fontSizeSM12,
-          shadows: AppTextStyles.shadowStyle2,
         ),
       ),
       leading: Icon(

@@ -6,17 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
@@ -38,9 +39,12 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   static const String debugTag = 'EditProfileScreen';
-  final bioTextController = TextEditingController();
+  final TextEditingController bioTextController = TextEditingController();
   late final ProfileCubit _profileCubit;
   Uint8List? _selectedImage;
+
+  ProfileUser get _currentUser => widget.currentUser;
+  String get _bio => bioTextController.text.trim();
 
   @override
   void initState() {
@@ -48,7 +52,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _profileCubit = getIt<ProfileCubit>();
   }
 
-  // BUILD UI
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileCubit, ProfileState>(
@@ -61,7 +64,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         );
       },
       listener: (context, state) {
-        // Show Error
         if (state is ProfileError) {
           ToastMessengerUnit.showErrorToast(
             context: context,
@@ -100,6 +102,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
+  void _handleProfileUpdate() async {
+    if (_selectedImage != null || _bio.isNotEmpty) {
+      _profileCubit.updateProfile(
+        userId: _currentUser.uid,
+        updatedBio: _bio,
+        imageBytes: _selectedImage,
+      );
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
   Widget _buildLoadingScreen() {
     return BlocConsumer<LoadingCubit, LoadingState>(
       listener: (context, state) {},
@@ -120,13 +134,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: _buildAppBar(),
       body: Column(
         children: [
-          const SizedBox(height: AppDimens.size24),
+          addSpacing(height: AppDimens.size24),
           _buildProfileImage(),
-          const SizedBox(height: AppDimens.size24),
+          addSpacing(height: AppDimens.size24),
           _buildPickImageButton(),
-          const SizedBox(height: AppDimens.size24),
+          addSpacing(height: AppDimens.size24),
           _buildBioSection(),
-          const SizedBox(height: AppDimens.size72),
+          addSpacing(height: AppDimens.size72),
         ],
       ),
     );
@@ -134,30 +148,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      title: const Text(AppStrings.editProfile),
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      title: const Text(AppStrings.editProfile),
       actions: [
         IconButton(
-          onPressed: updateProfile,
+          onPressed: _handleProfileUpdate,
           icon: const Icon(Icons.upload),
         ),
       ],
     );
-  }
-
-  void updateProfile() async {
-    final profileCubit = context.read<ProfileCubit>();
-    final String uid = widget.currentUser.uid;
-    final String? newBio = bioTextController.text.isNotEmpty
-        ? bioTextController.text.toString().trim()
-        : null;
-
-    if (_selectedImage != null || newBio != null) {
-      profileCubit.updateProfile(
-          userId: uid, updatedBio: newBio, imageBytes: _selectedImage);
-    } else {
-      Navigator.pop(context);
-    }
   }
 
   Widget _buildProfileImage() {
@@ -203,13 +203,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget _buildPickImageButton() {
     return Center(
       child: GradientButton(
-        text: AppStrings.pickImage.toUpperCase(),
+        text: AppStrings.pickImage,
         onPressed: _handleImageSelection,
-        textStyle: AppTextStyles.buttonTextPrimary.copyWith(
-          color: Theme.of(context).colorScheme.inversePrimary,
+        icon: const Icon(
+          Icons.filter,
+          color: AppColors.whitePure,
         ),
-        icon: Icon(Icons.filter,
-            color: Theme.of(context).colorScheme.inversePrimary),
       ),
     );
   }
@@ -222,18 +221,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         children: [
           Text(
             AppStrings.storylineDecoText,
-            style: AppTextStyles.subtitleSecondary.copyWith(
+            style: AppStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
-              shadows: [],
+              shadows: AppStyles.shadowStyleEmpty,
             ),
           ),
-          const SizedBox(height: AppDimens.size12),
+          addSpacing(height: AppDimens.size12),
           MultilineTextFieldUnit(
             controller: bioTextController,
             labelText: AppStrings.storyline,
             hintText: AppStrings.addYourStorylineBio,
-            maxLength: MAX_LENGTH_BIO_DESCRIPTION_FIELD,
+            maxLength: TextFieldLimits.bioDescriptionField,
           ),
         ],
       ),

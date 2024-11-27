@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
@@ -32,63 +32,61 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
     _initValues();
   }
 
-@override
-Widget build(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(
-        horizontal: AppDimens.paddingLG20, vertical: AppDimens.paddingXS2),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // USERNAME
-        Text(
-          "⤷ ${widget.comment.userName}",
-          style: AppTextStyles.textStylePost.copyWith(
-            color: Theme.of(context).colorScheme.onSecondary,
-            fontWeight: FontWeight.bold,
-            fontSize: AppDimens.fontSizeSM12,
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppDimens.paddingLG20, vertical: AppDimens.paddingXS2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // USERNAME
+          Text(
+            "⤷ ${widget.comment.userName}",
+            style: AppStyles.textSubtitlePost.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+            ),
           ),
-        ),
-        const SizedBox(width: AppDimens.size8),
+          const SizedBox(width: AppDimens.size8),
 
-        // COMMENT TEXT
-        Flexible(
-          child: SizedBox(
-            width: AppDimens.containerSize430,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxHeight: AppDimens.size100,
-              ),
-              child: Text(
-                widget.comment.text,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onTertiary,
-                  fontSize: AppDimens.fontSizeSM12,
-                  fontWeight: FontWeight.normal,
+          // COMMENT TEXT
+          Flexible(
+            child: SizedBox(
+              width: AppDimens.containerSize430,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxHeight: AppDimens.size100,
                 ),
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 5,
+                child: Text(
+                  widget.comment.text,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onTertiary,
+                    fontSize: AppDimens.fontSizeSM12,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 5,
+                ),
               ),
             ),
           ),
-        ),
 
-        const Spacer(),
+          const Spacer(),
 
-        // DELETE BUTTON
-        if (_isOwnPost)
-          GestureDetector(
-            onTap: _showOptions,
-            child: Icon(
-              Icons.more_horiz,
-              color: Theme.of(context).colorScheme.onPrimary,
+          // DELETE BUTTON
+          if (_isOwnPost)
+            GestureDetector(
+              onTap: _showOptions,
+              child: Icon(
+                Icons.more_horiz,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
             ),
-          ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   void _initValues() {
     _isOwnPost = (widget.comment.userId == _appUserId);

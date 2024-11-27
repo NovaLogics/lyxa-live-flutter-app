@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart'; 
+import 'package:lyxa_live/src/core/styles/app_styles.dart'; 
 
 const double _buttonVerticalPadding = 12.0;
 const double _buttonHorizontalPadding = 90.0;
@@ -101,13 +101,7 @@ class _GradientButtonState extends State<GradientButton>
               Text(
                 widget.text,
                 style: widget.textStyle ??
-                    const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                      letterSpacing: 1.2,
-                      fontFamily: FONT_RALEWAY,
-                    ),
+                    AppStyles.buttonTextPrimary,
               ),
               const SizedBox(width: 10.0),
               // Customizable Icon

@@ -25,12 +25,10 @@ class ScrollableScaffold extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          // Static Background
           _Background(
             backgroundColor: backgroundColor,
             backgroundStyle: backgroundStyle,
           ),
-          // Foreground with appBar, drawer, and scrollable body
           _Foreground(
             appBar: appBar,
             drawer: drawer,

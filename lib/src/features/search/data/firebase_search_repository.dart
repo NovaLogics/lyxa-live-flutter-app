@@ -7,15 +7,17 @@ import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 
 class FirebaseSearchRepository implements SearchRepository {
+  final String searchableSuffix = '\uf8ff';
+
   @override
   Future<Result<List<ProfileUser?>>> searchUsers(String query) async {
     try {
       final searchResult = await FirebaseFirestore.instance
-          .collection(FIRESTORE_COLLECTION_USERS)
+          .collection(firebaseUsersCollectionPath)
           .where(ProfileUserFields.searchableName,
               isGreaterThanOrEqualTo: query)
           .where(ProfileUserFields.searchableName,
-              isLessThanOrEqualTo: '$query\uf8ff')
+              isLessThanOrEqualTo: '$query$searchableSuffix')
           .get();
 
       final userList = searchResult.docs

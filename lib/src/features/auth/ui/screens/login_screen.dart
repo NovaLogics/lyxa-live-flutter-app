@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/resources/app_images.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
@@ -11,6 +12,7 @@ import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart'
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
+import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback? onToggleScreen;
@@ -28,8 +30,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _loginCredentialsFormKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
   late final AuthCubit _authCubit;
+
+  String get _email => _emailController.text.trim();
+  String get _password => _passwordController.text.trim();
 
   @override
   void initState() {
@@ -49,17 +53,17 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: AppDimens.size64),
+            addSpacing(height: AppDimens.size64),
             _buildTopBanner(),
             _buildHeadingText(),
             _buildSubheadingText(),
-            const SizedBox(height: AppDimens.size24),
+            addSpacing(height: AppDimens.size24),
             _buildEmailTextField(),
-            const SizedBox(height: AppDimens.size12),
+            addSpacing(height: AppDimens.size12),
             _buildPasswordTextField(),
-            const SizedBox(height: AppDimens.size24),
+            addSpacing(height: AppDimens.size24),
             _buildLoginButton(),
-            const SizedBox(height: AppDimens.size48),
+            addSpacing(height: AppDimens.size48),
             _buildRegisterLink(),
           ],
         ),
@@ -81,22 +85,31 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.text = savedUser.email;
   }
 
-  void _login() {
+  void _handleLogin() {
     if (_loginCredentialsFormKey.currentState?.validate() != true) return;
+    _saveUserToLocalStorage();
 
-    final String email = _emailController.text.trim();
-    final String password = _passwordController.text.trim();
+    _authCubit.login(
+      email: _email,
+      password: _password,
+    );
+  }
 
+  void _handleSignUpLinkClick() {
+    widget.onToggleScreen?.call();
+    _saveUserToLocalStorage();
+  }
+
+  void _saveUserToLocalStorage() {
     _authCubit.saveUserToLocalStorage(
       storageKey: HiveKeys.loginDataKey,
-      user: AppUser.createWith(email: email),
+      user: AppUser.createWith(email: _email),
     );
-    _authCubit.login(email, password);
   }
 
   Widget _buildTopBanner() {
     return Image.asset(
-      IMAGE_LYXA_BANNER,
+      AppImages.logoMainLyxa,
       height: AppDimens.bannerSize200,
       width: AppDimens.bannerSize200,
       fit: BoxFit.cover,
@@ -106,14 +119,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildHeadingText() {
     return const Text(
       AppStrings.welcomeBack,
-      style: AppTextStyles.headingPrimary,
+      style: AppStyles.textHeadingPrimary,
     );
   }
 
   Widget _buildSubheadingText() {
     return const Text(
       AppStrings.itsTimeToShareYourStory,
-      style: AppTextStyles.headingSecondary,
+      style: AppStyles.textHeadingSecondary,
     );
   }
 
@@ -134,13 +147,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildLoginButton() {
     return GradientButton(
       text: AppStrings.login.toUpperCase(),
-      onPressed: _login,
-      textStyle: AppTextStyles.buttonTextPrimary.copyWith(
-        color: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      icon: Icon(
+      onPressed: _handleLogin,
+      icon: const Icon(
         Icons.arrow_forward_outlined,
-        color: Theme.of(context).colorScheme.inversePrimary,
+        color: AppColors.whitePure,
       ),
     );
   }
@@ -154,21 +164,14 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           const Text(
             AppStrings.notAMember,
-            style: AppTextStyles.subtitleSecondary,
+            style: AppStyles.subtitleSecondary,
           ),
           const SizedBox(width: AppDimens.size8),
           GestureDetector(
-            onTap: () {
-              widget.onToggleScreen?.call();
-
-              _authCubit.saveUserToLocalStorage(
-                storageKey: HiveKeys.loginDataKey,
-                user: AppUser.createWith(email: _emailController.text.trim()),
-              );
-            },
+            onTap: _handleSignUpLinkClick,
             child: const Text(
               AppStrings.registerNow,
-              style: AppTextStyles.subtitlePrimary,
+              style: AppStyles.subtitlePrimary,
             ),
           ),
         ],

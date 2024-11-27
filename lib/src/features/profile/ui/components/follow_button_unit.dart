@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
 class FollowButtonUnit extends StatelessWidget {
-  final void Function()? onPressed;
+  final VoidCallback? onPressed;
   final bool isFollowing;
 
   const FollowButtonUnit({
@@ -14,44 +14,29 @@ class FollowButtonUnit extends StatelessWidget {
     required this.isFollowing,
   });
 
-  // Build UI
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0), // Padding outside
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size32),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(18), // Rounded corners
+        borderRadius: BorderRadius.circular(AppDimens.radiusLG16),
         child: GestureDetector(
-          onTap: onPressed, // Button action
+          onTap: onPressed,
           child: Container(
             decoration: BoxDecoration(
-              gradient: isFollowing
-                  ? const LinearGradient(
-                      colors: [
-                        AppColors.deepPurple900,
-                        AppColors.bluePurple300,
-                      ],
-                    )
-                  : const LinearGradient(
-                      colors: [
-                        AppColors.deepPurple700,
-                        AppColors.deepPurple300,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-              borderRadius: BorderRadius.circular(16),
+              gradient:_getLinearGradient(isFollowing),
+              borderRadius: BorderRadius.circular(AppDimens.radiusLG16),
             ),
-            padding: const EdgeInsets.all(12), // Inner padding
+            padding: const EdgeInsets.all(AppDimens.size12),
             child: Center(
               child: Text(
                 isFollowing
                     ? AppStrings.unfollowUpperCase
                     : AppStrings.followUpperCase,
-                style: AppTextStyles.buttonTextPrimary.copyWith(
+                style: AppStyles.buttonTextPrimary.copyWith(
                   color: AppColors.deepPurple50,
                   fontSize: AppDimens.fontSizeRG14,
-                  letterSpacing: 1.2,
+                  letterSpacing: AppDimens.letterSpacingPT12,
                 ),
               ),
             ),
@@ -60,4 +45,22 @@ class FollowButtonUnit extends StatelessWidget {
       ),
     );
   }
+}
+
+LinearGradient _getLinearGradient(bool isFollowing) {
+  return isFollowing
+      ? const LinearGradient(
+          colors: [
+            AppColors.deepPurple900,
+            AppColors.bluePurple300,
+          ],
+        )
+      : const LinearGradient(
+          colors: [
+            AppColors.deepPurple700,
+            AppColors.deepPurple300,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
 }

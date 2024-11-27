@@ -48,10 +48,10 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> login(
-    String email,
-    String password,
-  ) async {
+  Future<void> login({
+    required String email,
+    required String password,
+  }) async {
     _showLoading();
 
     final loginResult = await _authRepository.loginWithEmailAndPassword(
@@ -76,11 +76,11 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> register(
-    String name,
-    String email,
-    String password,
-  ) async {
+  Future<void> register({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
     _showLoading();
 
     final registerResult = await _authRepository.registerWithEmailAndPassword(

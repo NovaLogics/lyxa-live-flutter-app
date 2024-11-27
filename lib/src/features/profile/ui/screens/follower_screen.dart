@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/shared/widgets/user_tile_unit.dart';
@@ -41,6 +41,8 @@ class FollowerScreen extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       centerTitle: true,
       title: SizedBox(
         width: AppDimens.containerSize400,
@@ -48,16 +50,6 @@ class FollowerScreen extends StatelessWidget {
       ),
     );
   }
-
-  // Widget _buildBackButton(BuildContext context) {
-  //   return GestureDetector(
-  //     onTap: () => Navigator.of(context).pop(),
-  //     child: const Icon(
-  //       Icons.arrow_back_outlined,
-  //       size: AppDimens.size24,
-  //     ),
-  //   );
-  // }
 
   Widget _buildCustomTabBar(BuildContext context) {
     return SizedBox(
@@ -99,7 +91,7 @@ class UserListView extends StatelessWidget {
       itemBuilder: (context, index) {
         final uid = userIds[index];
         return FutureBuilder(
-          future: context.read<ProfileCubit>().getUserProfileById(userId: uid),
+          future: getIt<ProfileCubit>().getUserProfileById(userId: uid),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const ListTile(title: Text(AppStrings.loadingMessage));

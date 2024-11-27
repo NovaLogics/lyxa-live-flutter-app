@@ -1,5 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+class CommentFields {
+  static const String id = 'id';
+  static const String postId = 'postId';
+  static const String userId = 'userId';
+  static const String userName = 'userName';
+  static const String text = 'text';
+  static const String timestamp = 'timestamp';
+}
+
 class Comment {
   final String id;
   final String postId;
@@ -17,27 +26,25 @@ class Comment {
     required this.timestamp,
   });
 
-  //Convert Comment -> json
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'postId': postId,
-      'userId': userId,
-      'userName': userName,
-      'text': text,
-      'timestamp': Timestamp.fromDate(timestamp),
+      CommentFields.id: id,
+      CommentFields.postId: postId,
+      CommentFields.userId: userId,
+      CommentFields.userName: userName,
+      CommentFields.text: text,
+      CommentFields.timestamp: Timestamp.fromDate(timestamp),
     };
   }
 
-  //Convert json -> Comment
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
-      id: json['id'],
-      postId: json['postId'],
-      userId: json['userId'],
-      userName: json['userName'],
-      text: json['text'],
-      timestamp: (json['timestamp'] as Timestamp).toDate(),
+      id: json[CommentFields.id],
+      postId: json[CommentFields.postId],
+      userId: json[CommentFields.userId],
+      userName: json[CommentFields.userName],
+      text: json[CommentFields.text],
+      timestamp: (json[CommentFields.timestamp] as Timestamp).toDate(),
     );
   }
 }

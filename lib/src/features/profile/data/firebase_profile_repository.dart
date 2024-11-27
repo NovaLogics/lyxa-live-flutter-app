@@ -16,7 +16,7 @@ class FirebaseProfileRepository implements ProfileRepository {
   }) async {
     try {
       final userDocument = await firebaseFirestore
-          .collection(FIRESTORE_COLLECTION_USERS)
+          .collection(firebaseUsersCollectionPath)
           .doc(userId)
           .get();
 
@@ -43,7 +43,7 @@ class FirebaseProfileRepository implements ProfileRepository {
   }) async {
     try {
       await firebaseFirestore
-          .collection(FIRESTORE_COLLECTION_USERS)
+          .collection(firebaseUsersCollectionPath)
           .doc(updatedProfile.uid)
           .update({
         ProfileUserFields.bio: updatedProfile.bio,
@@ -64,11 +64,11 @@ class FirebaseProfileRepository implements ProfileRepository {
   }) async {
     try {
       final appUserDocumentRef = firebaseFirestore
-          .collection(FIRESTORE_COLLECTION_USERS)
+          .collection(firebaseUsersCollectionPath)
           .doc(appUserId);
 
       final targetUserDocumentRef = firebaseFirestore
-          .collection(FIRESTORE_COLLECTION_USERS)
+          .collection(firebaseUsersCollectionPath)
           .doc(targetUserId);
 
       final appUserDocument = await appUserDocumentRef.get();

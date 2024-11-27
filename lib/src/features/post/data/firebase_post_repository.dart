@@ -10,7 +10,7 @@ import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 class FirebasePostRepository implements PostRepository {
   final CollectionReference _postsCollectionRef =
-      FirebaseFirestore.instance.collection(FIRESTORE_COLLECTION_POSTS);
+      FirebaseFirestore.instance.collection(firebasePostsCollectionPath);
 
   @override
   Future<Result<List<Post>>> getAllPosts() async {

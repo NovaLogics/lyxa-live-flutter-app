@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
@@ -40,9 +40,8 @@ class SettingsScreen extends StatelessWidget {
     return ListTile(
       title: Text(
         AppStrings.darkMode,
-        style: AppTextStyles.textStylePost.copyWith(
+        style: AppStyles.textSubtitlePost.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
-          fontWeight: FontWeight.bold,
           fontSize: AppDimens.fontSizeLG18,
         ),
       ),
@@ -55,4 +54,3 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 }
-

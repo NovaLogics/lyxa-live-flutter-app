@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/resources/app_images.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
+import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
@@ -11,15 +12,16 @@ import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 
 class RegisterScreen extends StatefulWidget {
-  final VoidCallback? onToggle;
+  final VoidCallback? onToggleScreen;
 
   const RegisterScreen({
     super.key,
-    required this.onToggle,
+    required this.onToggleScreen,
   });
 
   @override
@@ -33,8 +35,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-
   late final AuthCubit _authCubit;
+
+  String get _name => _nameController.text.trim();
+  String get _email => _emailController.text.trim();
+  String get _password => _passwordController.text.trim();
 
   @override
   void initState() {
@@ -55,21 +60,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: AppDimens.size12),
+              addSpacing(height: AppDimens.size12),
               _buildTopBanner(),
-              const SizedBox(height: AppDimens.size12),
+              addSpacing(height: AppDimens.size12),
               _buildHeadingText(),
-              const SizedBox(height: AppDimens.size24),
+              addSpacing(height: AppDimens.size24),
               _buildNameTextField(),
-              const SizedBox(height: AppDimens.size12),
+              addSpacing(height: AppDimens.size12),
               _buildEmailTextField(),
-              const SizedBox(height: AppDimens.size12),
+              addSpacing(height: AppDimens.size12),
               _buildPasswordTextField(),
-              const SizedBox(height: AppDimens.size12),
+              addSpacing(height: AppDimens.size12),
               _buildConfirmPasswordTextField(),
-              const SizedBox(height: AppDimens.size24),
+              addSpacing(height: AppDimens.size24),
               _buildSignUpButton(),
-              const SizedBox(height: AppDimens.size52),
+              addSpacing(height: AppDimens.size52),
               _buildLoginLink(),
             ],
           ),
@@ -95,18 +100,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailController.text = savedUser.email;
   }
 
-  void _register() {
+  void _handleSignUp() {
     if (_registrationFormKey.currentState?.validate() != true) return;
+    _saveUserToLocalStorage();
 
-    final String name = _nameController.text.trim();
-    final String email = _emailController.text.trim();
-    final String password = _passwordController.text.trim();
+    _authCubit.register(
+      name: _name,
+      email: _email,
+      password: _password,
+    );
+  }
 
+  void _handleLoginLinkClick() {
+    widget.onToggleScreen?.call();
+    _saveUserToLocalStorage();
+  }
+
+  void _saveUserToLocalStorage() {
     _authCubit.saveUserToLocalStorage(
       storageKey: HiveKeys.signUpDataKey,
-      user: AppUser.createWith(name: name, email: email),
+      user: AppUser.createWith(name: _name, email: _email),
     );
-    _authCubit.register(name, email, password);
   }
 
   String? _validateMainPassword(String? password) {
@@ -125,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _buildTopBanner() {
     return Image.asset(
-      IMAGE_LYXA_BANNER,
+      AppImages.logoMainLyxa,
       height: AppDimens.size128,
       width: AppDimens.size128,
       fit: BoxFit.cover,
@@ -135,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildHeadingText() {
     return Text(
       AppStrings.createAccountMessage,
-      style: AppTextStyles.headingSecondary.copyWith(
+      style: AppStyles.textHeadingSecondary.copyWith(
         color: AppColors.white100,
         fontSize: AppDimens.fontSizeXXL24,
       ),
@@ -153,7 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         color: Theme.of(context).colorScheme.onPrimary,
       ),
       validator: (value) => Validator.validateUsername(value),
-      maxLength: MAX_LENGTH_USERNAME_FIELD,
+      maxLength: TextFieldLimits.usernameField,
     );
   }
 
@@ -182,13 +196,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildSignUpButton() {
     return GradientButton(
       text: AppStrings.signUp.toUpperCase(),
-      onPressed: _register,
-      textStyle: AppTextStyles.buttonTextPrimary.copyWith(
-        color: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      icon: Icon(
+      onPressed: _handleSignUp,
+      icon: const Icon(
         Icons.arrow_forward_ios_sharp,
-        color: Theme.of(context).colorScheme.inversePrimary,
+        color: AppColors.whitePure,
       ),
     );
   }
@@ -202,26 +213,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: [
           const Text(
             AppStrings.alreadyAMember,
-            style: AppTextStyles.subtitleSecondary,
+            style: AppStyles.subtitleSecondary,
           ),
-          const SizedBox(
-            width: AppDimens.size8,
-          ),
+          addSpacing(width: AppDimens.size8),
           GestureDetector(
-            onTap: () {
-              widget.onToggle?.call();
-
-              _authCubit.saveUserToLocalStorage(
-                storageKey: HiveKeys.signUpDataKey,
-                user: AppUser.createWith(
-                  name: _nameController.text.trim(),
-                  email: _emailController.text.trim(),
-                ),
-              );
-            },
+            onTap: _handleLoginLinkClick,
             child: const Text(
               AppStrings.loginNow,
-              style: AppTextStyles.subtitlePrimary,
+              style: AppStyles.subtitlePrimary,
             ),
           ),
         ],

@@ -1,4 +1,6 @@
 class AppDimens {
+  const AppDimens._();
+
   // General Sizes for custom components
   static const double size0 = 0.0;
   static const double size4 = 4.0;
@@ -62,6 +64,7 @@ class AppDimens {
   static const double paddingXS2 = 2.0;
   static const double paddingSM4 = 4.0;
   static const double paddingRG8 = 8.0;
+  static const double paddingRG12 = 12.0;
   static const double paddingMD16 = 16.0;
   static const double paddingLG20 = 20.0;
   static const double paddingLG24 = 24.0;
@@ -174,7 +177,7 @@ class AppDimens {
   static const double imageSize120 = size120;
   static const double imageSize180 = size180;
 
-    static const double actionIconSize26 = 26.0;
+  static const double actionIconSize26 = 26.0;
 
   static const double searchBarWidth = size260;
   static const double searchBarHeight = size64;
