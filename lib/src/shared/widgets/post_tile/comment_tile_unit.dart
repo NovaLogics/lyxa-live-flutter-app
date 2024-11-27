@@ -75,14 +75,18 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
           const Spacer(),
 
           // DELETE BUTTON
-          if (_isOwnPost)
-            GestureDetector(
-              onTap: _showOptions,
-              child: Icon(
-                Icons.more_horiz,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
+          (_isOwnPost)
+              ? GestureDetector(
+                  onTap: _showOptions,
+                  child: Icon(
+                    Icons.more_horiz,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    size: AppDimens.iconSizeSM20,
+                  ),
+                )
+              : const SizedBox(
+                  height: AppDimens.iconSizeSM20,
+                ),
         ],
       ),
     );
@@ -112,7 +116,8 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
             },
             child: Text(
               AppStrings.cancel,
-              style: TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onInverseSurface),
             ),
           ),
           // DELETE BUTTON
