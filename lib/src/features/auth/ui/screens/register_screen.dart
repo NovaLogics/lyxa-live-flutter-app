@@ -197,12 +197,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return GradientButton(
       text: AppStrings.signUp.toUpperCase(),
       onPressed: _handleSignUp,
-      textStyle: AppStyles.buttonTextPrimary.copyWith(
-        color: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      icon: Icon(
+      icon: const Icon(
         Icons.arrow_forward_ios_sharp,
-        color: Theme.of(context).colorScheme.inversePrimary,
+        color: AppColors.whitePure,
       ),
     );
   }

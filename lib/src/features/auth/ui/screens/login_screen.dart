@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_images.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
@@ -147,12 +148,9 @@ class _LoginScreenState extends State<LoginScreen> {
     return GradientButton(
       text: AppStrings.login.toUpperCase(),
       onPressed: _handleLogin,
-      textStyle: AppStyles.buttonTextPrimary.copyWith(
-        color: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      icon: Icon(
+      icon: const Icon(
         Icons.arrow_forward_outlined,
-        color: Theme.of(context).colorScheme.inversePrimary,
+        color: AppColors.whitePure,
       ),
     );
   }

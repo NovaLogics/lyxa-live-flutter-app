@@ -36,7 +36,7 @@ class AppStyles {
     letterSpacing: AppDimens.letterSpacingPT10,
   );
 
-    static const TextStyle titleSecondary = TextStyle(
+  static const TextStyle titleSecondary = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeLG18,
     fontFamily: AppFonts.raleway,
@@ -108,10 +108,12 @@ class AppStyles {
   /// Button Text
   /// ->
   static const TextStyle buttonTextPrimary = TextStyle(
-    color: AppColors.blueGrey50,
+    color: AppColors.whitePure,
     fontWeight: FontWeight.bold,
     fontSize: AppDimens.fontSizeMD16,
     fontFamily: AppFonts.raleway,
+    letterSpacing: AppDimens.letterSpacingPT09,
+    shadows: AppStyles.shadowStyle2,
   );
 
   /// Shadows
@@ -128,7 +130,7 @@ class AppStyles {
     Shadow(
       offset: Offset(0.5, 0.5),
       blurRadius: 1,
-      color: Colors.white30,
+      color: AppColors.black500,
     ),
   ];
 
