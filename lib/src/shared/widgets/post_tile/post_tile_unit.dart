@@ -123,7 +123,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
         content: MultilineTextFieldUnit(
           controller: _commentTextController,
           hintText: AppStrings.typeComment,
-         // labelText: AppStrings.addComment,
+          // labelText: AppStrings.addComment,
           maxLength: TextFieldLimits.commentsField,
         ),
         actions: [
@@ -203,11 +203,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         title: Text(
           AppStrings.deleteThisPostMessage,
-          style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         ),
-        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         actions: [
           // CANCEL BUTTON
           TextButton(
@@ -216,8 +216,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
             },
             child: Text(
               AppStrings.cancel,
-              style:
-                  TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
             ),
           ),
           // CONFIRM DELETE BUTTON
@@ -228,7 +227,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
             },
             child: Text(
               AppStrings.delete,
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
         ],

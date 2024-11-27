@@ -97,14 +97,23 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(AppStrings.deleteCommentMessage),
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+        title: Text(
+          AppStrings.deleteCommentMessage,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
         actions: [
           // CANCEL BUTTON
           TextButton(
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
             },
-            child: const Text(AppStrings.cancel),
+            child: Text(
+              AppStrings.cancel,
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+            ),
           ),
           // DELETE BUTTON
           TextButton(
@@ -112,7 +121,10 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
               Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
               widget.onDeletePressed(widget.comment).call();
             },
-            child: const Text(AppStrings.delete),
+            child: Text(
+              AppStrings.delete,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
           ),
         ],
       ),
