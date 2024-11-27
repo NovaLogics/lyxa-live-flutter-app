@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
@@ -38,31 +38,16 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: _buildAppDrawer(),
       body: BlocBuilder<PostCubit, PostState>(
         builder: (context, state) {
-          _hideLoading();
-          if (state is PostLoading) {
-            _showLoading(AppStrings.loadingMessage);
-            return const SizedBox();
-          } else if (state is PostUploading) {
-            _showLoading(AppStrings.uploading);
-            return const SizedBox();
-          } else if (state is PostLoaded) {
+          if (state is PostLoaded) {
             return _buildPostList(state.posts);
           } else if (state is PostError) {
-            return _buildErrorState(state.message);
+            return _buildDisplayMsgScreen(state.message);
           } else {
             return const SizedBox();
           }
         },
       ),
     );
-  }
-
-  void _showLoading(String message) {
-    LoadingCubit.showLoading(message: message);
-  }
-
-  void _hideLoading() {
-    LoadingCubit.hideLoading();
   }
 
   void _fetchAllPosts() {
@@ -75,15 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _initScreen() async {
-    _showLoading(
-      AppStrings.loadingMessage,
-    );
     final profileUser = await _postCubit.getCurrentUser();
 
     setState(() {
       _currentUser = profileUser;
     });
-    _hideLoading();
     _fetchAllPosts();
   }
 
@@ -130,10 +111,15 @@ class _HomeScreenState extends State<HomeScreen> {
           );
   }
 
-  Widget _buildErrorState(String errorMessage) {
+  Widget _buildDisplayMsgScreen(String errorMessage) {
     Logger.logError(errorMessage.toString());
     return Center(
-      child: Text(errorMessage),
+      child: Text(
+        errorMessage,
+        style: AppStyles.titleSecondary.copyWith(
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
+      ),
     );
   }
 }
