@@ -51,22 +51,25 @@ class ProfileStatsUnit extends StatelessWidget {
                     count: postCount.toString(),
                     label: AppStrings.postsUpperCase,
                   ),
-                  // Followers
                   GestureDetector(
                     onTap: onTap,
-                    child: _buildDisplayUnit(
-                      context,
-                      count: followerCount.toString(),
-                      label: AppStrings.followersUpperCase,
-                    ),
-                  ),
-                  // Following
-                  GestureDetector(
-                    onTap: onTap,
-                    child: _buildDisplayUnit(
-                      context,
-                      count: followingCount.toString(),
-                      label: AppStrings.followingUpperCase,
+                    child: AbsorbPointer(
+                      child: Row(
+                        children: [
+                          // Followers
+                          _buildDisplayUnit(
+                            context,
+                            count: followerCount.toString(),
+                            label: AppStrings.followersUpperCase,
+                          ),
+                          // Following
+                          _buildDisplayUnit(
+                            context,
+                            count: followingCount.toString(),
+                            label: AppStrings.followingUpperCase,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
