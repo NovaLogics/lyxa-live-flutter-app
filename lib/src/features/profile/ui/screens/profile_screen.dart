@@ -188,11 +188,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Center(
       child: Text(
         user.email,
-        style: AppStyles.subtitlePrimary.copyWith(
+        style: AppStyles.subtitleRegular.copyWith(
           color: Theme.of(context).colorScheme.onPrimary,
-          fontWeight: FontWeight.normal,
-          fontFamily: FONT_MONTSERRAT,
-          shadows: AppStyles.shadowStyle2,
         ),
       ),
     );
