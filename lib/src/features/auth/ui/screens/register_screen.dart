@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_images.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
-import 'package:lyxa_live/src/core/styles/text_field_limits.dart';
+import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
