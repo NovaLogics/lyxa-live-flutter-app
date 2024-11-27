@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lyxa_live/src/core/resources/app_assets.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
@@ -388,9 +389,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     shadowColor:
                         Theme.of(context).colorScheme.surface.withOpacity(0.4),
                     child: SvgPicture.asset(
-                      widget.post.likes.contains(_appUserId)
-                          ? ICON_HEART_FILLED
-                          : ICON_HEART_BORDER,
+                      widget.post.likes.contains(_appUserId) 
+                          ? AppAssets.Icons.likeHeartSolid
+                          : AppAssets.Icons.likeHeartOutlined,
                       colorFilter: ColorFilter.mode(
                         (widget.post.likes.contains(_appUserId)
                             ? Theme.of(context).colorScheme.primary
