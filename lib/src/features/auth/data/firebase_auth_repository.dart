@@ -4,7 +4,7 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/core/utils/hive_helper.dart';
+import 'package:lyxa_live/src/core/database/hive_storage.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
@@ -14,7 +14,7 @@ import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 class FirebaseAuthRepository implements AuthRepository {
-  final HiveHelper _hiveHelper = getIt<HiveHelper>();
+  final HiveStorage _hiveHelper = getIt<HiveStorage>();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final CollectionReference _userCollectionRef =
       FirebaseFirestore.instance.collection(firebaseUsersCollectionPath);

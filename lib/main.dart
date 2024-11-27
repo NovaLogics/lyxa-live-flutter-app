@@ -4,10 +4,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lyxa_live/src/app.dart';
 import 'package:lyxa_live/src/config/firebase_options.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/utils/hive_helper.dart';
+import 'package:lyxa_live/src/core/database/hive_storage.dart';
 
 /// Main Entry Point
-/// 
+///
 /// This function handles the setup process by:
 /// 1. Making sure Flutter bindings are initialized to get the engine ready
 /// 2. Setting up Firebase with the correct settings for the platform
@@ -32,12 +32,12 @@ Future<void> initFirebase() async {
 
 Future<void> initHive() async {
   await Hive.initFlutter();
-  final hiveHelper = HiveHelper();
+  final hiveHelper = HiveStorage();
   await hiveHelper.initialize();
 }
 
 void initServiceLocator() {
-    setupServiceLocator();
+  setupServiceLocator();
 }
 
 void launchApp() {

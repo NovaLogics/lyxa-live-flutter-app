@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
-import 'package:lyxa_live/src/core/utils/hive_helper.dart';
+import 'package:lyxa_live/src/core/database/hive_storage.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
@@ -21,7 +21,7 @@ final GetIt getIt = GetIt.instance;
 void setupServiceLocator() {
   // Register Hive | LoaclDB Helper
 
-  getIt.registerFactory(() => HiveHelper());
+  getIt.registerFactory(() => HiveStorage());
 
   // Register repositories as singletons
 
