@@ -115,6 +115,20 @@ class AppStyles {
     letterSpacing: AppDimens.letterSpacingPT05,
   );
 
+   static const TextStyle textFieldStyleMain = TextStyle(
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeMD16,
+    fontWeight: FontWeight.w600,
+    fontFamily: AppFonts.montserrat,
+  );
+
+    static const TextStyle textFieldStyleHint = TextStyle(
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeMD15,
+    fontWeight: FontWeight.normal,
+    fontFamily: AppFonts.montserrat,
+  );
+
   /// Button Text
   /// ->
   static const TextStyle buttonTextPrimary = TextStyle(
