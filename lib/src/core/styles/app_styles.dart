@@ -4,6 +4,8 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_fonts.dart';
 
 class AppStyles {
+  const AppStyles._();
+
   /// [1] TEXT ▼
 
   // Headings
@@ -72,7 +74,7 @@ class AppStyles {
     fontFamily: AppFonts.raleway,
   );
 
-   static const TextStyle textSubtitlePost = TextStyle(
+  static const TextStyle textSubtitlePost = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeSM12,
     fontWeight: FontWeight.bold,
