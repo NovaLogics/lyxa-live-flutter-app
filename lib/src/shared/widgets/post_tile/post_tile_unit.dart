@@ -214,7 +214,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
         backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         title: Text(
           AppStrings.deleteThisPostMessage,
-          style: TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+          style:
+              TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
         ),
         actions: [
           // CANCEL BUTTON
@@ -224,7 +225,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
             },
             child: Text(
               AppStrings.cancel,
-              style: TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onInverseSurface),
             ),
           ),
           // CONFIRM DELETE BUTTON
@@ -486,14 +488,13 @@ class _PostTileUnitState extends State<PostTileUnit> {
           const SizedBox(height: AppDimens.size4),
           ConstrainedBox(
             constraints: const BoxConstraints(
-                maxHeight: 100, minWidth: double.infinity), // Limit height
+                maxHeight: 100, minWidth: double.infinity),
             child: SingleChildScrollView(
               child: Text(
                 widget.post.captionText,
                 style: AppStyles.textTitlePost.copyWith(
                   color: Theme.of(context).colorScheme.inversePrimary,
-                  letterSpacing: AppDimens.letterSpacingPT07,
-                  shadows: AppStyles.shadowStyle2,
+                  letterSpacing: AppDimens.letterSpacingPT04,
                 ),
                 maxLines: 5,
                 softWrap: true,
