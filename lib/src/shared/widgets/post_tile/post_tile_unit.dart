@@ -322,7 +322,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           GestureDetector(
             onTap: _showDeleteOptions,
             child: SvgPicture.asset(
-              ICON_SETTINGS_STYLE_1,
+              AppIcons.settingsOutlinedStl1,
               colorFilter: ColorFilter.mode(
                 Theme.of(context).colorScheme.primary,
                 BlendMode.srcIn,
@@ -427,7 +427,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
               child: SvgPicture.asset(
                 widget.post.comments.isNotEmpty
                     ? AppIcons.commentSolid
-                    : ICON_COMMENT_BORDER,
+                    : AppIcons.commentOutlined,
                 colorFilter: ColorFilter.mode(
                   widget.post.comments.isNotEmpty
                       ? Theme.of(context).colorScheme.primary

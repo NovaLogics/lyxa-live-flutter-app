@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/resources/app_icons.dart';
 import 'package:lyxa_live/src/core/resources/app_images.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
@@ -49,20 +49,20 @@ class DrawerUnit extends StatelessWidget {
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleHome,
-                  iconSrc: ICON_HOME_BORDER,
+                  iconSrc: AppIcons.homeOutlined,
                   onTap: () => Navigator.of(context).pop(),
                 ),
                 _buildProfileSection(context),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleSearch,
-                  iconSrc: ICON_SEARCH_BORDER,
+                  iconSrc: AppIcons.searchOutlined,
                   onTap: () => _navigateToSearchScreen(context),
                 ),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleSettings,
-                  iconSrc: ICON_SETTINGS_BORDER,
+                  iconSrc: AppIcons.settingsOutlinedStl2,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
                 const SizedBox(height: AppDimens.size20),
@@ -75,7 +75,7 @@ class DrawerUnit extends StatelessWidget {
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleLogout,
-                  iconSrc: ICON_LOGOUT_BORDER,
+                  iconSrc: AppIcons.logoutOutlined,
                   onTap: () => _logout(context),
                 ),
                 Divider(
@@ -118,7 +118,7 @@ class DrawerUnit extends StatelessWidget {
     return _buildDrawerItem(
       context,
       title: AppStrings.titleProfile,
-      iconSrc: ICON_PROFILE_BORDER,
+      iconSrc: AppIcons.profileOutlined,
       onTap: () => _navigateToProfileScreen(context, user.uid),
     );
   }
