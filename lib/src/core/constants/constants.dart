@@ -7,9 +7,7 @@ const String firebasePostImageStoragePath = 'post_images';
 
 const String _iconPath = 'assets/icons';
 
-// ICON PATHS
-const String ICON_HEART_FILLED = '$_iconPath/ic_heart_filled.svg';
-const String ICON_HEART_BORDER = '$_iconPath/ic_heart_border.svg';
+
 const String ICON_COMMENT_BORDER = '$_iconPath/ic_comment_border.svg';
 const String ICON_COMMENT_FILLED = '$_iconPath/ic_comment_filled.svg';
 const String ICON_SETTINGS_STYLE_1 = '$_iconPath/ic_settings_style_1.svg';
