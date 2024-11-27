@@ -100,14 +100,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailController.text = savedUser.email;
   }
 
-  void _register() {
+  void _handleSignUp() {
     if (_registrationFormKey.currentState?.validate() != true) return;
+    _saveUserToLocalStorage();
+    
+    _authCubit.register(
+      _name,
+      _email,
+      _password,
+    );
+  }
 
+  void _handleLoginLinkClick() {
+    widget.onToggle?.call();
+    _saveUserToLocalStorage();
+  }
+
+  void _saveUserToLocalStorage() {
     _authCubit.saveUserToLocalStorage(
       storageKey: HiveKeys.signUpDataKey,
       user: AppUser.createWith(name: _name, email: _email),
     );
-    _authCubit.register(_name, _email, _password);
   }
 
   String? _validateMainPassword(String? password) {
@@ -183,7 +196,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildSignUpButton() {
     return GradientButton(
       text: AppStrings.signUp.toUpperCase(),
-      onPressed: _register,
+      onPressed: _handleSignUp,
       textStyle: AppStyles.buttonTextPrimary.copyWith(
         color: Theme.of(context).colorScheme.inversePrimary,
       ),
@@ -207,14 +220,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           addSpacing(width: AppDimens.size8),
           GestureDetector(
-            onTap: () {
-              widget.onToggle?.call();
-
-              _authCubit.saveUserToLocalStorage(
-                storageKey: HiveKeys.signUpDataKey,
-                user: AppUser.createWith(name: _name, email: _email),
-              );
-            },
+            onTap: _handleLoginLinkClick,
             child: const Text(
               AppStrings.loginNow,
               style: AppStyles.subtitlePrimary,
