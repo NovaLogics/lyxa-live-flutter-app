@@ -132,7 +132,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
             },
-            child: const Text(AppStrings.cancel),
+            child: Text(
+              AppStrings.cancel,
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+            ),
           ),
           // SAVE/SUBMIT BUTTON
           TextButton(
@@ -140,7 +144,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
               _addNewComment();
               Navigator.of(context).pop();
             },
-            child: const Text(AppStrings.save),
+            child: Text(
+              AppStrings.save,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary),
+            ),
           ),
         ],
       ),
@@ -206,7 +214,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
         backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         title: Text(
           AppStrings.deleteThisPostMessage,
-          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+          style: TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
         ),
         actions: [
           // CANCEL BUTTON
@@ -216,7 +224,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
             },
             child: Text(
               AppStrings.cancel,
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              style: TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
             ),
           ),
           // CONFIRM DELETE BUTTON

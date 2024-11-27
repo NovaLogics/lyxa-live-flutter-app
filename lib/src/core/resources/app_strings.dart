@@ -117,4 +117,7 @@ class AppStrings {
   static const String unknown = 'Unknown';
 
   static const String authenticatingMsg = 'Authenticating, please hold on...';
+
+  static const String logoutDialogMsg = 'Are you sure to logout?';
+  static const String yesLogout = 'Yes, logout';
 }

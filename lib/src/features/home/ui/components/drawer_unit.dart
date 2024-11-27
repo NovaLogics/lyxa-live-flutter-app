@@ -65,7 +65,7 @@ class DrawerUnit extends StatelessWidget {
                 DrawerTitleUnit(
                   title: AppStrings.titleLogout,
                   iconSrc: AppIcons.logoutOutlined,
-                  onTap: () => _logout(),
+                  onTap: () => _openLogoutDialog(context),
                 ),
                 _addDivider(context, isShortDivider: false),
                 addSpacing(height: AppDimens.size12),
@@ -134,5 +134,43 @@ class DrawerUnit extends StatelessWidget {
 
   void _logout() {
     getIt<AuthCubit>().logout();
+  }
+
+    void _openLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+       title: Text(
+          AppStrings.logoutDialogMsg,
+          style: TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+        ),
+        actions: [
+          // CANCEL BUTTON
+          TextButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+            child: Text(
+              AppStrings.cancel,
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+            ),
+          ),
+          // SAVE/SUBMIT BUTTON
+          TextButton(
+            onPressed: () {
+              _logout();
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              AppStrings.yesLogout,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

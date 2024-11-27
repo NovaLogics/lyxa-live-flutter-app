@@ -101,7 +101,7 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
         title: Text(
           AppStrings.deleteCommentMessage,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Theme.of(context).colorScheme.onInverseSurface,
           ),
         ),
         actions: [
@@ -112,7 +112,7 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
             },
             child: Text(
               AppStrings.cancel,
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              style: TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
             ),
           ),
           // DELETE BUTTON
