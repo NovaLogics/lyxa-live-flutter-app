@@ -232,7 +232,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           addSpacing(height: AppDimens.size12),
           MultilineTextFieldUnit(
             controller: bioTextController,
-            labelText: AppStrings.storyline,
+           // labelText: AppStrings.storyline,
             hintText: AppStrings.addYourStorylineBio,
             maxLength: TextFieldLimits.bioDescriptionField,
           ),

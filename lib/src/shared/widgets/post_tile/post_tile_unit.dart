@@ -123,7 +123,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
         content: MultilineTextFieldUnit(
           controller: _commentTextController,
           hintText: AppStrings.typeComment,
-          labelText: AppStrings.addComment,
+         // labelText: AppStrings.addComment,
           maxLength: TextFieldLimits.commentsField,
         ),
         actions: [

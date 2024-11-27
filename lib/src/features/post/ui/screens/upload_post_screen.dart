@@ -223,7 +223,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           addSpacing(height: AppDimens.spacingSM4),
           MultilineTextFieldUnit(
             controller: _captionController,
-            labelText: AppStrings.captionLabel,
+           // labelText: AppStrings.captionLabel,
             hintText: AppStrings.captionHint,
             maxLength: TextFieldLimits.postField,
           ),

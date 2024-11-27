@@ -6,14 +6,14 @@ import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 class MultilineTextFieldUnit extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  final String labelText;
+  // final String labelText;
   final int maxLength;
 
   const MultilineTextFieldUnit({
     super.key,
     required this.controller,
     required this.hintText,
-    required this.labelText,
+    // required this.labelText,
     this.maxLength = TextFieldLimits.defaultLimit,
   });
 
@@ -31,8 +31,9 @@ class MultilineTextFieldUnit extends StatelessWidget {
         fontSize: AppDimens.fontSizeMD16,
       ),
       decoration: InputDecoration(
-        labelText: labelText,
+        // labelText: labelText,
         hintText: hintText,
+
         hintStyle: TextStyle(
           color: Theme.of(context).colorScheme.onSecondary,
           fontWeight: FontWeight.normal,
