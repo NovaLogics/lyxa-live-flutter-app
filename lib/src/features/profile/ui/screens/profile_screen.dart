@@ -153,9 +153,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       title: Center(
         child: Text(
           user.name,
-          style: AppStyles.textStylePost.copyWith(
+          style: AppStyles.textSubtitlePost.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
-            fontWeight: FontWeight.bold,
             fontSize: AppDimens.fontSizeXL20,
           ),
         ),

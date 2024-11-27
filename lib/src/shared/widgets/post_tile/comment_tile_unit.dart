@@ -43,10 +43,8 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
           // USERNAME
           Text(
             "⤷ ${widget.comment.userName}",
-            style: AppStyles.textStylePost.copyWith(
+            style: AppStyles.textSubtitlePost.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
-              fontWeight: FontWeight.bold,
-              fontSize: AppDimens.fontSizeSM12,
             ),
           ),
           const SizedBox(width: AppDimens.size8),

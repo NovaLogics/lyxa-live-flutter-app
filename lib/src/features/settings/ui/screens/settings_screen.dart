@@ -40,9 +40,8 @@ class SettingsScreen extends StatelessWidget {
     return ListTile(
       title: Text(
         AppStrings.darkMode,
-        style: AppStyles.textStylePost.copyWith(
+        style: AppStyles.textSubtitlePost.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
-          fontWeight: FontWeight.bold,
           fontSize: AppDimens.fontSizeLG18,
         ),
       ),

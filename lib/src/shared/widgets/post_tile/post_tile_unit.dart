@@ -291,7 +291,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     // Username
                     Text(
                       widget.post.userName.toString().trim(),
-                      style: AppStyles.textStylePost.copyWith(
+                      style: AppStyles.textTitlePost.copyWith(
                         color: Theme.of(context).colorScheme.inversePrimary,
                       ),
                     ),
@@ -472,7 +472,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
         children: [
           Text(
             widget.post.userName,
-            style: AppStyles.textStylePost.copyWith(
+            style: AppStyles.textTitlePost.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
             ),
           ),
@@ -483,7 +483,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
             child: SingleChildScrollView(
               child: Text(
                 widget.post.captionText,
-                style: AppStyles.textStylePost.copyWith(
+                style: AppStyles.textTitlePost.copyWith(
                   color: Theme.of(context).colorScheme.inversePrimary,
                   letterSpacing: AppDimens.letterSpacingPT07,
                   shadows: AppStyles.shadowStyle2,

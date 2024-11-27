@@ -18,7 +18,7 @@ class UserTileUnit extends StatelessWidget {
     return ListTile(
       title: Text(
         user.name,
-        style: AppStyles.textStylePost.copyWith(
+        style: AppStyles.textTitlePost.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
           fontWeight: FontWeight.bold,
         ),

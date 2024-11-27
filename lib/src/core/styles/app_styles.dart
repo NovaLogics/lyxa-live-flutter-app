@@ -65,10 +65,17 @@ class AppStyles {
 
   /// Custom Text Styles
   /// ->
-  static const TextStyle textStylePost = TextStyle(
+  static const TextStyle textTitlePost = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeRG14,
     fontWeight: FontWeight.w600,
+    fontFamily: AppFonts.raleway,
+  );
+
+   static const TextStyle textSubtitlePost = TextStyle(
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeSM12,
+    fontWeight: FontWeight.bold,
     fontFamily: AppFonts.raleway,
   );
 
