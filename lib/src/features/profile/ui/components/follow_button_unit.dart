@@ -5,7 +5,7 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
 class FollowButtonUnit extends StatelessWidget {
-  final void Function()? onPressed;
+  final VoidCallback? onPressed;
   final bool isFollowing;
 
   const FollowButtonUnit({
