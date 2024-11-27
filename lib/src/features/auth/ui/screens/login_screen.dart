@@ -11,6 +11,7 @@ import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart'
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
+import 'package:lyxa_live/src/shared/spacers_unit.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback? onToggleScreen;
@@ -28,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _loginCredentialsFormKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
   late final AuthCubit _authCubit;
 
   @override
@@ -49,17 +49,17 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: AppDimens.size64),
+            addSpacing(height: AppDimens.size64),
             _buildTopBanner(),
             _buildHeadingText(),
             _buildSubheadingText(),
-            const SizedBox(height: AppDimens.size24),
+            addSpacing(height: AppDimens.size24),
             _buildEmailTextField(),
-            const SizedBox(height: AppDimens.size12),
+            addSpacing(height: AppDimens.size12),
             _buildPasswordTextField(),
-            const SizedBox(height: AppDimens.size24),
+            addSpacing(height: AppDimens.size24),
             _buildLoginButton(),
-            const SizedBox(height: AppDimens.size48),
+            addSpacing(height: AppDimens.size48),
             _buildRegisterLink(),
           ],
         ),
