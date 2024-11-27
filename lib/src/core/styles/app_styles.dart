@@ -36,6 +36,14 @@ class AppStyles {
     letterSpacing: AppDimens.letterSpacingPT10,
   );
 
+    static const TextStyle titleSecondary = TextStyle(
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeLG18,
+    fontFamily: AppFonts.raleway,
+    fontWeight: FontWeight.w600,
+    letterSpacing: AppDimens.letterSpacingPT13,
+  );
+
   /// Subtitles
   /// ->
   static const TextStyle subtitlePrimary = TextStyle(
