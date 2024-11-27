@@ -9,6 +9,7 @@ class TextFieldUnit extends StatefulWidget {
   final bool obscureText;
   final int maxLength;
   final Widget? prefixIcon;
+  final TextCapitalization? textCapitalization;
   final String? Function(String?)? validator;
 
   const TextFieldUnit({
@@ -18,7 +19,7 @@ class TextFieldUnit extends StatefulWidget {
     this.obscureText = false,
     this.prefixIcon,
     this.validator,
-    this.maxLength = TextFieldLimits.defaultLimit,
+    this.maxLength = TextFieldLimits.defaultLimit, this.textCapitalization,
   });
 
   @override
@@ -39,6 +40,7 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
     return TextFormField(
       controller: widget.controller,
       maxLength: widget.maxLength,
+      textCapitalization: widget.textCapitalization ?? TextCapitalization.none ,
       obscureText: widget.obscureText && !isPasswordVisible,
       style: TextStyle(
         color: Theme.of(context).colorScheme.inversePrimary,

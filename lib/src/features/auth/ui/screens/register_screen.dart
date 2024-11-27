@@ -160,6 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return TextFieldUnit(
       controller: _nameController,
       hintText: AppStrings.hintUsername,
+      textCapitalization: TextCapitalization.words,
       obscureText: false,
       prefixIcon: Icon(
         Icons.person_outline,
