@@ -41,9 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
           if (state is PostLoaded) {
             return _buildPostList(state.posts);
           } else if (state is PostError) {
-            return _buildDisplayMsgScreen(state.message);
+            return _buildDisplayMsgScreen(message: state.message);
           } else {
-            return const SizedBox();
+            return _buildDisplayMsgScreen();
           }
         },
       ),
@@ -97,7 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildPostList(List<Post> posts) {
     return (posts.isEmpty)
-        ? const Center(child: Text(AppStrings.noPostAvailableError))
+        ? _buildDisplayMsgScreen(
+            message: AppStrings.noPostAvailableError,
+          )
         : ListView.builder(
             itemCount: posts.length,
             itemBuilder: (context, index) {
@@ -111,11 +113,11 @@ class _HomeScreenState extends State<HomeScreen> {
           );
   }
 
-  Widget _buildDisplayMsgScreen(String errorMessage) {
-    Logger.logError(errorMessage.toString());
+  Widget _buildDisplayMsgScreen({String? message = ''}) {
+    Logger.logDebug(message.toString());
     return Center(
       child: Text(
-        errorMessage,
+        message ?? '',
         style: AppStyles.titleSecondary.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
