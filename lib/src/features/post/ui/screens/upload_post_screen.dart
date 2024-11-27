@@ -105,6 +105,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       return;
     }
 
+    FocusScope.of(context).unfocus();
+
     final newPost = Post.getDefault().copyWith(
       userId: profileUser.uid,
       userName: profileUser.name,
@@ -127,9 +129,9 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
             children: [
               _buildImagePreview(),
               _buildPickImageButton(),
-              const SizedBox(height: AppDimens.size28),
+              addSpacing(height: AppDimens.size28),
               _buildCaptionInput(),
-              const SizedBox(height: AppDimens.size72),
+              addSpacing(height: AppDimens.size72),
             ],
           ),
         );
@@ -158,6 +160,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
   AppBar _buildAppBar() {
     return AppBar(
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       title: const Text(AppStrings.createPost),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
