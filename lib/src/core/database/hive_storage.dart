@@ -21,6 +21,10 @@ class HiveStorage {
   /// Initialize Hive and open the box
   Future<void> initialize() async {
     _box = await Hive.openBox(hiveBoxLyxa);
+    deleteLoginData();
+  }
+
+  void deleteLoginData() {
     delete(HiveKeys.loginDataKey);
     delete(HiveKeys.signUpDataKey);
   }

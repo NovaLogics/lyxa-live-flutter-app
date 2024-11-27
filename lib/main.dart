@@ -18,7 +18,7 @@ import 'package:lyxa_live/src/core/database/hive_storage.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initFirebase();
-  await initHive();
+  await initHiveStorage();
   initServiceLocator();
 
   launchApp();
@@ -30,10 +30,10 @@ Future<void> initFirebase() async {
   );
 }
 
-Future<void> initHive() async {
+Future<void> initHiveStorage() async {
   await Hive.initFlutter();
-  final hiveHelper = HiveStorage();
-  await hiveHelper.initialize();
+  final hiveStorage = HiveStorage();
+  await hiveStorage.initialize();
 }
 
 void initServiceLocator() {

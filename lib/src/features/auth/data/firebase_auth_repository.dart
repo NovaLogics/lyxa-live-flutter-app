@@ -14,7 +14,7 @@ import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
 class FirebaseAuthRepository implements AuthRepository {
-  final HiveStorage _hiveHelper = getIt<HiveStorage>();
+  final HiveStorage _hiveStorage = getIt<HiveStorage>();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final CollectionReference _userCollectionRef =
       FirebaseFirestore.instance.collection(firebaseUsersCollectionPath);
@@ -37,6 +37,8 @@ class FirebaseAuthRepository implements AuthRepository {
       }
 
       final appUser = await _getUserById(userId);
+
+      _hiveStorage.deleteLoginData();
 
       return Result.success(
         data: appUser,
@@ -72,6 +74,8 @@ class FirebaseAuthRepository implements AuthRepository {
       );
 
       await _userCollectionRef.doc(userId).set(user.toJson());
+
+      _hiveStorage.deleteLoginData();
 
       return Result.success(
         data: user,
@@ -132,7 +136,7 @@ class FirebaseAuthRepository implements AuthRepository {
     required String storageKey,
   }) async {
     try {
-      final String? userData = _hiveHelper.get<String>(storageKey);
+      final String? userData = _hiveStorage.get<String>(storageKey);
 
       if (userData == null || userData.isEmpty) {
         return Result.error(ErrorMsgs.userDataNotFound);
@@ -151,7 +155,7 @@ class FirebaseAuthRepository implements AuthRepository {
     required AppUser user,
     required String storageKey,
   }) async {
-    await _hiveHelper.save(storageKey, user.toJsonString());
+    await _hiveStorage.save(storageKey, user.toJsonString());
   }
 
   // HELPER FUNCTIONS ▼
