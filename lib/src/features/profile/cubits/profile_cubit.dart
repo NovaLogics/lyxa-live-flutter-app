@@ -44,8 +44,10 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<ProfileUser> _getCurrentUser() async {
+    _showLoading(AppStrings.loadingMessage);
     final currentUser = getIt<AuthCubit>().currentUser;
     if (currentUser == null) {
+      _hideLoading();
       throw Exception(ErrorMsgs.cannotFetchProfileError);
     }
     _currentAppProfileUser = await getUserProfileById(
@@ -53,13 +55,18 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
 
     if (_currentAppProfileUser == null) {
+      _hideLoading();
       throw Exception(ErrorMsgs.cannotFetchProfileError);
     }
+
+    _hideLoading();
 
     return _currentAppProfileUser as ProfileUser;
   }
 
-  Future<ProfileUser?> getUserProfileById({required String userId}) async {
+  Future<ProfileUser?> getUserProfileById({
+    required String userId,
+  }) async {
     final getUserResult =
         await _profileRepository.getUserProfileById(userId: userId);
 
@@ -69,7 +76,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     return null;
   }
 
-  Future<void> loadUserProfileById({required String userId}) async {
+  Future<void> loadUserProfileById({
+    required String userId,
+  }) async {
     _showLoading(AppStrings.loadingMessage);
 
     final getUserResult =
@@ -117,7 +126,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           result: imageUploadResult,
           tag: '$debugTag: updateProfile()::imageUploadResult',
         );
-
         _hideLoading();
         return;
       }
