@@ -27,7 +27,7 @@ class GradientBackgroundUnit extends StatelessWidget {
               ..._buildGradientCircles(context),
               BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
-                child: const SizedBox.expand(), // Simplified decoration
+                child: const SizedBox.expand(), 
               ),
             ],
           ),
@@ -37,26 +37,26 @@ class GradientBackgroundUnit extends StatelessWidget {
   }
 
   List<Widget> _buildGradientCircles(BuildContext context) {
-    final colors = _getStyleColors(context); // Get colors based on style
+    final colors = _getStyleColors(context); 
 
     return [
       _buildCircle(
         const AlignmentDirectional(3, -0.3),
-        colors[0], // First color
+        colors[0], 
       ),
       _buildCircle(
         const AlignmentDirectional(-3, -0.3),
-        colors[1], // Second color
+        colors[1], 
       ),
       _buildCircle(
         const AlignmentDirectional(0, -0.9),
-        colors[2], // Third color
+        colors[2], 
         height: 400,
         width: 260,
       ),
       _buildCircle(
         const AlignmentDirectional(-0.3, 1.5),
-        colors[3], // Fourth color
+        colors[3], 
         height: 250,
         width: 300,
       ),

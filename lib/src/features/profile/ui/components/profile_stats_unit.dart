@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/shared/spacers_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 
 class ProfileStatsUnit extends StatelessWidget {
   final int postCount;

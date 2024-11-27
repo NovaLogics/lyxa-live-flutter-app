@@ -23,13 +23,11 @@ class ConstrainedScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Background layer
         _Background(
           backgroundColor: backgroundColor,
           backgroundStyle: backgroundStyle,
         ),
 
-        // Foreground layer with appBar, drawer, and body
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: appBar,

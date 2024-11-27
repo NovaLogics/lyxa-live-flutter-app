@@ -12,7 +12,7 @@ import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart'
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
-import 'package:lyxa_live/src/shared/spacers_unit.dart';
+import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback? onToggleScreen;
