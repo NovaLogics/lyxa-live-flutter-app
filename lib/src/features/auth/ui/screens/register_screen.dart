@@ -136,7 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildHeadingText() {
     return Text(
       AppStrings.createAccountMessage,
-      style: AppStyles.headingSecondary.copyWith(
+      style: AppStyles.textHeadingSecondary.copyWith(
         color: AppColors.white100,
         fontSize: AppDimens.fontSizeXXL24,
       ),

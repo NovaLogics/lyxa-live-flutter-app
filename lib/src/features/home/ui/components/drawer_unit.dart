@@ -104,12 +104,8 @@ class DrawerUnit extends StatelessWidget {
       user.name,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
-      style: AppStyles.headingSecondary.copyWith(
+      style: AppStyles.titlePrimary.copyWith(
         color: Theme.of(context).colorScheme.onPrimary,
-        fontSize: AppDimens.fontSizeXL20,
-        fontWeight: FontWeight.w600,
-        letterSpacing: AppDimens.letterSpacingPT10,
-        shadows: [],
       ),
     );
   }

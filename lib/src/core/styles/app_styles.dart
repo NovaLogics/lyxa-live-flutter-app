@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_fonts.dart';
 
 class AppStyles {
-  /// Headings
-  /// ->
-  static const TextStyle headingPrimary = TextStyle(
+  /// [1] TEXT ▼
+
+  // Headings
+  // ->
+  static const TextStyle textHeadingPrimary = TextStyle(
     color: AppColors.whitePure,
     fontSize: AppDimens.fontSizeXXL42,
     fontWeight: FontWeight.w500,
@@ -16,14 +17,14 @@ class AppStyles {
     shadows: shadowStyle1,
   );
 
-  static const TextStyle headingSecondary = TextStyle(
+  static const TextStyle textHeadingSecondary = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeLG18,
     fontFamily: AppFonts.raleway,
     shadows: shadowStyle1,
   );
 
-  /// Subtitles
+  /// Titles
   /// ->
   static const TextStyle titlePrimary = TextStyle(
     color: AppColors.blueGrey50,
@@ -38,32 +39,54 @@ class AppStyles {
   static const TextStyle subtitlePrimary = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeLG18,
-    fontFamily: FONT_RALEWAY,
+    fontFamily: AppFonts.raleway,
     fontWeight: FontWeight.bold,
-    letterSpacing: 0.7,
+    letterSpacing: AppDimens.letterSpacingPT07,
     shadows: shadowStyle1,
   );
 
   static const TextStyle subtitleSecondary = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeMD16,
-    fontFamily: FONT_RALEWAY,
+    fontFamily: AppFonts.raleway,
     shadows: shadowStyle1,
   );
+
+  /// Custom Text Styles
+  /// ->
 
   static const TextStyle textStylePost = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeRG14,
     fontWeight: FontWeight.w600,
-    fontFamily: FONT_RALEWAY,
+    fontFamily: AppFonts.raleway,
   );
 
-  static const TextStyle textStylePostWithNumbers = TextStyle(
+  static const TextStyle textNumberStyle1 = TextStyle(
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeMD16,
+    fontWeight: FontWeight.bold,
+    fontFamily: AppFonts.montserrat,
+    letterSpacing: AppDimens.letterSpacingPT05,
+  );
+
+  static const TextStyle textNumberStyle2 = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeRG14,
     fontWeight: FontWeight.w600,
-    fontFamily: FONT_MONTSERRAT,
-    letterSpacing: 0.5,
+    fontFamily: AppFonts.montserrat,
+    letterSpacing: AppDimens.letterSpacingPT05,
+  );
+
+  /// Label Text
+  /// ->
+  static const TextStyle labelPrimary = TextStyle(
+    color: AppColors.blueGrey50,
+    letterSpacing: AppDimens.letterSpacingPT07,
+    fontWeight: FontWeight.bold,
+    fontFamily: AppFonts.montserrat,
+    fontSize: AppDimens.fontSizeSM12,
+    shadows: AppStyles.shadowStyle2,
   );
 
   /// Button Text
@@ -72,7 +95,7 @@ class AppStyles {
     color: AppColors.blueGrey50,
     fontWeight: FontWeight.bold,
     fontSize: AppDimens.fontSizeMD16,
-    fontFamily: FONT_RALEWAY,
+    fontFamily: AppFonts.raleway,
   );
 
   /// Shadows

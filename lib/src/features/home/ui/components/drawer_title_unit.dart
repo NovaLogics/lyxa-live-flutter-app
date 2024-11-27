@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 
 class DrawerTitleUnit extends StatelessWidget {
@@ -24,8 +23,6 @@ class DrawerTitleUnit extends StatelessWidget {
         style: AppStyles.subtitlePrimary.copyWith(
           color: Theme.of(context).colorScheme.onSecondary,
           letterSpacing: AppDimens.letterSpacingPT13,
-          fontSize: AppDimens.fontSizeLG18,
-          fontFamily: FONT_RALEWAY,
           fontWeight: FontWeight.w600,
           shadows: [],
         ),

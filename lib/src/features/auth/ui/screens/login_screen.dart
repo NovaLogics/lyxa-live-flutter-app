@@ -106,14 +106,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildHeadingText() {
     return const Text(
       AppStrings.welcomeBack,
-      style: AppStyles.headingPrimary,
+      style: AppStyles.textHeadingPrimary,
     );
   }
 
   Widget _buildSubheadingText() {
     return const Text(
       AppStrings.itsTimeToShareYourStory,
-      style: AppStyles.headingSecondary,
+      style: AppStyles.textHeadingSecondary,
     );
   }
 

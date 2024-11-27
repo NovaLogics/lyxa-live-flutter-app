@@ -300,11 +300,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       padding: const EdgeInsets.only(left: 1),
                       child: Text(
                         DateTimeUtil.datetimeAgo(widget.post.timestamp),
-                        style: AppStyles.textStylePostWithNumbers.copyWith(
+                        style: AppStyles.textNumberStyle2.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                           fontSize: AppDimens.fontSizeSM12,
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 0.1,
+                          letterSpacing: AppDimens.letterSpacingPT01,
                         ),
                       ),
                     ),
@@ -407,7 +406,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 // Like count
                 Text(
                   widget.post.likes.length.toString(),
-                  style: AppStyles.textStylePostWithNumbers.copyWith(
+                  style: AppStyles.textNumberStyle2.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
@@ -442,7 +441,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           const SizedBox(width: AppDimens.size4),
           Text(
             widget.post.comments.length.toString(),
-            style: AppStyles.textStylePostWithNumbers.copyWith(
+            style: AppStyles.textNumberStyle2.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
@@ -451,9 +450,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
           Text(
             DateTimeUtil.formatDate(widget.post.timestamp,
                 format: DateTimeStyles.customShortDate),
-            style: AppStyles.textStylePostWithNumbers.copyWith(
+            style: AppStyles.textNumberStyle2.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.w400,
             ),
           ),
         ],

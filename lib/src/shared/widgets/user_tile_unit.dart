@@ -25,12 +25,8 @@ class UserTileUnit extends StatelessWidget {
       ),
       subtitle: Text(
         user.email,
-        style: AppStyles.subtitlePrimary.copyWith(
+        style: AppStyles.labelPrimary.copyWith(
           color: Theme.of(context).colorScheme.onSecondary,
-          fontWeight: FontWeight.bold,
-          fontFamily: FONT_MONTSERRAT,
-          fontSize: AppDimens.fontSizeSM12,
-          shadows: AppStyles.shadowStyle2,
         ),
       ),
       leading: Icon(
