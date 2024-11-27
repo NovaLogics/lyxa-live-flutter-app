@@ -245,6 +245,46 @@ class _PostTileUnitState extends State<PostTileUnit> {
     );
   }
 
+  Widget _createProfileImage() {
+    return Material(
+      elevation: AppDimens.elevationSM2,
+      borderRadius: BorderRadius.circular(24.0),
+      color: Theme.of(context).colorScheme.outline,
+      child: Padding(
+        padding: const EdgeInsets.all(1.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24.0),
+          child: Image.network(
+            widget.post.userProfileImageUrl,
+            fit: BoxFit.cover,
+            height: AppDimens.size36,
+            width: AppDimens.size36,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                color: Colors.grey[200],
+                height: AppDimens.size36,
+                width: AppDimens.size36,
+                child: const Icon(Icons.person, color: Colors.grey),
+              );
+            },
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) {
+                return child;
+              } else {
+                return Container(
+                  height: AppDimens.size36,
+                  width: AppDimens.size36,
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildPostHeader() {
     return Row(
       children: [
@@ -266,34 +306,35 @@ class _PostTileUnitState extends State<PostTileUnit> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Profile picture
-                Material(
-                  elevation: AppDimens.elevationSM2,
-                  shape: const CircleBorder(),
-                  color: Theme.of(context).colorScheme.outline,
-                  child: Padding(
-                    padding: const EdgeInsets.all(1),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.post.userProfileImageUrl,
-                      placeholder: (_, __) => const CircularProgressIndicator(),
-                      errorWidget: (_, __, ___) => Icon(
-                        Icons.person_rounded,
-                        size: AppDimens.size36,
-                        color: Theme.of(context).colorScheme.onSecondary,
-                      ),
-                      imageBuilder: (_, imageProvider) => Container(
-                        height: AppDimens.size36,
-                        width: AppDimens.size36,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _createProfileImage(),
+                // Material(
+                //   elevation: AppDimens.elevationSM2,
+                //   shape: const CircleBorder(),
+                //   color: Theme.of(context).colorScheme.outline,
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(1),
+                //     child: CachedNetworkImage(
+                //       imageUrl: widget.post.userProfileImageUrl,
+                //       placeholder: (_, __) => const CircularProgressIndicator(),
+                //       errorWidget: (_, __, ___) => Icon(
+                //         Icons.person_rounded,
+                //         size: AppDimens.size36,
+                //         color: Theme.of(context).colorScheme.onSecondary,
+                //       ),
+                //       imageBuilder: (_, imageProvider) => Container(
+                //         height: AppDimens.size36,
+                //         width: AppDimens.size36,
+                //         decoration: BoxDecoration(
+                //           shape: BoxShape.circle,
+                //           image: DecorationImage(
+                //             image: imageProvider,
+                //             fit: BoxFit.cover,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(width: AppDimens.size8),
                 Column(
                   children: [
@@ -487,8 +528,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
           ),
           const SizedBox(height: AppDimens.size4),
           ConstrainedBox(
-            constraints: const BoxConstraints(
-                maxHeight: 100, minWidth: double.infinity),
+            constraints:
+                const BoxConstraints(maxHeight: 100, minWidth: double.infinity),
             child: SingleChildScrollView(
               child: Text(
                 widget.post.captionText,
