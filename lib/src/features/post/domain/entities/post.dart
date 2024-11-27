@@ -41,20 +41,6 @@ class Post {
     return toJson().toString();
   }
 
-  static Post getDefault() {
-    return Post(
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
-      userId: '',
-      userName: '',
-      userProfileImageUrl: '',
-      captionText: '',
-      imageUrl: '',
-      timestamp: DateTime.now(),
-      likes: List.empty(),
-      comments: List.empty(),
-    );
-  }
-
   Post copyWith({
     String? id,
     String? userId,
@@ -109,6 +95,20 @@ class Post {
       timestamp: (json[PostFields.timestamp] as Timestamp).toDate(),
       likes: List<String>.from(json[PostFields.likes] ?? []),
       comments: comments,
+    );
+  }
+
+  static Post getDefault() {
+    return Post(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      userId: '',
+      userName: '',
+      userProfileImageUrl: '',
+      captionText: '',
+      imageUrl: '',
+      timestamp: DateTime.now(),
+      likes: List.empty(),
+      comments: List.empty(),
     );
   }
 }

@@ -18,6 +18,7 @@ import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
+import 'package:lyxa_live/src/shared/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
@@ -117,14 +118,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 
-  void _showLoading(String message) {
-    return LoadingCubit.showLoading(message: message);
-  }
-
-  void _hideLoading() {
-    LoadingCubit.hideLoading();
-  }
-
   Widget _buildUploadPostScreen() {
     return BlocConsumer<PostCubit, PostState>(
       builder: (context, state) {
@@ -142,12 +135,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         );
       },
       listener: (context, state) {
-        _hideLoading();
-        if (state is PostLoading) {
-          _showLoading(AppStrings.loadingMessage);
-        } else if (state is PostUploading) {
-          _showLoading(AppStrings.uploading);
-        } else if (state is PostLoaded) {
+        if (state is PostLoaded) {
           Navigator.pop(context);
         }
       },
@@ -206,9 +194,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       child: GradientButton(
         text: AppStrings.pickImageButton.toUpperCase(),
         onPressed: _handleImageSelection,
-        textStyle: AppStyles.buttonTextPrimary.copyWith(
-          color: AppColors.whitePure,
-        ),
         icon: const Icon(
           Icons.filter,
           color: AppColors.whitePure,
@@ -227,7 +212,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
             AppStrings.caption,
             style: AppStyles.subtitleSecondary,
           ),
-          const SizedBox(height: AppDimens.spacingSM4),
+          addSpacing(height: AppDimens.spacingSM4),
           MultilineTextFieldUnit(
             controller: _captionController,
             labelText: AppStrings.captionLabel,
