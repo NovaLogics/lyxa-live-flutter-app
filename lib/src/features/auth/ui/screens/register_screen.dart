@@ -161,6 +161,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: _nameController,
       hintText: AppStrings.hintUsername,
       textCapitalization: TextCapitalization.words,
+      textInputAction: TextInputAction.next,
       obscureText: false,
       prefixIcon: Icon(
         Icons.person_outline,
@@ -182,6 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return PasswordFieldUnit(
       passwordTextController: _passwordController,
       hintText: AppStrings.hintPassword,
+      textInputAction: TextInputAction.next,
       passwordValidator: _validateMainPassword,
     );
   }
@@ -190,6 +192,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return PasswordFieldUnit(
       passwordTextController: _confirmPasswordController,
       hintText: AppStrings.hintConfirmPassword,
+      textInputAction: TextInputAction.done,
       passwordValidator: _validateConfirmPassword,
     );
   }

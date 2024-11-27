@@ -15,6 +15,7 @@ class EmailFieldUnit extends StatelessWidget {
     return TextFieldUnit(
       controller: emailTextController,
       hintText: AppStrings.hintEmail,
+      textInputAction: TextInputAction.next,
       obscureText: false,
       prefixIcon: Icon(
         Icons.email_outlined,
