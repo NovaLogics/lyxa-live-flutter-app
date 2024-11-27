@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/styles/text_field_limits.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 
 class PasswordFieldUnit extends StatelessWidget {
@@ -27,7 +27,7 @@ class PasswordFieldUnit extends StatelessWidget {
         color: Theme.of(context).colorScheme.onPrimary,
       ),
       validator: passwordValidator,
-      maxLength: MAX_LENGTH_PASSWORD_FIELD,
+      maxLength: TextFieldLimits.passwordField,
     );
   }
 }

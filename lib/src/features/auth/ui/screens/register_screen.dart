@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_images.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/styles/text_field_limits.dart';
 import 'package:lyxa_live/src/core/utils/hive_helper.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
@@ -154,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         color: Theme.of(context).colorScheme.onPrimary,
       ),
       validator: (value) => Validator.validateUsername(value),
-      maxLength: MAX_LENGTH_USERNAME_FIELD,
+      maxLength: TextFieldLimits.usernameField,
     );
   }
 

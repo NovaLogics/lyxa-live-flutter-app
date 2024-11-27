@@ -7,10 +7,10 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/styles/text_field_limits.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
@@ -233,7 +233,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             controller: bioTextController,
             labelText: AppStrings.storyline,
             hintText: AppStrings.addYourStorylineBio,
-            maxLength: MAX_LENGTH_BIO_DESCRIPTION_FIELD,
+            maxLength: TextFieldLimits.bioDescriptionField,
           ),
         ],
       ),

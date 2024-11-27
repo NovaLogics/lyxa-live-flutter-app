@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/styles/text_field_limits.dart';
 
 class TextFieldUnit extends StatefulWidget {
   final TextEditingController controller;
@@ -17,7 +18,7 @@ class TextFieldUnit extends StatefulWidget {
     this.obscureText = false,
     this.prefixIcon,
     this.validator,
-    this.maxLength = MAX_LENGTH_DEFAULT,
+    this.maxLength = TextFieldLimits.defaultLimit,
   });
 
   @override

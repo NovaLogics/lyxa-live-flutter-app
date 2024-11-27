@@ -6,6 +6,7 @@ import 'package:lyxa_live/src/core/resources/app_icons.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/core/styles/text_field_limits.dart';
 import 'package:lyxa_live/src/core/utils/date_time_util.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
@@ -124,7 +125,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           controller: _commentTextController,
           hintText: AppStrings.typeComment,
           labelText: AppStrings.addComment,
-          maxLength: MAX_LENGTH_COMMENTS_FIELD,
+          maxLength: TextFieldLimits.commentsField,
         ),
         actions: [
           // CANCEL BUTTON
