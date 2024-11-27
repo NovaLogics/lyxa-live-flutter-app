@@ -18,7 +18,7 @@ import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_state.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/widgets/error_alert_unit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/widgets/center_loading_unit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 /// Main Application Entry Point for LyxaApp
@@ -139,7 +139,7 @@ class LyxaApp extends StatelessWidget {
       builder: (context, state) {
         return Visibility(
           visible: state.isVisible,
-          child: CenterLoadingUnit(
+          child: LoadingUnit(
             message: state.message,
           ),
         );

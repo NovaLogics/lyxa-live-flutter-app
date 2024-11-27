@@ -4,7 +4,6 @@ import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_text_styles.dart';
-import 'package:lyxa_live/src/core/utils/text_util.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_title_unit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
@@ -32,41 +31,55 @@ class DrawerUnit extends StatelessWidget {
               children: [
                 const SizedBox(height: AppDimens.size12),
                 _buildDrawerIcon(context),
-                const SizedBox(height: AppDimens.size12),
-                _buildHeadingText(context),
-                const SizedBox(height: AppDimens.size12),
+                const SizedBox(height: AppDimens.size8),
                 Divider(
                     thickness: 0.5,
-                    color: Theme.of(context).colorScheme.outline),
+                    color: Theme.of(context).colorScheme.primary),
+                const SizedBox(height: AppDimens.size8),
+                _buildHeadingText(context),
+                const SizedBox(height: AppDimens.size8),
+                Padding(
+                  padding: const EdgeInsets.only(right: AppDimens.size80),
+                  child: Divider(
+                      thickness: 0.5,
+                      color: Theme.of(context).colorScheme.primary),
+                ),
+                const SizedBox(height: AppDimens.size8),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleHome,
-                  icon: Icons.home_outlined,
+                  iconSrc: ICON_HOME_BORDER,
                   onTap: () => Navigator.of(context).pop(),
                 ),
                 _buildProfileSection(context),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleSearch,
-                  icon: Icons.search_outlined,
+                  iconSrc: ICON_SEARCH_BORDER,
                   onTap: () => _navigateToSearchScreen(context),
                 ),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleSettings,
-                  icon: Icons.settings_outlined,
+                  iconSrc: ICON_SETTINGS_BORDER,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
-                const SizedBox(height: AppDimens.size48),
-                Divider(
-                    thickness: 0.5,
-                    color: Theme.of(context).colorScheme.outline),
+                const SizedBox(height: AppDimens.size20),
+                Padding(
+                  padding: const EdgeInsets.only(right: AppDimens.size80),
+                  child: Divider(
+                      thickness: 0.5,
+                      color: Theme.of(context).colorScheme.primary),
+                ),
                 _buildDrawerItem(
                   context,
                   title: AppStrings.titleLogout,
-                  icon: Icons.login,
+                  iconSrc: ICON_LOGOUT_BORDER,
                   onTap: () => _logout(context),
                 ),
+                Divider(
+                    thickness: 0.5,
+                    color: Theme.of(context).colorScheme.primary),
                 const SizedBox(height: AppDimens.size12),
               ],
             ),
@@ -87,13 +100,13 @@ class DrawerUnit extends StatelessWidget {
 
   Widget _buildHeadingText(BuildContext context) {
     return Text(
-      TextUtil.toSentenceCaseMultiple(user.name),
+      user.name,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
       style: AppTextStyles.headingSecondary.copyWith(
-        color: Theme.of(context).colorScheme.onSecondary,
+        color: Theme.of(context).colorScheme.onPrimary,
         fontSize: AppDimens.fontSizeXL20,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
         letterSpacing: AppDimens.letterSpacingPT10,
         shadows: [],
       ),
@@ -104,7 +117,7 @@ class DrawerUnit extends StatelessWidget {
     return _buildDrawerItem(
       context,
       title: AppStrings.titleProfile,
-      icon: Icons.person_outline,
+      iconSrc: ICON_PROFILE_BORDER,
       onTap: () => _navigateToProfileScreen(context, user.uid),
     );
   }
@@ -112,12 +125,12 @@ class DrawerUnit extends StatelessWidget {
   Widget _buildDrawerItem(
     BuildContext context, {
     required String title,
-    required IconData icon,
+    required String iconSrc,
     required VoidCallback onTap,
   }) {
     return DrawerTitleUnit(
       title: title,
-      icon: icon,
+      iconSrc: iconSrc,
       onTap: onTap,
     );
   }

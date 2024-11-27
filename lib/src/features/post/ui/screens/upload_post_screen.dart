@@ -17,7 +17,7 @@ import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/widgets/center_loading_unit.dart';
+import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
@@ -160,7 +160,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       builder: (context, state) {
         return Visibility(
           visible: state.isVisible,
-          child: CenterLoadingUnit(
+          child: LoadingUnit(
             message: state.message,
           ),
         );
