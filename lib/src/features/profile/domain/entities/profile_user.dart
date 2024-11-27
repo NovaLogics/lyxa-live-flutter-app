@@ -15,9 +15,7 @@ class ProfileUserFields {
 class ProfileUser extends AppUser {
   final String bio;
   final String profileImageUrl;
-
   final bool isPrivate;
-
   final List<String> followers;
   final List<String> following;
 
@@ -33,7 +31,6 @@ class ProfileUser extends AppUser {
     this.isPrivate = false,
   });
 
-  // Update profile user
   ProfileUser copyWith({
     String? newBio,
     String? newProfileImageUrl,
@@ -52,6 +49,33 @@ class ProfileUser extends AppUser {
     );
   }
 
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      ProfileUserFields.uid: uid,
+      ProfileUserFields.email: email,
+      ProfileUserFields.name: name,
+      ProfileUserFields.bio: bio,
+      ProfileUserFields.searchableName: searchableName,
+      ProfileUserFields.profileImageUrl: profileImageUrl,
+      ProfileUserFields.followers: followers,
+      ProfileUserFields.following: following,
+    };
+  }
+
+  factory ProfileUser.fromJson(Map<String, dynamic> json) {
+    return ProfileUser(
+      uid: json[ProfileUserFields.uid],
+      email: json[ProfileUserFields.email],
+      name: json[ProfileUserFields.name] ?? '',
+      bio: json[ProfileUserFields.bio] ?? '',
+      searchableName: json[ProfileUserFields.searchableName] ?? '',
+      profileImageUrl: json[ProfileUserFields.profileImageUrl] ?? '',
+      followers: List<String>.from(json[ProfileUserFields.followers] ?? []),
+      following: List<String>.from(json[ProfileUserFields.following] ?? []),
+    );
+  }
+
   static ProfileUser getGuestUser() {
     return ProfileUser(
       uid: '',
@@ -63,35 +87,6 @@ class ProfileUser extends AppUser {
       followers: [],
       following: [],
       isPrivate: false,
-    );
-  }
-
-  //Convert ProfileUser -> json
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'uid': uid,
-      'email': email,
-      'name': name,
-      'searchableName': searchableName,
-      'bio': bio,
-      'profileImageUrl': profileImageUrl,
-      'followers': followers,
-      'following': following,
-    };
-  }
-
-  //Convert json -> ProfileUser
-  factory ProfileUser.fromJson(Map<String, dynamic> json) {
-    return ProfileUser(
-      uid: json['uid'],
-      email: json['email'],
-      name: json['name'],
-      searchableName: json['searchableName'],
-      bio: json['bio'] ?? '',
-      profileImageUrl: json['profileImageUrl'] ?? '',
-      followers: List<String>.from(json['followers'] ?? []),
-      following: List<String>.from(json['following'] ?? []),
     );
   }
 }
