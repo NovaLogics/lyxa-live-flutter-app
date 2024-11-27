@@ -17,7 +17,7 @@ class FirebaseAuthRepository implements AuthRepository {
   final HiveHelper _hiveHelper = getIt<HiveHelper>();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final CollectionReference _userCollectionRef =
-      FirebaseFirestore.instance.collection(FIRESTORE_COLLECTION_USERS);
+      FirebaseFirestore.instance.collection(firebaseUsersCollectionPath);
 
   @override
   Future<Result<AppUser>> loginWithEmailAndPassword({
@@ -92,7 +92,7 @@ class FirebaseAuthRepository implements AuthRepository {
       await _userCollectionRef
           .doc(userId)
           .update({ProfileUserFields.profileImageUrl: profileImageUrl});
-       return Result.success(
+      return Result.success(
         data: true,
       );
     } on FirebaseAuthException catch (authError) {

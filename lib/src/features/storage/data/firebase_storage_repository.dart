@@ -22,7 +22,7 @@ class FirebaseStorageRepository implements StorageRepository {
       final downloadUrl = await _uploadFileBytes(
         fileBytes: imageFileBytes!,
         fileName: fileName,
-        folder: STORAGE_PATH_POST_IMAGES,
+        folder: firebasePostImageStoragePath,
       );
 
       return Result.success(
@@ -45,7 +45,7 @@ class FirebaseStorageRepository implements StorageRepository {
       final downloadUrl = await _uploadFileBytes(
         fileBytes: imageFileBytes!,
         fileName: fileName,
-        folder: STORAGE_PATH_PROFILE_IMAGES,
+        folder: firebaseProfileImageStoragePath,
       );
 
       return Result.success(data: downloadUrl);
@@ -62,7 +62,7 @@ class FirebaseStorageRepository implements StorageRepository {
   //-> upload profile pictures to storage
   @override
   Future<String?> uploadProfileImageMobile(String path, String fileName) {
-    return _uploadFile(path, fileName, STORAGE_PATH_PROFILE_IMAGES);
+    return _uploadFile(path, fileName, firebaseProfileImageStoragePath);
   }
 
   @override
@@ -72,7 +72,7 @@ class FirebaseStorageRepository implements StorageRepository {
       return _uploadFileBytes(
         fileBytes: fileBytes,
         fileName: fileName,
-        folder: STORAGE_PATH_PROFILE_IMAGES,
+        folder: firebaseProfileImageStoragePath,
       );
     } catch (error) {
       return null;
@@ -83,7 +83,7 @@ class FirebaseStorageRepository implements StorageRepository {
   //-> upload post pictures to storage
   @override
   Future<String?> uploadPostImageMobile(String path, String fileName) {
-    return _uploadFile(path, fileName, STORAGE_PATH_POST_IMAGES);
+    return _uploadFile(path, fileName, firebasePostImageStoragePath);
   }
 
   @override
@@ -93,7 +93,7 @@ class FirebaseStorageRepository implements StorageRepository {
       return _uploadFileBytes(
         fileBytes: fileBytes,
         fileName: fileName,
-        folder: STORAGE_PATH_POST_IMAGES,
+        folder: firebasePostImageStoragePath,
       );
     } catch (error) {
       return null;

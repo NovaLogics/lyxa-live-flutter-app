@@ -11,7 +11,7 @@ class FirebaseSearchRepository implements SearchRepository {
   Future<Result<List<ProfileUser?>>> searchUsers(String query) async {
     try {
       final searchResult = await FirebaseFirestore.instance
-          .collection(FIRESTORE_COLLECTION_USERS)
+          .collection(firebaseUsersCollectionPath)
           .where(ProfileUserFields.searchableName,
               isGreaterThanOrEqualTo: query)
           .where(ProfileUserFields.searchableName,
