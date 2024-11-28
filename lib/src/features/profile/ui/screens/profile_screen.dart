@@ -179,8 +179,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfilePicture(ProfileUser user) {
-    return ProfileImage(
-      imageUrl: user.profileImageUrl,
+    return SizedBox(
+      height: AppDimens.size128,
+      child: ProfileImage(
+        imageUrl: user.profileImageUrl,
+      ),
     );
   }
 

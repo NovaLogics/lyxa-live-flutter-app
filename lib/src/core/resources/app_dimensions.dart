@@ -77,6 +77,7 @@ class AppDimens {
   // Font/Text Sizes
   static const double fontSizeXS10 = 10.0;
   static const double fontSizeSM12 = 12.0;
+  static const double fontSizeSM13 = 13.0;
   static const double fontSizeRG14 = 14.0;
   static const double fontSizeMD15 = 15.0;
   static const double fontSizeMD16 = 16.0;

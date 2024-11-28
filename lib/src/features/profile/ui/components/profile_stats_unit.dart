@@ -102,6 +102,7 @@ Widget _buildDisplayUnit(
           label,
           style: AppStyles.textSubtitlePost.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
+            letterSpacing: AppDimens.letterSpacingPT05,
           ),
         ),
       ],

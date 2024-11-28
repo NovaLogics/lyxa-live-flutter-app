@@ -3,12 +3,13 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
+
 class ConstrainedScaffold extends StatelessWidget {
   final Widget body;
   final PreferredSizeWidget? appBar;
   final Widget? drawer;
   final Color? backgroundColor;
-  final BackgroundStyle? backgroundStyle;
+  final BackgroundStyle backgroundStyle;
 
   const ConstrainedScaffold({
     super.key,
@@ -23,19 +24,25 @@ class ConstrainedScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        GradientBackgroundUnit(
-          width: AppDimens.containerSize430,
-          style: backgroundStyle ?? BackgroundStyle.main,
-        ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: appBar,
-          drawer: drawer,
-          body: _ConstrainedBody(
-            body: body,
-          ),
-        ),
+        _buildGradientBackground(),
+        _buildScaffold(),
       ],
+    );
+  }
+
+  Widget _buildGradientBackground() {
+    return getIt<GradientBackgroundUnit>(
+      param1: AppDimens.containerSize430,
+      param2: backgroundStyle,
+    );
+  }
+
+  Widget _buildScaffold() {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: appBar,
+      drawer: drawer,
+      body: _ConstrainedBody(body: body),
     );
   }
 }
@@ -55,3 +62,4 @@ class _ConstrainedBody extends StatelessWidget {
     );
   }
 }
+

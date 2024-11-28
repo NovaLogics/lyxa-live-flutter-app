@@ -42,9 +42,11 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
         children: [
           // USERNAME
           Text(
-            "⤷ ${widget.comment.userName}",
+            "⤷ ${widget.comment.userName} ⬪",
             style: AppStyles.textSubtitlePost.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
+              fontSize: AppDimens.fontSizeSM13,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(width: AppDimens.size8),
@@ -61,7 +63,7 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
                   widget.comment.text,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onTertiary,
-                    fontSize: AppDimens.fontSizeSM12,
+                    fontSize: AppDimens.fontSizeSM13,
                     fontWeight: FontWeight.normal,
                   ),
                   softWrap: true,

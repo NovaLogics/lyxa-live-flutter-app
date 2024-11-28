@@ -8,7 +8,7 @@ class ScrollableScaffold extends StatelessWidget {
   final Widget? drawer;
   final Widget body;
   final Color? backgroundColor;
-  final BackgroundStyle? backgroundStyle;
+  final BackgroundStyle backgroundStyle;
 
   const ScrollableScaffold({
     super.key,
@@ -23,26 +23,34 @@ class ScrollableScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        GradientBackgroundUnit(
-          width: AppDimens.containerSize430,
-          style: backgroundStyle ?? BackgroundStyle.main,
-        ),
-        _Foreground(
-          appBar: appBar,
-          drawer: drawer,
-          body: body,
-        ),
+        _buildGradientBackground(),
+        _buildContent(),
       ],
+    );
+  }
+
+  Widget _buildGradientBackground() {
+    return getIt<GradientBackgroundUnit>(
+      param1: AppDimens.containerSize430,
+      param2: backgroundStyle,
+    );
+  }
+
+  Widget _buildContent() {
+    return _Content(
+      appBar: appBar,
+      drawer: drawer,
+      body: body,
     );
   }
 }
 
-class _Foreground extends StatelessWidget {
+class _Content extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget? drawer;
   final Widget body;
 
-  const _Foreground({
+  const _Content({
     this.appBar,
     this.drawer,
     required this.body,
@@ -54,23 +62,27 @@ class _Foreground extends StatelessWidget {
       backgroundColor: Colors.transparent,
       appBar: appBar,
       drawer: drawer,
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return Center(
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: AppDimens.containerSize430,
-                  minHeight: constraints.maxHeight,
-                ),
-                child: IntrinsicHeight(
-                  child: body,
-                ),
+      body: _buildScrollableBody(context),
+    );
+  }
+
+  Widget _buildScrollableBody(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Center(
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: AppDimens.containerSize430,
+                minHeight: constraints.maxHeight,
+              ),
+              child: IntrinsicHeight(
+                child: body,
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
