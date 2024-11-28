@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/src/core/assets/app_fonts.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/assets/app_icons.dart';
@@ -107,6 +108,8 @@ class DrawerUnit extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       style: AppStyles.titlePrimary.copyWith(
         color: Theme.of(context).colorScheme.onPrimary,
+        letterSpacing: AppDimens.letterSpacingPT01,
+        fontFamily: AppFonts.montserrat,
       ),
     );
   }
