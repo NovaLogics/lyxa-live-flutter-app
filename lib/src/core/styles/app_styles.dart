@@ -100,18 +100,18 @@ class AppStyles {
 
   static const TextStyle textAppBarStatic = TextStyle(
     color: AppColors.whitePure,
-    letterSpacing: AppDimens.letterSpacingPT04,
-    fontSize: AppDimens.fontSizeXXL24,
-    fontWeight: FontWeight.bold,
-    fontFamily: AppFonts.elMessiri,
+    letterSpacing: 0.0,
+    fontSize: AppDimens.fontSizeXXL26,
+    fontWeight: FontWeight.normal,
+    fontFamily: AppFonts.balooPaaji2,
   );
 
   static const TextStyle textMessageStatic = TextStyle(
     color: AppColors.whitePure,
-    letterSpacing: AppDimens.letterSpacingPT05,
-    fontSize: AppDimens.fontSizeXL20,
+    letterSpacing: AppDimens.letterSpacingPT03,
+    fontSize: AppDimens.fontSizeXXL24,
     fontWeight: FontWeight.normal,
-    fontFamily: AppFonts.elMessiri,
+    fontFamily: AppFonts.balooPaaji2,
   );
 
   static const TextStyle textNumberStyle1 = TextStyle(

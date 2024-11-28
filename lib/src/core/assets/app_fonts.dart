@@ -6,4 +6,5 @@ class AppFonts {
   static const String montserrat = 'Montserrat';
   static const String elMessiri = 'ElMessiri';
   static const String balooPaaji2 = 'BalooPaaji2';
+  static const String anta = 'Anta';
 }

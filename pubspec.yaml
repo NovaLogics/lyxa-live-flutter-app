@@ -71,5 +71,9 @@ flutter:
         - asset: assets/fonts/baloo_paaji_2_regular.ttf
         - asset: assets/fonts/baloo_paaji_2_semi_bold.ttf
           weight: 600
+    - family: Anta
+      fonts:
+        - asset: assets/fonts/anta_regular.ttf
+
 
 

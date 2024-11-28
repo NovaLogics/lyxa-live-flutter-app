@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/assets/app_fonts.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
@@ -93,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Theme.of(context).colorScheme.onPrimary,
             letterSpacing: AppDimens.letterSpacingPT01,
             fontSize: AppDimens.fontSizeXXL28,
+            fontFamily: AppFonts.elMessiri,
           ),
         ),
       ),
