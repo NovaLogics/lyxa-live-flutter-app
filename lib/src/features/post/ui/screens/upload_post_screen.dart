@@ -161,7 +161,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   AppBar _buildAppBar() {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.2),
       title: Center(
         child: Text(
           AppStrings.createPost,
@@ -178,7 +178,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         IconButton(
           onPressed: _createAndUploadPost,
           icon: const Icon(Icons.upload),
-        )
+        ),
+        addSpacing(width: AppDimens.size12),
       ],
     );
   }

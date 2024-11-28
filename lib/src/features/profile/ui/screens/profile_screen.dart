@@ -121,6 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: _buildAppBar(context, user, isOwnProfile),
       body: ListView(
         children: [
+          addSpacing(height: AppDimens.size8),
           _buildProfilePicture(user),
           addSpacing(height: AppDimens.size8),
           _buildUserNameSection(user),
@@ -170,7 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 icon: const Icon(Icons.settings_suggest),
-                iconSize: AppDimens.iconSizeSM24,
+                iconSize: AppDimens.iconSizeMD32,
               )
             : addSpacing(width: AppDimens.iconSizeLG48),
       ],

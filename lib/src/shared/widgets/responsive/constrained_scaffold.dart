@@ -23,11 +23,10 @@ class ConstrainedScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        _Background(
-          backgroundColor: backgroundColor,
-          backgroundStyle: backgroundStyle,
+        GradientBackgroundUnit(
+          width: AppDimens.containerSize430,
+          style: backgroundStyle ?? BackgroundStyle.main,
         ),
-
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: appBar,
@@ -37,29 +36,6 @@ class ConstrainedScaffold extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _Background extends StatelessWidget {
-  final Color? backgroundColor;
-  final BackgroundStyle? backgroundStyle;
-
-  const _Background({
-    this.backgroundColor,
-    this.backgroundStyle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: backgroundColor ?? Colors.transparent,
-      child: RepaintBoundary(
-        child: getIt<GradientBackgroundUnit>(
-          param1: AppDimens.containerSize400,
-          param2: backgroundStyle ?? BackgroundStyle.main,
-        ),
-      ),
     );
   }
 }

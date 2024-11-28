@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/assets/app_images.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
@@ -40,6 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String get _name => _nameController.text.trim();
   String get _email => _emailController.text.trim();
   String get _password => _passwordController.text.trim();
+  bool get _isWebPlatform => kIsWeb;
 
   @override
   void initState() {
@@ -74,7 +76,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _buildConfirmPasswordTextField(),
               addSpacing(height: AppDimens.size24),
               _buildSignUpButton(),
-              addSpacing(height: AppDimens.size52),
+              addSpacing(
+                height: _isWebPlatform ? AppDimens.size40 : AppDimens.size52,
+              ),
               _buildLoginLink(),
             ],
           ),

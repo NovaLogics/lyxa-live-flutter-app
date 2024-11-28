@@ -54,7 +54,7 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
 
   // --- Surface Tint Colors ---
   // Tint for elevated surfaces (buttons / card backgrounds)
-  surfaceTint: Colors.purple,
+  surfaceTint: AppColors.bluePurple900L2,
 
   // --- Inverse Primary Color ---
   // Inverse primary color

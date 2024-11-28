@@ -35,6 +35,17 @@ class MultilineTextFieldUnit extends StatelessWidget {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimens.radiusLG16),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.inversePrimary,
+            width: 1.0,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimens.radiusLG16),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.onSecondary,
+            width: 1.0,
+          ),
         ),
       ),
     );
