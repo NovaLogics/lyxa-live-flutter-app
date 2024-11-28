@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lyxa_live/src/core/resources/app_icons.dart';
+import 'package:lyxa_live/src/core/assets/app_icons.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
@@ -370,15 +371,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
         if (_isOwnPost)
           GestureDetector(
             onTap: _showDeleteOptions,
-            child: SvgPicture.asset(
-              AppIcons.settingsOutlinedStl1,
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.primary,
-                BlendMode.srcIn,
-              ),
-              width: AppDimens.size48,
-              height: AppDimens.size48,
-            ),
+            child: _getDeleteIcon(),
           ),
       ],
     );
@@ -437,19 +430,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     shape: BoxShape.rectangle,
                     shadowColor:
                         Theme.of(context).colorScheme.surface.withOpacity(0.4),
-                    child: SvgPicture.asset(
-                      widget.post.likes.contains(_appUserId)
-                          ? AppIcons.likeHeartSolid
-                          : AppIcons.likeHeartOutlined,
-                      colorFilter: ColorFilter.mode(
-                        (widget.post.likes.contains(_appUserId)
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onPrimary),
-                        BlendMode.srcIn,
-                      ),
-                      width: AppDimens.size24,
-                      height: AppDimens.size24,
-                    ),
+                    child: _getLikeHeartIcon(),
                   ),
                 ),
                 const SizedBox(width: AppDimens.size4),
@@ -473,19 +454,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
               shape: BoxShape.rectangle,
               shadowColor:
                   Theme.of(context).colorScheme.surface.withOpacity(0.4),
-              child: SvgPicture.asset(
-                widget.post.comments.isNotEmpty
-                    ? AppIcons.commentSolid
-                    : AppIcons.commentOutlined,
-                colorFilter: ColorFilter.mode(
-                  widget.post.comments.isNotEmpty
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onPrimary,
-                  BlendMode.srcIn,
-                ),
-                width: AppDimens.actionIconSize26,
-                height: AppDimens.actionIconSize26,
-              ),
+              child: _getCommentIcon(),
             ),
           ),
           const SizedBox(width: AppDimens.size4),
@@ -507,6 +476,70 @@ class _PostTileUnitState extends State<PostTileUnit> {
         ],
       ),
     );
+  }
+
+  Widget _getDeleteIcon() {
+    final colour = Theme.of(context).colorScheme.primary;
+    return kIsWeb
+        ? Icon(
+            Icons.settings_rounded,
+            color: colour,
+          )
+        : SvgPicture.asset(
+            AppIcons.settingsOutlinedStl1,
+            colorFilter: ColorFilter.mode(
+              colour,
+              BlendMode.srcIn,
+            ),
+            width: AppDimens.size48,
+            height: AppDimens.size48,
+          );
+  }
+
+  Widget _getLikeHeartIcon() {
+    final isAlreadyLiked = (widget.post.likes.contains(_appUserId));
+    final colour = isAlreadyLiked
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.onPrimary;
+
+    return kIsWeb
+        ? Icon(
+            isAlreadyLiked ? Icons.favorite : Icons.favorite_border,
+            color: colour,
+          )
+        : SvgPicture.asset(
+            isAlreadyLiked
+                ? AppIcons.likeHeartSolid
+                : AppIcons.likeHeartOutlined,
+            colorFilter: ColorFilter.mode(
+              colour,
+              BlendMode.srcIn,
+            ),
+            width: AppDimens.size24,
+            height: AppDimens.size24,
+          );
+  }
+
+  Widget _getCommentIcon() {
+    final hasComments = (widget.post.comments.isNotEmpty);
+    final colour = hasComments
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.onPrimary;
+
+    return kIsWeb
+        ? Icon(
+            hasComments ? Icons.comment_rounded : Icons.comment_outlined,
+            color: colour,
+          )
+        : SvgPicture.asset(
+            hasComments ? AppIcons.commentSolid : AppIcons.commentOutlined,
+            colorFilter: ColorFilter.mode(
+              colour,
+              BlendMode.srcIn,
+            ),
+            width: AppDimens.actionIconSize26,
+            height: AppDimens.actionIconSize26,
+          );
   }
 
   Widget _buildCaption() {

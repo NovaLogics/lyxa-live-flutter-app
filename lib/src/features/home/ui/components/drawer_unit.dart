@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/core/resources/app_icons.dart';
+import 'package:lyxa_live/src/core/assets/app_icons.dart';
 import 'package:lyxa_live/src/core/resources/app_images.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
@@ -42,29 +42,34 @@ class DrawerUnit extends StatelessWidget {
                 addSpacing(height: AppDimens.size8),
                 DrawerTitleUnit(
                   title: AppStrings.titleHome,
-                  iconSrc: AppIcons.homeOutlined,
+                  iconMobile: AppIcons.homeOutlined,
+                  iconWeb: Icons.home_outlined,
                   onTap: () => Navigator.of(context).pop(),
                 ),
                 DrawerTitleUnit(
                   title: AppStrings.titleProfile,
-                  iconSrc: AppIcons.profileOutlined,
+                  iconMobile: AppIcons.profileOutlined,
+                  iconWeb: Icons.person_outline,
                   onTap: () => _navigateToProfileScreen(context, user.uid),
                 ),
                 DrawerTitleUnit(
                   title: AppStrings.titleSearch,
-                  iconSrc: AppIcons.searchOutlined,
+                  iconMobile: AppIcons.searchOutlined,
+                  iconWeb: Icons.search_outlined,
                   onTap: () => _navigateToSearchScreen(context),
                 ),
                 DrawerTitleUnit(
                   title: AppStrings.titleSettings,
-                  iconSrc: AppIcons.settingsOutlinedStl2,
+                  iconMobile: AppIcons.settingsOutlinedStl2,
+                  iconWeb: Icons.settings_outlined,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
                 addSpacing(height: AppDimens.size20),
                 _addDivider(context, isShortDivider: true),
                 DrawerTitleUnit(
                   title: AppStrings.titleLogout,
-                  iconSrc: AppIcons.logoutOutlined,
+                  iconMobile: AppIcons.logoutOutlined,
+                  iconWeb: Icons.login,
                   onTap: () => _openLogoutDialog(context),
                 ),
                 _addDivider(context, isShortDivider: false),
@@ -136,14 +141,15 @@ class DrawerUnit extends StatelessWidget {
     getIt<AuthCubit>().logout();
   }
 
-    void _openLogoutDialog(BuildContext context) {
+  void _openLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-          backgroundColor: Theme.of(context).colorScheme.inverseSurface,
-       title: Text(
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+        title: Text(
           AppStrings.logoutDialogMsg,
-          style: TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+          style:
+              TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
         ),
         actions: [
           // CANCEL BUTTON
@@ -153,8 +159,8 @@ class DrawerUnit extends StatelessWidget {
             },
             child: Text(
               AppStrings.cancel,
-              style:
-                  TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onInverseSurface),
             ),
           ),
           // SAVE/SUBMIT BUTTON
@@ -165,8 +171,7 @@ class DrawerUnit extends StatelessWidget {
             },
             child: Text(
               AppStrings.yesLogout,
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.error),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
         ],
