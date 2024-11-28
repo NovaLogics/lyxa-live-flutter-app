@@ -88,15 +88,13 @@ class _HomeScreenState extends State<HomeScreen> {
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface,
       title: Center(
-          child: Text(
-        AppStrings.homeTitle,
-        style: AppStyles.textHeadingPrimary.copyWith(
+        child: Text(
+          AppStrings.homeTitle,
+          style: AppStyles.textAppBarStatic.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
-            fontSize: AppDimens.fontSizeXXL24,
-            fontWeight: FontWeight.w600,
-            fontFamily: AppFonts.raleway,
-            shadows: AppStyles.shadowStyleEmpty),
-      )),
+          ),
+        ),
+      ),
       actions: [
         IconButton(
           onPressed: _navigateToUploadPostScreen,

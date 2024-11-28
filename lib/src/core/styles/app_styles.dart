@@ -99,6 +99,14 @@ class AppStyles {
     fontFamily: AppFonts.montserrat,
   );
 
+  static const TextStyle textAppBarStatic = TextStyle(
+    color: AppColors.whitePure,
+    letterSpacing: AppDimens.letterSpacingPT01,
+    fontSize: AppDimens.fontSizeXXL28,
+    fontWeight: FontWeight.bold,
+    fontFamily: AppFonts.elMessiri,
+  );
+
   static const TextStyle textNumberStyle1 = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeMD16,
@@ -115,14 +123,14 @@ class AppStyles {
     letterSpacing: AppDimens.letterSpacingPT05,
   );
 
-   static const TextStyle textFieldStyleMain = TextStyle(
+  static const TextStyle textFieldStyleMain = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeMD16,
     fontWeight: FontWeight.w600,
     fontFamily: AppFonts.montserrat,
   );
 
-    static const TextStyle textFieldStyleHint = TextStyle(
+  static const TextStyle textFieldStyleHint = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeMD15,
     fontWeight: FontWeight.normal,

@@ -4,4 +4,5 @@ class AppFonts {
   static const String raleway = 'Raleway';
   static const String dynalight = 'Dynalight';
   static const String montserrat = 'Montserrat';
+  static const String elMessiri = 'ElMessiri';
 }

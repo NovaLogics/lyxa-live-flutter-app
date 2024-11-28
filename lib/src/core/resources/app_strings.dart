@@ -1,6 +1,6 @@
 class AppStrings {
-    const AppStrings._();
-    
+  const AppStrings._();
+
   static const String appName = 'Lyxa Live';
 
   // UI SECTION [1]-> LOGIN
@@ -32,7 +32,7 @@ class AppStrings {
   static const String passwordNotMatchError = 'Passwords do not match!';
 
   // UI SECTION [3]-> HOME
-  static const String homeTitle = 'Lyxa Zone';
+  static const String homeTitle = 'LYXA Zone';
   static const String noPostAvailableError = 'No posts available';
 
   // UI SECTION [4]-> DRAWER
@@ -113,7 +113,7 @@ class AppStrings {
   static const String delete = 'Delete';
   static const String save = 'Save';
   static const String dialog = 'dialog';
-   static const closeButtonTooltip = 'Close';
+  static const closeButtonTooltip = 'Close';
 
   static const String languageCodeEnglish = 'en';
   static const String unknown = 'Unknown';
