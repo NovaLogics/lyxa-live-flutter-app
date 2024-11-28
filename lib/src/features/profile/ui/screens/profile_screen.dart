@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
@@ -122,8 +121,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: _buildAppBar(context, user, isOwnProfile),
       body: ListView(
         children: [
+          addSpacing(height: AppDimens.size8),
           _buildProfilePicture(user),
-          addSpacing(height: AppDimens.size16),
+          addSpacing(height: AppDimens.size8),
+          _buildUserNameSection(user),
           _buildEmailSection(user),
           addSpacing(height: AppDimens.size8),
           _buildProfileStats(user),
@@ -151,13 +152,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       BuildContext context, ProfileUser user, bool isOwnProfile) {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
       title: Center(
         child: Text(
-          user.name,
-          style: AppStyles.textSubtitlePost.copyWith(
+          AppStrings.profile,
+          style: AppStyles.textAppBarStatic.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
-            fontSize: AppDimens.fontSizeXL20,
           ),
         ),
       ),
@@ -170,17 +170,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     builder: (_) => EditProfileScreen(currentUser: user),
                   ),
                 ),
-                icon: const Icon(Icons.settings_outlined),
-                iconSize: AppDimens.iconSizeSM24,
+                icon: const Icon(Icons.settings_suggest),
+                iconSize: AppDimens.iconSizeMD32,
               )
-            : addSpacing(width: AppDimens.iconSizeMD32),
+            : addSpacing(width: AppDimens.iconSizeLG48),
       ],
     );
   }
 
   Widget _buildProfilePicture(ProfileUser user) {
-    return ProfileImage(
-      imageUrl: user.profileImageUrl,
+    return SizedBox(
+      height: AppDimens.size128,
+      child: ProfileImage(
+        imageUrl: user.profileImageUrl,
+      ),
+    );
+  }
+
+  Widget _buildUserNameSection(ProfileUser user) {
+    return Center(
+      child: Text(
+        user.name,
+        style: AppStyles.textSubtitlePost.copyWith(
+          color: Theme.of(context).colorScheme.onPrimary,
+          fontSize: AppDimens.fontSizeXL20,
+          letterSpacing: AppDimens.letterSpacingPT05,
+        ),
+      ),
     );
   }
 
@@ -188,11 +204,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Center(
       child: Text(
         user.email,
-        style: AppStyles.subtitlePrimary.copyWith(
-          color: Theme.of(context).colorScheme.onPrimary,
-          fontWeight: FontWeight.normal,
-          fontFamily: FONT_MONTSERRAT,
-          shadows: AppStyles.shadowStyle2,
+        style: AppStyles.subtitleRegular.copyWith(
+          color: Theme.of(context).colorScheme.onSecondary,
+          fontSize: AppDimens.fontSizeMD16,
+          fontWeight: FontWeight.w600,
+          shadows: AppStyles.shadowStyleEmpty,
         ),
       ),
     );
@@ -243,8 +259,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             AppStrings.storylineDecoText,
             style: AppStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.w300,
-              shadows: AppStyles.shadowStyle2,
+              fontWeight: FontWeight.w600,
+              shadows: AppStyles.shadowStyleEmpty,
             ),
           ),
         ),
@@ -286,7 +302,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .toList();
 
           if (userPosts.isEmpty) {
-            return const Center(child: Text(AppStrings.noPosts));
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimens.size12,
+                vertical: AppDimens.size64,
+              ),
+              child: Center(
+                child: Text(
+                  AppStrings.noPosts,
+                  style: AppStyles.textMessageStatic.copyWith(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                ),
+              ),
+            );
           }
 
           return ListView.builder(
@@ -299,7 +328,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 post: post,
                 currentUser: _currentAppUser,
                 onDeletePressed: () =>
-                    context.read<PostCubit>().deletePost(postId: post.id),
+                    getIt<PostCubit>().deletePost(postId: post.id),
               );
             },
           );

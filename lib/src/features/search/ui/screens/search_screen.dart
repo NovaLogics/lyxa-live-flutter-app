@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/shared/widgets/user_tile_unit.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_state.dart';
@@ -48,7 +49,7 @@ class _SearchScreenState extends State<SearchScreen> {
   AppBar _buildAppBar() {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
       centerTitle: true,
       title: SizedBox(
         width: AppDimens.containerSize400,
@@ -63,10 +64,14 @@ class _SearchScreenState extends State<SearchScreen> {
       height: AppDimens.size52,
       child: TextField(
         controller: _searchController,
+        autofocus: true,
+        style: AppStyles.textFieldStyleMain.copyWith(
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
         decoration: InputDecoration(
           hintText: AppStrings.searchUsers,
-          hintStyle: TextStyle(
-            color: Theme.of(context).colorScheme.onTertiary,
+          hintStyle: AppStyles.textFieldStyleHint.copyWith(
+            color: Theme.of(context).colorScheme.onSecondary,
           ),
         ),
       ),
@@ -81,9 +86,23 @@ class _SearchScreenState extends State<SearchScreen> {
         } else if (state is SearchLoaded) {
           return _buildUserList(state);
         } else if (state is SearchError) {
-          return Center(child: Text(state.message));
+          return Center(
+            child: Text(
+              state.message,
+              style: AppStyles.textMessageStatic.copyWith(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+            ),
+          );
         }
-        return const Center(child: Text(AppStrings.defaultSearchMessage));
+        return Center(
+          child: Text(
+            AppStrings.defaultSearchMessage,
+            style: AppStyles.textMessageStatic.copyWith(
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
+          ),
+        );
       },
     );
   }

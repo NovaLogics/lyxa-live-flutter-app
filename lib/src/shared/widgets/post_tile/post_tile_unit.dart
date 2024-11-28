@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lyxa_live/src/core/resources/app_icons.dart';
+import 'package:lyxa_live/src/core/assets/app_icons.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
@@ -123,7 +124,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
         content: MultilineTextFieldUnit(
           controller: _commentTextController,
           hintText: AppStrings.typeComment,
-          labelText: AppStrings.addComment,
+          // labelText: AppStrings.addComment,
           maxLength: TextFieldLimits.commentsField,
         ),
         actions: [
@@ -132,7 +133,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
             },
-            child: const Text(AppStrings.cancel),
+            child: Text(
+              AppStrings.cancel,
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+            ),
           ),
           // SAVE/SUBMIT BUTTON
           TextButton(
@@ -140,7 +145,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
               _addNewComment();
               Navigator.of(context).pop();
             },
-            child: const Text(AppStrings.save),
+            child: Text(
+              AppStrings.save,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary),
+            ),
           ),
         ],
       ),
@@ -203,11 +212,12 @@ class _PostTileUnitState extends State<PostTileUnit> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         title: Text(
           AppStrings.deleteThisPostMessage,
-          style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+          style:
+              TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
         ),
-        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         actions: [
           // CANCEL BUTTON
           TextButton(
@@ -216,8 +226,8 @@ class _PostTileUnitState extends State<PostTileUnit> {
             },
             child: Text(
               AppStrings.cancel,
-              style:
-                  TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onInverseSurface),
             ),
           ),
           // CONFIRM DELETE BUTTON
@@ -228,10 +238,50 @@ class _PostTileUnitState extends State<PostTileUnit> {
             },
             child: Text(
               AppStrings.delete,
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _createProfileImage() {
+    return Material(
+      elevation: AppDimens.elevationSM2,
+      borderRadius: BorderRadius.circular(24.0),
+      color: Theme.of(context).colorScheme.outline,
+      child: Padding(
+        padding: const EdgeInsets.all(1.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24.0),
+          child: Image.network(
+            widget.post.userProfileImageUrl,
+            fit: BoxFit.cover,
+            height: AppDimens.size36,
+            width: AppDimens.size36,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                color: Colors.grey[200],
+                height: AppDimens.size36,
+                width: AppDimens.size36,
+                child: const Icon(Icons.person, color: Colors.grey),
+              );
+            },
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) {
+                return child;
+              } else {
+                return Container(
+                  height: AppDimens.size36,
+                  width: AppDimens.size36,
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ),
       ),
     );
   }
@@ -257,34 +307,35 @@ class _PostTileUnitState extends State<PostTileUnit> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Profile picture
-                Material(
-                  elevation: AppDimens.elevationSM2,
-                  shape: const CircleBorder(),
-                  color: Theme.of(context).colorScheme.outline,
-                  child: Padding(
-                    padding: const EdgeInsets.all(1),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.post.userProfileImageUrl,
-                      placeholder: (_, __) => const CircularProgressIndicator(),
-                      errorWidget: (_, __, ___) => Icon(
-                        Icons.person_rounded,
-                        size: AppDimens.size36,
-                        color: Theme.of(context).colorScheme.onSecondary,
-                      ),
-                      imageBuilder: (_, imageProvider) => Container(
-                        height: AppDimens.size36,
-                        width: AppDimens.size36,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _createProfileImage(),
+                // Material(
+                //   elevation: AppDimens.elevationSM2,
+                //   shape: const CircleBorder(),
+                //   color: Theme.of(context).colorScheme.outline,
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(1),
+                //     child: CachedNetworkImage(
+                //       imageUrl: widget.post.userProfileImageUrl,
+                //       placeholder: (_, __) => const CircularProgressIndicator(),
+                //       errorWidget: (_, __, ___) => Icon(
+                //         Icons.person_rounded,
+                //         size: AppDimens.size36,
+                //         color: Theme.of(context).colorScheme.onSecondary,
+                //       ),
+                //       imageBuilder: (_, imageProvider) => Container(
+                //         height: AppDimens.size36,
+                //         width: AppDimens.size36,
+                //         decoration: BoxDecoration(
+                //           shape: BoxShape.circle,
+                //           image: DecorationImage(
+                //             image: imageProvider,
+                //             fit: BoxFit.cover,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(width: AppDimens.size8),
                 Column(
                   children: [
@@ -320,15 +371,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
         if (_isOwnPost)
           GestureDetector(
             onTap: _showDeleteOptions,
-            child: SvgPicture.asset(
-              AppIcons.settingsOutlinedStl1,
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.primary,
-                BlendMode.srcIn,
-              ),
-              width: AppDimens.size48,
-              height: AppDimens.size48,
-            ),
+            child: _getDeleteIcon(),
           ),
       ],
     );
@@ -387,19 +430,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                     shape: BoxShape.rectangle,
                     shadowColor:
                         Theme.of(context).colorScheme.surface.withOpacity(0.4),
-                    child: SvgPicture.asset(
-                      widget.post.likes.contains(_appUserId)
-                          ? AppIcons.likeHeartSolid
-                          : AppIcons.likeHeartOutlined,
-                      colorFilter: ColorFilter.mode(
-                        (widget.post.likes.contains(_appUserId)
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onPrimary),
-                        BlendMode.srcIn,
-                      ),
-                      width: AppDimens.size24,
-                      height: AppDimens.size24,
-                    ),
+                    child: _getLikeHeartIcon(),
                   ),
                 ),
                 const SizedBox(width: AppDimens.size4),
@@ -423,19 +454,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
               shape: BoxShape.rectangle,
               shadowColor:
                   Theme.of(context).colorScheme.surface.withOpacity(0.4),
-              child: SvgPicture.asset(
-                widget.post.comments.isNotEmpty
-                    ? AppIcons.commentSolid
-                    : AppIcons.commentOutlined,
-                colorFilter: ColorFilter.mode(
-                  widget.post.comments.isNotEmpty
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onPrimary,
-                  BlendMode.srcIn,
-                ),
-                width: AppDimens.actionIconSize26,
-                height: AppDimens.actionIconSize26,
-              ),
+              child: _getCommentIcon(),
             ),
           ),
           const SizedBox(width: AppDimens.size4),
@@ -459,6 +478,70 @@ class _PostTileUnitState extends State<PostTileUnit> {
     );
   }
 
+  Widget _getDeleteIcon() {
+    final colour = Theme.of(context).colorScheme.primary;
+    return kIsWeb
+        ? Icon(
+            Icons.more_vert_rounded,
+            color: colour,
+          )
+        : SvgPicture.asset(
+            AppIcons.settingsOutlinedStyle1,
+            colorFilter: ColorFilter.mode(
+              colour,
+              BlendMode.srcIn,
+            ),
+            width: AppDimens.size48,
+            height: AppDimens.size48,
+          );
+  }
+
+  Widget _getLikeHeartIcon() {
+    final isAlreadyLiked = (widget.post.likes.contains(_appUserId));
+    final colour = isAlreadyLiked
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.onPrimary;
+
+    return kIsWeb
+        ? Icon(
+            isAlreadyLiked ? Icons.favorite : Icons.favorite_border,
+            color: colour,
+          )
+        : SvgPicture.asset(
+            isAlreadyLiked
+                ? AppIcons.likeHeartSolid
+                : AppIcons.likeHeartOutlined,
+            colorFilter: ColorFilter.mode(
+              colour,
+              BlendMode.srcIn,
+            ),
+            width: AppDimens.size24,
+            height: AppDimens.size24,
+          );
+  }
+
+  Widget _getCommentIcon() {
+    final hasComments = (widget.post.comments.isNotEmpty);
+    final colour = hasComments
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.onPrimary;
+
+    return kIsWeb
+        ? Icon(
+            hasComments ? Icons.insert_comment_rounded : Icons.mode_comment_outlined,
+            color: colour,
+          )
+        : SvgPicture.asset(
+            hasComments ? AppIcons.commentSolid : AppIcons.commentOutlined,
+            colorFilter: ColorFilter.mode(
+              colour,
+              BlendMode.srcIn,
+            ),
+            width: AppDimens.actionIconSize26,
+            height: AppDimens.actionIconSize26,
+          );
+  }
+
   Widget _buildCaption() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -478,15 +561,14 @@ class _PostTileUnitState extends State<PostTileUnit> {
           ),
           const SizedBox(height: AppDimens.size4),
           ConstrainedBox(
-            constraints: const BoxConstraints(
-                maxHeight: 100, minWidth: double.infinity), // Limit height
+            constraints:
+                const BoxConstraints(maxHeight: 100, minWidth: double.infinity),
             child: SingleChildScrollView(
               child: Text(
                 widget.post.captionText,
                 style: AppStyles.textTitlePost.copyWith(
                   color: Theme.of(context).colorScheme.inversePrimary,
-                  letterSpacing: AppDimens.letterSpacingPT07,
-                  shadows: AppStyles.shadowStyle2,
+                  letterSpacing: AppDimens.letterSpacingPT04,
                 ),
                 maxLines: 5,
                 softWrap: true,

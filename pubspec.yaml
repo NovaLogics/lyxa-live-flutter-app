@@ -32,6 +32,7 @@ dependencies:
   carousel_slider: ^5.0.0
   image_cropper: ^8.0.2
   flutter_image_compress: ^2.3.0
+  flutter_cache_manager: ^3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -60,5 +61,19 @@ flutter:
         - asset: assets/fonts/montserrat_regular.ttf
         - asset: assets/fonts/montserrat_medium.ttf
           weight: 600
+    - family: ElMessiri
+      fonts:
+        - asset: assets/fonts/el_messiri_regular.ttf
+        - asset: assets/fonts/el_messiri_semi_bold.ttf
+          weight: 600
+    - family: BalooPaaji2
+      fonts:
+        - asset: assets/fonts/baloo_paaji_2_regular.ttf
+        - asset: assets/fonts/baloo_paaji_2_semi_bold.ttf
+          weight: 600
+    - family: Anta
+      fonts:
+        - asset: assets/fonts/anta_regular.ttf
+
 
 

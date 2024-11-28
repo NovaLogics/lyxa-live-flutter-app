@@ -6,6 +6,7 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
+import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -13,15 +14,26 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedScaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: _buildSettingsBody(context),
     );
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text(AppStrings.settings),
-    );
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
+        title: Center(
+          child: Text(
+            AppStrings.settings,
+            style: AppStyles.textAppBarStatic.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),
+        ),
+        actions: [
+          addSpacing(width: AppDimens.iconSizeLG48),
+        ]);
   }
 
   Widget _buildSettingsBody(BuildContext context) {
@@ -30,6 +42,7 @@ class SettingsScreen extends StatelessWidget {
 
     return Column(
       children: [
+        addSpacing(height: AppDimens.size12),
         _buildDarkModeSwitch(context, themeCubit, isDarkModeEnabled),
       ],
     );

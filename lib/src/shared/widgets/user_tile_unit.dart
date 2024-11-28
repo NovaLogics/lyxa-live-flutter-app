@@ -20,6 +20,7 @@ class UserTileUnit extends StatelessWidget {
         style: AppStyles.textTitlePost.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
           fontWeight: FontWeight.bold,
+          letterSpacing: AppDimens.letterSpacingPT03,
         ),
       ),
       subtitle: Text(
@@ -29,7 +30,7 @@ class UserTileUnit extends StatelessWidget {
         ),
       ),
       leading: Icon(
-        Icons.person_rounded,
+        Icons.person_pin,
         color: Theme.of(context).colorScheme.onSecondary,
         size: AppDimens.size36,
       ),
@@ -40,6 +41,7 @@ class UserTileUnit extends StatelessWidget {
         Icons.arrow_forward,
         color: Theme.of(context).colorScheme.onPrimary,
       ),
+
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(

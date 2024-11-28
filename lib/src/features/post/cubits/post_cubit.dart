@@ -33,7 +33,7 @@ class PostCubit extends Cubit<PostState> {
   Future<ProfileUser> getCurrentUser() async {
     _showLoading(AppStrings.loadingMessage);
     final profileUser = await getIt<ProfileCubit>().getCurrentUser();
-     _hideLoading();
+    _hideLoading();
     return profileUser;
   }
 
@@ -104,6 +104,8 @@ class PostCubit extends Cubit<PostState> {
 
     switch (result.status) {
       case Status.success:
+        //TODO : Handle this
+        getAllPosts();
         break;
 
       case Status.error:

@@ -8,7 +8,7 @@ class ScrollableScaffold extends StatelessWidget {
   final Widget? drawer;
   final Widget body;
   final Color? backgroundColor;
-  final BackgroundStyle? backgroundStyle;
+  final BackgroundStyle backgroundStyle;
 
   const ScrollableScaffold({
     super.key,
@@ -21,54 +21,36 @@ class ScrollableScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          _Background(
-            backgroundColor: backgroundColor,
-            backgroundStyle: backgroundStyle,
-          ),
-          _Foreground(
-            appBar: appBar,
-            drawer: drawer,
-            body: body,
-          ),
-        ],
-      ),
+    return Stack(
+      children: [
+        _buildGradientBackground(),
+        _buildContent(),
+      ],
+    );
+  }
+
+  Widget _buildGradientBackground() {
+    return getIt<GradientBackgroundUnit>(
+      param1: AppDimens.containerSize430,
+      param2: backgroundStyle,
+    );
+  }
+
+  Widget _buildContent() {
+    return _Content(
+      appBar: appBar,
+      drawer: drawer,
+      body: body,
     );
   }
 }
 
-class _Background extends StatelessWidget {
-  final Color? backgroundColor;
-  final BackgroundStyle? backgroundStyle;
-
-  const _Background({
-    this.backgroundColor,
-    this.backgroundStyle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: backgroundColor ?? Colors.transparent,
-      child: RepaintBoundary(
-        child: getIt<GradientBackgroundUnit>(
-          param1: AppDimens.containerSize400,
-          param2: backgroundStyle ?? BackgroundStyle.main,
-        ),
-      ),
-    );
-  }
-}
-
-class _Foreground extends StatelessWidget {
+class _Content extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget? drawer;
   final Widget body;
 
-  const _Foreground({
+  const _Content({
     this.appBar,
     this.drawer,
     required this.body,
@@ -80,23 +62,27 @@ class _Foreground extends StatelessWidget {
       backgroundColor: Colors.transparent,
       appBar: appBar,
       drawer: drawer,
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return Center(
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: AppDimens.containerSize430,
-                  minHeight: constraints.maxHeight,
-                ),
-                child: IntrinsicHeight(
-                  child: body,
-                ),
+      body: _buildScrollableBody(context),
+    );
+  }
+
+  Widget _buildScrollableBody(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Center(
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: AppDimens.containerSize430,
+                minHeight: constraints.maxHeight,
+              ),
+              child: IntrinsicHeight(
+                child: body,
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

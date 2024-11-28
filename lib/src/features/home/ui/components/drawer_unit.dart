@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/src/core/assets/app_fonts.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/core/resources/app_icons.dart';
-import 'package:lyxa_live/src/core/resources/app_images.dart';
+import 'package:lyxa_live/src/core/assets/app_icons.dart';
+import 'package:lyxa_live/src/core/assets/app_images.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
@@ -35,37 +36,42 @@ class DrawerUnit extends StatelessWidget {
                 _buildDrawerIcon(context),
                 addSpacing(height: AppDimens.size8),
                 _addDivider(context, isShortDivider: false),
-                addSpacing(height: AppDimens.size8),
+                addSpacing(height: AppDimens.size4),
                 _buildHeadingText(context),
-                addSpacing(height: AppDimens.size8),
+                addSpacing(height: AppDimens.size4),
                 _addDivider(context, isShortDivider: true),
                 addSpacing(height: AppDimens.size8),
                 DrawerTitleUnit(
                   title: AppStrings.titleHome,
-                  iconSrc: AppIcons.homeOutlined,
+                  iconMobile: AppIcons.homeOutlined,
+                  iconWeb: Icons.home_rounded,
                   onTap: () => Navigator.of(context).pop(),
                 ),
                 DrawerTitleUnit(
                   title: AppStrings.titleProfile,
-                  iconSrc: AppIcons.profileOutlined,
+                  iconMobile: AppIcons.profileOutlined,
+                  iconWeb: Icons.person_rounded,
                   onTap: () => _navigateToProfileScreen(context, user.uid),
                 ),
                 DrawerTitleUnit(
                   title: AppStrings.titleSearch,
-                  iconSrc: AppIcons.searchOutlined,
+                  iconMobile: AppIcons.searchOutlined,
+                  iconWeb: Icons.search_rounded,
                   onTap: () => _navigateToSearchScreen(context),
                 ),
                 DrawerTitleUnit(
                   title: AppStrings.titleSettings,
-                  iconSrc: AppIcons.settingsOutlinedStl2,
+                  iconMobile: AppIcons.settingsOutlinedStyle2,
+                  iconWeb: Icons.settings_rounded,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
                 addSpacing(height: AppDimens.size20),
                 _addDivider(context, isShortDivider: true),
                 DrawerTitleUnit(
                   title: AppStrings.titleLogout,
-                  iconSrc: AppIcons.logoutOutlined,
-                  onTap: () => _logout(),
+                  iconMobile: AppIcons.logoutOutlined,
+                  iconWeb: Icons.power_settings_new_rounded,
+                  onTap: () => _openLogoutDialog(context),
                 ),
                 _addDivider(context, isShortDivider: false),
                 addSpacing(height: AppDimens.size12),
@@ -102,6 +108,9 @@ class DrawerUnit extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       style: AppStyles.titlePrimary.copyWith(
         color: Theme.of(context).colorScheme.onPrimary,
+        letterSpacing: AppDimens.letterSpacingPT03,
+        fontSize: AppDimens.fontSizeXXL26,
+        fontFamily: AppFonts.elMessiri,
       ),
     );
   }
@@ -134,5 +143,43 @@ class DrawerUnit extends StatelessWidget {
 
   void _logout() {
     getIt<AuthCubit>().logout();
+  }
+
+  void _openLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+        title: Text(
+          AppStrings.logoutDialogMsg,
+          style:
+              TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+        ),
+        actions: [
+          // CANCEL BUTTON
+          TextButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+            child: Text(
+              AppStrings.cancel,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onInverseSurface),
+            ),
+          ),
+          // SAVE/SUBMIT BUTTON
+          TextButton(
+            onPressed: () {
+              _logout();
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              AppStrings.yesLogout,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

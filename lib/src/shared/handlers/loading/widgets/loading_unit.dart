@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/gradient_progress_indicator.dart';
@@ -116,12 +116,9 @@ class LoadingUnit extends StatelessWidget {
   }
 
   TextStyle _getMessageTextStyle(BuildContext context) {
-    return TextStyle(
-      fontSize: AppDimens.fontSizeXL20,
-      letterSpacing: AppDimens.letterSpacingPT07,
-      fontWeight: FontWeight.w600,
-      fontFamily: FONT_RALEWAY,
+    return AppStyles.titlePrimary.copyWith(
       color: Theme.of(context).colorScheme.onTertiary,
+      letterSpacing: AppDimens.letterSpacingPT07,
     );
   }
 }

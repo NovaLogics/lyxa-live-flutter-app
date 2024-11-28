@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 
 class MultilineTextFieldUnit extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  final String labelText;
+  // final String labelText;
   final int maxLength;
 
   const MultilineTextFieldUnit({
     super.key,
     required this.controller,
     required this.hintText,
-    required this.labelText,
+    // required this.labelText,
     this.maxLength = TextFieldLimits.defaultLimit,
   });
 
@@ -22,23 +22,30 @@ class MultilineTextFieldUnit extends StatelessWidget {
     return TextField(
       controller: controller,
       maxLines: 5,
+      textCapitalization: TextCapitalization.sentences,
       maxLength: maxLength,
-      style: TextStyle(
+      style: AppStyles.textFieldStyleMain.copyWith(
         color: Theme.of(context).colorScheme.inversePrimary,
-        fontFamily: FONT_RALEWAY,
-        fontWeight: FontWeight.w500,
-        fontSize: AppDimens.fontSizeMD16,
       ),
       decoration: InputDecoration(
-        labelText: labelText,
+        // labelText: labelText,
         hintText: hintText,
-        hintStyle: TextStyle(
+        hintStyle: AppStyles.textFieldStyleHint.copyWith(
           color: Theme.of(context).colorScheme.onSecondary,
-          fontWeight: FontWeight.normal,
-          fontSize: AppDimens.fontSizeRG14,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimens.radiusLG16),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.inversePrimary,
+            width: 1.0,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimens.radiusLG16),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.onSecondary,
+            width: 1.0,
+          ),
         ),
       ),
     );

@@ -161,8 +161,15 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   AppBar _buildAppBar() {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      title: const Text(AppStrings.createPost),
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
+      title: Center(
+        child: Text(
+          AppStrings.createPost,
+          style: AppStyles.textAppBarStatic.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+      ),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () => Navigator.of(context).pop(),
@@ -171,7 +178,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         IconButton(
           onPressed: _createAndUploadPost,
           icon: const Icon(Icons.upload),
-        )
+        ),
+        addSpacing(width: AppDimens.size12),
       ],
     );
   }
@@ -186,10 +194,10 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
               fit: BoxFit.contain,
             ),
           )
-        : Icon(
+        : const Icon(
             Icons.image,
             size: AppDimens.imageSize180,
-            color: Theme.of(context).colorScheme.outline,
+            color: AppColors.bluePurple400,
           );
   }
 
@@ -212,14 +220,18 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             AppStrings.caption,
-            style: AppStyles.subtitleSecondary,
+            style: AppStyles.subtitleSecondary.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+              shadows: AppStyles.shadowStyleEmpty,
+            ),
           ),
           addSpacing(height: AppDimens.spacingSM4),
           MultilineTextFieldUnit(
             controller: _captionController,
-            labelText: AppStrings.captionLabel,
+            // labelText: AppStrings.captionLabel,
             hintText: AppStrings.captionHint,
             maxLength: TextFieldLimits.postField,
           ),

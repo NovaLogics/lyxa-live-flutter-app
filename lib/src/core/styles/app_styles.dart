@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/core/resources/app_fonts.dart';
+import 'package:lyxa_live/src/core/assets/app_fonts.dart';
 
 class AppStyles {
   const AppStyles._();
@@ -55,6 +55,15 @@ class AppStyles {
     shadows: shadowStyle1,
   );
 
+  static const TextStyle subtitleRegular = TextStyle(
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeLG18,
+    fontFamily: AppFonts.montserrat,
+    fontWeight: FontWeight.normal,
+    letterSpacing: AppDimens.letterSpacingPT07,
+    shadows: AppStyles.shadowStyle2,
+  );
+
   static const TextStyle subtitleSecondary = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeMD16,
@@ -66,11 +75,10 @@ class AppStyles {
   /// ->
   static const TextStyle labelPrimary = TextStyle(
     color: AppColors.blueGrey50,
-    letterSpacing: AppDimens.letterSpacingPT07,
-    fontWeight: FontWeight.bold,
+    letterSpacing: AppDimens.letterSpacingPT05,
+    fontWeight: FontWeight.w600,
     fontFamily: AppFonts.montserrat,
-    fontSize: AppDimens.fontSizeSM12,
-    shadows: AppStyles.shadowStyle2,
+    fontSize: AppDimens.fontSizeRG14,
   );
 
   /// Custom Text Styles
@@ -79,14 +87,31 @@ class AppStyles {
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeRG14,
     fontWeight: FontWeight.w600,
-    fontFamily: AppFonts.raleway,
+    fontFamily: AppFonts.montserrat,
   );
 
   static const TextStyle textSubtitlePost = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeSM12,
+    letterSpacing: AppDimens.letterSpacingPT03,
     fontWeight: FontWeight.bold,
-    fontFamily: AppFonts.raleway,
+    fontFamily: AppFonts.montserrat,
+  );
+
+  static const TextStyle textAppBarStatic = TextStyle(
+    color: AppColors.whitePure,
+    letterSpacing: AppDimens.letterSpacingPT01,
+    fontSize: AppDimens.fontSizeXXL24,
+    fontWeight: FontWeight.normal,
+    fontFamily: AppFonts.anta,
+  );
+
+  static const TextStyle textMessageStatic = TextStyle(
+    color: AppColors.whitePure,
+    letterSpacing: AppDimens.letterSpacingPT03,
+    fontSize: AppDimens.fontSizeXXL24,
+    fontWeight: FontWeight.normal,
+    fontFamily: AppFonts.balooPaaji2,
   );
 
   static const TextStyle textNumberStyle1 = TextStyle(
@@ -103,6 +128,20 @@ class AppStyles {
     fontWeight: FontWeight.w600,
     fontFamily: AppFonts.montserrat,
     letterSpacing: AppDimens.letterSpacingPT05,
+  );
+
+  static const TextStyle textFieldStyleMain = TextStyle(
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeMD16,
+    fontWeight: FontWeight.w600,
+    fontFamily: AppFonts.montserrat,
+  );
+
+  static const TextStyle textFieldStyleHint = TextStyle(
+    color: AppColors.blueGrey50,
+    fontSize: AppDimens.fontSizeMD16,
+    fontWeight: FontWeight.normal,
+    fontFamily: AppFonts.montserrat,
   );
 
   /// Button Text

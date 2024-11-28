@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-// Neutral Colors
+  const AppColors._();
 
+// Neutral Colors
   static const Color whitePure = Color(0xFFFFFFFF);
   static const Color whiteShade = Color(0xFFFFF8F8);
   static const Color blackPure = Color(0xFF000000);

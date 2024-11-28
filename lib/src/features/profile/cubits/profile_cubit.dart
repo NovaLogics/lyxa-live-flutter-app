@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
@@ -131,6 +133,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
 
       imageDownloadUrl = imageUploadResult.data as String;
+      //await DefaultCacheManager().emptyCache();
+      await CachedNetworkImage.evictFromCache(currentUser.profileImageUrl);
     }
 
     final updatedProfile = currentUser.copyWith(
@@ -141,6 +145,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     final updateProfileResult = await _profileRepository.updateProfile(
       updatedProfile: updatedProfile,
     );
+
+    Logger.logDebug(updatedProfile.toJsonString(),
+        tag: '$debugTag: updateProfile() User');
 
     if (updateProfileResult.status == Status.error) {
       _handleErrors(

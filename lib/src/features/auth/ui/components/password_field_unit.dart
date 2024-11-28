@@ -6,6 +6,7 @@ import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 class PasswordFieldUnit extends StatelessWidget {
   final TextEditingController passwordTextController;
   final String hintText;
+  final TextInputAction? textInputAction;
   final String? Function(String?)? passwordValidator;
 
   const PasswordFieldUnit({
@@ -13,6 +14,7 @@ class PasswordFieldUnit extends StatelessWidget {
     required this.passwordTextController,
     required this.hintText,
     this.passwordValidator,
+    this.textInputAction,
   });
 
   @override
@@ -20,6 +22,7 @@ class PasswordFieldUnit extends StatelessWidget {
     return TextFieldUnit(
       controller: passwordTextController,
       hintText: hintText,
+      textInputAction: textInputAction,
       obscureText: true,
       prefixIcon: Icon(
         Icons.lock_outlined,

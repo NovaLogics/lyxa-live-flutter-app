@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 
 class TextFieldUnit extends StatefulWidget {
   final TextEditingController controller;
@@ -9,6 +9,8 @@ class TextFieldUnit extends StatefulWidget {
   final bool obscureText;
   final int maxLength;
   final Widget? prefixIcon;
+  final TextCapitalization? textCapitalization;
+  final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
 
   const TextFieldUnit({
@@ -19,6 +21,8 @@ class TextFieldUnit extends StatefulWidget {
     this.prefixIcon,
     this.validator,
     this.maxLength = TextFieldLimits.defaultLimit,
+    this.textCapitalization,
+    this.textInputAction,
   });
 
   @override
@@ -39,12 +43,11 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
     return TextFormField(
       controller: widget.controller,
       maxLength: widget.maxLength,
+      textCapitalization: widget.textCapitalization ?? TextCapitalization.none,
+      textInputAction: widget.textInputAction ?? TextInputAction.done,
       obscureText: widget.obscureText && !isPasswordVisible,
-      style: TextStyle(
+      style: AppStyles.textFieldStyleMain.copyWith(
         color: Theme.of(context).colorScheme.inversePrimary,
-        fontFamily: FONT_MONTSERRAT,
-        fontWeight: FontWeight.w600,
-        fontSize: AppDimens.fontSizeMD16,
       ),
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
@@ -57,10 +60,8 @@ class _TextFieldUnitState extends State<TextFieldUnit> {
           borderRadius: BorderRadius.circular(AppDimens.radiusMD12),
         ),
         hintText: widget.hintText,
-        hintStyle: TextStyle(
+        hintStyle: AppStyles.textFieldStyleHint.copyWith(
           color: Theme.of(context).colorScheme.onSecondary,
-          fontWeight: FontWeight.normal,
-          fontFamily: FONT_MONTSERRAT,
         ),
         fillColor: Theme.of(context)
             .colorScheme

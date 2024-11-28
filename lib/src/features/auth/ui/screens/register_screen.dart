@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/resources/app_images.dart';
+import 'package:lyxa_live/src/core/assets/app_images.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
-import 'package:lyxa_live/src/core/utils/hive_helper.dart';
+import 'package:lyxa_live/src/core/database/hive_storage.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
@@ -40,6 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String get _name => _nameController.text.trim();
   String get _email => _emailController.text.trim();
   String get _password => _passwordController.text.trim();
+  bool get _isWebPlatform => kIsWeb;
 
   @override
   void initState() {
@@ -74,7 +76,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _buildConfirmPasswordTextField(),
               addSpacing(height: AppDimens.size24),
               _buildSignUpButton(),
-              addSpacing(height: AppDimens.size52),
+              addSpacing(
+                height: _isWebPlatform ? AppDimens.size40 : AppDimens.size52,
+              ),
               _buildLoginLink(),
             ],
           ),
@@ -160,6 +164,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return TextFieldUnit(
       controller: _nameController,
       hintText: AppStrings.hintUsername,
+      textCapitalization: TextCapitalization.words,
+      textInputAction: TextInputAction.next,
       obscureText: false,
       prefixIcon: Icon(
         Icons.person_outline,
@@ -181,6 +187,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return PasswordFieldUnit(
       passwordTextController: _passwordController,
       hintText: AppStrings.hintPassword,
+      textInputAction: TextInputAction.next,
       passwordValidator: _validateMainPassword,
     );
   }
@@ -189,6 +196,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return PasswordFieldUnit(
       passwordTextController: _confirmPasswordController,
       hintText: AppStrings.hintConfirmPassword,
+      textInputAction: TextInputAction.done,
       passwordValidator: _validateConfirmPassword,
     );
   }

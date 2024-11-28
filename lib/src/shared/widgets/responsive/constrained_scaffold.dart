@@ -3,12 +3,13 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
+
 class ConstrainedScaffold extends StatelessWidget {
   final Widget body;
   final PreferredSizeWidget? appBar;
   final Widget? drawer;
   final Color? backgroundColor;
-  final BackgroundStyle? backgroundStyle;
+  final BackgroundStyle backgroundStyle;
 
   const ConstrainedScaffold({
     super.key,
@@ -23,43 +24,25 @@ class ConstrainedScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        _Background(
-          backgroundColor: backgroundColor,
-          backgroundStyle: backgroundStyle,
-        ),
-
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: appBar,
-          drawer: drawer,
-          body: _ConstrainedBody(
-            body: body,
-          ),
-        ),
+        _buildGradientBackground(),
+        _buildScaffold(),
       ],
     );
   }
-}
 
-class _Background extends StatelessWidget {
-  final Color? backgroundColor;
-  final BackgroundStyle? backgroundStyle;
+  Widget _buildGradientBackground() {
+    return getIt<GradientBackgroundUnit>(
+      param1: AppDimens.containerSize430,
+      param2: backgroundStyle,
+    );
+  }
 
-  const _Background({
-    this.backgroundColor,
-    this.backgroundStyle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: backgroundColor ?? Colors.transparent,
-      child: RepaintBoundary(
-        child: getIt<GradientBackgroundUnit>(
-          param1: AppDimens.containerSize400,
-          param2: backgroundStyle ?? BackgroundStyle.main,
-        ),
-      ),
+  Widget _buildScaffold() {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: appBar,
+      drawer: drawer,
+      body: _ConstrainedBody(body: body),
     );
   }
 }
@@ -79,3 +62,4 @@ class _ConstrainedBody extends StatelessWidget {
     );
   }
 }
+

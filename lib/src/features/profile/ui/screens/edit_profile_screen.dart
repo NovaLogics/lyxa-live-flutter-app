@@ -104,6 +104,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void _handleProfileUpdate() async {
     if (_selectedImage != null || _bio.isNotEmpty) {
+      FocusScope.of(context).unfocus();
+
       _profileCubit.updateProfile(
         userId: _currentUser.uid,
         updatedBio: _bio,
@@ -149,8 +151,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   AppBar _buildAppBar() {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      title: const Text(AppStrings.editProfile),
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
+      title: Center(
+        child: Text(
+          AppStrings.editProfile,
+          style: AppStyles.textAppBarStatic.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+      ),
       actions: [
         IconButton(
           onPressed: _handleProfileUpdate,
@@ -172,7 +181,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             height: AppDimens.imageSize180,
             width: AppDimens.imageSize180,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainer,
+              color: Theme.of(context).colorScheme.inversePrimary,
               shape: BoxShape.circle,
             ),
             clipBehavior: Clip.hardEdge,
@@ -230,7 +239,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           addSpacing(height: AppDimens.size12),
           MultilineTextFieldUnit(
             controller: bioTextController,
-            labelText: AppStrings.storyline,
+            // labelText: AppStrings.storyline,
             hintText: AppStrings.addYourStorylineBio,
             maxLength: TextFieldLimits.bioDescriptionField,
           ),

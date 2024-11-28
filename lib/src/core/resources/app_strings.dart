@@ -1,4 +1,6 @@
 class AppStrings {
+  const AppStrings._();
+
   static const String appName = 'Lyxa Live';
 
   // UI SECTION [1]-> LOGIN
@@ -30,7 +32,7 @@ class AppStrings {
   static const String passwordNotMatchError = 'Passwords do not match!';
 
   // UI SECTION [3]-> HOME
-  static const String homeTitle = 'Lyxa Zone';
+  static const String homeTitle = 'LYXA Zone';
   static const String noPostAvailableError = 'No posts available';
 
   // UI SECTION [4]-> DRAWER
@@ -50,7 +52,7 @@ class AppStrings {
   static const String defaultSearchMessage = 'Start search for user...';
 
   // UI SECTION [7]-> SETTINGS
-  static const String settings = 'Settings';
+  static const String settings = 'SETTINGS';
   static const String darkMode = 'Dark Mode';
   static const String searchUsers = 'Search users...';
 
@@ -82,7 +84,7 @@ class AppStrings {
   static const String userNotFoundMessage = 'User not found';
 
   static const String createPost = 'CREATE POST';
-  static const String noPosts = 'No Posts';
+  static const String noPosts = 'No Posts...';
   static const String failedToLoadPostError = 'Failed to load posts.';
   static const String caption = 'Caption';
   static const String captionHint = 'Add post caption here..';
@@ -99,6 +101,7 @@ class AppStrings {
       'Error picking or compressing image.';
   static const String pickImage = 'PICK IMAGE';
   static const String editProfile = 'EDIT PROFILE';
+  static const String profile = 'PROFILE';
   static const String addYourStorylineBio = 'Add your bio / storyline';
   static const String cropperToolbarTitle = 'Profile Image Cropper';
 
@@ -111,10 +114,13 @@ class AppStrings {
   static const String delete = 'Delete';
   static const String save = 'Save';
   static const String dialog = 'dialog';
-   static const closeButtonTooltip = 'Close';
+  static const closeButtonTooltip = 'Close';
 
   static const String languageCodeEnglish = 'en';
   static const String unknown = 'Unknown';
 
   static const String authenticatingMsg = 'Authenticating, please hold on...';
+
+  static const String logoutDialogMsg = 'Are you sure to logout?';
+  static const String yesLogout = 'Yes, logout';
 }

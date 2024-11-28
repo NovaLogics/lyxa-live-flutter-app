@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/assets/app_fonts.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 
 class ToastDuration {
   static const Duration second1 = Duration(seconds: 1);
@@ -61,7 +63,6 @@ class ToastMessengerUnit {
     VoidCallback? onButtonPressed,
     Duration duration = ToastDuration.second3,
   }) {
-
     ///USAGE ->
 //  ToastMessengerUnit.showToast(
 //     context: context,
@@ -148,12 +149,10 @@ class ToastMessengerUnit {
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(
+                style: AppStyles.titleSecondary.copyWith(
                   color: textColor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: FONT_MONTSERRAT,
-                  letterSpacing: 0.1,
+                  fontFamily: AppFonts.montserrat,
+                  letterSpacing: AppDimens.letterSpacingPT01,
                 ),
               ),
             ),
@@ -170,11 +169,9 @@ class ToastMessengerUnit {
                 ),
                 child: Text(
                   buttonText,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  style: AppStyles.subtitleSecondary.copyWith(
                     color: textColor,
-                    fontFamily: FONT_RALEWAY,
+                    shadows: AppStyles.shadowStyleEmpty,
                   ),
                 ),
               ),

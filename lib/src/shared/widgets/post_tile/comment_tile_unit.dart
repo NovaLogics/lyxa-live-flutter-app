@@ -42,9 +42,11 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
         children: [
           // USERNAME
           Text(
-            "⤷ ${widget.comment.userName}",
+            "⤷ ${widget.comment.userName} ⬪",
             style: AppStyles.textSubtitlePost.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
+              fontSize: AppDimens.fontSizeSM13,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(width: AppDimens.size8),
@@ -61,7 +63,7 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
                   widget.comment.text,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onTertiary,
-                    fontSize: AppDimens.fontSizeSM12,
+                    fontSize: AppDimens.fontSizeSM13,
                     fontWeight: FontWeight.normal,
                   ),
                   softWrap: true,
@@ -75,14 +77,18 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
           const Spacer(),
 
           // DELETE BUTTON
-          if (_isOwnPost)
-            GestureDetector(
-              onTap: _showOptions,
-              child: Icon(
-                Icons.more_horiz,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
+          (_isOwnPost)
+              ? GestureDetector(
+                  onTap: _showOptions,
+                  child: Icon(
+                    Icons.more_horiz,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    size: AppDimens.iconSizeSM20,
+                  ),
+                )
+              : const SizedBox(
+                  height: AppDimens.iconSizeSM20,
+                ),
         ],
       ),
     );
@@ -97,14 +103,24 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(AppStrings.deleteCommentMessage),
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+        title: Text(
+          AppStrings.deleteCommentMessage,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onInverseSurface,
+          ),
+        ),
         actions: [
           // CANCEL BUTTON
           TextButton(
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
             },
-            child: const Text(AppStrings.cancel),
+            child: Text(
+              AppStrings.cancel,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onInverseSurface),
+            ),
           ),
           // DELETE BUTTON
           TextButton(
@@ -112,7 +128,10 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
               Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
               widget.onDeletePressed(widget.comment).call();
             },
-            child: const Text(AppStrings.delete),
+            child: Text(
+              AppStrings.delete,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
           ),
         ],
       ),

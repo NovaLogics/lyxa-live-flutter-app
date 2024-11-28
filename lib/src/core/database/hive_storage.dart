@@ -8,19 +8,23 @@ class HiveKeys {
   static const emailKey = 'email';
 }
 
-class HiveHelper {
-  static final HiveHelper _instance = HiveHelper._internal();
+class HiveStorage {
+  static final HiveStorage _instance = HiveStorage._internal();
   late Box _box;
 
-  HiveHelper._internal();
+  HiveStorage._internal();
 
-  factory HiveHelper() {
+  factory HiveStorage() {
     return _instance;
   }
 
   /// Initialize Hive and open the box
   Future<void> initialize() async {
     _box = await Hive.openBox(hiveBoxLyxa);
+    deleteLoginData();
+  }
+
+  void deleteLoginData() {
     delete(HiveKeys.loginDataKey);
     delete(HiveKeys.signUpDataKey);
   }

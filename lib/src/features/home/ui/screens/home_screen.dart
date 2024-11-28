@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/assets/app_fonts.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
+import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
@@ -56,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _deletePost(String postId) {
     _postCubit.deletePost(postId: postId);
-    _fetchAllPosts();
+    //_fetchAllPosts();
   }
 
   void _initScreen() async {
@@ -84,8 +86,19 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      title: const Text(AppStrings.homeTitle),
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
+      title: Center(
+        child: Text(
+          AppStrings.homeTitle,
+          style: AppStyles.textAppBarStatic.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+            letterSpacing: AppDimens.letterSpacingPT01,
+            fontSize: AppDimens.fontSizeXXL28,
+            fontWeight: FontWeight.w600,
+            fontFamily: AppFonts.elMessiri,
+          ),
+        ),
+      ),
       actions: [
         IconButton(
           onPressed: _navigateToUploadPostScreen,
