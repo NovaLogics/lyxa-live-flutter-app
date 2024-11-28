@@ -86,9 +86,23 @@ class _SearchScreenState extends State<SearchScreen> {
         } else if (state is SearchLoaded) {
           return _buildUserList(state);
         } else if (state is SearchError) {
-          return Center(child: Text(state.message));
+          return Center(
+            child: Text(
+              state.message,
+              style: AppStyles.textMessageStatic.copyWith(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+            ),
+          );
         }
-        return const Center(child: Text(AppStrings.defaultSearchMessage));
+        return Center(
+          child: Text(
+            AppStrings.defaultSearchMessage,
+            style: AppStyles.textMessageStatic.copyWith(
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
+          ),
+        );
       },
     );
   }

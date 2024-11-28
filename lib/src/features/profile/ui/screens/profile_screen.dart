@@ -294,7 +294,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .toList();
 
           if (userPosts.isEmpty) {
-            return const Center(child: Text(AppStrings.noPosts));
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimens.size12,
+                vertical: AppDimens.size64,
+              ),
+              child: Center(
+                child: Text(
+                  AppStrings.noPosts,
+                  style: AppStyles.textMessageStatic.copyWith(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                ),
+              ),
+            );
           }
 
           return ListView.builder(

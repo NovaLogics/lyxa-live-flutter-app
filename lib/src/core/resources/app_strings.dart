@@ -84,7 +84,7 @@ class AppStrings {
   static const String userNotFoundMessage = 'User not found';
 
   static const String createPost = 'CREATE POST';
-  static const String noPosts = 'No Posts';
+  static const String noPosts = 'No Posts...';
   static const String failedToLoadPostError = 'Failed to load posts.';
   static const String caption = 'Caption';
   static const String captionHint = 'Add post caption here..';

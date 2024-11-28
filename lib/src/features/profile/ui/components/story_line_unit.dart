@@ -26,7 +26,9 @@ class StoryLineUnit extends StatelessWidget {
       child: Text(
         text.isNotEmpty ? text : AppStrings.emptyStoryLineMessage,
         style: AppStyles.textTitlePost.copyWith(
-          color: Theme.of(context).colorScheme.inversePrimary,
+          color: text.isNotEmpty
+              ? Theme.of(context).colorScheme.inversePrimary
+              : Theme.of(context).colorScheme.outline,
         ),
         maxLines: 5,
         overflow: TextOverflow.ellipsis,
