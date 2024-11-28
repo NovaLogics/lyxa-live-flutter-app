@@ -101,8 +101,8 @@ class AppStyles {
 
   static const TextStyle textAppBarStatic = TextStyle(
     color: AppColors.whitePure,
-    letterSpacing: AppDimens.letterSpacingPT01,
-    fontSize: AppDimens.fontSizeXXL28,
+    letterSpacing: AppDimens.letterSpacingPT04,
+    fontSize: AppDimens.fontSizeXXL24,
     fontWeight: FontWeight.bold,
     fontFamily: AppFonts.elMessiri,
   );

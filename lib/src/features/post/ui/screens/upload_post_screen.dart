@@ -162,7 +162,14 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      title: const Text(AppStrings.createPost),
+      title: Center(
+        child: Text(
+          AppStrings.createPost,
+          style: AppStyles.textAppBarStatic.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+      ),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () => Navigator.of(context).pop(),
@@ -223,7 +230,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           addSpacing(height: AppDimens.spacingSM4),
           MultilineTextFieldUnit(
             controller: _captionController,
-           // labelText: AppStrings.captionLabel,
+            // labelText: AppStrings.captionLabel,
             hintText: AppStrings.captionHint,
             maxLength: TextFieldLimits.postField,
           ),

@@ -52,7 +52,7 @@ class AppStrings {
   static const String defaultSearchMessage = 'Start search for user...';
 
   // UI SECTION [7]-> SETTINGS
-  static const String settings = 'Settings';
+  static const String settings = 'SETTINGS';
   static const String darkMode = 'Dark Mode';
   static const String searchUsers = 'Search users...';
 

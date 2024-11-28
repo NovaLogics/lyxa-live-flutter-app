@@ -152,7 +152,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      title: const Text(AppStrings.editProfile),
+      title: Center(
+        child: Text(
+          AppStrings.editProfile,
+          style: AppStyles.textAppBarStatic.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+      ),
       actions: [
         IconButton(
           onPressed: _handleProfileUpdate,
@@ -232,7 +239,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           addSpacing(height: AppDimens.size12),
           MultilineTextFieldUnit(
             controller: bioTextController,
-           // labelText: AppStrings.storyline,
+            // labelText: AppStrings.storyline,
             hintText: AppStrings.addYourStorylineBio,
             maxLength: TextFieldLimits.bioDescriptionField,
           ),
