@@ -61,5 +61,10 @@ flutter:
         - asset: assets/fonts/montserrat_regular.ttf
         - asset: assets/fonts/montserrat_medium.ttf
           weight: 600
+    - family: ElMessiri
+      fonts:
+        - asset: assets/fonts/el_messiri_regular.ttf
+        - asset: assets/fonts/el_messiri_semi_bold.ttf
+          weight: 600
 
 
