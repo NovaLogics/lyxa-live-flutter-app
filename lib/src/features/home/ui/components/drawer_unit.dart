@@ -60,7 +60,7 @@ class DrawerUnit extends StatelessWidget {
                 ),
                 DrawerTitleUnit(
                   title: AppStrings.titleSettings,
-                  iconMobile: AppIcons.settingsOutlinedStl2,
+                  iconMobile: AppIcons.settingsOutlinedStyle2,
                   iconWeb: Icons.settings_outlined,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),

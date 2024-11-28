@@ -486,7 +486,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
             color: colour,
           )
         : SvgPicture.asset(
-            AppIcons.settingsOutlinedStl1,
+            AppIcons.settingsOutlinedStyle1,
             colorFilter: ColorFilter.mode(
               colour,
               BlendMode.srcIn,
