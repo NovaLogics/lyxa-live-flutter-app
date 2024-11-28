@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
-import 'package:lyxa_live/src/core/resources/app_images.dart';
+import 'package:lyxa_live/src/core/assets/app_images.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/database/hive_storage.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
