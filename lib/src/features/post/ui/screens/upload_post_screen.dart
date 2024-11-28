@@ -161,7 +161,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   AppBar _buildAppBar() {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.2),
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
       title: Center(
         child: Text(
           AppStrings.createPost,
@@ -194,10 +194,10 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
               fit: BoxFit.contain,
             ),
           )
-        : Icon(
+        : const Icon(
             Icons.image,
             size: AppDimens.imageSize180,
-            color: Theme.of(context).colorScheme.outline,
+            color: AppColors.blueGrey600,
           );
   }
 

@@ -56,7 +56,7 @@ const ColorScheme lightColorScheme = ColorScheme.light(
 
   // --- Surface Tint Colors ---
   // Tint for elevated surfaces
-  surfaceTint: AppColors.deepPurple50,
+  surfaceTint: AppColors.bluePurple50,
 
   // --- Inverse Primary Color ---
   // Inverse primary color

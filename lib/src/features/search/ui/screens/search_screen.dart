@@ -49,7 +49,7 @@ class _SearchScreenState extends State<SearchScreen> {
   AppBar _buildAppBar() {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
       centerTitle: true,
       title: SizedBox(
         width: AppDimens.containerSize400,

@@ -64,8 +64,8 @@ class GradientBackgroundUnit extends StatelessWidget {
           colors: [
             Theme.of(context).colorScheme.surface,
             Theme.of(context).colorScheme.surfaceContainerHighest,
-            Theme.of(context).colorScheme.surfaceContainerLow,
-            Theme.of(context).colorScheme.surfaceContainerLow,
+            Theme.of(context).colorScheme.surfaceTint,
+            Theme.of(context).colorScheme.surfaceTint,
             Theme.of(context).colorScheme.surfaceContainerHighest,
             Theme.of(context).colorScheme.surface,
           ],

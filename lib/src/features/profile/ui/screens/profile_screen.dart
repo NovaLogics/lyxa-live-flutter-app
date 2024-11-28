@@ -152,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       BuildContext context, ProfileUser user, bool isOwnProfile) {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
       title: Center(
         child: Text(
           AppStrings.profile,
@@ -256,8 +256,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             AppStrings.storylineDecoText,
             style: AppStyles.subtitleSecondary.copyWith(
               color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.w300,
-              shadows: AppStyles.shadowStyle2,
+              fontWeight: FontWeight.w600,
+              shadows: AppStyles.shadowStyleEmpty,
             ),
           ),
         ),
