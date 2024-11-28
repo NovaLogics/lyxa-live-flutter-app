@@ -66,5 +66,10 @@ flutter:
         - asset: assets/fonts/el_messiri_regular.ttf
         - asset: assets/fonts/el_messiri_semi_bold.ttf
           weight: 600
+    - family: BalooPaaji2
+      fonts:
+        - asset: assets/fonts/baloo_paaji_2_regular.ttf
+        - asset: assets/fonts/baloo_paaji_2_semi_bold.ttf
+          weight: 600
 
 
