@@ -123,6 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           _buildProfilePicture(user),
           addSpacing(height: AppDimens.size16),
+          _buildUserNameSection(user),
           _buildEmailSection(user),
           addSpacing(height: AppDimens.size8),
           _buildProfileStats(user),
@@ -153,10 +154,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       title: Center(
         child: Text(
-          user.name,
-          style: AppStyles.textSubtitlePost.copyWith(
+          AppStrings.profile,
+          style: AppStyles.textAppBarStatic.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
-            fontSize: AppDimens.fontSizeXL20,
           ),
         ),
       ),
@@ -169,7 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     builder: (_) => EditProfileScreen(currentUser: user),
                   ),
                 ),
-                icon: const Icon(Icons.settings_outlined),
+                icon: const Icon(Icons.settings_suggest),
                 iconSize: AppDimens.iconSizeSM24,
               )
             : addSpacing(width: AppDimens.iconSizeMD32),
@@ -183,12 +183,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _buildUserNameSection(ProfileUser user) {
+    return Center(
+      child: Text(
+        user.name,
+        style: AppStyles.textSubtitlePost.copyWith(
+          color: Theme.of(context).colorScheme.onPrimary,
+          fontSize: AppDimens.fontSizeXL20,
+        ),
+      ),
+    );
+  }
+
   Widget _buildEmailSection(ProfileUser user) {
     return Center(
       child: Text(
         user.email,
         style: AppStyles.subtitleRegular.copyWith(
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: Theme.of(context).colorScheme.onSecondary,
         ),
       ),
     );

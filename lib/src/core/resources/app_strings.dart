@@ -101,6 +101,7 @@ class AppStrings {
       'Error picking or compressing image.';
   static const String pickImage = 'PICK IMAGE';
   static const String editProfile = 'EDIT PROFILE';
+  static const String profile = 'PROFILE';
   static const String addYourStorylineBio = 'Add your bio / storyline';
   static const String cropperToolbarTitle = 'Profile Image Cropper';
 

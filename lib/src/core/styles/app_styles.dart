@@ -106,6 +106,14 @@ class AppStyles {
     fontFamily: AppFonts.elMessiri,
   );
 
+  static const TextStyle textMessageStatic = TextStyle(
+    color: AppColors.whitePure,
+    letterSpacing: AppDimens.letterSpacingPT05,
+    fontSize: AppDimens.fontSizeXL20,
+    fontWeight: FontWeight.normal,
+    fontFamily: AppFonts.elMessiri,
+  );
+
   static const TextStyle textNumberStyle1 = TextStyle(
     color: AppColors.blueGrey50,
     fontSize: AppDimens.fontSizeMD16,

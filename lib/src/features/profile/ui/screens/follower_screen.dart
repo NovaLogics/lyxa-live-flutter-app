@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/shared/widgets/user_tile_unit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
@@ -57,8 +58,14 @@ class FollowerScreen extends StatelessWidget {
       height: AppDimens.size96,
       child: TabBar(
         dividerColor: Colors.transparent,
-        labelColor: Theme.of(context).colorScheme.inversePrimary,
+        labelColor: Theme.of(context).colorScheme.onPrimary,
         indicatorColor: Theme.of(context).colorScheme.primary,
+        unselectedLabelColor: Theme.of(context).colorScheme.outline,
+        labelStyle: AppStyles.textAppBarStatic.copyWith(
+          color: Theme.of(context).colorScheme.onPrimary,
+          letterSpacing: AppDimens.letterSpacingPT05,
+          fontSize: AppDimens.fontSizeXL20,
+        ),
         tabs: const [
           Tab(text: AppStrings.followersTabTitle),
           Tab(text: AppStrings.followingTabTitle),
@@ -82,7 +89,12 @@ class UserListView extends StatelessWidget {
   Widget build(BuildContext context) {
     if (userIds.isEmpty) {
       return Center(
-        child: Text(emptyMessage),
+        child: Text(
+          emptyMessage,
+          style: AppStyles.textMessageStatic.copyWith(
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+        ),
       );
     }
 
@@ -100,7 +112,9 @@ class UserListView extends StatelessWidget {
               return UserTileUnit(user: user);
             } else {
               return const ListTile(
-                title: Text(AppStrings.userNotFoundMessage),
+                title: Text(
+                  AppStrings.userNotFoundMessage,
+                ),
               );
             }
           },
