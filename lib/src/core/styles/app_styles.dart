@@ -75,11 +75,10 @@ class AppStyles {
   /// ->
   static const TextStyle labelPrimary = TextStyle(
     color: AppColors.blueGrey50,
-    letterSpacing: AppDimens.letterSpacingPT07,
-    fontWeight: FontWeight.bold,
+    letterSpacing: AppDimens.letterSpacingPT05,
+    fontWeight: FontWeight.w600,
     fontFamily: AppFonts.montserrat,
-    fontSize: AppDimens.fontSizeSM12,
-    shadows: AppStyles.shadowStyle2,
+    fontSize: AppDimens.fontSizeRG14,
   );
 
   /// Custom Text Styles
