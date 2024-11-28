@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/styles/app_styles.dart'; 
+import 'package:lyxa_live/src/core/styles/app_styles.dart';
 
 const double _buttonVerticalPadding = 12.0;
 const double _buttonHorizontalPadding = 90.0;
 const double _buttonBorderRadius = 24.0;
 const double _buttonSpreadRadius = 2.0;
 const double _buttonBlurRadius = 10.0;
-const Offset _buttonShadowOffset = Offset(0, 5);
+const Offset _buttonShadowOffset = Offset(0, 3);
 const Duration _animationDuration = Duration(milliseconds: 100);
 
 class GradientButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
-  final TextStyle? textStyle; 
+  final TextStyle? textStyle;
   final Widget? icon;
 
   const GradientButton({
@@ -100,8 +100,7 @@ class _GradientButtonState extends State<GradientButton>
               // Customizable Text
               Text(
                 widget.text,
-                style: widget.textStyle ??
-                    AppStyles.buttonTextPrimary,
+                style: widget.textStyle ?? AppStyles.buttonTextPrimary,
               ),
               const SizedBox(width: 10.0),
               // Customizable Icon

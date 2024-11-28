@@ -100,10 +100,10 @@ class AppStyles {
 
   static const TextStyle textAppBarStatic = TextStyle(
     color: AppColors.whitePure,
-    letterSpacing: 0.0,
-    fontSize: AppDimens.fontSizeXXL26,
+    letterSpacing: AppDimens.letterSpacingPT01,
+    fontSize: AppDimens.fontSizeXXL24,
     fontWeight: FontWeight.normal,
-    fontFamily: AppFonts.balooPaaji2,
+    fontFamily: AppFonts.anta,
   );
 
   static const TextStyle textMessageStatic = TextStyle(
@@ -139,7 +139,7 @@ class AppStyles {
 
   static const TextStyle textFieldStyleHint = TextStyle(
     color: AppColors.blueGrey50,
-    fontSize: AppDimens.fontSizeMD15,
+    fontSize: AppDimens.fontSizeMD16,
     fontWeight: FontWeight.normal,
     fontFamily: AppFonts.montserrat,
   );

@@ -36,9 +36,9 @@ class DrawerUnit extends StatelessWidget {
                 _buildDrawerIcon(context),
                 addSpacing(height: AppDimens.size8),
                 _addDivider(context, isShortDivider: false),
-                addSpacing(height: AppDimens.size8),
+                addSpacing(height: AppDimens.size4),
                 _buildHeadingText(context),
-                addSpacing(height: AppDimens.size8),
+                addSpacing(height: AppDimens.size4),
                 _addDivider(context, isShortDivider: true),
                 addSpacing(height: AppDimens.size8),
                 DrawerTitleUnit(
@@ -108,8 +108,9 @@ class DrawerUnit extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       style: AppStyles.titlePrimary.copyWith(
         color: Theme.of(context).colorScheme.onPrimary,
-        letterSpacing: AppDimens.letterSpacingPT01,
-        fontFamily: AppFonts.montserrat,
+        letterSpacing: AppDimens.letterSpacingPT03,
+        fontSize: AppDimens.fontSizeXXL26,
+        fontFamily: AppFonts.elMessiri,
       ),
     );
   }

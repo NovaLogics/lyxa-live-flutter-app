@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lyxa_live/src/core/assets/app_fonts.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
@@ -65,6 +66,7 @@ class FollowerScreen extends StatelessWidget {
           color: Theme.of(context).colorScheme.onPrimary,
           letterSpacing: AppDimens.letterSpacingPT05,
           fontSize: AppDimens.fontSizeXL20,
+          fontFamily: AppFonts.elMessiri,
         ),
         tabs: const [
           Tab(text: AppStrings.followersTabTitle),

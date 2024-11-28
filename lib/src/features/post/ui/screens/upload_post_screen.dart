@@ -197,7 +197,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         : const Icon(
             Icons.image,
             size: AppDimens.imageSize180,
-            color: AppColors.blueGrey600,
+            color: AppColors.bluePurple400,
           );
   }
 
