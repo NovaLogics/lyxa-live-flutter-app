@@ -94,7 +94,7 @@ Widget _buildDisplayUnit(
         Text(
           count,
           style: AppStyles.textNumberStyle1.copyWith(
-            color: Theme.of(context).colorScheme.onTertiary,
+            color: Theme.of(context).colorScheme.onSecondary,
           ),
         ),
         addSpacing(height: AppDimens.size4),

@@ -122,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ListView(
         children: [
           _buildProfilePicture(user),
-          addSpacing(height: AppDimens.size16),
+          addSpacing(height: AppDimens.size8),
           _buildUserNameSection(user),
           _buildEmailSection(user),
           addSpacing(height: AppDimens.size8),
@@ -172,7 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: const Icon(Icons.settings_suggest),
                 iconSize: AppDimens.iconSizeSM24,
               )
-            : addSpacing(width: AppDimens.iconSizeMD32),
+            : addSpacing(width: AppDimens.iconSizeLG48),
       ],
     );
   }
@@ -190,6 +190,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         style: AppStyles.textSubtitlePost.copyWith(
           color: Theme.of(context).colorScheme.onPrimary,
           fontSize: AppDimens.fontSizeXL20,
+          letterSpacing: AppDimens.letterSpacingPT05,
         ),
       ),
     );
@@ -201,6 +202,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         user.email,
         style: AppStyles.subtitleRegular.copyWith(
           color: Theme.of(context).colorScheme.onSecondary,
+          fontSize: AppDimens.fontSizeMD16,
+          fontWeight: FontWeight.w600,
+          shadows: AppStyles.shadowStyleEmpty,
         ),
       ),
     );
