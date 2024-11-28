@@ -43,25 +43,25 @@ class DrawerUnit extends StatelessWidget {
                 DrawerTitleUnit(
                   title: AppStrings.titleHome,
                   iconMobile: AppIcons.homeOutlined,
-                  iconWeb: Icons.home_outlined,
+                  iconWeb: Icons.home_rounded,
                   onTap: () => Navigator.of(context).pop(),
                 ),
                 DrawerTitleUnit(
                   title: AppStrings.titleProfile,
                   iconMobile: AppIcons.profileOutlined,
-                  iconWeb: Icons.person_outline,
+                  iconWeb: Icons.person_rounded,
                   onTap: () => _navigateToProfileScreen(context, user.uid),
                 ),
                 DrawerTitleUnit(
                   title: AppStrings.titleSearch,
                   iconMobile: AppIcons.searchOutlined,
-                  iconWeb: Icons.search_outlined,
+                  iconWeb: Icons.search_rounded,
                   onTap: () => _navigateToSearchScreen(context),
                 ),
                 DrawerTitleUnit(
                   title: AppStrings.titleSettings,
                   iconMobile: AppIcons.settingsOutlinedStyle2,
-                  iconWeb: Icons.settings_outlined,
+                  iconWeb: Icons.settings_rounded,
                   onTap: () => _navigateToSettingsScreen(context),
                 ),
                 addSpacing(height: AppDimens.size20),
@@ -69,7 +69,7 @@ class DrawerUnit extends StatelessWidget {
                 DrawerTitleUnit(
                   title: AppStrings.titleLogout,
                   iconMobile: AppIcons.logoutOutlined,
-                  iconWeb: Icons.login,
+                  iconWeb: Icons.power_settings_new_rounded,
                   onTap: () => _openLogoutDialog(context),
                 ),
                 _addDivider(context, isShortDivider: false),

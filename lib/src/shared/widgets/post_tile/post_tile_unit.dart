@@ -482,7 +482,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
     final colour = Theme.of(context).colorScheme.primary;
     return kIsWeb
         ? Icon(
-            Icons.settings_rounded,
+            Icons.more_vert_rounded,
             color: colour,
           )
         : SvgPicture.asset(
@@ -528,7 +528,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
     return kIsWeb
         ? Icon(
-            hasComments ? Icons.comment_rounded : Icons.comment_outlined,
+            hasComments ? Icons.insert_comment_rounded : Icons.mode_comment_outlined,
             color: colour,
           )
         : SvgPicture.asset(
