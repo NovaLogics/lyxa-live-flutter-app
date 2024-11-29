@@ -606,10 +606,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
             text: '$word ',
             style: AppStyles.textTitlePost.copyWith(
               color: AppColors.teal700,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontSize: AppDimens.fontSizeMD17,
               fontFamily: AppFonts.balooPaaji2,
-              letterSpacing: AppDimens.letterSpacingPT00,
+              letterSpacing: -0.1,
             ),
           ),
         );
