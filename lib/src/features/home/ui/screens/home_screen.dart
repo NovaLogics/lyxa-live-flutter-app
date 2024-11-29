@@ -101,8 +101,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       actions: [
         IconButton(
+          onPressed: _fetchAllPosts,
+          icon: const Icon(Icons.refresh_rounded),
+          tooltip: AppStrings.refreshPosts,
+        ),
+        IconButton(
           onPressed: _navigateToUploadPostScreen,
-          icon: const Icon(Icons.add),
+          icon: const Icon(Icons.add_photo_alternate_rounded),
+          tooltip: AppStrings.addNewPost,
         ),
       ],
     );

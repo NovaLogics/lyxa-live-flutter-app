@@ -123,4 +123,7 @@ class AppStrings {
 
   static const String logoutDialogMsg = 'Are you sure to logout?';
   static const String yesLogout = 'Yes, logout';
+
+   static const String refreshPosts = 'Refresh Posts';
+   static const String addNewPost = 'Add New Post';
 }
