@@ -29,6 +29,7 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
   // --- Tertiary Colors ---
   // Text/Icon color on tertiary
   onTertiary: AppColors.bluePurple50,
+  onTertiaryContainer: AppColors.bluePurple50,
 
   // --- Error Colors ---
   // Error color (used for error states)

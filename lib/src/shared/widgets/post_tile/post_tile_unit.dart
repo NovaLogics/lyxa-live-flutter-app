@@ -562,15 +562,13 @@ class _PostTileUnitState extends State<PostTileUnit> {
           const SizedBox(height: AppDimens.size4),
           ConstrainedBox(
             constraints:
-                const BoxConstraints(maxHeight: 100, minWidth: double.infinity),
+                const BoxConstraints(maxHeight: 300, minWidth: double.infinity),
             child: SingleChildScrollView(
-              child: Text(
-                widget.post.captionText,
-                style: AppStyles.textTitlePost.copyWith(
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                  letterSpacing: AppDimens.letterSpacingPT04,
+              child: Text.rich(
+                TextSpan(
+                  children: _buildStyledText(widget.post.captionText, context),
                 ),
-                maxLines: 5,
+                maxLines: 10,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -579,6 +577,38 @@ class _PostTileUnitState extends State<PostTileUnit> {
         ],
       ),
     );
+  }
+
+  List<TextSpan> _buildStyledText(String text, BuildContext context) {
+    text = text.replaceAll('\n#', '\n #');
+    final words = text.split(' ');
+    final List<TextSpan> spans = [];
+
+    for (final word in words) {
+      if (word.startsWith('#') || word.startsWith('@')) {
+        spans.add(
+          TextSpan(
+            text: '$word ',
+            style: AppStyles.textTitlePost.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+              fontWeight: FontWeight.bold,
+              letterSpacing: AppDimens.letterSpacingPT05,
+            ),
+          ),
+        );
+      } else {
+        spans.add(
+          TextSpan(
+            text: '$word ',
+            style: AppStyles.textTitlePost.copyWith(
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
+          ),
+        );
+      }
+    }
+
+    return spans;
   }
 
   Widget _buildDivider(bool isLongDivider) {
