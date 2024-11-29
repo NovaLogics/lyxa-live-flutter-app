@@ -103,6 +103,30 @@ class AppColors {
   static const Color gold800 = Color(0xFFFB8C00);
   static const Color gold900 = Color(0xFFEF6C00);
 
+  // -> GREEN
+  static const Color green50 = Color(0xFFE8F5E9); 
+  static const Color green100 = Color(0xFFC8E6C9); 
+  static const Color green200 = Color(0xFFA5D6A7); 
+  static const Color green300 = Color(0xFF81C784); 
+  static const Color green400 = Color(0xFF66BB6A); 
+  static const Color green500 = Color(0xFF4CAF50); 
+  static const Color green600 = Color(0xFF43A047); 
+  static const Color green700 = Color(0xFF388E3C); 
+  static const Color green800 = Color(0xFF2C6B2F); 
+  static const Color green900 = Color(0xFF1B5E20); 
+
+  // -> TEAL
+static const Color teal50 = Color(0xFFE0F2F1);  
+static const Color teal100 = Color(0xFFB2DFDB); 
+static const Color teal200 = Color(0xFF80CBC4); 
+static const Color teal300 = Color(0xFF4DB6AC); 
+static const Color teal400 = Color(0xFF26A69A); 
+static const Color teal500 = Color(0xFF03DAC5); 
+static const Color teal600 = Color(0xFF00B8A2); 
+static const Color teal700 = Color(0xFF00A396); 
+static const Color teal800 = Color(0xFF008C7A); 
+static const Color teal900 = Color(0xFF00796B); 
+
   // -> WHITE
   static const Color white50 = Color(0xFFFFFFFF);
   static const Color white100 = Color(0xFFFFF8F8);

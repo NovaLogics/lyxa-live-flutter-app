@@ -3,7 +3,9 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lyxa_live/src/core/assets/app_fonts.dart';
 import 'package:lyxa_live/src/core/assets/app_icons.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
@@ -52,7 +54,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
       child: Column(
         children: [
           // AUTHOR'S PROFILE HEADER
@@ -413,9 +415,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppDimens.size16,
-        AppDimens.size0,
+        kIsWeb ? AppDimens.size16 : AppDimens.size0,
         AppDimens.size16,
-        AppDimens.size0,
+        kIsWeb ? AppDimens.size16 : AppDimens.size0,
       ),
       child: Row(
         children: [
@@ -581,18 +583,33 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
   List<TextSpan> _buildStyledText(String text, BuildContext context) {
     text = text.replaceAll('\n#', '\n #');
+    text = text.replaceAll('\n@', '\n @');
     final words = text.split(' ');
     final List<TextSpan> spans = [];
 
     for (final word in words) {
-      if (word.startsWith('#') || word.startsWith('@')) {
+      if (word.startsWith('#')) {
         spans.add(
           TextSpan(
             text: '$word ',
             style: AppStyles.textTitlePost.copyWith(
               color: Theme.of(context).colorScheme.onSecondary,
               fontWeight: FontWeight.bold,
-              letterSpacing: AppDimens.letterSpacingPT05,
+              fontFamily: AppFonts.raleway,
+              letterSpacing: AppDimens.letterSpacingPT07,
+            ),
+          ),
+        );
+      } else if (word.startsWith('@')) {
+        spans.add(
+          TextSpan(
+            text: '$word ',
+            style: AppStyles.textTitlePost.copyWith(
+              color: AppColors.teal700,
+              fontWeight: FontWeight.bold,
+              fontSize: AppDimens.fontSizeMD17,
+              fontFamily: AppFonts.balooPaaji2,
+              letterSpacing: AppDimens.letterSpacingPT00,
             ),
           ),
         );
