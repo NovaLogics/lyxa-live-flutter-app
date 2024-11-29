@@ -42,6 +42,21 @@ class ToastMessengerUnit {
     );
   }
 
+  static void showErrorToastShort({
+    required BuildContext context,
+    required String message,
+  }) {
+    showToast(
+      context: context,
+      message: message,
+      icon: Icons.error,
+      backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+      textColor: Theme.of(context).colorScheme.onInverseSurface,
+      shadowColor: AppColors.blackShade,
+      duration: ToastDuration.second3,
+    );
+  }
+
   /// Show a custom toast message
   /// [message] - Text to display
   /// [context] - BuildContext required to show overlay
