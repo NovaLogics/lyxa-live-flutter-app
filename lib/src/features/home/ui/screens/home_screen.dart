@@ -88,14 +88,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
-      title: Text(
-        AppStrings.homeTitle,
-        style: AppStyles.textAppBarStatic.copyWith(
-          color: Theme.of(context).colorScheme.onPrimary,
-          letterSpacing: AppDimens.letterSpacingPT01,
-          fontSize: AppDimens.fontSizeXXL28,
-          fontWeight: FontWeight.w600,
-          fontFamily: AppFonts.elMessiri,
+      title: Center(
+        child: Padding(
+          padding: const EdgeInsets.only(left: AppDimens.size32),
+          child: Text(
+            AppStrings.homeTitle,
+            style: AppStyles.textAppBarStatic.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+              letterSpacing: AppDimens.letterSpacingPT01,
+              fontSize: AppDimens.fontSizeXXL28,
+              fontWeight: FontWeight.w600,
+              fontFamily: AppFonts.elMessiri,
+            ),
+          ),
         ),
       ),
       actions: [
