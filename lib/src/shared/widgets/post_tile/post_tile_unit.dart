@@ -570,7 +570,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 TextSpan(
                   children: _buildStyledText(widget.post.captionText, context),
                 ),
-                maxLines: 10,
+                maxLines: 16,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
               ),
