@@ -328,7 +328,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 post: post,
                 currentUser: _currentAppUser,
                 onDeletePressed: () =>
-                    getIt<PostCubit>().deletePost(postId: post.id),
+                    getIt<PostCubit>().deletePost(post: post),
               );
             },
           );

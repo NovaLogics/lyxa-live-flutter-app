@@ -57,8 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _postCubit.getAllPosts();
   }
 
-  void _deletePost(String postId) {
-    _postCubit.deletePost(postId: postId);
+  void _deletePost(Post post) {
+    _postCubit.deletePost(post: post);
     //_fetchAllPosts();
   }
 
@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return PostTileUnit(
                 post: post,
                 currentUser: _currentUser,
-                onDeletePressed: () => _deletePost(post.id),
+                onDeletePressed: () => _deletePost(post),
               );
             },
           );

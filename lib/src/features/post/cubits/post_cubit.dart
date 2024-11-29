@@ -98,11 +98,14 @@ class PostCubit extends Cubit<PostState> {
   }
 
   Future<void> deletePost({
-    required String postId,
+    required Post post,
   }) async {
-    final result = await _postRepository.removePost(postId: postId);
+    final postDeleteResult = await _postRepository.removePost(postId: post.id);
 
-    switch (result.status) {
+    // final imageDeleteResult =
+    await _storageRepository.deleteImageByUrl(downloadUrl: post.imageUrl);
+
+    switch (postDeleteResult.status) {
       case Status.success:
         //TODO : Handle this
         getAllPosts();
@@ -110,7 +113,7 @@ class PostCubit extends Cubit<PostState> {
 
       case Status.error:
         _handleErrors(
-          result: result,
+          result: postDeleteResult,
           tag: '$debugTag: deletePost()',
         );
         break;
