@@ -369,9 +369,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
         const Spacer(),
         // Delete option if it's the user's post
         if (_isOwnPost)
-          GestureDetector(
-            onTap: _showDeleteOptions,
-            child: _getDeleteIcon(),
+          IconButton(
+            onPressed: _showDeleteOptions,
+            icon: _getDeleteIcon(),
+            tooltip: AppStrings.removeThisPost,
           ),
       ],
     );
@@ -412,51 +413,48 @@ class _PostTileUnitState extends State<PostTileUnit> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppDimens.size16,
+        AppDimens.size0,
         AppDimens.size16,
-        AppDimens.size16,
-        AppDimens.size8,
+        AppDimens.size0,
       ),
       child: Row(
         children: [
           // Like button
-          SizedBox(
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: _toggleLikePost,
-                  child: PhysicalModel(
-                    color: Colors.transparent,
-                    elevation: AppDimens.elevationMD8,
-                    shape: BoxShape.rectangle,
-                    shadowColor:
-                        Theme.of(context).colorScheme.surface.withOpacity(0.4),
-                    child: _getLikeHeartIcon(),
-                  ),
+          Row(
+            children: [
+              SizedBox(
+                width: AppDimens.size32,
+                child: IconButton(
+                  onPressed: _toggleLikePost,
+                  icon: _getLikeHeartIcon(),
+                  tooltip: AppStrings.likeThisPost,
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
                 ),
-                const SizedBox(width: AppDimens.size4),
-                // Like count
-                Text(
-                  widget.post.likes.length.toString(),
-                  style: AppStyles.textNumberStyle2.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
+              ),
+              // Like count
+              Text(
+                widget.post.likes.length.toString(),
+                style: AppStyles.textNumberStyle2.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+
           const SizedBox(width: AppDimens.size12),
           // Comment button
-          GestureDetector(
-            onTap: _openCommentDialog,
-            child: PhysicalModel(
-              color: Colors.transparent,
-              elevation: AppDimens.elevationMD8,
-              shape: BoxShape.rectangle,
-              shadowColor:
-                  Theme.of(context).colorScheme.surface.withOpacity(0.4),
-              child: _getCommentIcon(),
+          SizedBox(
+            width: AppDimens.size28,
+            child: IconButton(
+              onPressed: _openCommentDialog,
+              icon: _getCommentIcon(),
+              tooltip: AppStrings.postAComment,
+              constraints: const BoxConstraints(),
+              padding: EdgeInsets.zero,
             ),
           ),
+
           const SizedBox(width: AppDimens.size4),
           Text(
             widget.post.comments.length.toString(),
@@ -528,7 +526,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
     return kIsWeb
         ? Icon(
-            hasComments ? Icons.insert_comment_rounded : Icons.mode_comment_outlined,
+            hasComments
+                ? Icons.insert_comment_rounded
+                : Icons.mode_comment_outlined,
             color: colour,
           )
         : SvgPicture.asset(

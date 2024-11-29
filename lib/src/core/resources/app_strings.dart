@@ -128,4 +128,8 @@ class AppStrings {
   static const String addNewPost = 'Add New Post';
   static const String refreshCooldownMessage =
       'Please wait 5 seconds before refreshing again.';
+
+  static const String likeThisPost = 'Like this post';
+  static const String postAComment = 'Post a comment';
+  static const String removeThisPost = 'Remove This post';
 }
