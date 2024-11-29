@@ -7,6 +7,7 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
+import 'package:lyxa_live/src/features/home/ui/components/refresh_button_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
@@ -87,28 +88,27 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
-      title: Center(
-        child: Text(
-          AppStrings.homeTitle,
-          style: AppStyles.textAppBarStatic.copyWith(
-            color: Theme.of(context).colorScheme.onPrimary,
-            letterSpacing: AppDimens.letterSpacingPT01,
-            fontSize: AppDimens.fontSizeXXL28,
-            fontWeight: FontWeight.w600,
-            fontFamily: AppFonts.elMessiri,
-          ),
+      title: Text(
+        AppStrings.homeTitle,
+        style: AppStyles.textAppBarStatic.copyWith(
+          color: Theme.of(context).colorScheme.onPrimary,
+          letterSpacing: AppDimens.letterSpacingPT01,
+          fontSize: AppDimens.fontSizeXXL28,
+          fontWeight: FontWeight.w600,
+          fontFamily: AppFonts.elMessiri,
         ),
       ),
       actions: [
-        IconButton(
-          onPressed: _fetchAllPosts,
-          icon: const Icon(Icons.refresh_rounded),
-          tooltip: AppStrings.refreshPosts,
+        RefreshButtonUnit(
+          onRefresh: _fetchAllPosts,
         ),
-        IconButton(
-          onPressed: _navigateToUploadPostScreen,
-          icon: const Icon(Icons.add_photo_alternate_rounded),
-          tooltip: AppStrings.addNewPost,
+        Padding(
+          padding: const EdgeInsets.only(right: AppDimens.size2),
+          child: IconButton(
+            onPressed: _navigateToUploadPostScreen,
+            icon: const Icon(Icons.add_box_outlined),
+            tooltip: AppStrings.addNewPost,
+          ),
         ),
       ],
     );
