@@ -24,7 +24,7 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 <br>
 <br>
 
-[![Platform](https://img.shields.io/badge/-Android%20:%20IOS%20:%20Web%20|%20Platforms-2E8B57?logo=flutter&logoColor=white&style=for-the-badge)](#)
+[![Flutter](https://img.shields.io/badge/Flutter%20|%20UI%20framework-02569B?style=for-the-badge&logo=flutter&logoColor=white)](#)
 
 [![Language](https://img.shields.io/badge/-Dart%20|%20Language-%2307405e?logo=dart&logoColor=white&style=for-the-badge)](#)
 
@@ -33,6 +33,11 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 [![Architecture](https://img.shields.io/badge/%20BLoC%20pattern-1C1E24?logo=planetscale&logoColor=00C7B7&style=for-the-badge)](#)
 <!-- [![UI](https://img.shields.io/badge/-UI%20|%20Jetpack%20Compose-1C1E24?logo=planetscale&logoColor=00C7B7&style=for-the-badge)](#) -->
 [![License: MIT](https://img.shields.io/badge/-LICENSE%20|%20MIT-1C1E24?logo=maas&logoColor=00C7B7&style=for-the-badge)](./LICENSE)
+
+[![Android](https://img.shields.io/badge/Android-2E8B57?style=for-the-badge&logo=android&logoColor=white)](#)
+[![Web](https://img.shields.io/badge/Web-%232C2D72?style=for-the-badge&logo=html5&logoColor=white)](#)
+[![IOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)](#)
+
 <br>
 <br>
 
