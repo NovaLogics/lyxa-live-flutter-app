@@ -21,7 +21,7 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 | [ᴅᴇᴠ ꜰᴇᴀᴛᴜʀᴇꜱ](#ᴠ--ʙᴇʜɪɴᴅ-ᴛʜᴇ-ᴄᴏᴅᴇ-ᴅᴇᴠ-ꜰᴇᴀᴛᴜʀᴇꜱ)
 | [ᴘʀᴏᴊᴇᴄᴛ ɴᴏᴛᴇꜱ](#ᴠɪ--ᴘʀᴏᴊᴇᴄᴛ-ɴᴏᴛᴇꜱ)
 
-<br>
+
 <br>
 
 [![Android](https://img.shields.io/badge/Android-2E8B57?style=for-the-badge&logo=android&logoColor=white)](#)
