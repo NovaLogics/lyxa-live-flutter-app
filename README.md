@@ -140,8 +140,10 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 
 > <samp> **STAGING BRANCH :**  </samp>  
 > `FLOW | Staging → Production`  
-> For pre-release testing, which ensures that the code is stable, bug-free, and ready for deployment.  
+> For pre-release testing, which ensures that the code is stable, bug-free, and ready for deployment.
+<!--   
 > ➲ [staging][branch-staging]
+> -->
 
 > <samp> **DEVELOPMENT BRANCH :**  </samp>  
 > `FLOW | Development → Release → Staging → Production`  
@@ -232,23 +234,50 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 
 <br>
 
-* [Kotlin][0] : Kotlin is statically typed & first-class language for Android Development.
-* [Coroutines][1] : For Asynchronus or non-blocking operations.
-* [Flows][2] : Data Streaming API which is built on top of Coroutines.
-* [Jetpack Compose][3] : Toolkit for building native UI in a declarative way.
-* [Room][4] : Save data in a local database using Room
-* [Retrofit][5] : Type-safe REST client for Android to consume RESTful web services.
-* [Dagger Hilt][6] : Dependency injection library for Android.
-* [Kotlin DSL][7] : For writing gradle script for Kotlin is more readable and offers better compile-time.
+## **Flutter Dependencies**
 
-[0]:  https://kotlinlang.org/
-[1]:  https://kotlinlang.org/docs/coroutines-overview.html
-[2]:  https://developer.android.com/kotlin/flow
-[3]:  https://developer.android.com/jetpack/compose
-[4]:  https://developer.android.com/training/data-storage/room
-[5]:  https://github.com/square/retrofit
-[6]:  https://dagger.dev/hilt/
-[7]:  https://docs.gradle.org/current/userguide/kotlin_dsl.html
+* [cupertino_icons][0] : Provides iOS-style icons for Flutter apps.
+* [firebase_core][1] : Initializes Firebase services for Flutter applications.
+* [firebase_auth][2] : Handles authentication for Firebase users (sign-in, sign-up).
+* [flutter_bloc][3] : Implements the BLoC (Business Logic Component) pattern for state management.
+* [cloud_firestore][4] : Firebase Firestore plugin for reading and writing documents.
+* [firebase_storage][5] : Firebase Storage plugin to upload and download files.
+* [file_picker][6] : Allows users to pick files from the device.
+* [cached_network_image][7] : Caches images for improved performance and offline support.
+* [json_annotation][8] : Provides annotations to work with JSON data (serialization/deserialization).
+* [intl][9] : Internationalization and localization support for Flutter apps.
+* [hive][10] : Lightweight, fast, NoSQL database for Flutter.
+* [hive_flutter][11] : Flutter integration for the Hive database.
+* [path_provider][12] : Provides a platform-agnostic way to get device file paths.
+* [get_it][13] : A simple Service Locator for Dart and Flutter.
+* [injectable][14] : Code generation for dependency injection.
+* [flutter_svg][15] : SVG support for Flutter.
+* [carousel_slider][16] : A highly customizable carousel slider widget for Flutter.
+* [image_cropper][17] : Crop images in Flutter apps.
+* [flutter_image_compress][18] : Compress images to reduce file size.
+* [flutter_cache_manager][19] : Caching files from the internet to improve app performance.
+
+[0]: https://pub.dev/packages/cupertino_icons
+[1]: https://pub.dev/packages/firebase_core
+[2]: https://pub.dev/packages/firebase_auth
+[3]: https://pub.dev/packages/flutter_bloc
+[4]: https://pub.dev/packages/cloud_firestore
+[5]: https://pub.dev/packages/firebase_storage
+[6]: https://pub.dev/packages/file_picker
+[7]: https://pub.dev/packages/cached_network_image
+[8]: https://pub.dev/packages/json_annotation
+[9]: https://pub.dev/packages/intl
+[10]: https://pub.dev/packages/hive
+[11]: https://pub.dev/packages/hive_flutter
+[12]: https://pub.dev/packages/path_provider
+[13]: https://pub.dev/packages/get_it
+[14]: https://pub.dev/packages/injectable
+[15]: https://pub.dev/packages/flutter_svg
+[16]: https://pub.dev/packages/carousel_slider
+[17]: https://pub.dev/packages/image_cropper
+[18]: https://pub.dev/packages/flutter_image_compress
+[19]: https://pub.dev/packages/flutter_cache_manager
+
 
 
 #
@@ -257,24 +286,6 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 1. Project Resources &nbsp;|&nbsp;  [ More-> ](#1-project-resources)
 
 
-#
-### ⭓ Project Documents
-<br>
-
-1. **Managing Dependencies with Version Catalogs** &nbsp;|&nbsp;  [ Read -> ](./archive/docs/Doc_Version_Catalogs.md)
-
-2. **Jetpack Compose Project Structure Guide** &nbsp;|&nbsp;  [ Read -> ](./archive/docs/Doc_Project_Structure.md)
-
-3. **Dimension Standards in Android** &nbsp;|&nbsp;  [ Read -> ](./archive/docs/Doc_Dimension_Resource.md)
-<br>
-<br>  
-<br>  
-
-#
-<div align="center">
-
-<kbd>[&nbsp; ⮝ &nbsp;  BACK TO TOP  &nbsp;&nbsp;&nbsp;](#ɪ----ᴘʀᴏᴊᴇᴄᴛ-ɪɴꜰᴏ) </kbd>
-</div>
 
 
 
@@ -290,13 +301,7 @@ ____
 
 ## 1. Project Resources
 
-Colours
-
-https://material-foundation.github.io/material-theme-builder/
-
-https://www.materialpalette.com/orange/brown
-
-https://htmlcolorcodes.com/colors/
+https://flutter.dev/
 
 
 <br>
