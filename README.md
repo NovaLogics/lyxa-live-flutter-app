@@ -46,19 +46,37 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 
 ### ⭓ Features
 
-- **Personalized Fashion Tips**: Tailored outfit suggestions for men, women, and kids.
-- **Trending Styles**: Latest fashion trends and seasonal collections.
-- **Grooming Advice**: Expert tips on grooming and self-care.
-- **Daily Style Inspirations**: Fresh outfit ideas for everyday wear or special occasions.
-- **Style Alerts**: Notifications for new fashion releases and sales.
-- **Size and Fit Guide**: Help finding the perfect fit for any clothing item.
-- **Fashion News**: Updates on global fashion trends and designer highlights.
-- **Shopping Links**: Easy access to buy recommended outfits and accessories.
-
+- **Post Sharing**: Share photos, videos, and stories with your followers and the world.
+- **Real-time Interactions**: Engage with others through comments, likes, and shares.
+- **Inspiring Content**: Discover motivational and creative posts from your community.
+- **Profile Customization**: Personalize your profile with photos, bios, and links.
+- **Activity Feed**: Stay updated on friends' activities, likes, and comments.
+- **Live Events**: Join and participate in live events, chats, and discussions.
+- **Followers & Following**: Build your community by following others and gaining followers.
+- **Content Discovery**: Explore trending posts, hashtags, and popular topics.
+  
 ##
 ### ⭓ Requirements
-- Android 7.0 and Above
-- Min SDK version 24
+## **System Requirements**
+
+### Android
+- **Android 7.0 (Nougat)** and Above
+- **Minimum SDK Version**: 24
+
+### iOS
+- **iOS 11.0** and Above
+
+### Web
+- **Supported Browsers**:
+  - Google Chrome (latest stable)
+  - Firefox (latest stable)
+  - Safari (latest stable)
+  - Edge (latest stable)
+
+- **Required Features**:
+  - Modern JavaScript and HTML5 support
+  - WebAssembly (for performance)
+
 
 
 ##
@@ -71,19 +89,27 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 
 <p align="center">
 <img 
-  src="./archive/screenshots/alpha_dark.png" 
+  src="./_archive/screenshots/screen_login_dark.png" 
    width="210" height="460" 
   />
 <img 
-  src="./archive/screenshots/alpha_light.png" 
+  src="./_archive/screenshots/screen_login_light.png" 
   width="210" height="460" 
   />
 <img
-    src="./archive/screenshots/screen_men_dark.png"
+    src="./_archive/screenshots/screen_home_1_light.png" 
     width="210" height="460"
   />
 <img
-    src="./archive/screenshots/screen_men_light.png"
+     src="./_archive/screenshots/screen_home_2_dark.png" 
+    width="210" height="460"
+  />
+  <img
+    src="./_archive/screenshots/screen_profile_dark.png" 
+    width="210" height="460"
+  />
+<img
+     src="./_archive/screenshots/screen_home_2_light.png" 
     width="210" height="460"
   />
 </p>
