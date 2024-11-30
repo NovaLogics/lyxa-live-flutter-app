@@ -1,4 +1,4 @@
-<h1 align="center" >  𝐒𝐓𝐘𝐋𝐄𝐒 𝚋𝚢 𝙽𝚘𝚟𝚊  <br> ♨ [ ᴀɴᴅʀᴏɪᴅ  ᴘʀᴏᴊᴇᴄᴛ ] ♨</h1>
+<h1 align="center" >    ✦ 𝐋𝐘𝐗𝐀 𝑳𝒊𝒗𝒆 ✦   <br> ♨ [ ꜰʟᴜᴛᴛᴇʀ  ᴘʀᴏᴊᴇᴄᴛ ] ♨</h1>
 
 ## ɪ  ⁃  ᴘʀᴏᴊᴇᴄᴛ ɪɴꜰᴏ
 
@@ -6,7 +6,9 @@
 > **This project is still in its early development stage.**
 #
 
-𝑁𝑜𝑣𝑎 𝑆𝑡𝑦𝑙𝑒𝑠 ( 𝐒𝐓𝐘𝐋𝐄𝐒 𝚋𝚢 𝙽𝚘𝚟𝚊 ) is your go to fashion app for men, women, and kids, offering fresh style tips, trending outfits, and grooming advice to keep you looking your best.
+**LYXA Live** is a dynamic social media app built with *Flutter and Dart*, designed to help users Share, Live, and Inspire. This app provides an engaging platform for users to connect, share their stories, and inspire each other with its sleek, user-friendly interface.
+
+Built using the *BLoC* pattern for state management, LYXA ensures smooth, responsive interactions and a scalable architecture for future enhancements.
 
 <br>
 
@@ -22,13 +24,14 @@
 <br>
 <br>
 
-[![Platform](https://img.shields.io/badge/-Android%20|%20Platform-2E8B57?logo=android&logoColor=white&style=for-the-badge)](#)
-[![Language](https://img.shields.io/badge/-Kotlin%20|%20Language-%2307405e?logo=kotlin&logoColor=white&style=for-the-badge)](#)
+[![Platform](https://img.shields.io/badge/-Android%20:%20IOS%20:%20Web%20|%20Platforms-2E8B57?logo=flutter&logoColor=white&style=for-the-badge)](#)
+
+[![Language](https://img.shields.io/badge/-Dart%20|%20Language-%2307405e?logo=dart&logoColor=white&style=for-the-badge)](#)
 
 [![MIN API LEVEL](https://img.shields.io/badge/-MIN%20SDK%20|%2024-1C1E24?logo=planetscale&logoColor=00C7B7&style=for-the-badge)](#)
 [![Target Version](https://img.shields.io/badge/-Target%20SDK%20|%2034-1C1E24?logo=planetscale&logoColor=00C7B7&style=for-the-badge)](#)
-[![Architecture](https://img.shields.io/badge/-Architecture%20|%20MVI-1C1E24?logo=planetscale&logoColor=00C7B7&style=for-the-badge)](#)
-[![UI](https://img.shields.io/badge/-UI%20|%20Jetpack%20Compose-1C1E24?logo=planetscale&logoColor=00C7B7&style=for-the-badge)](#)
+[![Architecture](https://img.shields.io/badge/%20BLoC%20pattern-1C1E24?logo=planetscale&logoColor=00C7B7&style=for-the-badge)](#)
+<!-- [![UI](https://img.shields.io/badge/-UI%20|%20Jetpack%20Compose-1C1E24?logo=planetscale&logoColor=00C7B7&style=for-the-badge)](#) -->
 [![License: MIT](https://img.shields.io/badge/-LICENSE%20|%20MIT-1C1E24?logo=maas&logoColor=00C7B7&style=for-the-badge)](./LICENSE)
 <br>
 <br>
