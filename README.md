@@ -120,7 +120,7 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 
 
 ![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
-![ForTheBadge ANDROID](https://forthebadge.com/images/badges/built-for-android.svg)
+![forthebadge](https://forthebadge.com/images/featured/featured-contains-cat-gifs.svg)
 ![ForTheBadge GIT](https://forthebadge.com/images/badges/uses-git.svg)
 
   <br>
@@ -207,9 +207,9 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 <!-- Experimental → Feature → Development → Release → Staging → Main/Production   -->
 
 
-[branch-main]:  https://github.com/dizzcode/nova-styles-android-app/tree/main
-[branch-development]:  https://github.com/dizzcode/nova-styles-android-app/tree/development
-[branch-staging]:  https://github.com/dizzcode/nova-styles-android-app/tree/staging
+[branch-main]:  https://github.com/NovaLogics/lyxa-live-flutter-app/tree/main
+[branch-development]:  https://github.com/NovaLogics/lyxa-live-flutter-app/tree/development
+[branch-staging]:  https://github.com/NovaLogics/lyxa-live-flutter-app/tree/staging
 
 [branch-feature-NAME]:  https://github.com/dizzcode/nova-styles-android-app/tree/staging
 
