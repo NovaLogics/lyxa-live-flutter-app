@@ -3,7 +3,9 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lyxa_live/src/core/assets/app_fonts.dart';
 import 'package:lyxa_live/src/core/assets/app_icons.dart';
+import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
@@ -52,7 +54,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
       child: Column(
         children: [
           // AUTHOR'S PROFILE HEADER
@@ -369,9 +371,10 @@ class _PostTileUnitState extends State<PostTileUnit> {
         const Spacer(),
         // Delete option if it's the user's post
         if (_isOwnPost)
-          GestureDetector(
-            onTap: _showDeleteOptions,
-            child: _getDeleteIcon(),
+          IconButton(
+            onPressed: _showDeleteOptions,
+            icon: _getDeleteIcon(),
+            tooltip: AppStrings.removeThisPost,
           ),
       ],
     );
@@ -412,51 +415,48 @@ class _PostTileUnitState extends State<PostTileUnit> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppDimens.size16,
+        kIsWeb ? AppDimens.size16 : AppDimens.size0,
         AppDimens.size16,
-        AppDimens.size16,
-        AppDimens.size8,
+        kIsWeb ? AppDimens.size16 : AppDimens.size0,
       ),
       child: Row(
         children: [
           // Like button
-          SizedBox(
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: _toggleLikePost,
-                  child: PhysicalModel(
-                    color: Colors.transparent,
-                    elevation: AppDimens.elevationMD8,
-                    shape: BoxShape.rectangle,
-                    shadowColor:
-                        Theme.of(context).colorScheme.surface.withOpacity(0.4),
-                    child: _getLikeHeartIcon(),
-                  ),
+          Row(
+            children: [
+              SizedBox(
+                width: AppDimens.size32,
+                child: IconButton(
+                  onPressed: _toggleLikePost,
+                  icon: _getLikeHeartIcon(),
+                  tooltip: AppStrings.likeThisPost,
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
                 ),
-                const SizedBox(width: AppDimens.size4),
-                // Like count
-                Text(
-                  widget.post.likes.length.toString(),
-                  style: AppStyles.textNumberStyle2.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
+              ),
+              // Like count
+              Text(
+                widget.post.likes.length.toString(),
+                style: AppStyles.textNumberStyle2.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+
           const SizedBox(width: AppDimens.size12),
           // Comment button
-          GestureDetector(
-            onTap: _openCommentDialog,
-            child: PhysicalModel(
-              color: Colors.transparent,
-              elevation: AppDimens.elevationMD8,
-              shape: BoxShape.rectangle,
-              shadowColor:
-                  Theme.of(context).colorScheme.surface.withOpacity(0.4),
-              child: _getCommentIcon(),
+          SizedBox(
+            width: AppDimens.size28,
+            child: IconButton(
+              onPressed: _openCommentDialog,
+              icon: _getCommentIcon(),
+              tooltip: AppStrings.postAComment,
+              constraints: const BoxConstraints(),
+              padding: EdgeInsets.zero,
             ),
           ),
+
           const SizedBox(width: AppDimens.size4),
           Text(
             widget.post.comments.length.toString(),
@@ -528,7 +528,9 @@ class _PostTileUnitState extends State<PostTileUnit> {
 
     return kIsWeb
         ? Icon(
-            hasComments ? Icons.insert_comment_rounded : Icons.mode_comment_outlined,
+            hasComments
+                ? Icons.insert_comment_rounded
+                : Icons.mode_comment_outlined,
             color: colour,
           )
         : SvgPicture.asset(
@@ -562,15 +564,13 @@ class _PostTileUnitState extends State<PostTileUnit> {
           const SizedBox(height: AppDimens.size4),
           ConstrainedBox(
             constraints:
-                const BoxConstraints(maxHeight: 100, minWidth: double.infinity),
+                const BoxConstraints(maxHeight: 300, minWidth: double.infinity),
             child: SingleChildScrollView(
-              child: Text(
-                widget.post.captionText,
-                style: AppStyles.textTitlePost.copyWith(
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                  letterSpacing: AppDimens.letterSpacingPT04,
+              child: Text.rich(
+                TextSpan(
+                  children: _buildStyledText(widget.post.captionText, context),
                 ),
-                maxLines: 5,
+                maxLines: 16,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -579,6 +579,53 @@ class _PostTileUnitState extends State<PostTileUnit> {
         ],
       ),
     );
+  }
+
+  List<TextSpan> _buildStyledText(String text, BuildContext context) {
+    text = text.replaceAll('\n#', '\n #');
+    text = text.replaceAll('\n@', '\n @');
+    final words = text.split(' ');
+    final List<TextSpan> spans = [];
+
+    for (final word in words) {
+      if (word.startsWith('#')) {
+        spans.add(
+          TextSpan(
+            text: '$word ',
+            style: AppStyles.textTitlePost.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+              fontWeight: FontWeight.bold,
+              fontFamily: AppFonts.raleway,
+              letterSpacing: AppDimens.letterSpacingPT07,
+            ),
+          ),
+        );
+      } else if (word.startsWith('@')) {
+        spans.add(
+          TextSpan(
+            text: '$word ',
+            style: AppStyles.textTitlePost.copyWith(
+              color: AppColors.teal700,
+              fontWeight: FontWeight.w500,
+              fontSize: AppDimens.fontSizeMD17,
+              fontFamily: AppFonts.balooPaaji2,
+              letterSpacing: -0.1,
+            ),
+          ),
+        );
+      } else {
+        spans.add(
+          TextSpan(
+            text: '$word ',
+            style: AppStyles.textTitlePost.copyWith(
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
+          ),
+        );
+      }
+    }
+
+    return spans;
   }
 
   Widget _buildDivider(bool isLongDivider) {

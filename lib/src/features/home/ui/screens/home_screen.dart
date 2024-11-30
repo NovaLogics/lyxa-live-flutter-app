@@ -7,6 +7,7 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
+import 'package:lyxa_live/src/features/home/ui/components/refresh_button_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
@@ -56,8 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _postCubit.getAllPosts();
   }
 
-  void _deletePost(String postId) {
-    _postCubit.deletePost(postId: postId);
+  void _deletePost(Post post) {
+    _postCubit.deletePost(post: post);
     //_fetchAllPosts();
   }
 
@@ -88,21 +89,31 @@ class _HomeScreenState extends State<HomeScreen> {
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
       title: Center(
-        child: Text(
-          AppStrings.homeTitle,
-          style: AppStyles.textAppBarStatic.copyWith(
-            color: Theme.of(context).colorScheme.onPrimary,
-            letterSpacing: AppDimens.letterSpacingPT01,
-            fontSize: AppDimens.fontSizeXXL28,
-            fontWeight: FontWeight.w600,
-            fontFamily: AppFonts.elMessiri,
+        child: Padding(
+          padding: const EdgeInsets.only(left: AppDimens.size32),
+          child: Text(
+            AppStrings.homeTitle,
+            style: AppStyles.textAppBarStatic.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+              letterSpacing: AppDimens.letterSpacingPT01,
+              fontSize: AppDimens.fontSizeXXL28,
+              fontWeight: FontWeight.w600,
+              fontFamily: AppFonts.elMessiri,
+            ),
           ),
         ),
       ),
       actions: [
-        IconButton(
-          onPressed: _navigateToUploadPostScreen,
-          icon: const Icon(Icons.add),
+        RefreshButtonUnit(
+          onRefresh: _fetchAllPosts,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: AppDimens.size2),
+          child: IconButton(
+            onPressed: _navigateToUploadPostScreen,
+            icon: const Icon(Icons.add_box_outlined),
+            tooltip: AppStrings.addNewPost,
+          ),
         ),
       ],
     );
@@ -120,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return PostTileUnit(
                 post: post,
                 currentUser: _currentUser,
-                onDeletePressed: () => _deletePost(post.id),
+                onDeletePressed: () => _deletePost(post),
               );
             },
           );

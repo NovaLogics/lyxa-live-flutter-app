@@ -56,6 +56,27 @@ class FirebaseStorageRepository implements StorageRepository {
     }
   }
 
+  @override
+  Future<Result<void>> deleteImageByUrl({required String downloadUrl}) async {
+    try {
+      // Extract the path from the download URL
+      final Uri uri = Uri.parse(downloadUrl);
+      final String path = Uri.decodeFull(uri.pathSegments.last);
+
+      // Get a reference to the file in Firebase Storage
+      final Reference storageReference = _firebaseStorage.ref().child(path);
+
+      // Delete the file
+      await storageReference.delete();
+
+      return Result.voidSuccess();
+    } on FirebaseException catch (error) {
+      return Result.error(FirebaseError(error));
+    } catch (error) {
+      return Result.error(GenericError(error: error));
+    }
+  }
+
   //•▼ LEGACY CODE ▼•
 
   // Profile Pictures

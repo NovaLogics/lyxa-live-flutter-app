@@ -13,6 +13,10 @@ abstract class StorageRepository {
     required String fileName,
   });
 
+  Future<Result<void>> deleteImageByUrl({
+    required String downloadUrl,
+  });
+
   //•▼ LEGACY CODE ▼•
 
   // Upload profile images on mobile platforms

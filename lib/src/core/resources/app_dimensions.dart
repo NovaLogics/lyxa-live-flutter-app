@@ -3,6 +3,7 @@ class AppDimens {
 
   // General Sizes for custom components
   static const double size0 = 0.0;
+  static const double size2 = 4.0;
   static const double size4 = 4.0;
   static const double size8 = 8.0;
   static const double size12 = 12.0;
@@ -81,6 +82,7 @@ class AppDimens {
   static const double fontSizeRG14 = 14.0;
   static const double fontSizeMD15 = 15.0;
   static const double fontSizeMD16 = 16.0;
+  static const double fontSizeMD17 = 17.0;
   static const double fontSizeLG18 = 18.0;
   static const double fontSizeXL20 = 20.0;
   static const double fontSizeXXL24 = 24.0;
@@ -107,6 +109,7 @@ class AppDimens {
   static const double spacingXXL64 = 64.0;
 
   // Letter Spacing
+  static const double letterSpacingPT00 = 0.0;
   static const double letterSpacingPT01 = 0.1;
   static const double letterSpacingPT02 = 0.2;
   static const double letterSpacingPT03 = 0.3;

@@ -37,61 +37,67 @@ class _CommentTileUnitState extends State<CommentTileUnit> {
     return Padding(
       padding: const EdgeInsets.symmetric(
           horizontal: AppDimens.paddingLG20, vertical: AppDimens.paddingXS2),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          // USERNAME
-          Text(
-            "⤷ ${widget.comment.userName} ⬪",
-            style: AppStyles.textSubtitlePost.copyWith(
-              color: Theme.of(context).colorScheme.onSecondary,
-              fontSize: AppDimens.fontSizeSM13,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(width: AppDimens.size8),
-
-          // COMMENT TEXT
-          Flexible(
-            child: SizedBox(
-              width: AppDimens.containerSize430,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxHeight: AppDimens.size100,
-                ),
-                child: Text(
-                  widget.comment.text,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onTertiary,
+          Padding(
+            padding: const EdgeInsets.only(right: AppDimens.size20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // USERNAME
+                Text(
+                  "⤷ ${widget.comment.userName} ⬪",
+                  style: AppStyles.textSubtitlePost.copyWith(
+                    color: Theme.of(context).colorScheme.onSecondary,
                     fontSize: AppDimens.fontSizeSM13,
-                    fontWeight: FontWeight.normal,
+                    fontWeight: FontWeight.w600,
                   ),
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 5,
                 ),
-              ),
+                const SizedBox(width: AppDimens.size8),
+
+                // COMMENT TEXT
+                Flexible(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxHeight: AppDimens.size120,
+                      minWidth: double.infinity,
+                    ),
+                    child: Text(
+                      widget.comment.text,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onTertiary,
+                        fontSize: AppDimens.fontSizeSM13,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 5,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-
-          const Spacer(),
-
-          // DELETE BUTTON
-          (_isOwnPost)
-              ? GestureDetector(
-                  onTap: _showOptions,
-                  child: Icon(
-                    Icons.more_horiz,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    size: AppDimens.iconSizeSM20,
+          Positioned(
+            right: 0, // Place actions on the right side
+            child: (_isOwnPost)
+                ? GestureDetector(
+                    onTap: _showOptions,
+                    child: Icon(
+                      Icons.more_horiz,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      size: AppDimens.iconSizeSM20,
+                    ),
+                  )
+                : const SizedBox(
+                    height: AppDimens.iconSizeSM20,
                   ),
-                )
-              : const SizedBox(
-                  height: AppDimens.iconSizeSM20,
-                ),
+          ),
         ],
       ),
     );
+
+    // DELETE BUTTON
   }
 
   void _initValues() {
