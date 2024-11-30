@@ -36,9 +36,8 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 <br>
 <br>
 
-<img src="./archive/screenshots/alpha_light.png" width="320" height="720" />
-
-<img src="./archive/screenshots/screen_men_dark.png" width="320" height="720" />
+<img src="./_archive/screenshots/screen_home_1_dark.png" width="320" height="720" />
+<img src="./_archive/screenshots/screen_home_2_light.png" width="320" height="720" />
 <br>
 
 </div>
