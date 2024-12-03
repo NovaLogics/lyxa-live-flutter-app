@@ -10,6 +10,10 @@ class ScrollableScaffold extends StatelessWidget {
   final Color? backgroundColor;
   final BackgroundStyle backgroundStyle;
 
+  final bool showPhotoSlider;
+  final bool showLoading;
+  final bool showError;
+
   const ScrollableScaffold({
     super.key,
     this.appBar,
@@ -17,6 +21,9 @@ class ScrollableScaffold extends StatelessWidget {
     this.backgroundColor,
     this.backgroundStyle = BackgroundStyle.main,
     required this.body,
+    this.showPhotoSlider = false,
+    this.showLoading = true,
+    this.showError = true,
   });
 
   @override
