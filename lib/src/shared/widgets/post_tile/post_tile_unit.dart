@@ -14,7 +14,7 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/comment_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
@@ -166,7 +166,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
       return;
     }
 
-    final newComment = Comment(
+    final newComment = CommentEntity(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       postId: widget.post.id,
       userId: _appUserId,
@@ -193,7 +193,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
   }
 
   // Handle the logic for deleting comment to the post
-  void _deleteSelectedComment(Comment comment) {
+  void _deleteSelectedComment(CommentEntity comment) {
     setState(() {
       widget.post.comments.remove(comment);
     });

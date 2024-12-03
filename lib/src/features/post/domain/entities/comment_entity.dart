@@ -9,7 +9,7 @@ class CommentFields {
   static const String timestamp = 'timestamp';
 }
 
-class Comment {
+class CommentEntity {
   final String id;
   final String postId;
   final String userId;
@@ -17,7 +17,7 @@ class Comment {
   final String text;
   final DateTime timestamp;
 
-  Comment({
+  CommentEntity({
     required this.id,
     required this.postId,
     required this.userId,
@@ -37,8 +37,8 @@ class Comment {
     };
   }
 
-  factory Comment.fromJson(Map<String, dynamic> json) {
-    return Comment(
+  factory CommentEntity.fromJson(Map<String, dynamic> json) {
+    return CommentEntity(
       id: json[CommentFields.id],
       postId: json[CommentFields.postId],
       userId: json[CommentFields.userId],

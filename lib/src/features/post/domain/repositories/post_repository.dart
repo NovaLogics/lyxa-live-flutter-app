@@ -1,4 +1,4 @@
-import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 
@@ -24,7 +24,7 @@ abstract class PostRepository {
 
   Future<Result<void>> addCommentToPost({
     required String postId,
-    required Comment comment,
+    required CommentEntity comment,
   });
 
   Future<Result<void>> removeCommentFromPost({

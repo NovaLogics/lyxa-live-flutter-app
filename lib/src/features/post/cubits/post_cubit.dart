@@ -7,7 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
@@ -145,7 +145,7 @@ class PostCubit extends Cubit<PostState> {
 
   Future<void> addComment({
     required String postId,
-    required Comment comment,
+    required CommentEntity comment,
   }) async {
     final result = await _postRepository.addCommentToPost(
       postId: postId,

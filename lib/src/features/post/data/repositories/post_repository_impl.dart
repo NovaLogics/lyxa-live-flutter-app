@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
@@ -113,7 +113,7 @@ class PostRepositoryImpl implements PostRepository {
   @override
   Future<Result<void>> addCommentToPost({
     required String postId,
-    required Comment comment,
+    required CommentEntity comment,
   }) async {
     try {
       final post = await _getPostById(postId);
