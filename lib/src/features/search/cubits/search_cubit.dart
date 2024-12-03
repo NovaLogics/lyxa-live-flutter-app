@@ -1,15 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/features/search/domain/repositories/search_repository.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_state.dart';
+import 'package:lyxa_live/src/features/search/domain/usecases/search_users.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 
 class SearchCubit extends Cubit<SearchState> {
   static const String debugTag = 'SearchCubit';
-  final SearchRepository _searchRepository;
+  final SearchUsers _searchUsers;
 
-  SearchCubit({required SearchRepository searchRepository})
-      : _searchRepository = searchRepository,
+  SearchCubit({
+    required SearchUsers searchUsers,
+  })  : _searchUsers = searchUsers,
         super(SearchInitial());
 
   Future<void> searchUsers(String query) async {
@@ -18,7 +19,7 @@ class SearchCubit extends Cubit<SearchState> {
       return;
     }
 
-    final userSearchResult = await _searchRepository.searchUsers(query);
+    final userSearchResult = await _searchUsers(queryText: query);
 
     switch (userSearchResult.status) {
       case Status.success:
@@ -31,6 +32,13 @@ class SearchCubit extends Cubit<SearchState> {
           tag: '$debugTag: searchUsers()',
         );
         break;
+    }
+  }
+
+  void formatQuery(String query){
+     if (query.isEmpty) {
+      emit(SearchInitial());
+      return;
     }
   }
 

@@ -14,6 +14,7 @@ import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repos
 import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/search/data/repositories/search_repository_impl.dart';
 import 'package:lyxa_live/src/features/search/domain/repositories/search_repository.dart';
+import 'package:lyxa_live/src/features/search/domain/usecases/search_users.dart';
 import 'package:lyxa_live/src/features/storage/data/repositories/storage_repository_impl.dart';
 import 'package:lyxa_live/src/features/storage/domain/repositories/storage_repository.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
@@ -59,7 +60,7 @@ void setupServiceLocator() {
   );
 
   getIt.registerSingleton<SearchCubit>(
-    SearchCubit(searchRepository: getIt<SearchRepository>()),
+    SearchCubit(searchUsers: getIt<SearchUsers>()),
   );
 
   getIt.registerSingleton<ProfileCubit>(
@@ -83,6 +84,10 @@ void setupServiceLocator() {
   getIt.registerSingleton<LoadingCubit>(LoadingCubit());
 
   getIt.registerSingleton<ErrorAlertCubit>(ErrorAlertCubit());
+
+  // Register Use Cases
+
+  getIt.registerLazySingleton(() => SearchUsers(getIt<SearchRepository>()));
 
   // Register Widgets
 
