@@ -8,7 +8,8 @@ import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/data/repositories/post_repository_impl.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/data/firebase_profile_repository.dart';
+import 'package:lyxa_live/src/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/search/data/firebase_search_repository.dart';
 import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
@@ -30,15 +31,15 @@ void setupServiceLocator() {
     () => FirebaseAuthRepository(),
   );
 
-  getIt.registerLazySingleton<FirebaseProfileRepository>(
-    () => FirebaseProfileRepository(),
+  getIt.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(),
   );
 
   getIt.registerLazySingleton<FirebaseStorageRepository>(
     () => FirebaseStorageRepository(),
   );
 
-   getIt.registerLazySingleton<PostRepository>(
+  getIt.registerLazySingleton<PostRepository>(
     () => PostRepositoryImpl(),
   );
 
@@ -60,7 +61,7 @@ void setupServiceLocator() {
 
   getIt.registerSingleton<ProfileCubit>(
     ProfileCubit(
-      profileRepository: getIt<FirebaseProfileRepository>(),
+      profileRepository: getIt<ProfileRepository>(),
       storageRepository: getIt<FirebaseStorageRepository>(),
     ),
   );
