@@ -7,7 +7,8 @@ class SearchUsers {
 
   SearchUsers(this.repository);
 
-  Future<Result<List<ProfileUser?>>> call({required String queryText}) {
-    return repository.searchUsers(queryText);
+  Future<Result<List<ProfileUser?>>> call({required String query}) {
+    final processedQuery = query.toLowerCase();
+    return repository.searchUsers(processedQuery);
   }
 }

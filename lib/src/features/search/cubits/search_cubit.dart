@@ -14,12 +14,11 @@ class SearchCubit extends Cubit<SearchState> {
         super(SearchInitial());
 
   Future<void> searchUsers(String query) async {
-    if (query.isEmpty) {
-      emit(SearchInitial());
-      return;
-    }
+    final trimmedQuery = query.trim();
 
-    final userSearchResult = await _searchUsers(queryText: query);
+    if (!_isQueryValid(trimmedQuery)) return;
+
+    final userSearchResult = await _searchUsers(query: trimmedQuery);
 
     switch (userSearchResult.status) {
       case Status.success:
@@ -35,15 +34,19 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
-  void formatQuery(String query){
-     if (query.isEmpty) {
+  bool _isQueryValid(String query) {
+    if (query.isEmpty) {
       emit(SearchInitial());
-      return;
+      return false;
     }
+    return true;
   }
 
-  void _handleErrors(
-      {required Result result, String? prefixMessage, String? tag}) {
+  void _handleErrors({
+    required Result result,
+    String? prefixMessage,
+    String? tag,
+  }) {
     // FIREBASE ERROR
     if (result.isFirebaseError()) {
       emit(SearchError(result.getFirebaseAlert()));
