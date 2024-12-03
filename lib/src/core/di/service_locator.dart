@@ -12,7 +12,8 @@ import 'package:lyxa_live/src/features/profile/data/repositories/profile_reposit
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/search/data/firebase_search_repository.dart';
-import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
+import 'package:lyxa_live/src/features/storage/data/repositories/storage_repository_impl.dart';
+import 'package:lyxa_live/src/features/storage/domain/repositories/storage_repository.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
@@ -35,8 +36,8 @@ void setupServiceLocator() {
     () => ProfileRepositoryImpl(),
   );
 
-  getIt.registerLazySingleton<FirebaseStorageRepository>(
-    () => FirebaseStorageRepository(),
+  getIt.registerLazySingleton<StorageRepository>(
+    () => StorageRepositoryImpl(),
   );
 
   getIt.registerLazySingleton<PostRepository>(
@@ -52,7 +53,7 @@ void setupServiceLocator() {
   getIt.registerSingleton<AuthCubit>(
     AuthCubit(
         authRepository: getIt<FirebaseAuthRepository>(),
-        storageRepository: getIt<FirebaseStorageRepository>()),
+        storageRepository: getIt<StorageRepository>()),
   );
 
   getIt.registerSingleton<SearchCubit>(
@@ -62,14 +63,14 @@ void setupServiceLocator() {
   getIt.registerSingleton<ProfileCubit>(
     ProfileCubit(
       profileRepository: getIt<ProfileRepository>(),
-      storageRepository: getIt<FirebaseStorageRepository>(),
+      storageRepository: getIt<StorageRepository>(),
     ),
   );
 
   getIt.registerSingleton<PostCubit>(
     PostCubit(
       postRepository: getIt<PostRepository>(),
-      storageRepository: getIt<FirebaseStorageRepository>(),
+      storageRepository: getIt<StorageRepository>(),
     ),
   );
 
