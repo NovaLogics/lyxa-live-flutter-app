@@ -10,12 +10,4 @@ class AppUserEntity {
     required this.name,
     required this.searchableName,
   });
-
-  @override
-  String toString() => {
-        'uid': uid,
-        'email': email,
-        'name': name,
-        'searchableName': searchableName,
-      }.toString();
 }

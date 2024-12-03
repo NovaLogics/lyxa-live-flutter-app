@@ -49,7 +49,7 @@ class ProfileUser extends AppUserEntity {
     );
   }
 
-  @override
+ 
   Map<String, dynamic> toJson() {
     return {
       ProfileUserFields.uid: uid,
