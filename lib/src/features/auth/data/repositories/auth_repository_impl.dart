@@ -21,7 +21,7 @@ class AuthRepositoryImpl implements AuthRepository {
       FirebaseFirestore.instance.collection(firebaseUsersCollectionPath);
 
   @override
-  Future<Result<AppUserModel>> loginWithEmailAndPassword({
+  Future<Result<AppUserEntity>> loginWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -42,7 +42,7 @@ class AuthRepositoryImpl implements AuthRepository {
       _hiveStorage.deleteLoginData();
 
       return Result.success(
-        data: appUser,
+        data: appUser.toEntity(),
       );
     } on FirebaseAuthException catch (authError) {
       return Result.error(FirebaseError(authError));
@@ -52,7 +52,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<AppUserModel>> registerWithEmailAndPassword({
+  Future<Result<AppUserEntity>> registerWithEmailAndPassword({
     required String name,
     required String email,
     required String password,
@@ -79,7 +79,7 @@ class AuthRepositoryImpl implements AuthRepository {
       _hiveStorage.deleteLoginData();
 
       return Result.success(
-        data: user,
+        data: user.toEntity(),
       );
     } on FirebaseAuthException catch (authError) {
       return Result.error(FirebaseError(authError));
@@ -108,7 +108,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<AppUserModel?>> getCurrentUser() async {
+  Future<Result<AppUserEntity?>> getCurrentUser() async {
     try {
       final firebaseUser = _firebaseAuth.currentUser;
 
@@ -118,7 +118,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final appUser = await _getUserById(firebaseUser.uid);
 
       return Result.success(
-        data: appUser,
+        data: appUser.toEntity(),
       );
     } on FirebaseAuthException catch (authError) {
       return Result.error(FirebaseError(authError));
@@ -143,10 +143,10 @@ class AuthRepositoryImpl implements AuthRepository {
         return Result.error(ErrorMsgs.userDataNotFound);
       }
 
-      final appUserEntity = AppUserModel.fromJsonString(userData).toEntity();
+      final appUserModel = AppUserModel.fromJsonString(userData);
 
       return Result.success(
-        data: appUserEntity,
+        data: appUserModel.toEntity(),
       );
     } catch (error) {
       return Result.error(GenericError(error: error));
@@ -158,8 +158,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required AppUserEntity user,
     required String storageKey,
   }) async {
-    final appUserModel = AppUserModel.fromEntity(user);
-    final userJson = appUserModel.toJsonString();
+    final userJson = AppUserModel.fromEntity(user).toJsonString();
     await _hiveStorage.save(storageKey, userJson);
   }
 

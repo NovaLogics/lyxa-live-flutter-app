@@ -37,7 +37,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (currentUserResult.status) {
       case Status.success:
-        _handleAuthStatus(userData: currentUserResult.data);
+        _handleAuthStatus(userData: currentUserResult.data!);
         break;
 
       case Status.error:
@@ -65,7 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (loginResult.status) {
       case Status.success:
-        _handleAuthStatus(userData: loginResult.data);
+        _handleAuthStatus(userData: loginResult.data!);
         break;
 
       case Status.error:
@@ -120,7 +120,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> logout() async {
     await _authRepository.logOut();
-    _currentUser = AppUserModel.getDefaultGuestUser();
+    _currentUser = null;
     getIt<ProfileCubit>().resetUser();
     emit(Unauthenticated());
   }
@@ -217,9 +217,9 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void _handleAuthStatus({required AppUserModel? userData}) {
+  void _handleAuthStatus({required AppUserEntity? userData}) {
     if (userData != null) {
-      _currentUser = userData.toEntity();
+      _currentUser = userData;
       emit(Authenticated(_currentUser!));
     } else {
       emit(Unauthenticated());
