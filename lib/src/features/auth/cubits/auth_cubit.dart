@@ -37,7 +37,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (currentUserResult.status) {
       case Status.success:
-        _handleAuthStatus(userData: currentUserResult.data!);
+        _handleAuthStatus(userData: currentUserResult.data);
         break;
 
       case Status.error:
@@ -65,7 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (loginResult.status) {
       case Status.success:
-        _handleAuthStatus(userData: loginResult.data!);
+        _handleAuthStatus(userData: loginResult.data);
         break;
 
       case Status.error:
