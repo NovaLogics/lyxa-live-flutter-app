@@ -22,3 +22,8 @@ class PostErrorToast extends PostState {
   final String message;
   PostErrorToast(this.message);
 }
+
+class PostErrorException extends PostState {
+  final Object? error;
+  PostErrorException(this.error);
+}

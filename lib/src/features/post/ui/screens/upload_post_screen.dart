@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
@@ -68,18 +67,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
   Future<void> _handleImageSelection() async {
     try {
-      final pickedFile = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        withData: kIsWeb,
-      );
-
-      final processedImage = await _postCubit.getProcessedImage(
-        pickedFile: pickedFile,
-        isWebPlatform: kIsWeb,
-      );
-
-      if (processedImage == null) throw Exception(ErrorMsgs.imageFileEmpty);
-
+      final processedImage = await _postCubit.getSelectedImage();
       setState(() {
         _selectedImage = processedImage;
       });
