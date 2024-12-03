@@ -23,7 +23,7 @@ import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class PostTileUnit extends StatefulWidget {
-  final Post post;
+  final PostEntity post;
   final ProfileUser currentUser;
   final VoidCallback? onDeletePressed;
 

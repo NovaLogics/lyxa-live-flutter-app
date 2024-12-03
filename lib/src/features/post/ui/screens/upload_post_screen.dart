@@ -12,6 +12,7 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
+import 'package:lyxa_live/src/features/post/data/models/post_model.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
@@ -107,7 +108,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
     FocusScope.of(context).unfocus();
 
-    final newPost = Post.getDefault().copyWith(
+    final newPost = PostModel.getDefault().copyWith(
       userId: profileUser.uid,
       userName: profileUser.name,
       userProfileImageUrl: profileUser.profileImageUrl,
@@ -115,7 +116,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
 
     _postCubit.addPost(
-      post: newPost,
+      post: newPost.toEntity(),
       imageBytes: _selectedImage,
     );
   }

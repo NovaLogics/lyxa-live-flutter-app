@@ -7,6 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/features/post/data/models/post_model.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
@@ -58,7 +59,7 @@ class PostCubit extends Cubit<PostState> {
   }
 
   Future<void> addPost({
-    required Post post,
+    required PostEntity post,
     Uint8List? imageBytes,
   }) async {
     _showLoading(AppStrings.uploading);
@@ -77,7 +78,9 @@ class PostCubit extends Cubit<PostState> {
       return;
     }
 
-    final updatedPost = post.copyWith(imageUrl: imageUploadResult.data);
+    final postData =
+        PostModel.fromEntity(post).copyWith(imageUrl: imageUploadResult.data);
+    final updatedPost = postData.toEntity();
 
     final postUploadResult =
         await _postRepository.addPost(newPost: updatedPost);
@@ -98,7 +101,7 @@ class PostCubit extends Cubit<PostState> {
   }
 
   Future<void> deletePost({
-    required Post post,
+    required PostEntity post,
   }) async {
     final postDeleteResult = await _postRepository.removePost(postId: post.id);
 

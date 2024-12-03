@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _postCubit.getAllPosts();
   }
 
-  void _deletePost(Post post) {
+  void _deletePost(PostEntity post) {
     _postCubit.deletePost(post: post);
     //_fetchAllPosts();
   }
@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildPostList(List<Post> posts) {
+  Widget _buildPostList(List<PostEntity> posts) {
     return (posts.isEmpty)
         ? _buildDisplayMsgScreen(
             message: AppStrings.noPostAvailableError,

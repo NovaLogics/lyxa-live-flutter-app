@@ -9,7 +9,7 @@ class PostLoading extends PostState {}
 class PostUploading extends PostState {}
 
 class PostLoaded extends PostState {
-  final List<Post> posts;
+  final List<PostEntity> posts;
   PostLoaded(this.posts);
 }
 
