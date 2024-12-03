@@ -5,7 +5,7 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/database/hive_storage.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
@@ -20,7 +20,7 @@ class AuthRepositoryImpl implements AuthRepository {
       FirebaseFirestore.instance.collection(firebaseUsersCollectionPath);
 
   @override
-  Future<Result<AppUser>> loginWithEmailAndPassword({
+  Future<Result<AppUserEntity>> loginWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -51,7 +51,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<AppUser>> registerWithEmailAndPassword({
+  Future<Result<AppUserEntity>> registerWithEmailAndPassword({
     required String name,
     required String email,
     required String password,
@@ -66,7 +66,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return Result.error(ErrorMsgs.failedToRetrieveUserId);
       }
 
-      AppUser user = AppUser(
+      AppUserEntity user = AppUserEntity(
         uid: userId,
         email: email,
         name: name,
@@ -107,7 +107,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<AppUser?>> getCurrentUser() async {
+  Future<Result<AppUserEntity?>> getCurrentUser() async {
     try {
       final firebaseUser = _firebaseAuth.currentUser;
 
@@ -132,7 +132,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<AppUser>> getSavedUser({
+  Future<Result<AppUserEntity>> getSavedUser({
     required String storageKey,
   }) async {
     try {
@@ -143,7 +143,7 @@ class AuthRepositoryImpl implements AuthRepository {
       }
 
       return Result.success(
-        data: AppUser.fromJsonString(userData),
+        data: AppUserEntity.fromJsonString(userData),
       );
     } catch (error) {
       return Result.error(GenericError(error: error));
@@ -152,7 +152,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> saveUserToLocalStorage({
-    required AppUser user,
+    required AppUserEntity user,
     required String storageKey,
   }) async {
     await _hiveStorage.save(storageKey, user.toJsonString());
@@ -160,12 +160,12 @@ class AuthRepositoryImpl implements AuthRepository {
 
   // HELPER FUNCTIONS ▼
 
-  Future<AppUser> _getUserById(String userId) async {
+  Future<AppUserEntity> _getUserById(String userId) async {
     final userDocument = await _userCollectionRef.doc(userId).get();
 
     if (!userDocument.exists) {
       throw Exception(ErrorMsgs.userDataNotFound);
     }
-    return AppUser.fromJson(userDocument.data() as Map<String, dynamic>);
+    return AppUserEntity.fromJson(userDocument.data() as Map<String, dynamic>);
   }
 }

@@ -13,34 +13,37 @@ class AppUserFields {
 }
 
 @JsonSerializable()
-class AppUser {
+class AppUserEntity {
   final String uid;
   final String email;
   final String name;
   final String searchableName;
 
-  AppUser({
+  AppUserEntity({
     required this.uid,
     required this.email,
     required this.name,
     required this.searchableName,
   });
 
-  @override
+
+
+    @override
   String toString() {
-    return toJson().toString();
+    return 'AppUserEntity(uid: $uid, email: $email, name: $name)';
   }
 
   // Creates an `AppUser` instance from a JSON map.
-  factory AppUser.fromJson(Map<String, dynamic> json) =>
+  factory AppUserEntity.fromJson(Map<String, dynamic> json) =>
       _$AppUserFromJson(json);
 
   // Converts the `AppUser` instance into a JSON map.
   Map<String, dynamic> toJson() => _$AppUserToJson(this);
 
   // Create AppUser from JSON string
-  factory AppUser.fromJsonString(String jsonString) {
-    return AppUser.fromJson(jsonDecode(jsonString) as Map<String, dynamic>);
+  factory AppUserEntity.fromJsonString(String jsonString) {
+    return AppUserEntity.fromJson(
+        jsonDecode(jsonString) as Map<String, dynamic>);
   }
 
   String toJsonString() => jsonEncode(toJson());
@@ -50,7 +53,7 @@ class AppUser {
     String email = AppUserConstants.defaultValue,
     String name = AppUserConstants.defaultValue,
   }) {
-    return AppUser(
+    return AppUserEntity(
       uid: uid,
       email: email,
       name: name,
@@ -59,7 +62,7 @@ class AppUser {
   }
 
   static getDefaultGuestUser() {
-    return AppUser(
+    return AppUserEntity(
       uid: AppUserConstants.defaultValue,
       email: AppUserConstants.defaultEmail,
       name: AppUserConstants.defaultName,

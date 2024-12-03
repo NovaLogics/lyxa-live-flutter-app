@@ -4,7 +4,7 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/assets/app_images.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
@@ -20,7 +20,7 @@ class AuthCubit extends Cubit<AuthState> {
   static const String debugTag = 'AuthCubit';
   final AuthRepository _authRepository;
   final StorageRepository _storageRepository;
-  AppUser? _currentUser;
+  AppUserEntity? _currentUser;
 
   AuthCubit({
     required AuthRepository authRepository,
@@ -29,7 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
         _storageRepository = storageRepository,
         super(AuthInitial());
 
-  AppUser? get currentUser => _currentUser;
+  AppUserEntity? get currentUser => _currentUser;
 
   Future<void> checkAuth() async {
     final currentUserResult = await _authRepository.getCurrentUser();
@@ -96,7 +96,7 @@ class AuthCubit extends Cubit<AuthState> {
       case Status.success:
         if (registerResult.isDataNotNull()) {
           _showLoading();
-          _currentUser = registerResult.data as AppUser;
+          _currentUser = registerResult.data as AppUserEntity;
           await _uploadDeafultUserAvatar(_currentUser!.uid);
           Logger.logDebug(_currentUser!.toJsonString(),
               tag: '$debugTag: register() User');
@@ -119,12 +119,12 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> logout() async {
     await _authRepository.logOut();
-    _currentUser = AppUser.getDefaultGuestUser();
+    _currentUser = AppUserEntity.getDefaultGuestUser();
     getIt<ProfileCubit>().resetUser();
     emit(Unauthenticated());
   }
 
-  Future<AppUser?> getSavedUser({
+  Future<AppUserEntity?> getSavedUser({
     required String storageKey,
   }) async {
     final savedUserResult =
@@ -139,7 +139,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> saveUserToLocalStorage({
     required String storageKey,
-    required AppUser user,
+    required AppUserEntity user,
   }) async {
     await _authRepository.saveUserToLocalStorage(
       storageKey: storageKey,
@@ -147,16 +147,16 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  Future<AppUser> getSavedUserOrDefault({
+  Future<AppUserEntity> getSavedUserOrDefault({
     required String storageKey,
   }) async {
     final savedUser = await getSavedUser(
       storageKey: storageKey,
     );
-    if (savedUser == null) AppUser.createWith();
+    if (savedUser == null) AppUserEntity.createWith();
 
     Logger.logDebug(savedUser.toString());
-    return savedUser as AppUser;
+    return savedUser as AppUserEntity;
   }
 
   // HELPER FUNCTIONS ▼
@@ -216,7 +216,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void _handleAuthStatus({required AppUser? userData}) {
+  void _handleAuthStatus({required AppUserEntity? userData}) {
     if (userData != null) {
       _currentUser = userData;
       emit(Authenticated(_currentUser!));

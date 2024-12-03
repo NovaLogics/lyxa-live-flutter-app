@@ -1,4 +1,4 @@
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 
 class ProfileUserFields {
   static const String uid = 'uid';
@@ -12,7 +12,7 @@ class ProfileUserFields {
   static const String isPrivate = 'isPrivate';
 }
 
-class ProfileUser extends AppUser {
+class ProfileUser extends AppUserEntity {
   final String bio;
   final String profileImageUrl;
   final bool isPrivate;
