@@ -51,6 +51,10 @@ void setupServiceLocator() {
     () => SearchRepositoryImpl(),
   );
 
+  // Register Use Cases
+
+  getIt.registerLazySingleton(() => SearchUsers(getIt<SearchRepository>()));
+
   // Register Cubits
 
   getIt.registerSingleton<AuthCubit>(
@@ -84,10 +88,6 @@ void setupServiceLocator() {
   getIt.registerSingleton<LoadingCubit>(LoadingCubit());
 
   getIt.registerSingleton<ErrorAlertCubit>(ErrorAlertCubit());
-
-  // Register Use Cases
-
-  getIt.registerLazySingleton(() => SearchUsers(getIt<SearchRepository>()));
 
   // Register Widgets
 
