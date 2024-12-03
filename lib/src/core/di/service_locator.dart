@@ -2,7 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
 import 'package:lyxa_live/src/core/database/hive_storage.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
-import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
+import 'package:lyxa_live/src/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/data/repositories/post_repository_impl.dart';
@@ -29,8 +30,8 @@ void setupServiceLocator() {
 
   // Register repositories as singletons
 
-  getIt.registerLazySingleton<FirebaseAuthRepository>(
-    () => FirebaseAuthRepository(),
+  getIt.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(),
   );
 
   getIt.registerLazySingleton<ProfileRepository>(
@@ -53,7 +54,7 @@ void setupServiceLocator() {
 
   getIt.registerSingleton<AuthCubit>(
     AuthCubit(
-        authRepository: getIt<FirebaseAuthRepository>(),
+        authRepository: getIt<AuthRepository>(),
         storageRepository: getIt<StorageRepository>()),
   );
 

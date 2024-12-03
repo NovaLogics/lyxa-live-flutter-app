@@ -13,7 +13,7 @@ import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
-class FirebaseAuthRepository implements AuthRepository {
+class AuthRepositoryImpl implements AuthRepository {
   final HiveStorage _hiveStorage = getIt<HiveStorage>();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final CollectionReference _userCollectionRef =
