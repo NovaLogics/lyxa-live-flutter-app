@@ -106,6 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _handleSignUp() {
     if (_registrationFormKey.currentState?.validate() != true) return;
+    
     _saveUserToLocalStorage();
 
     _authCubit.register(

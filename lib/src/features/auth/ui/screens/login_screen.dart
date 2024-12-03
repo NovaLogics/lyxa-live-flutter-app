@@ -91,6 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() {
     if (_loginCredentialsFormKey.currentState?.validate() != true) return;
+    
     _saveUserToLocalStorage();
 
     _authCubit.login(
@@ -170,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
             AppStrings.notAMember,
             style: AppStyles.subtitleSecondary,
           ),
-          const SizedBox(width: AppDimens.size8),
+          addSpacing(width: AppDimens.size8),
           GestureDetector(
             onTap: _handleSignUpLinkClick,
             child: const Text(
