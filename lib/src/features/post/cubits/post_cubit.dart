@@ -237,7 +237,10 @@ class PostCubit extends Cubit<PostState> {
 
         return compressedImage;
       }
-    } catch (error) {}
+    } catch (error) {
+      emit(PostErrorException(error));
+    }
+    return null;
   }
 
   // HELPER FUNCTIONS ▼
@@ -258,21 +261,11 @@ class PostCubit extends Cubit<PostState> {
     }
     // GENERIC ERROR
     else if (result.isGenericError()) {
-      ErrorHandler.handleError(
-        result.getGenericErrorData(),
-        prefixMessage: prefixMessage,
-        tag: tag,
-        onRetry: () {},
-      );
+      emit(PostErrorException(result.getGenericErrorData()));
     }
     // KNOWN ERRORS
     else if (result.isMessageError()) {
-      ErrorHandler.handleError(
-        null,
-        tag: tag,
-        customMessage: result.getMessageErrorAlert(),
-        onRetry: () {},
-      );
+      emit(PostError(result.getMessageErrorAlert()));
     }
   }
 

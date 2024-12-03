@@ -89,7 +89,7 @@ class AppStrings {
   static const String caption = 'Caption';
   static const String captionHint = 'Add post caption here..';
   static const String captionLabel = 'Caption Area...';
-  static const String pickImageButton = 'Pick Image';
+  static const String pickImageButton = 'PICK IMAGE';
   static const String errorImageAndCaptionRequired =
       'Both image and caption are required.';
   static const String cropperTitle = 'Crop Image';

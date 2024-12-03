@@ -216,7 +216,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         onPressed: _handleImageSelection,
         icon: const Icon(
           Icons.filter,
-          color: AppColors.whitePure,
+          color: AppColors.whiteLight,
         ),
       ),
     );

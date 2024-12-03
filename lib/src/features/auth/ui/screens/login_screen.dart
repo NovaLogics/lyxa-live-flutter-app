@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
       onPressed: _handleLogin,
       icon: const Icon(
         Icons.arrow_forward_outlined,
-        color: AppColors.whitePure,
+        color: AppColors.whiteLight,
       ),
     );
   }

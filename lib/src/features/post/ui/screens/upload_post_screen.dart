@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
@@ -12,7 +11,6 @@ import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
@@ -66,21 +64,14 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   }
 
   Future<void> _handleImageSelection() async {
-    try {
-      final processedImage = await _postCubit.getSelectedImage();
-      setState(() {
-        _selectedImage = processedImage;
-      });
-    } catch (error) {
-      ErrorHandler.handleError(
-        error,
-        tag: debugTag,
-        onRetry: () {},
-      );
-    }
+    final selectedImage = await _postCubit.getSelectedImage();
+    setState(() {
+      _selectedImage = selectedImage;
+    });
   }
 
-  void _createAndUploadPost() {
+  void _handleUploadPost() {
+    _hideKeyboard();
     _postCubit.addPost(
       captionText: _captionController.text,
       imageBytes: _selectedImage,
@@ -88,13 +79,25 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 
-  void showErrorToast(String errorMessage) {
-    FocusScope.of(context).unfocus();
+  void _handleErrorToast(String message) {
+    _hideKeyboard();
     ToastMessengerUnit.showErrorToast(
       context: context,
-      message: AppStrings.errorImageAndCaptionRequired,
+      message: message,
     );
   }
+
+  void _handleExceptionMessage({Object? error, String? message}) {
+    _hideKeyboard();
+    ErrorHandler.handleError(
+      error,
+      tag: debugTag,
+      customMessage: message,
+      onRetry: () {},
+    );
+  }
+
+  void _hideKeyboard() => FocusScope.of(context).unfocus();
 
   Widget _buildUploadPostScreen() {
     return BlocConsumer<PostCubit, PostState>(
@@ -116,7 +119,11 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         if (state is PostLoaded) {
           Navigator.pop(context);
         } else if (state is PostErrorToast) {
-          showErrorToast(state.message);
+          _handleErrorToast(state.message);
+        } else if (state is PostErrorException) {
+          _handleExceptionMessage(error: state.error);
+        } else if (state is PostError) {
+          _handleExceptionMessage(message: state.message);
         }
       },
     );
@@ -154,7 +161,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       ),
       actions: [
         IconButton(
-          onPressed: _createAndUploadPost,
+          onPressed: _handleUploadPost,
           icon: const Icon(Icons.upload),
         ),
         addSpacing(width: AppDimens.size12),
@@ -182,11 +189,11 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   Widget _buildPickImageButton() {
     return Center(
       child: GradientButton(
-        text: AppStrings.pickImageButton.toUpperCase(),
+        text: AppStrings.pickImageButton,
         onPressed: _handleImageSelection,
         icon: const Icon(
           Icons.filter,
-          color: AppColors.whitePure,
+          color: AppColors.whiteLight,
         ),
       ),
     );
