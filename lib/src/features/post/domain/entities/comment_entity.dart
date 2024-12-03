@@ -1,14 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-class CommentFields {
-  static const String id = 'id';
-  static const String postId = 'postId';
-  static const String userId = 'userId';
-  static const String userName = 'userName';
-  static const String text = 'text';
-  static const String timestamp = 'timestamp';
-}
-
 class CommentEntity {
   final String id;
   final String postId;
@@ -25,26 +14,4 @@ class CommentEntity {
     required this.text,
     required this.timestamp,
   });
-
-  Map<String, dynamic> toJson() {
-    return {
-      CommentFields.id: id,
-      CommentFields.postId: postId,
-      CommentFields.userId: userId,
-      CommentFields.userName: userName,
-      CommentFields.text: text,
-      CommentFields.timestamp: Timestamp.fromDate(timestamp),
-    };
-  }
-
-  factory CommentEntity.fromJson(Map<String, dynamic> json) {
-    return CommentEntity(
-      id: json[CommentFields.id],
-      postId: json[CommentFields.postId],
-      userId: json[CommentFields.userId],
-      userName: json[CommentFields.userName],
-      text: json[CommentFields.text],
-      timestamp: (json[CommentFields.timestamp] as Timestamp).toDate(),
-    );
-  }
 }

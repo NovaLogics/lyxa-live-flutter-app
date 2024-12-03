@@ -21,7 +21,7 @@ import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart'
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';

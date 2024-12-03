@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lyxa_live/src/features/post/data/models/comment_model.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 
 class PostFields {
@@ -75,14 +76,16 @@ class Post {
       PostFields.imageUrl: imageUrl,
       PostFields.timestamp: Timestamp.fromDate(timestamp),
       PostFields.likes: likes,
-      PostFields.comments: comments.map((comment) => comment.toJson()).toList(),
+      PostFields.comments: comments
+          .map((comment) => CommentModel.fromEntity(comment).toJson())
+          .toList(),
     };
   }
 
   factory Post.fromJson(Map<String, dynamic> json) {
     final List<CommentEntity> comments =
         (json[PostFields.comments] as List<dynamic>?)
-                ?.map((commentJson) => CommentEntity.fromJson(commentJson))
+                ?.map((commentJson) => CommentModel.fromJson(commentJson).toEntity())
                 .toList() ??
             List.empty();
 

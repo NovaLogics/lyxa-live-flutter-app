@@ -1,4 +1,4 @@
-import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 
 abstract class PostState {}
 

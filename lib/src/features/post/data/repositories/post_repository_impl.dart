@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
@@ -121,7 +121,7 @@ class PostRepositoryImpl implements PostRepository {
       post.comments.add(comment);
 
       final updatedComments =
-          post.comments.map((comment) => comment.toJson()).toList();
+          post.comments.map((comment) => comment).toList();
 
       await _postsCollectionRef
           .doc(postId)
@@ -146,7 +146,7 @@ class PostRepositoryImpl implements PostRepository {
       post.comments.removeWhere((comment) => comment.id == commentId);
 
       final updatedComments =
-          post.comments.map((comment) => comment.toJson()).toList();
+          post.comments.map((comment) => comment).toList();
 
       await _postsCollectionRef
           .doc(postId)
