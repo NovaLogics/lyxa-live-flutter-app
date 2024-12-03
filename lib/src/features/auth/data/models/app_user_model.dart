@@ -68,8 +68,20 @@ class AppUserModel {
 
   String toJsonString() => jsonEncode(toJson());
 
+  static createWith({
+    String uid = AppUserConstants.defaultValue,
+    String email = AppUserConstants.defaultValue,
+    String name = AppUserConstants.defaultValue,
+  }) {
+    return AppUserEntity(
+      uid: uid,
+      email: email,
+      name: name,
+      searchableName: name.toLowerCase(),
+    );
+  }
 
-    static getDefaultGuestUser() {
+  static getDefaultGuestUser() {
     return AppUserEntity(
       uid: AppUserConstants.defaultValue,
       email: AppUserConstants.defaultEmail,

@@ -21,7 +21,7 @@ class AuthCubit extends Cubit<AuthState> {
   static const String debugTag = 'AuthCubit';
   final AuthRepository _authRepository;
   final StorageRepository _storageRepository;
-  AppUserModel? _currentUser;
+  AppUserEntity? _currentUser;
 
   AuthCubit({
     required AuthRepository authRepository,
@@ -30,7 +30,7 @@ class AuthCubit extends Cubit<AuthState> {
         _storageRepository = storageRepository,
         super(AuthInitial());
 
-  AppUserModel? get currentUser => _currentUser;
+  AppUserEntity? get currentUser => _currentUser;
 
   Future<void> checkAuth() async {
     final currentUserResult = await _authRepository.getCurrentUser();
@@ -97,12 +97,12 @@ class AuthCubit extends Cubit<AuthState> {
       case Status.success:
         if (registerResult.isDataNotNull()) {
           _showLoading();
-          _currentUser = registerResult.data as AppUserModel;
+          _currentUser = registerResult.data as AppUserEntity;
           await _uploadDeafultUserAvatar(_currentUser!.uid);
-          Logger.logDebug(_currentUser!.toJsonString(),
+          Logger.logDebug(_currentUser!.toString(),
               tag: '$debugTag: register() User');
           _hideLoading();
-          emit(Authenticated(_currentUser!.toEntity()));
+          emit(Authenticated(_currentUser!));
         } else {
           emit(Unauthenticated());
         }
@@ -133,7 +133,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     if (savedUserResult.status == Status.success &&
         savedUserResult.isDataNotNull()) {
-      return savedUserResult.data;
+      return savedUserResult.data!.toEntity();
     }
     return null;
   }
@@ -144,7 +144,7 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     await _authRepository.saveUserToLocalStorage(
       storageKey: storageKey,
-      user: user,
+      user: user.to,
     );
   }
 
