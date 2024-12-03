@@ -8,7 +8,7 @@ import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
-class FirebasePostRepository implements PostRepository {
+class PostRepositoryImpl implements PostRepository {
   final CollectionReference _postsCollectionRef =
       FirebaseFirestore.instance.collection(firebasePostsCollectionPath);
 
