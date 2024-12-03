@@ -17,3 +17,8 @@ class PostError extends PostState {
   final String message;
   PostError(this.message);
 }
+
+class PostErrorToast extends PostState {
+  final String message;
+  PostErrorToast(this.message);
+}

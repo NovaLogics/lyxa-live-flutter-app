@@ -10,9 +10,7 @@ import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
-
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
-import 'package:lyxa_live/src/features/post/data/models/post_model.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
@@ -22,7 +20,6 @@ import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart'
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
@@ -45,12 +42,18 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   late final PostCubit _postCubit;
   Uint8List? _selectedImage;
 
-  ProfileUser get profileUser => widget.profileUser;
+  ProfileUser get _profileUser => widget.profileUser;
 
   @override
   void initState() {
     super.initState();
     _postCubit = getIt<PostCubit>();
+  }
+
+  @override
+  void dispose() {
+    _captionController.dispose();
+    super.dispose();
   }
 
   @override
@@ -61,12 +64,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         _buildLoadingScreen(),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    _captionController.dispose();
-    super.dispose();
   }
 
   Future<void> _handleImageSelection() async {
@@ -96,28 +93,18 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   }
 
   void _createAndUploadPost() {
-    final captionText = _captionController.text.trim();
-
-    if (_selectedImage == null || captionText.isEmpty) {
-      ToastMessengerUnit.showErrorToast(
-        context: context,
-        message: AppStrings.errorImageAndCaptionRequired,
-      );
-      return;
-    }
-
-    FocusScope.of(context).unfocus();
-
-    final newPost = PostModel.getDefault().copyWith(
-      userId: profileUser.uid,
-      userName: profileUser.name,
-      userProfileImageUrl: profileUser.profileImageUrl,
-      captionText: captionText,
-    );
-
     _postCubit.addPost(
-      post: newPost.toEntity(),
+      captionText: _captionController.text,
       imageBytes: _selectedImage,
+      currentUser: _profileUser,
+    );
+  }
+
+  void showErrorToast(String errorMessage) {
+    FocusScope.of(context).unfocus();
+    ToastMessengerUnit.showErrorToast(
+      context: context,
+      message: AppStrings.errorImageAndCaptionRequired,
     );
   }
 
@@ -140,6 +127,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       listener: (context, state) {
         if (state is PostLoaded) {
           Navigator.pop(context);
+        } else if (state is PostErrorToast) {
+          showErrorToast(state.message);
         }
       },
     );

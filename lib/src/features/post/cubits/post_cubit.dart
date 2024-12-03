@@ -59,14 +59,29 @@ class PostCubit extends Cubit<PostState> {
   }
 
   Future<void> addPost({
-    required PostEntity post,
+    required String captionText,
     Uint8List? imageBytes,
+    required ProfileUser currentUser,
   }) async {
+    final trimmedCaption = captionText.trim();
+
+    if (imageBytes == null || trimmedCaption.isEmpty) {
+      emit(PostErrorToast(AppStrings.errorImageAndCaptionRequired));
+      return;
+    }
+
     _showLoading(AppStrings.uploading);
+
+    final newPost = PostModel.getDefault().copyWith(
+      userId: currentUser.uid,
+      userName: currentUser.name,
+      userProfileImageUrl: currentUser.profileImageUrl,
+      captionText: captionText,
+    );
 
     final imageUploadResult = await _storageRepository.uploadPostImage(
       imageFileBytes: imageBytes,
-      fileName: post.id,
+      fileName: newPost.id,
     );
 
     if (imageUploadResult.status == Status.error) {
@@ -78,9 +93,8 @@ class PostCubit extends Cubit<PostState> {
       return;
     }
 
-    final postData =
-        PostModel.fromEntity(post).copyWith(imageUrl: imageUploadResult.data);
-    final updatedPost = postData.toEntity();
+    newPost.copyWith(imageUrl: imageUploadResult.data);
+    final updatedPost = newPost.toEntity();
 
     final postUploadResult =
         await _postRepository.addPost(newPost: updatedPost);
