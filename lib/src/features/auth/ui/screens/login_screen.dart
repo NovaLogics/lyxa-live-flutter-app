@@ -8,7 +8,7 @@ import 'package:lyxa_live/src/core/database/hive_storage.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
+import 'package:lyxa_live/src/features/auth/data/models/app_user_model.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _saveUserToLocalStorage() {
     _authCubit.saveUserToLocalStorage(
       storageKey: HiveKeys.loginDataKey,
-      user: AppUserEntity.createWith(email: _email),
+      user: AppUserModel.createWith(email: _email),
     );
   }
 

@@ -9,7 +9,7 @@ import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
+import 'package:lyxa_live/src/features/auth/data/models/app_user_model.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
@@ -123,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _saveUserToLocalStorage() {
     _authCubit.saveUserToLocalStorage(
       storageKey: HiveKeys.signUpDataKey,
-      user: AppUserEntity.createWith(name: _name, email: _email),
+      user: AppUserModel.createWith(name: _name, email: _email),
     );
   }
 

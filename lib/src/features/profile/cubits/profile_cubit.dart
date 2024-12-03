@@ -146,7 +146,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       updatedProfile: updatedProfile,
     );
 
-    Logger.logDebug(updatedProfile.toJsonString(),
+    Logger.logDebug(updatedProfile.toString(),
         tag: '$debugTag: updateProfile() User');
 
     if (updateProfileResult.status == Status.error) {
