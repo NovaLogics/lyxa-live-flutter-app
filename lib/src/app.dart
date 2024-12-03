@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
+import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
@@ -10,14 +11,9 @@ import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
-import 'package:lyxa_live/src/features/photo_slider/cubits/slider_state.dart';
-import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_state.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/widgets/error_alert_unit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
@@ -84,79 +80,27 @@ class LyxaApp extends StatelessWidget {
 
         // SHOW AUTH SCREEN
         if (state is Unauthenticated) {
-          return Stack(
-            children: [
-              const AuthScreen(),
-              _buildLoadingScreen(),
-              _buildErrorDisplayScreen(),
-            ],
-          );
+          return const AuthScreen();
         }
         // SHOW MAIN/HOME SCREEN
         else if (state is Authenticated) {
-          return Stack(
-            children: [
-              const HomeScreen(),
-              _buildPhotoSliderScreen(),
-              _buildLoadingScreen(),
-              _buildErrorDisplayScreen(),
-            ],
-          );
+          return const HomeScreen();
         }
         // SHOW LOADING INDICATOR
         else {
-          return _buildLoadingScreen();
+          return const LoadingUnit(
+            message: AppStrings.loadingMessage,
+          );
         }
       },
       listener: (context, state) {
         // SHOW ERROR IF AUTHENTICATION FAILS
         if (state is AuthError) {
-          Logger.logError(state.message.toString());
           ToastMessengerUnit.showErrorToast(
             context: context,
             message: state.message,
           );
         }
-      },
-    );
-  }
-
-  Widget _buildErrorDisplayScreen() {
-    return BlocConsumer<ErrorAlertCubit, ErrorAlertState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Visibility(
-          visible: state.isVisible,
-          child: const ErrorAlertUnit(),
-        );
-      },
-    );
-  }
-
-  Widget _buildLoadingScreen() {
-    return BlocConsumer<LoadingCubit, LoadingState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Visibility(
-          visible: state.isVisible,
-          child: LoadingUnit(
-            message: state.message,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildPhotoSliderScreen() {
-    return BlocConsumer<SliderCubit, SliderState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return (state is SliderLoaded)
-            ? PhotoSlider(
-                images: state.images,
-                initialIndex: state.currentIndex,
-              )
-            : const SizedBox.shrink();
       },
     );
   }
