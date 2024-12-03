@@ -133,7 +133,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     if (savedUserResult.status == Status.success &&
         savedUserResult.isDataNotNull()) {
-      return savedUserResult.data!.toEntity();
+      return savedUserResult.data!;
     }
     return null;
   }
@@ -144,17 +144,17 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     await _authRepository.saveUserToLocalStorage(
       storageKey: storageKey,
-      user: user.to,
+      user: user,
     );
   }
 
   Future<AppUserEntity> getSavedUserOrDefault({
     required String storageKey,
   }) async {
-    final savedUser = await getSavedUser(
+    AppUserEntity? savedUser = await getSavedUser(
       storageKey: storageKey,
     );
-    if (savedUser == null) AppUserEntity.createWith();
+    savedUser ??= AppUserModel.createWith();
 
     Logger.logDebug(savedUser.toString());
     return savedUser as AppUserEntity;
@@ -219,8 +219,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   void _handleAuthStatus({required AppUserModel? userData}) {
     if (userData != null) {
-      _currentUser = userData;
-      emit(Authenticated(_currentUser!.toEntity()));
+      _currentUser = userData.toEntity();
+      emit(Authenticated(_currentUser!));
     } else {
       emit(Unauthenticated());
     }
