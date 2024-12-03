@@ -27,7 +27,6 @@ class AppUserEntity {
   });
 
 
-
     @override
   String toString() {
     return 'AppUserEntity(uid: $uid, email: $email, name: $name)';
@@ -61,19 +60,7 @@ class AppUserEntity {
     );
   }
 
-  static getDefaultGuestUser() {
-    return AppUserEntity(
-      uid: AppUserConstants.defaultValue,
-      email: AppUserConstants.defaultEmail,
-      name: AppUserConstants.defaultName,
-      searchableName: AppUserConstants.defaultSearchableName,
-    );
-  }
+
 }
 
-class AppUserConstants {
-  static const String defaultValue = '';
-  static const String defaultEmail = 'Guest@lyxa.com';
-  static const String defaultName = 'Guest';
-  static const String defaultSearchableName = 'guest';
-}
+

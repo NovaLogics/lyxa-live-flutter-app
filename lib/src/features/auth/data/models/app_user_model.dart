@@ -6,6 +6,12 @@ import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart
 /// cmd-> flutter packages pub run build_runner build
 part 'app_user_model.g.dart';
 
+class AppUserFields {
+  static const uid = 'uid';
+  static const email = 'email';
+  static const name = 'name';
+}
+
 // Data layer class
 @JsonSerializable()
 class AppUserModel {
@@ -61,4 +67,21 @@ class AppUserModel {
   }
 
   String toJsonString() => jsonEncode(toJson());
+
+
+    static getDefaultGuestUser() {
+    return AppUserEntity(
+      uid: AppUserConstants.defaultValue,
+      email: AppUserConstants.defaultEmail,
+      name: AppUserConstants.defaultName,
+      searchableName: AppUserConstants.defaultSearchableName,
+    );
+  }
+}
+
+class AppUserConstants {
+  static const String defaultValue = '';
+  static const String defaultEmail = 'Guest@lyxa.com';
+  static const String defaultName = 'Guest';
+  static const String defaultSearchableName = 'guest';
 }
