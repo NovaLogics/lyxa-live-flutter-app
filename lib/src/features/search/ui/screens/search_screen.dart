@@ -65,7 +65,7 @@ class _SearchScreenState extends State<SearchScreen> {
       height: AppDimens.size52,
       child: TextField(
         controller: _searchController,
-        autofocus: true,
+       // autofocus: true,
         style: AppStyles.textFieldStyleMain.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
