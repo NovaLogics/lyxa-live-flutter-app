@@ -34,6 +34,12 @@ void setupServiceLocator() {
 
   getIt.registerFactory(() => HiveStorage());
 
+  getIt.registerSingleton<ProfileService>(
+    ProfileService(
+      ProfileUserModel.getGuestUser(),
+    ),
+  );
+
   // Register repositories as singletons
 
   getIt.registerLazySingleton<AuthRepository>(
@@ -104,10 +110,6 @@ void setupServiceLocator() {
   getIt.registerSingleton<LoadingCubit>(LoadingCubit());
 
   getIt.registerSingleton<ErrorAlertCubit>(ErrorAlertCubit());
-
-  getIt.registerSingleton<ProfileService>(ProfileService(
-    ProfileUserModel.getGuestUser(),
-  ));
 
   // Register Widgets
 
