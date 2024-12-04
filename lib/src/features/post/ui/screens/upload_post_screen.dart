@@ -10,7 +10,7 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
+import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
@@ -31,17 +31,15 @@ class UploadPostScreen extends StatefulWidget {
 class _UploadPostScreenState extends State<UploadPostScreen> {
   static const String debugTag = 'UploadPostScreen';
   final TextEditingController _captionController = TextEditingController();
+  late final ProfileService _profileService;
   late final PostCubit _postCubit;
   late final HomeCubit _homeCubit;
   Uint8List? _selectedImage;
 
- // ProfileUserEntity get _profileUser => widget.profileUser;
-
   @override
   void initState() {
     super.initState();
-    _postCubit = getIt<PostCubit>();
-    _homeCubit = getIt<HomeCubit>();
+    _initScreen();
   }
 
   @override
@@ -82,6 +80,12 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 
+  void _initScreen() async {
+    _profileService = getIt<ProfileService>();
+    _postCubit = getIt<PostCubit>();
+    _homeCubit = getIt<HomeCubit>();
+  }
+
   Future<void> _handleImageSelection() async {
     final selectedImage = await _postCubit.getSelectedImage();
     setState(() {
@@ -89,14 +93,14 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     });
   }
 
-  // void _handleUploadPost() {
-  //   _hideKeyboard();
-  //   _postCubit.addPost(
-  //     captionText: _captionController.text,
-  //     imageBytes: _selectedImage,
-  //     currentUser: _profileUser,
-  //   );
-  // }
+  void _handleUploadPost() {
+    _hideKeyboard();
+    _postCubit.addPost(
+      captionText: _captionController.text,
+      imageBytes: _selectedImage,
+      currentUser: _profileService.profileEntity,
+    );
+  }
 
   void _handleErrorToast(String message) {
     _hideKeyboard();
@@ -135,11 +139,11 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         onPressed: () => Navigator.of(context).pop(),
       ),
       actions: [
-        // IconButton(
-        //   onPressed: _handleUploadPost,
-        //   icon: const Icon(Icons.upload),
-        // ),
-        // addSpacing(width: AppDimens.size12),
+        IconButton(
+          onPressed: _handleUploadPost,
+          icon: const Icon(Icons.upload),
+        ),
+        addSpacing(width: AppDimens.size12),
       ],
     );
   }
