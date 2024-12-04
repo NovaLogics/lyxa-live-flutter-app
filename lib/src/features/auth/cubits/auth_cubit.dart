@@ -9,6 +9,8 @@ import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
+import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/storage/domain/repositories/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
@@ -22,6 +24,7 @@ class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _authRepository;
   final StorageRepository _storageRepository;
   AppUserEntity? _currentUser;
+  final ProfileService _profileService = getIt<ProfileService>();
 
   AuthCubit({
     required AuthRepository authRepository,
@@ -37,6 +40,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (currentUserResult.status) {
       case Status.success:
+        _profileService.assignEntity(currentUserResult.data!);
         _handleAuthStatus(userData: currentUserResult.data);
         break;
 
@@ -65,6 +69,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (loginResult.status) {
       case Status.success:
+             _profileService.assignEntity(loginResult.data!);
         _handleAuthStatus(userData: loginResult.data);
         break;
 
@@ -99,7 +104,9 @@ class AuthCubit extends Cubit<AuthState> {
         if (registerResult.isDataNotNull()) {
           _currentUser = registerResult.data as AppUserEntity;
           await _uploadDeafultUserAvatar(_currentUser!.uid);
-          emit(Authenticated(_currentUser!));
+
+          checkAuth();
+          //  emit(Authenticated(_currentUser!));
         } else {
           emit(Unauthenticated());
         }
