@@ -9,6 +9,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/post/data/models/post_model.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
@@ -25,6 +26,9 @@ class PostCubit extends Cubit<PostState> {
   static const String debugTag = 'PostCubit';
   final PostRepository _postRepository;
   final StorageRepository _storageRepository;
+  List<PostEntity> _postList = List.empty();
+
+  List<PostEntity> get postDataList => _postList;
 
   PostCubit({
     required PostRepository postRepository,
@@ -40,27 +44,28 @@ class PostCubit extends Cubit<PostState> {
     return profileUser;
   }
 
-  Future<void> getAllPosts() async {
+  Future<bool> getAllPosts() async {
     _showLoading(AppStrings.loadingMessage);
 
     final getPostsResult = await _postRepository.getAllPosts();
 
+    _hideLoading();
     switch (getPostsResult.status) {
       case Status.success:
-        emit(PostLoaded(getPostsResult.data ?? List.empty()));
-        break;
+        _postList = getPostsResult.data ?? List.empty();
+        emit(PostLoaded(_postList));
+        return true;
 
       case Status.error:
         _handleErrors(
           result: getPostsResult,
           tag: '$debugTag: getAllPosts()',
         );
-        break;
+        return false;
     }
-    _hideLoading();
   }
 
-  Future<void> addPost({
+  Future<bool> addPost({
     required String captionText,
     Uint8List? imageBytes,
     required ProfileUser currentUser,
@@ -69,17 +74,12 @@ class PostCubit extends Cubit<PostState> {
 
     if (imageBytes == null || trimmedCaption.isEmpty) {
       emit(PostErrorToast(AppStrings.errorImageAndCaptionRequired));
-      return;
+      return false;
     }
 
     _showLoading(AppStrings.uploading);
 
-    final newPost = PostModel.getDefault().copyWith(
-      userId: currentUser.uid,
-      userName: currentUser.name,
-      userProfileImageUrl: currentUser.profileImageUrl,
-      captionText: captionText,
-    );
+    PostModel newPost = PostModel.getDefault();
 
     final imageUploadResult = await _storageRepository.uploadPostImage(
       imageFileBytes: imageBytes,
@@ -92,50 +92,59 @@ class PostCubit extends Cubit<PostState> {
         tag: '$debugTag: addPost()::imageUploadResult',
       );
       _hideLoading();
-      return;
+      return false;
     }
 
-    newPost.copyWith(imageUrl: imageUploadResult.data);
+    newPost = newPost.copyWith(
+      userId: currentUser.uid,
+      userName: currentUser.name,
+      imageUrl: imageUploadResult.data,
+      userProfileImageUrl: currentUser.profileImageUrl,
+      captionText: captionText,
+    );
+
     final updatedPost = newPost.toEntity();
 
     final postUploadResult =
         await _postRepository.addPost(newPost: updatedPost);
 
+    _hideLoading();
+
     switch (postUploadResult.status) {
       case Status.success:
-        getAllPosts();
-        break;
+        //  getAllPosts();
+        return true;
 
       case Status.error:
         _handleErrors(
           result: postUploadResult,
           tag: '$debugTag: addPost()::postUploadResult',
         );
-        break;
+        return false;
     }
-    _hideLoading();
   }
 
-  Future<void> deletePost({
+  Future<bool> deletePost({
     required PostEntity post,
   }) async {
+    // _showLoading(AppStrings.loadingMessage);
     final postDeleteResult = await _postRepository.removePost(postId: post.id);
 
     // final imageDeleteResult =
     await _storageRepository.deleteImageByUrl(downloadUrl: post.imageUrl);
 
+    //  _hideLoading();
     switch (postDeleteResult.status) {
       case Status.success:
-        //TODO : Handle this
-        getAllPosts();
-        break;
+        // _postList.remove(post);
+        return true;
 
       case Status.error:
         _handleErrors(
           result: postDeleteResult,
           tag: '$debugTag: deletePost()',
         );
-        break;
+        return false;
     }
   }
 
@@ -240,6 +249,14 @@ class PostCubit extends Cubit<PostState> {
       emit(PostErrorException(error));
     }
     return null;
+  }
+
+  void locallyDeletePost(PostEntity post) {
+    _postList.remove(post);
+  }
+
+  void locallyAddPost(PostEntity post) {
+    _postList.add(post);
   }
 
   // HELPER FUNCTIONS ▼

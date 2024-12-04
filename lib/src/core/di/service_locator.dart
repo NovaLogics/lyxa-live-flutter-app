@@ -91,6 +91,7 @@ void setupServiceLocator() {
   getIt.registerSingleton<HomeCubit>(
     HomeCubit(
       homeRepository: getIt<HomeRepository>(),
+      postCubit: getIt<PostCubit>(),
     ),
   );
 
