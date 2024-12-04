@@ -10,6 +10,10 @@ class ProfileService {
 
   ProfileUserEntity get profileEntity => _profile.toEntity();
 
+  String getUserId() {
+    return _profile.uid;
+  }
+
   void updateProfile({
     String? newBio,
     String? newProfileImageUrl,

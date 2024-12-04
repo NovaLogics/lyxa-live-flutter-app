@@ -5,7 +5,7 @@ import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
-import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
+import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_image.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
@@ -24,7 +24,10 @@ import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dar
 class ProfileScreen extends StatefulWidget {
   final String displayUserId;
 
-  const ProfileScreen({super.key, required this.displayUserId});
+  const ProfileScreen({
+    super.key,
+    required this.displayUserId,
+  });
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -32,16 +35,15 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late final ProfileCubit _profileCubit;
-  ProfileUserEntity _currentAppUser = ProfileUserModel.getGuestUserAsEntity();
+  late final ProfileService _profileService;
 
-  get _appUserId => _currentAppUser.uid;
+  get _appUserId => _profileService.getUserId();
   get _displayUserId => widget.displayUserId;
 
   @override
   void initState() {
     super.initState();
-    _profileCubit = getIt<ProfileCubit>();
-    _fetchUserProfile(_displayUserId);
+    _initScreen();
   }
 
   @override
@@ -64,10 +66,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _fetchUserProfile(String profileUserId) async {
-    _currentAppUser = await _profileCubit.getCurrentUser();
-
-    _profileCubit.loadUserProfileById(userId: profileUserId);
+  void _initScreen() async {
+    _profileService = getIt<ProfileService>();
+    _profileCubit = getIt<ProfileCubit>();
+    _profileCubit.loadUserProfileById(userId: _displayUserId);
   }
 
   void _handleFollowButtonPressed() {
@@ -308,7 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               final post = userPosts[index];
               return PostTileUnit(
                 post: post,
-                currentUser: _currentAppUser,
+                currentUser: _profileService.profileEntity,
                 onDeletePressed: () =>
                     getIt<PostCubit>().deletePost(post: post),
               );
