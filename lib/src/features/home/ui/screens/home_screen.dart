@@ -11,7 +11,7 @@ import 'package:lyxa_live/src/features/home/cubits/home_state.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/refresh_button_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';

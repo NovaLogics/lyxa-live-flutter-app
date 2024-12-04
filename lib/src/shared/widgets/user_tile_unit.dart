@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 
 class UserTileUnit extends StatelessWidget {
