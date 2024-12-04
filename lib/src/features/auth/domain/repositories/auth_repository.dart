@@ -1,10 +1,11 @@
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 
 /// Defines Authentication Operations For The App
 /// ->
 abstract class AuthRepository {
-  Future<Result<AppUserEntity>> loginWithEmailAndPassword({
+  Future<Result<ProfileUserEntity>> loginWithEmailAndPassword({
     required String email,
     required String password,
   });
@@ -15,7 +16,7 @@ abstract class AuthRepository {
     required String password,
   });
 
-  Future<Result<AppUserEntity?>> getCurrentUser();
+  Future<Result<ProfileUserEntity?>> getCurrentUser();
 
   Future<void> logOut();
 
