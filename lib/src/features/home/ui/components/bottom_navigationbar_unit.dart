@@ -74,7 +74,8 @@ class _BottomNavigationBarUnitState extends State<BottomNavigationBarUnit> {
         },
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        backgroundColor: Theme.of(context).colorScheme.onError.withOpacity(0.7),
+        backgroundColor:
+            Theme.of(context).colorScheme.onError.withOpacity(0.7),
         selectedItemColor: selectedColor,
         unselectedItemColor: AppColors.grayNeutral,
         selectedLabelStyle: const TextStyle(

@@ -1,3 +1,5 @@
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
@@ -8,6 +10,8 @@ import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/auth_screen.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/bottom_navigationbar_unit.dart';
+import 'package:lyxa_live/src/features/home/ui/components/bottom_navigationbar_unit_v2.dart';
+import 'package:lyxa_live/src/features/home/ui/components/bottom_navigationbar_unit_v3.dart';
 import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
@@ -95,8 +99,8 @@ class LyxaApp extends StatelessWidget {
         // SHOW MAIN/HOME SCREEN
         else if (state is Authenticated) {
           //  return const HomeScreen();
-
-          return BottomNavigationBarUnit(
+          // FocusScope.of(context).unfocus();
+          return BottomNavigationBarUnitV2(
             homeScreen: const HomeScreen(),
             searchScreen: const SearchScreen(),
             profileScreen: ProfileScreen(
@@ -104,15 +108,25 @@ class LyxaApp extends StatelessWidget {
             ),
             newPostScreen: const UploadPostScreen(),
             settingsScreen: const SettingsScreen(),
-            homeWebIcon: Icons.home_outlined,
-            homeMobileIcon: Icons.home,
-            profileWebIcon: Icons.person_outline,
-            profileMobileIcon: Icons.person,
-            searchWebIcon: Icons.search_outlined,
-            searchMobileIcon: Icons.search,
-            settingsWebIcon: Icons.settings_outlined,
-            settingsMobileIcon: Icons.settings,
           );
+
+          // return BottomNavigationBarUnit(
+          //   homeScreen: const HomeScreen(),
+          //   searchScreen: const SearchScreen(),
+          //   profileScreen: ProfileScreen(
+          //     displayUserId: state.user.uid,
+          //   ),
+          //   newPostScreen: const UploadPostScreen(),
+          //   settingsScreen: const SettingsScreen(),
+          //   homeWebIcon: Icons.home_outlined,
+          //   homeMobileIcon: Icons.home,
+          //   profileWebIcon: Icons.person_outline,
+          //   profileMobileIcon: Icons.person,
+          //   searchWebIcon: Icons.search_outlined,
+          //   searchMobileIcon: Icons.search,
+          //   settingsWebIcon: Icons.settings_outlined,
+          //   settingsMobileIcon: Icons.settings,
+          // );
         }
         // SHOW LOADING INDICATOR
         else {
