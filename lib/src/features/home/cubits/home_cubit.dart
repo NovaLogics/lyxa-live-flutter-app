@@ -1,23 +1,24 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_state.dart';
+import 'package:lyxa_live/src/features/home/domain/repositories/home_repository.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
-import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   static const String debugTag = 'PostCubit';
-  final PostRepository _postRepository;
+  final HomeRepository _homeRepository;
 
-  HomeCubit({required PostRepository postRepository})
-      : _postRepository = postRepository,
+  HomeCubit({required HomeRepository homeRepository})
+      : _homeRepository = homeRepository,
         super(HomeInitial());
 
   Future<void> getAllPosts() async {
     _showLoading(AppStrings.loadingMessage);
 
-    final getPostsResult = await _postRepository.getAllPosts();
+    final getPostsResult = await _homeRepository.getAllPosts();
 
     switch (getPostsResult.status) {
       case Status.success:
@@ -32,6 +33,25 @@ class HomeCubit extends Cubit<HomeState> {
         break;
     }
     _hideLoading();
+  }
+
+  Future<ProfileUser> getCurrentAppUser() async {
+    _showLoading(AppStrings.loadingMessage);
+
+    final getUserResult = await _homeRepository.getCurrentAppUser();
+    
+    _hideLoading();
+    switch (getUserResult.status) {
+      case Status.success:
+        return getUserResult.data!;
+
+      case Status.error:
+        _handleErrors(
+          result: getUserResult,
+          tag: '$debugTag: getAllPosts()',
+        );
+        return ProfileUser.getGuestUser();
+    }
   }
 
   // HELPER FUNCTIONS ▼
