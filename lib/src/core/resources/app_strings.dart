@@ -43,6 +43,8 @@ class AppStrings {
   static const String titleSettings = 'SETTINGS';
   static const String titleLogout = 'LOGOUT';
 
+    static const String logout = 'Logout';
+
   // UI SECTION [5]-> PROFILE
   static const String userNotFoundError = 'User not found';
   static const String failedToFetchUserError =
