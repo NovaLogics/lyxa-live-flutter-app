@@ -9,6 +9,7 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
+import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
@@ -37,6 +38,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   static const String debugTag = 'UploadPostScreen';
   final TextEditingController _captionController = TextEditingController();
   late final PostCubit _postCubit;
+  late final HomeCubit _homeCubit;
   Uint8List? _selectedImage;
 
   ProfileUser get _profileUser => widget.profileUser;
@@ -45,6 +47,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   void initState() {
     super.initState();
     _postCubit = getIt<PostCubit>();
+    _homeCubit = getIt<HomeCubit>();
   }
 
   @override
@@ -70,13 +73,21 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     });
   }
 
-  void _handleUploadPost() {
+  void _handleUploadPost() async {
     _hideKeyboard();
-    _postCubit.addPost(
+    final result = await _postCubit.addPost(
       captionText: _captionController.text,
       imageBytes: _selectedImage,
       currentUser: _profileUser,
     );
+    if (result) {
+      _homeCubit.getAllPostsfromServer();
+      navHomeScreen();
+    }
+  }
+
+  void navHomeScreen() {
+    Navigator.pop(context);
   }
 
   void _handleErrorToast(String message) {
@@ -116,9 +127,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         );
       },
       listener: (context, state) {
-        if (state is PostLoaded) {
-          Navigator.pop(context);
-        } else if (state is PostErrorToast) {
+        if (state is PostErrorToast) {
           _handleErrorToast(state.message);
         } else if (state is PostErrorException) {
           _handleExceptionMessage(error: state.error);
