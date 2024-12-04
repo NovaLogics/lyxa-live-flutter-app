@@ -95,17 +95,15 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (registerResult.status) {
       case Status.success:
+        _showLoading();
         if (registerResult.isDataNotNull()) {
-          _showLoading();
           _currentUser = registerResult.data as AppUserEntity;
           await _uploadDeafultUserAvatar(_currentUser!.uid);
-          Logger.logDebug(_currentUser!.toString(),
-              tag: '$debugTag: register() User');
-          _hideLoading();
           emit(Authenticated(_currentUser!));
         } else {
           emit(Unauthenticated());
         }
+        _hideLoading();
         break;
 
       case Status.error:
