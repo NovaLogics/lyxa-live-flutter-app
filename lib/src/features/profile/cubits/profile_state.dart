@@ -15,3 +15,13 @@ class ProfileError extends ProfileState {
   final String message;
   ProfileError(this.message);
 }
+
+class ProfileErrorToast extends ProfileState {
+  final String message;
+  ProfileErrorToast(this.message);
+}
+
+class ProfileErrorException extends ProfileState {
+  final Object? error;
+  ProfileErrorException(this.error);
+}

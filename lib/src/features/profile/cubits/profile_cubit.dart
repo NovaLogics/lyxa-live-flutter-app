@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -178,30 +179,38 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<Uint8List?> getProcessedImage({
-    required FilePickerResult? pickedFile,
-    required bool isWebPlatform,
-  }) async {
-    if (pickedFile == null) return null;
-
-    if (isWebPlatform) {
-      // WEB
-      return pickedFile.files.single.bytes;
-    } else {
-      // MOBILE
-      final filePath = pickedFile.files.single.path!;
-      final croppedFile = await ImageCropper().cropImage(
-        sourcePath: filePath,
-        compressFormat: ImageCompressFormat.jpg,
-        uiSettings: _getImageCropperSettings(),
+  Future<Uint8List?> getSelectedImage() async {
+    try {
+      final pickedFile = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: kIsWeb,
       );
+      if (pickedFile == null) return null;
 
-      if (croppedFile == null) return null;
+      if (kIsWeb) {
+        // WEB
+        return pickedFile.files.single.bytes;
+      } else {
+        // MOBILE
+        final filePath = pickedFile.files.single.path!;
+        final croppedFile = await ImageCropper().cropImage(
+          sourcePath: filePath,
+          compressFormat: ImageCompressFormat.jpg,
+          uiSettings: _getImageCropperSettings(),
+        );
 
-      final compressedImage = await _compressImage(croppedFile.path);
+        if (croppedFile == null) return null;
 
-      return compressedImage;
+        final compressedImage = await _compressImage(croppedFile.path);
+
+        if (compressedImage == null) throw Exception(ErrorMsgs.imageFileEmpty);
+
+        return compressedImage;
+      }
+    } catch (error) {
+      emit(ProfileErrorException(error));
     }
+    return null;
   }
 
   // HELPER FUNCTIONS ▼
@@ -218,25 +227,15 @@ class ProfileCubit extends Cubit<ProfileState> {
       {required Result result, String? prefixMessage, String? tag}) {
     // FIREBASE ERROR
     if (result.isFirebaseError()) {
-      emit(ProfileError(result.getFirebaseAlert()));
+      emit(ProfileErrorToast(result.getFirebaseAlert()));
     }
     // GENERIC ERROR
     else if (result.isGenericError()) {
-      ErrorHandler.handleError(
-        result.getGenericErrorData(),
-        prefixMessage: prefixMessage,
-        tag: tag,
-        onRetry: () {},
-      );
+      emit(ProfileErrorException(result.getGenericErrorData()));
     }
     // KNOWN ERRORS
     else if (result.isMessageError()) {
-      ErrorHandler.handleError(
-        null,
-        tag: tag,
-        customMessage: result.getMessageErrorAlert(),
-        onRetry: () {},
-      );
+      emit(ProfileError(result.getMessageErrorAlert()));
     }
   }
 

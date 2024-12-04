@@ -1,9 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
@@ -13,7 +11,6 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
@@ -62,47 +59,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         return _buildEditScreen();
       },
       listener: (context, state) {
-        if (state is ProfileError) {
-          ToastMessengerUnit.showErrorToast(
-            context: context,
-            message: state.message,
-          );
-        } else if (state is ProfileLoaded) {
+        if (state is ProfileLoaded) {
           Navigator.pop(context);
+        } else if (state is ProfileErrorToast) {
+          _handleErrorToast(state.message);
+        } else if (state is ProfileErrorException) {
+          _handleExceptionMessage(error: state.error);
+        } else if (state is ProfileError) {
+          _handleExceptionMessage(message: state.message);
         }
       },
     );
   }
 
   Future<void> _handleImageSelection() async {
-    try {
-      final pickedFile = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        withData: kIsWeb,
-      );
-
-      final processedImage = await _profileCubit.getProcessedImage(
-        pickedFile: pickedFile,
-        isWebPlatform: kIsWeb,
-      );
-
-      if (processedImage == null) throw Exception(ErrorMsgs.imageFileEmpty);
-
-      setState(() {
-        _selectedImage = processedImage;
-      });
-    } catch (error) {
-      ErrorHandler.handleError(
-        error,
-        tag: debugTag,
-        onRetry: () {},
-      );
-    }
+    final selectedImage = await _profileCubit.getSelectedImage();
+    setState(() {
+      _selectedImage = selectedImage;
+    });
   }
 
   void _handleProfileUpdate() async {
     if (_selectedImage != null || _bio.isNotEmpty) {
-      FocusScope.of(context).unfocus();
+       _hideKeyboard();
 
       _profileCubit.updateProfile(
         userId: _currentUser.uid,
@@ -113,6 +92,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       Navigator.pop(context);
     }
   }
+
+  void _handleErrorToast(String message) {
+    _hideKeyboard();
+    ToastMessengerUnit.showErrorToast(
+      context: context,
+      message: message,
+    );
+  }
+
+  void _handleExceptionMessage({Object? error, String? message}) {
+    _hideKeyboard();
+    ErrorHandler.handleError(
+      error,
+      tag: debugTag,
+      customMessage: message,
+      onRetry: () {},
+    );
+  }
+
+  void _hideKeyboard() => FocusScope.of(context).unfocus();
 
   Widget _buildEditScreen() {
     bioTextController.text = widget.currentUser.bio;
