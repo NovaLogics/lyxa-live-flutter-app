@@ -8,10 +8,13 @@ class HomeLoading extends HomeState {}
 
 class HomeLoaded extends HomeState {
   final List<PostEntity> posts;
-  HomeLoaded(this.posts);
+  final String? errorMessage;
+
+  HomeLoaded({required this.posts, this.errorMessage});
 }
 
 class HomeError extends HomeState {
-  final String message;
-  HomeError(this.message);
+  final Object? error;
+  final String? message;
+  HomeError({this.message, this.error});
 }
