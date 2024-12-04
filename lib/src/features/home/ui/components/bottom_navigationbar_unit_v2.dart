@@ -32,7 +32,10 @@ class BottomNavigationBarUnitV2 extends StatefulWidget {
 class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
   int _currentIndex = 0;
 
-  get backgroundStyle => null;
+  bool _isWebPlatform() {
+    return MediaQueryData.fromView(WidgetsBinding.instance.window).size.width >
+        600;
+  }
 
   setBottomBarIndex(int index) {
     setState(() {
@@ -43,7 +46,6 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
   @override
   Widget build(BuildContext context) {
     // final Size size = MediaQuery.of(context).size;
-    final selectedColor = Theme.of(context).colorScheme.onSecondary;
     final screens = [
       widget.homeScreen,
       widget.searchScreen,
@@ -76,7 +78,7 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
   }
 
   Widget _buildBar(BuildContext context) {
-    final selectedColor = Theme.of(context).colorScheme.onSecondary;
+    final selectedColor = Theme.of(context).colorScheme.primary;
     return Row(
       children: [
         const Spacer(),
@@ -92,20 +94,22 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
                     size: Size(430, 80),
                     painter: NavCustomPainter(context),
                   ),
+                  // ADD POST
                   Center(
                     heightFactor: 0.6,
                     child: FloatingActionButton(
-                      backgroundColor: Colors.orange,
-                      child: _buildIcon(
-                        3,
-                        selectedColor,
-                        AppIcons.settingsOutlinedStyle2,
-                        Icons.settings_rounded,
-                      ),
+                      backgroundColor: AppColors.bluePurple800,
                       elevation: 0.1,
                       onPressed: () {
-                        setBottomBarIndex(2); // New post action
+                        setBottomBarIndex(2);
                       },
+                      child: _buildIcon(
+                        2,
+                        selectedColor,
+                        AppIcons.addPostOutlinedStyle2,
+                        Icons.add_photo_alternate_outlined,
+                        isHighlight: true,
+                      ),
                     ),
                   ),
                   Container(
@@ -118,7 +122,7 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
                           icon: Icon(
                             Icons.home,
                             color: _currentIndex == 0
-                                ? Colors.orange
+                                ? AppColors.bluePurple600
                                 : Colors.grey.shade400,
                           ),
                           onPressed: () {
@@ -167,7 +171,7 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
             ),
           ],
         ),
-        Spacer(),
+        const Spacer(),
       ],
     );
   }
@@ -179,12 +183,22 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
     IconData iconWeb, {
     bool isHighlight = false,
   }) {
-    final isWeb = true;
+    if (_currentIndex != index) color = AppColors.grayNeutral;
+    final isWeb = _isWebPlatform();
     double size = isHighlight ? AppDimens.size28 : AppDimens.size24;
+    if (isHighlight) {
+      if (_currentIndex == index) {
+        color = Colors.orange;
+      } else {
+        color = Colors.grey.shade400;
+      }
+    }
+
     return isWeb
         ? Icon(
             iconWeb,
             color: color,
+            size: size,
           )
         : SvgPicture.asset(
             iconMobile,
