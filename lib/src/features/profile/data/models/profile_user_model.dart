@@ -50,6 +50,30 @@ class ProfileUserModel extends AppUserEntity {
     );
   }
 
+  ProfileUserEntity copyWithFull({
+    String? uid,
+    String? bio,
+    String? profileImageUrl,
+    bool? isPrivate,
+    List<String>? followers,
+    List<String>? following,
+    String? email,
+    String? name,
+    String? searchableName,
+  }) {
+    return ProfileUserEntity(
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      searchableName: searchableName ?? this.searchableName,
+      bio: bio ?? this.bio,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
+      isPrivate: isPrivate ?? this.isPrivate,
+      followers: followers ?? List.from(this.followers),
+      following: following ?? List.from(this.following),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       ProfileUserFields.uid: uid,
@@ -118,7 +142,7 @@ class ProfileUserModel extends AppUserEntity {
     );
   }
 
-    static ProfileUserEntity getGuestUserAsEntity() {
+  static ProfileUserEntity getGuestUserAsEntity() {
     return ProfileUserEntity(
       uid: '',
       email: '',
