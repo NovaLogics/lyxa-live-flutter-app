@@ -24,7 +24,7 @@ import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class PostTileUnit extends StatefulWidget {
   final PostEntity post;
-  final ProfileUser currentUser;
+  final ProfileUserEntity currentUser;
   final VoidCallback? onDeletePressed;
 
   const PostTileUnit({

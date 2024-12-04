@@ -20,7 +20,7 @@ import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class UploadPostScreen extends StatefulWidget {
-  final ProfileUser profileUser;
+  final ProfileUserEntity profileUser;
 
   const UploadPostScreen({
     super.key,
@@ -38,7 +38,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   late final HomeCubit _homeCubit;
   Uint8List? _selectedImage;
 
-  ProfileUser get _profileUser => widget.profileUser;
+  ProfileUserEntity get _profileUser => widget.profileUser;
 
   @override
   void initState() {

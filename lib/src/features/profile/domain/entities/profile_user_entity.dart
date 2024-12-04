@@ -12,14 +12,14 @@ class ProfileUserFields {
   static const String isPrivate = 'isPrivate';
 }
 
-class ProfileUser extends AppUserEntity {
+class ProfileUserEntity extends AppUserEntity {
   final String bio;
   final String profileImageUrl;
   final bool isPrivate;
   final List<String> followers;
   final List<String> following;
 
-  ProfileUser({
+  ProfileUserEntity({
     required super.uid,
     required super.email,
     required super.name,
@@ -31,13 +31,13 @@ class ProfileUser extends AppUserEntity {
     this.isPrivate = false,
   });
 
-  ProfileUser copyWith({
+  ProfileUserEntity copyWith({
     String? newBio,
     String? newProfileImageUrl,
     List<String>? newFollowers,
     List<String>? newFollowing,
   }) {
-    return ProfileUser(
+    return ProfileUserEntity(
       uid: uid,
       email: email,
       name: name,
@@ -49,7 +49,6 @@ class ProfileUser extends AppUserEntity {
     );
   }
 
- 
   Map<String, dynamic> toJson() {
     return {
       ProfileUserFields.uid: uid,
@@ -63,8 +62,8 @@ class ProfileUser extends AppUserEntity {
     };
   }
 
-  factory ProfileUser.fromJson(Map<String, dynamic> json) {
-    return ProfileUser(
+  factory ProfileUserEntity.fromJson(Map<String, dynamic> json) {
+    return ProfileUserEntity(
       uid: json[ProfileUserFields.uid],
       email: json[ProfileUserFields.email],
       name: json[ProfileUserFields.name] ?? '',
@@ -76,8 +75,8 @@ class ProfileUser extends AppUserEntity {
     );
   }
 
-  static ProfileUser getGuestUser() {
-    return ProfileUser(
+  static ProfileUserEntity getGuestUser() {
+    return ProfileUserEntity(
       uid: '',
       email: '',
       name: '',

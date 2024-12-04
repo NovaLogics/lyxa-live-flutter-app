@@ -13,7 +13,7 @@ class HomeCubit extends Cubit<HomeState> {
   static const String debugTag = 'PostCubit';
   final PostCubit _postCubit;
   final HomeRepository _homeRepository;
-  ProfileUser? _currentUser;
+  ProfileUserEntity? _currentUser;
 
   HomeCubit({
     required HomeRepository homeRepository,
@@ -22,9 +22,9 @@ class HomeCubit extends Cubit<HomeState> {
         _postCubit = postCubit,
         super(HomeInitial());
 
-  Future<ProfileUser> getCurrentUser() async {
+  Future<ProfileUserEntity> getCurrentUser() async {
     if (_currentUser != null) {
-      return _currentUser as ProfileUser;
+      return _currentUser as ProfileUserEntity;
     } else {
       return await getCurrentAppUser();
     }
@@ -53,7 +53,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<ProfileUser> getCurrentAppUser() async {
+  Future<ProfileUserEntity> getCurrentAppUser() async {
     _showLoading(AppStrings.loadingMessage);
 
     final getUserResult = await _homeRepository.getCurrentAppUser();
@@ -68,7 +68,7 @@ class HomeCubit extends Cubit<HomeState> {
           result: getUserResult,
           tag: '$debugTag: getAllPosts()',
         );
-        return ProfileUser.getGuestUser();
+        return ProfileUserEntity.getGuestUser();
     }
   }
 

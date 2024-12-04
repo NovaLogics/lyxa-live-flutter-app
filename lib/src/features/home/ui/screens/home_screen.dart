@@ -28,7 +28,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   static const String debugTag = 'HomeScreen';
   late final HomeCubit _homeCubit;
-  ProfileUser _currentUser = ProfileUser.getGuestUser();
+  ProfileUserEntity _currentUser = ProfileUserEntity.getGuestUser();
 
   @override
   void initState() {

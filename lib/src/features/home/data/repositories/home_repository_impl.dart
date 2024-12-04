@@ -36,7 +36,7 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<Result<ProfileUser>> getCurrentAppUser() async {
+  Future<Result<ProfileUserEntity>> getCurrentAppUser() async {
     try {
       final firebaseUser = _firebaseAuth.currentUser;
       if (firebaseUser == null) throw Exception(ErrorMsgs.userDataNotFound);
@@ -50,8 +50,8 @@ class HomeRepositoryImpl implements HomeRepository {
         throw Exception(ErrorMsgs.cannotFetchProfileError);
       }
 
-      final profileUser =
-          ProfileUser.fromJson(userDocument.data() as Map<String, dynamic>);
+      final profileUser = ProfileUserEntity.fromJson(
+          userDocument.data() as Map<String, dynamic>);
 
       return Result.success(
         data: profileUser,

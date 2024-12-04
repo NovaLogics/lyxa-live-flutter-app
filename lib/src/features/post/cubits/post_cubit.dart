@@ -36,7 +36,7 @@ class PostCubit extends Cubit<PostState> {
         _postRepository = postRepository,
         super(PostInitial());
 
-  Future<ProfileUser> getCurrentUser() async {
+  Future<ProfileUserEntity> getCurrentUser() async {
     _showLoading(AppStrings.loadingMessage);
     final profileUser = await getIt<ProfileCubit>().getCurrentUser();
     _hideLoading();
@@ -67,7 +67,7 @@ class PostCubit extends Cubit<PostState> {
   Future<bool> addPost({
     required String captionText,
     Uint8List? imageBytes,
-    required ProfileUser currentUser,
+    required ProfileUserEntity currentUser,
   }) async {
     final trimmedCaption = captionText.trim();
 

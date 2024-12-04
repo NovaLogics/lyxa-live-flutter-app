@@ -15,7 +15,7 @@ import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart'
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 
 class DrawerUnit extends StatelessWidget {
-  final ProfileUser user;
+  final ProfileUserEntity user;
 
   const DrawerUnit({
     super.key,

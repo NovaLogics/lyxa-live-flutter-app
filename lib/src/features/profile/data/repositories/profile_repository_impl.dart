@@ -11,7 +11,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
-  Future<Result<ProfileUser?>> getUserProfileById({
+  Future<Result<ProfileUserEntity?>> getUserProfileById({
     required String userId,
   }) async {
     try {
@@ -24,8 +24,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
         throw Exception(ErrorMsgs.cannotFetchProfileError);
       }
 
-      final profileUser =
-          ProfileUser.fromJson(userDocument.data() as Map<String, dynamic>);
+      final profileUser = ProfileUserEntity.fromJson(
+          userDocument.data() as Map<String, dynamic>);
 
       return Result.success(
         data: profileUser,
@@ -39,7 +39,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<Result<void>> updateProfile({
-    required ProfileUser updatedProfile,
+    required ProfileUserEntity updatedProfile,
   }) async {
     try {
       await firebaseFirestore

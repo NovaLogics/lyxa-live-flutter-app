@@ -24,7 +24,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   static const String debugTag = 'ProfileCubit';
   final ProfileRepository _profileRepository;
   final StorageRepository _storageRepository;
-  ProfileUser? _currentAppProfileUser;
+  ProfileUserEntity? _currentAppProfileUser;
 
   ProfileCubit({
     required ProfileRepository profileRepository,
@@ -37,15 +37,15 @@ class ProfileCubit extends Cubit<ProfileState> {
     _currentAppProfileUser = null;
   }
 
-  Future<ProfileUser> getCurrentUser() async {
+  Future<ProfileUserEntity> getCurrentUser() async {
     if (_currentAppProfileUser != null) {
-      return _currentAppProfileUser as ProfileUser;
+      return _currentAppProfileUser as ProfileUserEntity;
     } else {
       return await _getCurrentUser();
     }
   }
 
-  Future<ProfileUser> _getCurrentUser() async {
+  Future<ProfileUserEntity> _getCurrentUser() async {
     _showLoading(AppStrings.loadingMessage);
     final currentUser = getIt<AuthCubit>().currentUser;
     if (currentUser == null) {
@@ -63,17 +63,17 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     _hideLoading();
 
-    return _currentAppProfileUser as ProfileUser;
+    return _currentAppProfileUser as ProfileUserEntity;
   }
 
-  Future<ProfileUser?> getUserProfileById({
+  Future<ProfileUserEntity?> getUserProfileById({
     required String userId,
   }) async {
     final getUserResult =
         await _profileRepository.getUserProfileById(userId: userId);
 
     if (getUserResult.isDataNotNull()) {
-      return getUserResult.data as ProfileUser;
+      return getUserResult.data as ProfileUserEntity;
     }
     return null;
   }
@@ -91,7 +91,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     switch (getUserResult.status) {
       case Status.success:
         if (getUserResult.data != null) {
-          emit(ProfileLoaded(getUserResult.data as ProfileUser));
+          emit(ProfileLoaded(getUserResult.data as ProfileUserEntity));
         } else {
           emit(ProfileError(AppStrings.userNotFoundError));
         }

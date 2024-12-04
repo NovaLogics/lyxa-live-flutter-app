@@ -10,7 +10,7 @@ class SearchRepositoryImpl implements SearchRepository {
   final String searchableSuffix = '\uf8ff';
 
   @override
-  Future<Result<List<ProfileUser?>>> searchUsers(String query) async {
+  Future<Result<List<ProfileUserEntity?>>> searchUsers(String query) async {
     try {
       final searchResult = await FirebaseFirestore.instance
           .collection(firebaseUsersCollectionPath)
@@ -21,7 +21,7 @@ class SearchRepositoryImpl implements SearchRepository {
           .get();
 
       final userList = searchResult.docs
-          .map((document) => ProfileUser.fromJson(document.data()))
+          .map((document) => ProfileUserEntity.fromJson(document.data()))
           .toList();
 
       return Result.success(

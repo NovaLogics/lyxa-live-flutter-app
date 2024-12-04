@@ -5,7 +5,7 @@ import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_enti
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 
 class UserTileUnit extends StatelessWidget {
-  final ProfileUser user;
+  final ProfileUserEntity user;
 
   const UserTileUnit({
     super.key,

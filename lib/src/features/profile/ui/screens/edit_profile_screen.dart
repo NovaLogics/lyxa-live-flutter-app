@@ -20,7 +20,7 @@ import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  final ProfileUser currentUser;
+  final ProfileUserEntity currentUser;
 
   const EditProfileScreen({
     super.key,
@@ -37,7 +37,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late final ProfileCubit _profileCubit;
   Uint8List? _selectedImage;
 
-  ProfileUser get _currentUser => widget.currentUser;
+  ProfileUserEntity get _currentUser => widget.currentUser;
   String get _bio => bioTextController.text.trim();
 
   @override
@@ -81,7 +81,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void _handleProfileUpdate() async {
     if (_selectedImage != null || _bio.isNotEmpty) {
-       _hideKeyboard();
+      _hideKeyboard();
 
       _profileCubit.updateProfile(
         userId: _currentUser.uid,
