@@ -5,6 +5,7 @@ import 'package:lyxa_live/src/features/home/domain/repositories/home_repository.
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
@@ -68,7 +69,7 @@ class HomeCubit extends Cubit<HomeState> {
           result: getUserResult,
           tag: '$debugTag: getAllPosts()',
         );
-        return ProfileUserEntity.getGuestUser();
+        return ProfileUserModel.getGuestUserAsEntity();
     }
   }
 

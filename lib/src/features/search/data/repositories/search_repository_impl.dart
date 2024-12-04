@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/search/domain/repositories/search_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
@@ -21,7 +22,7 @@ class SearchRepositoryImpl implements SearchRepository {
           .get();
 
       final userList = searchResult.docs
-          .map((document) => ProfileUserEntity.fromJson(document.data()))
+          .map((document) => ProfileUserModel.fromJson(document.data()).toEntity())
           .toList();
 
       return Result.success(

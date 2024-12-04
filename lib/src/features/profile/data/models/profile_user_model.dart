@@ -117,4 +117,18 @@ class ProfileUserModel extends AppUserEntity {
       isPrivate: false,
     );
   }
+
+    static ProfileUserEntity getGuestUserAsEntity() {
+    return ProfileUserEntity(
+      uid: '',
+      email: '',
+      name: '',
+      searchableName: '',
+      bio: '',
+      profileImageUrl: '',
+      followers: [],
+      following: [],
+      isPrivate: false,
+    );
+  }
 }

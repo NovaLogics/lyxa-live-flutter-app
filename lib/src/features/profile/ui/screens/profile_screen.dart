@@ -5,6 +5,7 @@ import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_image.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
@@ -31,7 +32,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late final ProfileCubit _profileCubit;
-  ProfileUserEntity _currentAppUser = ProfileUserEntity.getGuestUser();
+  ProfileUserEntity _currentAppUser = ProfileUserModel.getGuestUserAsEntity();
 
   get _appUserId => _currentAppUser.uid;
   get _displayUserId => widget.displayUserId;

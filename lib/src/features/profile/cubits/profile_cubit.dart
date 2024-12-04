@@ -11,6 +11,7 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
@@ -114,6 +115,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     _showLoading(AppStrings.updating);
 
     final currentUser = await getCurrentUser();
+    final profileUser = ProfileUserModel.fromEntity(currentUser);
 
     String? imageDownloadUrl;
 
@@ -134,13 +136,13 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       imageDownloadUrl = imageUploadResult.data as String;
       //await DefaultCacheManager().emptyCache();
-      await CachedNetworkImage.evictFromCache(currentUser.profileImageUrl);
+      await CachedNetworkImage.evictFromCache(profileUser.profileImageUrl);
     }
 
-    final updatedProfile = currentUser.copyWith(
+    final updatedProfile = profileUser.copyWith(
       newBio: updatedBio ?? currentUser.bio,
       newProfileImageUrl: imageDownloadUrl ?? currentUser.profileImageUrl,
-    );
+    ).toEntity();
 
     final updateProfileResult = await _profileRepository.updateProfile(
       updatedProfile: updatedProfile,

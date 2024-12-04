@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
@@ -24,8 +25,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
         throw Exception(ErrorMsgs.cannotFetchProfileError);
       }
 
-      final profileUser = ProfileUserEntity.fromJson(
-          userDocument.data() as Map<String, dynamic>);
+      final profileUser = ProfileUserModel.fromJson(
+          userDocument.data() as Map<String, dynamic>).toEntity();
 
       return Result.success(
         data: profileUser,
