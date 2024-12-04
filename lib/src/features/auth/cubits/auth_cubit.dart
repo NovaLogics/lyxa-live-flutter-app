@@ -9,7 +9,6 @@ import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/storage/domain/repositories/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
@@ -36,8 +35,11 @@ class AuthCubit extends Cubit<AuthState> {
   AppUserEntity? get currentUser => _currentUser;
 
   Future<void> checkAuth() async {
+    _showLoading();
+
     final currentUserResult = await _authRepository.getCurrentUser();
 
+    _hideLoading();
     switch (currentUserResult.status) {
       case Status.success:
         _profileService.assignEntity(currentUserResult.data!);
@@ -69,7 +71,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (loginResult.status) {
       case Status.success:
-             _profileService.assignEntity(loginResult.data!);
+        _profileService.assignEntity(loginResult.data!);
         _handleAuthStatus(userData: loginResult.data);
         break;
 
