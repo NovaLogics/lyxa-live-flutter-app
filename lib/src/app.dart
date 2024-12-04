@@ -10,6 +10,7 @@ import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/bottom_navigationbar_unit.dart';
 import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
+import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
@@ -101,6 +102,7 @@ class LyxaApp extends StatelessWidget {
             profileScreen: ProfileScreen(
               displayUserId: state.user.uid,
             ),
+            newPostScreen: const UploadPostScreen(),
             settingsScreen: const SettingsScreen(),
             homeWebIcon: Icons.home_outlined,
             homeMobileIcon: Icons.home,
