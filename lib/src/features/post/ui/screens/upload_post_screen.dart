@@ -20,11 +20,8 @@ import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class UploadPostScreen extends StatefulWidget {
-  final ProfileUserEntity profileUser;
-
   const UploadPostScreen({
     super.key,
-    required this.profileUser,
   });
 
   @override
@@ -38,7 +35,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   late final HomeCubit _homeCubit;
   Uint8List? _selectedImage;
 
-  ProfileUserEntity get _profileUser => widget.profileUser;
+ // ProfileUserEntity get _profileUser => widget.profileUser;
 
   @override
   void initState() {
@@ -92,14 +89,14 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     });
   }
 
-  void _handleUploadPost() {
-    _hideKeyboard();
-    _postCubit.addPost(
-      captionText: _captionController.text,
-      imageBytes: _selectedImage,
-      currentUser: _profileUser,
-    );
-  }
+  // void _handleUploadPost() {
+  //   _hideKeyboard();
+  //   _postCubit.addPost(
+  //     captionText: _captionController.text,
+  //     imageBytes: _selectedImage,
+  //     currentUser: _profileUser,
+  //   );
+  // }
 
   void _handleErrorToast(String message) {
     _hideKeyboard();
@@ -138,11 +135,11 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         onPressed: () => Navigator.of(context).pop(),
       ),
       actions: [
-        IconButton(
-          onPressed: _handleUploadPost,
-          icon: const Icon(Icons.upload),
-        ),
-        addSpacing(width: AppDimens.size12),
+        // IconButton(
+        //   onPressed: _handleUploadPost,
+        //   icon: const Icon(Icons.upload),
+        // ),
+        // addSpacing(width: AppDimens.size12),
       ],
     );
   }
