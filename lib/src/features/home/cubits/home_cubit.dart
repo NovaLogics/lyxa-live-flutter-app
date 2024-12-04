@@ -2,44 +2,62 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_state.dart';
 import 'package:lyxa_live/src/features/home/domain/repositories/home_repository.dart';
+import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   static const String debugTag = 'PostCubit';
+  final PostCubit _postCubit;
   final HomeRepository _homeRepository;
+  ProfileUser? _currentUser;
 
-  HomeCubit({required HomeRepository homeRepository})
-      : _homeRepository = homeRepository,
+  HomeCubit({
+    required HomeRepository homeRepository,
+    required PostCubit postCubit,
+  })  : _homeRepository = homeRepository,
+        _postCubit = postCubit,
         super(HomeInitial());
 
-  Future<void> getAllPosts() async {
-    _showLoading(AppStrings.loadingMessage);
-
-    final getPostsResult = await _homeRepository.getAllPosts();
-
-    switch (getPostsResult.status) {
-      case Status.success:
-        emit(HomeLoaded(posts: getPostsResult.data ?? List.empty()));
-        break;
-
-      case Status.error:
-        _handleErrors(
-          result: getPostsResult,
-          tag: '$debugTag: getAllPosts()',
-        );
-        break;
+  Future<ProfileUser> getCurrentUser() async {
+    if (_currentUser != null) {
+      return _currentUser as ProfileUser;
+    } else {
+      return await getCurrentAppUser();
     }
-    _hideLoading();
+  }
+
+  Future<void> getAllPostsfromServer() async {
+    await _postCubit.getAllPosts();
+    emit(HomeLoaded(posts: _postCubit.postDataList));
+  }
+
+  List<PostEntity> getLoadedPosts() {
+    return _postCubit.postDataList;
+  }
+
+  Future<void> deletePost({
+    required PostEntity post,
+  }) async {
+    _postCubit.locallyDeletePost(post);
+    emit(HomeLoaded(posts: _postCubit.postDataList));
+    
+    final deleteResult = await _postCubit.deletePost(post: post);
+
+    if (!deleteResult) {
+      _postCubit.locallyAddPost(post);
+      emit(HomeLoaded(posts: _postCubit.postDataList));
+    }
   }
 
   Future<ProfileUser> getCurrentAppUser() async {
     _showLoading(AppStrings.loadingMessage);
 
     final getUserResult = await _homeRepository.getCurrentAppUser();
-    
+
     _hideLoading();
     switch (getUserResult.status) {
       case Status.success:
