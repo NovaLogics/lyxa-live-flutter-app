@@ -12,9 +12,6 @@ import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
@@ -58,11 +55,33 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _buildUploadPostScreen(),
-        _buildLoadingScreen(),
-      ],
+    return BlocConsumer<PostCubit, PostState>(
+      builder: (context, state) {
+        return ScrollableScaffold(
+          appBar: _buildAppBar(),
+          body: Column(
+            children: [
+              _buildImagePreview(),
+              _buildPickImageButton(),
+              addSpacing(height: AppDimens.size28),
+              _buildCaptionInput(),
+              addSpacing(height: AppDimens.size72),
+            ],
+          ),
+        );
+      },
+      listener: (context, state) {
+        if (state is PostUploaded) {
+          _homeCubit.getAllPosts();
+          Navigator.pop(context);
+        } else if (state is PostErrorToast) {
+          _handleErrorToast(state.message);
+        } else if (state is PostErrorException) {
+          _handleExceptionMessage(error: state.error);
+        } else if (state is PostError) {
+          _handleExceptionMessage(message: state.message);
+        }
+      },
     );
   }
 
@@ -73,21 +92,13 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     });
   }
 
-  void _handleUploadPost() async {
+  void _handleUploadPost() {
     _hideKeyboard();
-    final result = await _postCubit.addPost(
+    _postCubit.addPost(
       captionText: _captionController.text,
       imageBytes: _selectedImage,
       currentUser: _profileUser,
     );
-    if (result) {
-      _homeCubit.getAllPostsfromServer();
-      navHomeScreen();
-    }
-  }
-
-  void navHomeScreen() {
-    Navigator.pop(context);
   }
 
   void _handleErrorToast(String message) {
@@ -109,48 +120,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   }
 
   void _hideKeyboard() => FocusScope.of(context).unfocus();
-
-  Widget _buildUploadPostScreen() {
-    return BlocConsumer<PostCubit, PostState>(
-      builder: (context, state) {
-        return ScrollableScaffold(
-          appBar: _buildAppBar(),
-          body: Column(
-            children: [
-              _buildImagePreview(),
-              _buildPickImageButton(),
-              addSpacing(height: AppDimens.size28),
-              _buildCaptionInput(),
-              addSpacing(height: AppDimens.size72),
-            ],
-          ),
-        );
-      },
-      listener: (context, state) {
-        if (state is PostErrorToast) {
-          _handleErrorToast(state.message);
-        } else if (state is PostErrorException) {
-          _handleExceptionMessage(error: state.error);
-        } else if (state is PostError) {
-          _handleExceptionMessage(message: state.message);
-        }
-      },
-    );
-  }
-
-  Widget _buildLoadingScreen() {
-    return BlocConsumer<LoadingCubit, LoadingState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Visibility(
-          visible: state.isVisible,
-          child: LoadingUnit(
-            message: state.message,
-          ),
-        );
-      },
-    );
-  }
 
   AppBar _buildAppBar() {
     return AppBar(

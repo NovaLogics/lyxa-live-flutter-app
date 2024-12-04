@@ -9,7 +9,6 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/post/data/models/post_model.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
@@ -112,7 +111,7 @@ class PostCubit extends Cubit<PostState> {
 
     switch (postUploadResult.status) {
       case Status.success:
-        //  getAllPosts();
+        emit(PostUploaded());
         return true;
 
       case Status.error:
