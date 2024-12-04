@@ -17,4 +17,11 @@ class AppIcons {
   static const String profileOutlined = '$_iconPath/ic_profile_border.svg';
   static const String searchOutlined = '$_iconPath/ic_search_border.svg';
   static const String logoutOutlined = '$_iconPath/ic_logout_border.svg';
+
+  static const String addPostOutlined = '$_iconPath/ic_add_border.svg';
+  static const String addPostOutlinedStyle1 =
+      '$_iconPath/ic_add_border_style_1.svg';
+        static const String addPostOutlinedStyle2 =
+      '$_iconPath/ic_add_border_style_2.svg';
+  static const String addPostSolid = '$_iconPath/ic_add_filled.svg';
 }

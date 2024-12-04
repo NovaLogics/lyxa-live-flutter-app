@@ -39,6 +39,7 @@ class AppStrings {
   static const String titleHome = 'HOME';
   static const String titleProfile = 'PROFILE';
   static const String titleSearch = 'SEARCH';
+   static const String titlePost = 'POST';
   static const String titleSettings = 'SETTINGS';
   static const String titleLogout = 'LOGOUT';
 
