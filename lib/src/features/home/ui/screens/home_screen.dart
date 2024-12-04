@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return ConstrainedScaffold(
       appBar: _buildAppBar(context),
       drawer: _buildAppDrawer(),
+      showPhotoSlider: true,
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           if (state is HomeLoaded) {
@@ -50,7 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             return _buildPostList(state.posts);
           } else if (state is HomeError) {
-            _handleExceptionMessage(error: state.error, message: state.message);
+            _handleExceptionMessage(
+              error: state.error,
+              message: state.message,
+            );
             return _buildDisplayMsgScreen(message: state.message);
           }
           return _buildDisplayMsgScreen();
@@ -65,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _currentUser = profileUser;
     });
-    _homeCubit.getAllPostsfromServer();
+    _homeCubit.getAllPosts();
   }
 
   void _deletePost(PostEntity post) {
@@ -126,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       actions: [
         RefreshButtonUnit(
-          onRefresh: _homeCubit.getAllPostsfromServer,
+          onRefresh: _homeCubit.getAllPosts,
         ),
         Padding(
           padding: const EdgeInsets.only(right: AppDimens.size2),

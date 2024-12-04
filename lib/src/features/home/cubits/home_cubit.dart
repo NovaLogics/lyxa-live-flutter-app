@@ -30,12 +30,12 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<void> getAllPostsfromServer() async {
+  Future<void> getAllPosts() async {
     await _postCubit.getAllPosts();
     emit(HomeLoaded(posts: _postCubit.postDataList));
   }
 
-  List<PostEntity> getLoadedPosts() {
+  List<PostEntity> getCachedPosts() {
     return _postCubit.postDataList;
   }
 
@@ -44,7 +44,7 @@ class HomeCubit extends Cubit<HomeState> {
   }) async {
     _postCubit.locallyDeletePost(post);
     emit(HomeLoaded(posts: _postCubit.postDataList));
-    
+
     final deleteResult = await _postCubit.deletePost(post: post);
 
     if (!deleteResult) {
