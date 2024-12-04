@@ -6,6 +6,7 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_state.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
@@ -20,6 +21,7 @@ import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dar
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class HomeScreen extends StatefulWidget {
+ // AppUserEntity appUser;
   const HomeScreen({super.key});
 
   @override
@@ -101,9 +103,16 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UploadPostScreen(profileUser: _currentUser),
+        builder: (context) => UploadPostScreen(
+            // profileUser: _currentUser
+            ),
       ),
     );
+  }
+
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
+    _homeCubit.getAllPosts();
   }
 
   Widget _buildAppDrawer() {
@@ -150,16 +159,19 @@ class _HomeScreenState extends State<HomeScreen> {
         ? _buildDisplayMsgScreen(
             message: AppStrings.noPostAvailableError,
           )
-        : ListView.builder(
-            itemCount: postList.length,
-            itemBuilder: (context, index) {
-              final post = postList[index];
-              return PostTileUnit(
-                post: post,
-                currentUser: _currentUser,
-                onDeletePressed: () => _deletePost(post),
-              );
-            },
+        : RefreshIndicator(
+            onRefresh: _refresh,
+            child: ListView.builder(
+              itemCount: postList.length,
+              itemBuilder: (context, index) {
+                final post = postList[index];
+                return PostTileUnit(
+                  post: post,
+                  currentUser: _currentUser,
+                  onDeletePressed: () => _deletePost(post),
+                );
+              },
+            ),
           );
   }
 
