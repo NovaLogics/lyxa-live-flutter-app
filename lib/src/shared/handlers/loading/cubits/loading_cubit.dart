@@ -42,7 +42,7 @@ class LoadingCubit extends Cubit<LoadingState> {
 
   static void showLoading({String? message, Duration? timeout}) {
     getIt<LoadingCubit>()
-        .show(message: message, timeout: const Duration(seconds: 15));
+        .show(message: message, timeout: const Duration(seconds: 60));
   }
 
   static void hideLoading() {
