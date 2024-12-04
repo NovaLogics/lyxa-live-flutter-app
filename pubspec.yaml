@@ -33,6 +33,7 @@ dependencies:
   image_cropper: ^8.0.2
   flutter_image_compress: ^2.3.0
   flutter_cache_manager: ^3.4.1
+  equatable: ^2.0.7
 
 dev_dependencies:
   flutter_test:
