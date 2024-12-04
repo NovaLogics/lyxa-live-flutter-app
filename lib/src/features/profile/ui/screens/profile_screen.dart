@@ -7,9 +7,6 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_image.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
@@ -50,20 +47,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return Stack(
-          children: [
-            if (state is ProfileLoaded)
-              _buildProfileContent(
-                context,
-                state.profileUser,
-              ),
-            if (state is! ProfileLoaded)
-              _buildEmptyContent(
-                displayText: AppStrings.profileNotFoundError,
-              ),
-            _buildLoadingScreen(),
-          ],
-        );
+        if (state is ProfileLoaded) {
+          return _buildProfileContent(
+            context,
+            state.profileUser,
+          );
+        } else if (state is ProfileError) {
+          return _buildEmptyContent(
+            displayText: AppStrings.profileNotFoundError,
+          );
+        } else {
+          return _buildEmptyContent();
+        }
       },
     );
   }
@@ -97,20 +92,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : profileUser.followers.remove(_appUserId);
       });
     });
-  }
-
-  Widget _buildLoadingScreen() {
-    return BlocConsumer<LoadingCubit, LoadingState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Visibility(
-          visible: state.isVisible,
-          child: LoadingUnit(
-            message: state.message,
-          ),
-        );
-      },
-    );
   }
 
   Widget _buildProfileContent(BuildContext context, ProfileUser user) {

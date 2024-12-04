@@ -14,9 +14,6 @@ import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
@@ -53,15 +50,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   @override
+  void dispose() {
+    bioTextController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return Stack(
-          children: [
-            _buildEditScreen(),
-            _buildLoadingScreen(),
-          ],
-        );
+        return _buildEditScreen();
       },
       listener: (context, state) {
         if (state is ProfileError) {
@@ -114,20 +112,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     } else {
       Navigator.pop(context);
     }
-  }
-
-  Widget _buildLoadingScreen() {
-    return BlocConsumer<LoadingCubit, LoadingState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Visibility(
-          visible: state.isVisible,
-          child: LoadingUnit(
-            message: state.message,
-          ),
-        );
-      },
-    );
   }
 
   Widget _buildEditScreen() {
