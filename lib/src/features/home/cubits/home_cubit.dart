@@ -1,20 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_state.dart';
 import 'package:lyxa_live/src/features/home/domain/repositories/home_repository.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
-import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   static const String debugTag = 'PostCubit';
   final PostCubit _postCubit;
   final HomeRepository _homeRepository;
-  ProfileUserEntity? _currentUser;
 
   HomeCubit({
     required HomeRepository homeRepository,
@@ -23,13 +18,7 @@ class HomeCubit extends Cubit<HomeState> {
         _postCubit = postCubit,
         super(HomeInitial());
 
-  Future<ProfileUserEntity> getCurrentProfileUser(String userId) async {
-    if (_currentUser != null) {
-      return _currentUser as ProfileUserEntity;
-    } else {
-      return await getCurrentAppUser(userId);
-    }
-  }
+ 
 
   Future<void> getAllPosts() async {
     await _postCubit.getAllPosts();
@@ -54,34 +43,8 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<ProfileUserEntity> getCurrentAppUser(String userId) async {
-    _showLoading(AppStrings.loadingMessage);
-
-    final getUserResult = await _homeRepository.getCurrentAppUser(userId: userId);
-
-    _hideLoading();
-    switch (getUserResult.status) {
-      case Status.success:
-        return getUserResult.data!;
-
-      case Status.error:
-        _handleErrors(
-          result: getUserResult,
-          tag: '$debugTag: getAllPosts()',
-        );
-        return ProfileUserModel.getGuestUserAsEntity();
-    }
-  }
-
   // HELPER FUNCTIONS ▼
 
-  void _showLoading(String message) {
-    LoadingCubit.showLoading(message: message);
-  }
-
-  void _hideLoading() {
-    LoadingCubit.hideLoading();
-  }
 
   void _handleErrors(
       {required Result result, String? prefixMessage, String? tag}) {

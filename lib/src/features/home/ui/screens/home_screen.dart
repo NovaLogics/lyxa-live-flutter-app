@@ -8,18 +8,15 @@ import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_state.dart';
-import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/refresh_button_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
+import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
-import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class HomeScreen extends StatefulWidget {
- 
   const HomeScreen({
     super.key,
   });
@@ -31,12 +28,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   static const String debugTag = 'HomeScreen';
   late final HomeCubit _homeCubit;
-  ProfileUserEntity? _currentUser;
+  late final ProfileService _profileService;
 
   @override
   void initState() {
     super.initState();
-    _homeCubit = getIt<HomeCubit>();
     _initScreen();
   }
 
@@ -44,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return ConstrainedScaffold(
       appBar: _buildAppBar(context),
-      drawer: _buildAppDrawer(),
       showPhotoSlider: true,
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
@@ -67,11 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _initScreen() async {
-    final profileUser = await _homeCubit.getCurrentProfileUser();
+    _profileService = getIt<ProfileService>();
 
-    setState(() {
-      _currentUser = profileUser;
-    });
+    _homeCubit = getIt<HomeCubit>();
     _homeCubit.getAllPosts();
   }
 
@@ -99,24 +92,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _hideKeyboard() => FocusScope.of(context).unfocus();
 
-  void _navigateToUploadPostScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => UploadPostScreen(
-            // profileUser: _currentUser
-            ),
-      ),
-    );
-  }
-
   Future<void> _refresh() async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
+    await Future.delayed(const Duration(seconds: 2));
     _homeCubit.getAllPosts();
-  }
-
-  Widget _buildAppDrawer() {
-    return DrawerUnit(user: _currentUser);
   }
 
   AppBar _buildAppBar(BuildContext context) {
@@ -142,14 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
         RefreshButtonUnit(
           onRefresh: _homeCubit.getAllPosts,
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: AppDimens.size2),
-          child: IconButton(
-            onPressed: _navigateToUploadPostScreen,
-            icon: const Icon(Icons.add_box_outlined),
-            tooltip: AppStrings.addNewPost,
-          ),
-        ),
       ],
     );
   }
@@ -165,9 +135,10 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: postList.length,
               itemBuilder: (context, index) {
                 final post = postList[index];
+
                 return PostTileUnit(
                   post: post,
-                  currentUser: _currentUser,
+                  currentUser: _profileService.profileEntity,
                   onDeletePressed: () => _deletePost(post),
                 );
               },
