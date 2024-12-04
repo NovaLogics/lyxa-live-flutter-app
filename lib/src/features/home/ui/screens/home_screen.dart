@@ -6,13 +6,11 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_state.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/refresh_button_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
-import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
@@ -21,8 +19,10 @@ import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dar
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class HomeScreen extends StatefulWidget {
- // AppUserEntity appUser;
-  const HomeScreen({super.key});
+ 
+  const HomeScreen({
+    super.key,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -31,7 +31,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   static const String debugTag = 'HomeScreen';
   late final HomeCubit _homeCubit;
-  ProfileUserEntity _currentUser = ProfileUserModel.getGuestUserAsEntity();
+  ProfileUserEntity? _currentUser;
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _initScreen() async {
-    final profileUser = await _homeCubit.getCurrentUser();
+    final profileUser = await _homeCubit.getCurrentProfileUser();
 
     setState(() {
       _currentUser = profileUser;

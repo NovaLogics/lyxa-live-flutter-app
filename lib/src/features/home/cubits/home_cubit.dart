@@ -23,11 +23,11 @@ class HomeCubit extends Cubit<HomeState> {
         _postCubit = postCubit,
         super(HomeInitial());
 
-  Future<ProfileUserEntity> getCurrentUser() async {
+  Future<ProfileUserEntity> getCurrentProfileUser(String userId) async {
     if (_currentUser != null) {
       return _currentUser as ProfileUserEntity;
     } else {
-      return await getCurrentAppUser();
+      return await getCurrentAppUser(userId);
     }
   }
 
@@ -54,10 +54,10 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<ProfileUserEntity> getCurrentAppUser() async {
+  Future<ProfileUserEntity> getCurrentAppUser(String userId) async {
     _showLoading(AppStrings.loadingMessage);
 
-    final getUserResult = await _homeRepository.getCurrentAppUser();
+    final getUserResult = await _homeRepository.getCurrentAppUser(userId: userId);
 
     _hideLoading();
     switch (getUserResult.status) {

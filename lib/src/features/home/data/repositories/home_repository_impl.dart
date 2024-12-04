@@ -14,7 +14,6 @@ import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 class HomeRepositoryImpl implements HomeRepository {
   final CollectionReference _postsCollectionRef =
       FirebaseFirestore.instance.collection(firebasePostsCollectionPath);
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   @override
@@ -37,14 +36,13 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<Result<ProfileUserEntity>> getCurrentAppUser() async {
+  Future<Result<ProfileUserEntity>> getCurrentAppUser({
+    required String userId,
+  }) async {
     try {
-      final firebaseUser = _firebaseAuth.currentUser;
-      if (firebaseUser == null) throw Exception(ErrorMsgs.userDataNotFound);
-
       final userDocument = await _firebaseFirestore
           .collection(firebaseUsersCollectionPath)
-          .doc(firebaseUser.uid)
+          .doc(userId)
           .get();
 
       if (!userDocument.exists || userDocument.data() == null) {
