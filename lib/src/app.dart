@@ -6,6 +6,7 @@ import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/auth_screen.dart';
+import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
@@ -53,6 +54,10 @@ class LyxaApp extends StatelessWidget {
       // SEARCH CUBIT
       BlocProvider<SearchCubit>(
         create: (context) => getIt<SearchCubit>(),
+      ),
+      // HOME CUBIT
+      BlocProvider<HomeCubit>(
+        create: (context) => getIt<HomeCubit>(),
       ),
       // THEME CUBIT
       BlocProvider<ThemeCubit>(

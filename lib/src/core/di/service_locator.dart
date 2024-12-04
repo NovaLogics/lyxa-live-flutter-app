@@ -4,6 +4,9 @@ import 'package:lyxa_live/src/core/database/hive_storage.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
+import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
+import 'package:lyxa_live/src/features/home/data/repositories/home_repository_impl.dart';
+import 'package:lyxa_live/src/features/home/domain/repositories/home_repository.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/data/repositories/post_repository_impl.dart';
@@ -51,6 +54,10 @@ void setupServiceLocator() {
     () => SearchRepositoryImpl(),
   );
 
+  getIt.registerLazySingleton<HomeRepository>(
+    () => HomeRepositoryImpl(),
+  );
+
   // Register Use Cases
 
   getIt.registerLazySingleton(() => SearchUsers(getIt<SearchRepository>()));
@@ -78,6 +85,12 @@ void setupServiceLocator() {
     PostCubit(
       postRepository: getIt<PostRepository>(),
       storageRepository: getIt<StorageRepository>(),
+    ),
+  );
+
+  getIt.registerSingleton<HomeCubit>(
+    HomeCubit(
+      homeRepository: getIt<HomeRepository>(),
     ),
   );
 
