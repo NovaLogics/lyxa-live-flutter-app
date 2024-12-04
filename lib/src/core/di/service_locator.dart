@@ -12,7 +12,9 @@ import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/data/repositories/post_repository_impl.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
 import 'package:lyxa_live/src/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/search/data/repositories/search_repository_impl.dart';
@@ -102,6 +104,10 @@ void setupServiceLocator() {
   getIt.registerSingleton<LoadingCubit>(LoadingCubit());
 
   getIt.registerSingleton<ErrorAlertCubit>(ErrorAlertCubit());
+
+  getIt.registerSingleton<ProfileService>(ProfileService(
+    ProfileUserModel.getGuestUser(),
+  ));
 
   // Register Widgets
 
