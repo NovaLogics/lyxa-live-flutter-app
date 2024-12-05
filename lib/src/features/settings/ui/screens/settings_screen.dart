@@ -64,7 +64,13 @@ class SettingsScreen extends StatelessWidget {
         style: AppStyles.textSubtitlePost.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
           fontSize: AppDimens.fontSizeLG18,
+          letterSpacing: AppDimens.letterSpacingPT05,
         ),
+      ),
+      leading: Icon(
+        Icons.invert_colors_on_rounded,
+        color: Theme.of(context).colorScheme.onPrimary,
+        size: AppDimens.size28,
       ),
       trailing: CupertinoSwitch(
         value: isDarkModeEnabled,
@@ -82,12 +88,13 @@ class SettingsScreen extends StatelessWidget {
         style: AppStyles.textSubtitlePost.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
           fontSize: AppDimens.fontSizeLG18,
+          letterSpacing: AppDimens.letterSpacingPT05,
         ),
       ),
-      trailing: _buildLeadingIcon(
-        Theme.of(context).colorScheme.inversePrimary,
-        AppIcons.logoutOutlined,
+      leading: Icon(
         Icons.power_settings_new_rounded,
+        color: Theme.of(context).colorScheme.onPrimary,
+        size: AppDimens.size28,
       ),
       onTap: () => _openLogoutDialog(context),
     );
@@ -134,26 +141,5 @@ class SettingsScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget _buildLeadingIcon(
-    Color color,
-    String iconMobile,
-    IconData iconWeb,
-  ) {
-    return kIsWeb
-        ? Icon(
-            iconWeb,
-            color: color,
-          )
-        : SvgPicture.asset(
-            iconMobile,
-            colorFilter: ColorFilter.mode(
-              color,
-              BlendMode.srcIn,
-            ),
-            width: AppDimens.size24,
-            height: AppDimens.size24,
-          );
   }
 }
