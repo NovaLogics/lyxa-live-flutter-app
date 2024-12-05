@@ -4,6 +4,7 @@ import 'package:lyxa_live/src/core/assets/app_icons.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/features/home/ui/components/diamond_fab.dart';
 import 'package:lyxa_live/src/features/home/ui/components/nav_custom_painter.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
@@ -100,16 +101,34 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
 
                   // ADD POST
                   Center(
-                    heightFactor: 0.6,
-                    child: FloatingActionButton(
-                      backgroundColor: AppColors.bluePurple800,
-                      elevation: 2.0,
-                      onPressed: () {
-                        setBottomBarIndex(2);
-                      },
-                      child: Container(
-                        width: 80,
-                        height: 80,
+                      heightFactor: 0.6,
+                      child:
+                          // FloatingActionButton(
+                          //   backgroundColor: AppColors.bluePurple800,
+                          //   elevation: 2.0,
+                          //   onPressed: () {
+                          //     setBottomBarIndex(2);
+                          //   },
+                          //   child: Container(
+                          //     width: 80,
+                          //     height: 80,
+                          //     child: _buildIcon(
+                          //       2,
+                          //       selectedColor,
+                          //       AppIcons.addPostOutlinedStyle2,
+                          //       Icons.add_photo_alternate_outlined,
+                          //       isHighlight: true,
+                          //     ),
+                          //     decoration: BoxDecoration(
+                          //         shape: BoxShape.circle,
+                          //         gradient: LinearGradient(
+                          //             colors: [Colors.red, Colors.blue])),
+                          //   ),
+                          // ),
+                          DiamondFAB(
+                        onPressed: () {
+                          setBottomBarIndex(2);
+                        },
                         child: _buildIcon(
                           2,
                           selectedColor,
@@ -117,13 +136,7 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
                           Icons.add_photo_alternate_outlined,
                           isHighlight: true,
                         ),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                                colors: [Colors.red, Colors.blue])),
-                      ),
-                    ),
-                  ),
+                      )),
 
                   // HOME
                   SizedBox(
@@ -210,9 +223,9 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
     double size = isHighlight ? AppDimens.size28 : AppDimens.size24;
     if (isHighlight) {
       if (_currentIndex == index) {
-        color = Colors.purpleAccent;
-      } else {
         color = AppColors.whiteLight;
+      } else {
+        color = AppColors.blackDark;
       }
     }
 
