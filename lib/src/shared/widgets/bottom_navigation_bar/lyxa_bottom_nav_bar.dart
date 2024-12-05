@@ -8,14 +8,14 @@ import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/nav_custom_pa
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/rounded_corners_fab.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
-class BottomNavigationBarUnitV2 extends StatefulWidget {
+class LyxaBottomNavBar extends StatefulWidget {
   final Widget homeScreen;
   final Widget profileScreen;
   final Widget searchScreen;
   final Widget settingsScreen;
   final Widget newPostScreen;
 
-  const BottomNavigationBarUnitV2({
+  const LyxaBottomNavBar({
     super.key,
     required this.homeScreen,
     required this.profileScreen,
@@ -25,11 +25,10 @@ class BottomNavigationBarUnitV2 extends StatefulWidget {
   });
 
   @override
-  State<BottomNavigationBarUnitV2> createState() =>
-      _BottomNavigationBarUnitV2State();
+  State<LyxaBottomNavBar> createState() => _LyxaBottomNavBarState();
 }
 
-class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
+class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
   int _currentIndex = 0;
 
   bool _isWebPlatform() {

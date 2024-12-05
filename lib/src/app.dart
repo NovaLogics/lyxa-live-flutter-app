@@ -7,7 +7,7 @@ import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/auth_screen.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
-import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/bottom_navigationbar_unit_v2.dart';
+import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/lyxa_bottom_nav_bar.dart';
 import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
@@ -96,7 +96,7 @@ class LyxaApp extends StatelessWidget {
         else if (state is Authenticated) {
           //  return const HomeScreen();
 
-          return BottomNavigationBarUnitV2(
+          return LyxaBottomNavBar(
             homeScreen: const HomeScreen(),
             searchScreen: const SearchScreen(),
             profileScreen: ProfileScreen(
