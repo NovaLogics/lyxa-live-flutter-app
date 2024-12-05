@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_state.dart';
 import 'package:lyxa_live/src/features/home/domain/repositories/home_repository.dart';

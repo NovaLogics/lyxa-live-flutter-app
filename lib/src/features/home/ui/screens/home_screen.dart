@@ -39,16 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           if (state is HomeLoaded) {
-            if (state.errorMessage != null) {
-              _handleErrorToast(state.errorMessage!);
-            }
-            return _buildHomeScreen(state.posts);
+            return _buildHomeScreen(state);
           } else if (state is HomeError) {
-            _handleExceptionMessage(
-              error: state.error,
-              message: state.message,
-            );
-            return _buildMessageScreen(message: state.message);
+            return _buildMessageScreen(errorState: state);
           }
           return _buildMessageScreen();
         },
@@ -93,7 +86,11 @@ class _HomeScreenState extends State<HomeScreen> {
     _homeCubit.getAllPosts();
   }
 
-  Widget _buildHomeScreen(List<PostEntity> postList) {
+  Widget _buildHomeScreen(HomeLoaded state) {
+    if (state.errorMessage != null) {
+      _handleErrorToast(state.errorMessage!);
+    }
+
     return RefreshIndicator(
       onRefresh: _refresh,
       child: CustomScrollView(
@@ -123,14 +120,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          postList.isEmpty
+          state.posts.isEmpty
               ? SliverFillRemaining(
                   hasScrollBody: false,
                   child: _buildMessageScreen(
                     message: AppStrings.noPostAvailableError,
                   ),
                 )
-              : _buildPostList(context, postList),
+              : _buildPostList(context, state.posts),
         ],
       ),
     );
@@ -152,8 +149,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildMessageScreen({String? message = ''}) {
+  Widget _buildMessageScreen({String? message = '', HomeError? errorState}) {
+    if (errorState != null) {
+      _handleExceptionMessage(
+        error: errorState.error,
+        message: errorState.message,
+      );
+      message = errorState.message;
+    }
     Logger.logDebug(message.toString());
+    
     return Center(
       child: Text(
         message ?? '',
