@@ -20,8 +20,11 @@ import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class UploadPostScreen extends StatefulWidget {
+  final VoidCallback onPostUploaded;
+
   const UploadPostScreen({
     super.key,
+    required this.onPostUploaded,
   });
 
   @override
@@ -29,7 +32,6 @@ class UploadPostScreen extends StatefulWidget {
 }
 
 class _UploadPostScreenState extends State<UploadPostScreen> {
-  static const String debugTag = 'UploadPostScreen';
   final TextEditingController _captionController = TextEditingController();
   late final ProfileService _profileService;
   late final PostCubit _postCubit;
@@ -111,6 +113,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   }
 
   void _handleExceptionMessage({Object? error, String? message}) {
+    final String debugTag = (UploadPostScreen).toString();
     _hideKeyboard();
     ErrorHandler.handleError(
       error,
