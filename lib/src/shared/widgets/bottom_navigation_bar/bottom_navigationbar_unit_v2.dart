@@ -4,8 +4,8 @@ import 'package:lyxa_live/src/core/assets/app_icons.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/features/home/ui/components/nav_custom_painter.dart';
-import 'package:lyxa_live/src/features/home/ui/components/rounded_corners_fab.dart';
+import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/nav_custom_painter.dart';
+import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/rounded_corners_fab.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
 class BottomNavigationBarUnitV2 extends StatefulWidget {
