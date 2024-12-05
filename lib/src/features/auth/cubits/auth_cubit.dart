@@ -14,6 +14,7 @@ import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_enti
 import 'package:lyxa_live/src/features/storage/domain/repositories/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
 /// AUTH CUBIT:
@@ -272,8 +273,8 @@ class AuthCubit extends Cubit<AuthState> {
       final functionName = stackTrace.split('\n')[1].trim().split(' ')[1];
       return functionName;
     } catch (e) {
-      Logger.logError('Error extracting function name from stack trace: $e');
-      return 'UnknownFunction';
+        Logger.logError('${ErrorMsgs.functionExtractFailError} $e');
+      return ErrorMsgs.unknownFunction;
     }
   }
 }
