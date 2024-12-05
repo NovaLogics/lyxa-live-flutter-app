@@ -32,8 +32,10 @@ class _BottomNavigationBarUnitState extends State<BottomNavigationBarUnitV3> {
   int _currentIndex = 0;
 
   bool _isWebPlatform() {
-    return MediaQueryData.fromView(WidgetsBinding.instance.window).size.width >
-        600;
+    final MediaQueryData data = MediaQueryData.fromView(
+      WidgetsBinding.instance.platformDispatcher.views.single,
+    );
+    return data.size.shortestSide > 600;
   }
 
   @override
@@ -74,102 +76,49 @@ class _BottomNavigationBarUnitState extends State<BottomNavigationBarUnitV3> {
             label: AppStrings.titleHome,
           ),
           CurvedNavigationBarItem(
-            child: Icon(Icons.search),
-            label: 'Search',
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(Icons.chat_bubble_outline),
-            label: 'Chat',
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(Icons.newspaper),
-            label: 'Feed',
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(Icons.perm_identity),
-            label: 'Personal',
-          ),
-        ],
-      ),
-    );
-
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: screens,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        backgroundColor: Theme.of(context).colorScheme.onError.withOpacity(0.7),
-        selectedItemColor: selectedColor,
-        unselectedItemColor: AppColors.grayNeutral,
-        selectedLabelStyle: const TextStyle(
-          fontSize: 0,
-        ),
-        elevation: 2.0,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          // HOME
-          BottomNavigationBarItem(
-            icon: _buildIcon(
+            child: _buildIcon(
               0,
               selectedColor,
               AppIcons.homeOutlined,
               Icons.home_rounded,
             ),
-            tooltip: AppStrings.titleHome,
             label: AppStrings.titleHome,
           ),
-          // SEARCH
-          BottomNavigationBarItem(
-            icon: _buildIcon(
+          CurvedNavigationBarItem(
+            child: _buildIcon(
               1,
               selectedColor,
               AppIcons.searchOutlined,
               Icons.search_rounded,
             ),
-            tooltip: AppStrings.titleSearch,
             label: AppStrings.titleSearch,
           ),
-          // ADD POST
-          BottomNavigationBarItem(
-            icon: _buildIcon(
+          CurvedNavigationBarItem(
+            child: _buildIcon(
               2,
               selectedColor,
               AppIcons.addPostOutlinedStyle2,
               Icons.add_box_outlined,
               isHighlight: true,
             ),
-            tooltip: AppStrings.titlePost,
             label: AppStrings.titlePost,
           ),
-          // SETTINGS
-          BottomNavigationBarItem(
-            icon: _buildIcon(
+          CurvedNavigationBarItem(
+            child: _buildIcon(
               3,
               selectedColor,
               AppIcons.settingsOutlinedStyle2,
               Icons.settings_rounded,
             ),
-            tooltip: AppStrings.titleSettings,
             label: AppStrings.titleSettings,
           ),
-          // PROFILE
-          BottomNavigationBarItem(
-            icon: _buildIcon(
+          CurvedNavigationBarItem(
+            child: _buildIcon(
               4,
               selectedColor,
               AppIcons.profileOutlined,
               Icons.person_rounded,
             ),
-            tooltip: AppStrings.titleProfile,
             label: AppStrings.titleProfile,
           ),
         ],

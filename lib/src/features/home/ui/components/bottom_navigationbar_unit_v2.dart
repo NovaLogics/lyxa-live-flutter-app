@@ -32,8 +32,10 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
   int _currentIndex = 0;
 
   bool _isWebPlatform() {
-    return MediaQueryData.fromView(WidgetsBinding.instance.window).size.width >
-        600;
+    final MediaQueryData data = MediaQueryData.fromView(
+      WidgetsBinding.instance.platformDispatcher.views.single,
+    );
+    return data.size.shortestSide > 600;
   }
 
   setBottomBarIndex(int index) {
@@ -66,7 +68,6 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
                 index: _currentIndex,
                 children: screens,
               ),
-              //  _buildBar(context),
             ],
           ),
           bottomNavigationBar: _buildBar(context),
@@ -160,7 +161,7 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
                             Icons.settings_rounded,
                           ),
                           onPressed: () {
-                            setBottomBarIndex(3); // Settings screen
+                            setBottomBarIndex(3);
                           },
                         ),
 
@@ -173,7 +174,7 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
                             Icons.person_rounded,
                           ),
                           onPressed: () {
-                            setBottomBarIndex(4); // Profile screen
+                            setBottomBarIndex(4);
                           },
                         ),
                       ],

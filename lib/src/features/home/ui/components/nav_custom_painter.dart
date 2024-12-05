@@ -7,7 +7,7 @@ class NavCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Theme.of(context).colorScheme.onError
+      ..color = Theme.of(context).colorScheme.onError.withOpacity(0.8)
       ..style = PaintingStyle.fill;
 
     Path path = Path();
@@ -20,7 +20,7 @@ class NavCustomPainter extends CustomPainter {
     path.quadraticBezierTo(size.width * 0.80, 0, size.width, 20);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
-    path.lineTo(0, 5);
+    path.lineTo(0, 35);
     path.close();
     canvas.drawShadow(path, Theme.of(context).colorScheme.onPrimary, 16, false);
     canvas.drawPath(path, paint);
