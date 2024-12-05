@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class NavCustomPainter extends CustomPainter {
   final BuildContext context;
+  final double elevation;
 
-  NavCustomPainter(this.context);
+  NavCustomPainter(this.context, this.elevation);
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
@@ -23,7 +24,7 @@ class NavCustomPainter extends CustomPainter {
     path.lineTo(0, 20);
     path.close();
     canvas.drawShadow(
-        path, Theme.of(context).colorScheme.onTertiary, 16, false);
+        path, Theme.of(context).colorScheme.onTertiary, elevation, false);
     canvas.drawPath(path, paint);
   }
 

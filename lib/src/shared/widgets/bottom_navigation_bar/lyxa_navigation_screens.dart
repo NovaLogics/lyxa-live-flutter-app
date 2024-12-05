@@ -117,7 +117,10 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
                 children: [
                   CustomPaint(
                     size: Size(sizeWidth, sizeHeight),
-                    painter: NavCustomPainter(context),
+                    painter: NavCustomPainter(
+                      context,
+                      isWebPlatform ? 0.5 : AppDimens.size16,
+                    ),
                   ),
 
                   // ADD POST
