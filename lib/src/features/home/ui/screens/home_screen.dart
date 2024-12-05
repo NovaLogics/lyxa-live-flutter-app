@@ -17,16 +17,12 @@ import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dar
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({
-    super.key,
-  });
-
+  const HomeScreen({super.key});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  static const String debugTag = 'HomeScreen';
   late final HomeCubit _homeCubit;
   late final ProfileService _profileService;
 
@@ -39,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedScaffold(
-      //  appBar: _buildAppBar(context),
       showPhotoSlider: true,
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
@@ -47,15 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
             if (state.errorMessage != null) {
               _handleErrorToast(state.errorMessage!);
             }
-            return _buildScreen(state.posts);
+            return _buildHomeScreen(state.posts);
           } else if (state is HomeError) {
             _handleExceptionMessage(
               error: state.error,
               message: state.message,
             );
-            return _buildDisplayMsgScreen1(message: state.message);
+            return _buildMessageScreen(message: state.message);
           }
-          return _buildDisplayMsgScreen1();
+          return _buildMessageScreen();
         },
       ),
     );
@@ -82,11 +77,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _handleExceptionMessage({Object? error, String? message}) {
     _hideKeyboard();
+    final String debugTag = (HomeScreen).toString();
     ErrorHandler.handleError(
       error,
       tag: debugTag,
       customMessage: message,
-      onRetry: () {},
+      onRetry: () => _refresh,
     );
   }
 
@@ -97,76 +93,45 @@ class _HomeScreenState extends State<HomeScreen> {
     _homeCubit.getAllPosts();
   }
 
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
-      title: Text(
-        AppStrings.homeTitle,
-        style: AppStyles.textAppBarStatic.copyWith(
-          color: Theme.of(context).colorScheme.onPrimary,
-          letterSpacing: AppDimens.letterSpacingPT01,
-          fontWeight: FontWeight.w600,
-          fontFamily: AppFonts.elMessiri,
-        ),
-      ),
-      toolbarHeight: AppDimens.size44,
-      actions: [
-        RefreshButtonUnit(
-          onRefresh: _homeCubit.getAllPosts,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildScreen(List<PostEntity> postList) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          foregroundColor: Theme.of(context).colorScheme.onPrimary,
-          backgroundColor:
-              Theme.of(context).colorScheme.surface.withOpacity(0.95),
-          expandedHeight: AppDimens.size52,
-          floating: true,
-          pinned: false,
-          actions: [
-            RefreshButtonUnit(
-              onRefresh: _homeCubit.getAllPosts,
-            ),
-          ],
-          flexibleSpace: FlexibleSpaceBar(
-            titlePadding: const EdgeInsets.all(AppDimens.size12),
-            title: Text(
-              AppStrings.homeTitle,
-              style: AppStyles.textAppBarStatic.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
-                letterSpacing: AppDimens.letterSpacingPT01,
-                fontWeight: FontWeight.w600,
-                fontFamily: AppFonts.elMessiri,
+  Widget _buildHomeScreen(List<PostEntity> postList) {
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            backgroundColor:
+                Theme.of(context).colorScheme.surface.withOpacity(0.95),
+            expandedHeight: AppDimens.size52,
+            floating: true,
+            pinned: false,
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding: const EdgeInsets.all(AppDimens.size12),
+              title: Text(
+                AppStrings.homeTitle,
+                style: AppStyles.textAppBarStatic.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  letterSpacing: AppDimens.letterSpacingPT01,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: AppFonts.elMessiri,
+                ),
               ),
             ),
+            actions: [
+              RefreshButtonUnit(
+                onRefresh: _homeCubit.getAllPosts,
+              ),
+            ],
           ),
-        ),
-        postList.isEmpty
-            ? _buildDisplayMsgScreen(
-                context,
-                message: AppStrings.noPostAvailableError,
-              )
-            : _buildPostList(context, postList),
-      ],
-    );
-  }
-
-  Widget _buildDisplayMsgScreen(BuildContext context, {String? message}) {
-    return SliverFillRemaining(
-      hasScrollBody: false,
-      child: Center(
-        child: Text(
-          message ?? '',
-          style: AppStyles.titleSecondary.copyWith(
-            color: Theme.of(context).colorScheme.inversePrimary,
-          ),
-        ),
+          postList.isEmpty
+              ? SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: _buildMessageScreen(
+                    message: AppStrings.noPostAvailableError,
+                  ),
+                )
+              : _buildPostList(context, postList),
+        ],
       ),
     );
   }
@@ -178,8 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final post = postList[index];
           return PostTileUnit(
             post: post,
-            currentUser: _profileService
-                .profileEntity, // Replace with your current user data
+            currentUser: _profileService.profileEntity,
             onDeletePressed: () => _deletePost(post),
           );
         },
@@ -188,29 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildPostList1(List<PostEntity> postList) {
-    return (postList.isEmpty)
-        ? _buildDisplayMsgScreen1(
-            message: AppStrings.noPostAvailableError,
-          )
-        : RefreshIndicator(
-            onRefresh: _refresh,
-            child: ListView.builder(
-              itemCount: postList.length,
-              itemBuilder: (context, index) {
-                final post = postList[index];
-
-                return PostTileUnit(
-                  post: post,
-                  currentUser: _profileService.profileEntity,
-                  onDeletePressed: () => _deletePost(post),
-                );
-              },
-            ),
-          );
-  }
-
-  Widget _buildDisplayMsgScreen1({String? message = ''}) {
+  Widget _buildMessageScreen({String? message = ''}) {
     Logger.logDebug(message.toString());
     return Center(
       child: Text(
