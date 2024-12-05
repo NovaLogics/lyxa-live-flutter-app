@@ -101,31 +101,8 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
 
                   // ADD POST
                   Center(
-                      heightFactor: 0.6,
-                      child:
-                          // FloatingActionButton(
-                          //   backgroundColor: AppColors.bluePurple800,
-                          //   elevation: 2.0,
-                          //   onPressed: () {
-                          //     setBottomBarIndex(2);
-                          //   },
-                          //   child: Container(
-                          //     width: 80,
-                          //     height: 80,
-                          //     child: _buildIcon(
-                          //       2,
-                          //       selectedColor,
-                          //       AppIcons.addPostOutlinedStyle2,
-                          //       Icons.add_photo_alternate_outlined,
-                          //       isHighlight: true,
-                          //     ),
-                          //     decoration: BoxDecoration(
-                          //         shape: BoxShape.circle,
-                          //         gradient: LinearGradient(
-                          //             colors: [Colors.red, Colors.blue])),
-                          //   ),
-                          // ),
-                          DiamondFAB(
+                      heightFactor: 0.7,
+                      child: DiamondFAB(
                         onPressed: () {
                           setBottomBarIndex(2);
                         },
