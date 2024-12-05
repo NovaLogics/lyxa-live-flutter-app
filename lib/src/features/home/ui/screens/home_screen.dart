@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedScaffold(
-      appBar: _buildAppBar(context),
+      //  appBar: _buildAppBar(context),
       showPhotoSlider: true,
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
@@ -47,15 +47,15 @@ class _HomeScreenState extends State<HomeScreen> {
             if (state.errorMessage != null) {
               _handleErrorToast(state.errorMessage!);
             }
-            return _buildPostList(state.posts);
+            return _buildScreen(state.posts);
           } else if (state is HomeError) {
             _handleExceptionMessage(
               error: state.error,
               message: state.message,
             );
-            return _buildDisplayMsgScreen(message: state.message);
+            return _buildDisplayMsgScreen1(message: state.message);
           }
-          return _buildDisplayMsgScreen();
+          return _buildDisplayMsgScreen1();
         },
       ),
     );
@@ -101,21 +101,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
-      title: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(left: AppDimens.size32),
-          child: Text(
-            AppStrings.homeTitle,
-            style: AppStyles.textAppBarStatic.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
-              letterSpacing: AppDimens.letterSpacingPT01,
-              fontSize: AppDimens.fontSizeXXL28,
-              fontWeight: FontWeight.w600,
-              fontFamily: AppFonts.elMessiri,
-            ),
-          ),
+      title: Text(
+        AppStrings.homeTitle,
+        style: AppStyles.textAppBarStatic.copyWith(
+          color: Theme.of(context).colorScheme.onPrimary,
+          letterSpacing: AppDimens.letterSpacingPT01,
+          fontWeight: FontWeight.w600,
+          fontFamily: AppFonts.elMessiri,
         ),
       ),
+      toolbarHeight: AppDimens.size44,
       actions: [
         RefreshButtonUnit(
           onRefresh: _homeCubit.getAllPosts,
@@ -124,9 +119,78 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildPostList(List<PostEntity> postList) {
+  Widget _buildScreen(List<PostEntity> postList) {
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          expandedHeight: AppDimens.size52,
+          floating: false,
+          pinned: false,
+          actions: [
+            RefreshButtonUnit(
+              onRefresh: _homeCubit.getAllPosts,
+            ),
+          ],
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          backgroundColor:
+              Theme.of(context).colorScheme.surface.withOpacity(0.3),
+          flexibleSpace: FlexibleSpaceBar(
+            titlePadding: const EdgeInsets.all(AppDimens.size12),
+            title: Text(
+              AppStrings.homeTitle,
+              style: AppStyles.textAppBarStatic.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+                letterSpacing: AppDimens.letterSpacingPT01,
+                fontWeight: FontWeight.w600,
+                fontFamily: AppFonts.elMessiri,
+              ),
+            ),
+          ),
+        ),
+        postList.isEmpty
+            ? _buildDisplayMsgScreen(
+                context,
+                message: AppStrings.noPostAvailableError,
+              )
+            : _buildPostList(context, postList),
+      ],
+    );
+  }
+
+  Widget _buildDisplayMsgScreen(BuildContext context, {String? message}) {
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Center(
+        child: Text(
+          message ?? '',
+          style: AppStyles.titleSecondary.copyWith(
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPostList(BuildContext context, List<PostEntity> postList) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final post = postList[index];
+          return PostTileUnit(
+            post: post,
+            currentUser: _profileService
+                .profileEntity, // Replace with your current user data
+            onDeletePressed: () => _deletePost(post),
+          );
+        },
+        childCount: postList.length,
+      ),
+    );
+  }
+
+  Widget _buildPostList1(List<PostEntity> postList) {
     return (postList.isEmpty)
-        ? _buildDisplayMsgScreen(
+        ? _buildDisplayMsgScreen1(
             message: AppStrings.noPostAvailableError,
           )
         : RefreshIndicator(
@@ -146,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
   }
 
-  Widget _buildDisplayMsgScreen({String? message = ''}) {
+  Widget _buildDisplayMsgScreen1({String? message = ''}) {
     Logger.logDebug(message.toString());
     return Center(
       child: Text(
