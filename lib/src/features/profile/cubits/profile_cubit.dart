@@ -107,6 +107,35 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+   Future<void> loadSelfProfileById({
+    required String userId,
+  }) async {
+    _showLoading(AppStrings.loadingMessage);
+
+    final getUserResult =
+        await _profileRepository.getUserProfileById(userId: userId);
+
+    _hideLoading();
+
+    switch (getUserResult.status) {
+      case Status.success:
+        if (getUserResult.data != null) {
+          emit(ProfileSelfLoaded(getUserResult.data as ProfileUserEntity));
+        } else {
+          emit(ProfileSelfError(AppStrings.userNotFoundError));
+        }
+        break;
+
+      case Status.error:
+        _handleErrors(
+          result: getUserResult,
+          tag: '$debugTag: getUserProfileById()',
+        );
+        break;
+    }
+  }
+
+
   Future<void> updateProfile({
     required String userId,
     String? updatedBio,

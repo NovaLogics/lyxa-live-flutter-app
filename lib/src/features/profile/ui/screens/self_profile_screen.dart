@@ -15,7 +15,6 @@ import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/story_line_unit.dart';
-import 'package:lyxa_live/src/features/profile/ui/components/follow_button_unit.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_stats_unit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
@@ -23,24 +22,18 @@ import 'package:lyxa_live/src/features/profile/ui/screens/edit_profile_screen.da
 import 'package:lyxa_live/src/features/profile/ui/screens/follower_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
-class ProfileScreen extends StatefulWidget {
-  final String displayUserId;
-
-  const ProfileScreen({
-    super.key,
-    required this.displayUserId,
-  });
+class SelfProfileScreen extends StatefulWidget {
+  const SelfProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<SelfProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<SelfProfileScreen> {
   late final ProfileCubit _profileCubit;
   late final ProfileService _profileService;
 
   get _appUserId => _profileService.getUserId();
-  get _displayUserId => widget.displayUserId;
 
   @override
   void initState() {
@@ -52,12 +45,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        if (state is ProfileLoaded) {
+        if (state is ProfileSelfLoaded) {
           return _buildProfileContent(
             context,
             state.profileUser,
           );
-        } else if (state is ProfileError) {
+        } else if (state is ProfileSelfError) {
           return _buildEmptyContent(
             displayText: AppStrings.profileNotFoundError,
           );
@@ -71,45 +64,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _initScreen() async {
     _profileService = getIt<ProfileService>();
     _profileCubit = getIt<ProfileCubit>();
-    // Ensure only the required profile is loaded
-    if (_profileCubit.state is! ProfileLoaded ||
-        (_profileCubit.state as ProfileLoaded).profileUser.uid !=
-            _displayUserId) {
-      _profileCubit.loadUserProfileById(userId: _displayUserId);
-    }
+    _profileCubit.loadSelfProfileById(userId: _appUserId);
   }
 
-  void _handleFollowButtonPressed() {
-    final profileState = _profileCubit.state;
-
-    if (profileState is! ProfileLoaded) return;
-
-    final profileUser = profileState.profileUser;
-    final isAlreadyFollowing = profileUser.followers.contains(_appUserId);
-
-    setState(() {
-      isAlreadyFollowing
-          ? profileUser.followers.remove(_appUserId)
-          : profileUser.followers.add(_appUserId);
-    });
-
-    _profileCubit
-        .toggleFollow(appUserId: _appUserId, targetUserId: _displayUserId)
-        .catchError((_) {
-      setState(() {
-        isAlreadyFollowing
-            ? profileUser.followers.add(_appUserId)
-            : profileUser.followers.remove(_appUserId);
-      });
-    });
-  }
+  
 
   Widget _buildProfileContent(BuildContext context, ProfileUserEntity user) {
-    final isOwnProfile = (_displayUserId == _appUserId);
-    Logger.logDebug('$isOwnProfile  $_displayUserId = $_appUserId ');
+
+    Logger.logDebug('$_appUserId ');
 
     return ConstrainedScaffold(
-      appBar: _buildAppBar(context, user, isOwnProfile),
+      appBar: _buildAppBar(context, user),
       body: ListView(
         children: [
           addSpacing(height: AppDimens.size8),
@@ -119,12 +84,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildEmailSection(user),
           addSpacing(height: AppDimens.size8),
           _buildProfileStats(user),
-          if (!isOwnProfile) addSpacing(height: AppDimens.size8),
-          if (!isOwnProfile) _buildFollowActionSection(user),
           addSpacing(height: AppDimens.size12),
           _buildStoryLineSection(user.bio),
-          if (isOwnProfile) addSpacing(height: AppDimens.size24),
-          if (isOwnProfile) _buildEditProfileSection(),
+          addSpacing(height: AppDimens.size24),
+          _buildEditProfileSection(),
           addSpacing(height: AppDimens.size24),
           _buildPostSection(context),
         ],
@@ -142,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   AppBar _buildAppBar(
-      BuildContext context, ProfileUserEntity user, bool isOwnProfile) {
+      BuildContext context, ProfileUserEntity user) {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
@@ -200,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
         int postCount = (state is PostLoaded)
-            ? state.posts.where((post) => post.userId == _displayUserId).length
+            ? state.posts.where((post) => post.userId == _appUserId).length
             : 0;
 
         return Padding(
@@ -224,12 +187,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildFollowActionSection(ProfileUserEntity user) {
-    return FollowButtonUnit(
-      onPressed: _handleFollowButtonPressed,
-      isFollowing: user.followers.contains(_appUserId),
-    );
-  }
+
 
   Widget _buildStoryLineSection(String bio) {
     return Column(
@@ -297,7 +255,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (context, state) {
         if (state is PostLoaded) {
           final userPosts = state.posts
-              .where((post) => post.userId == widget.displayUserId)
+              .where((post) => post.userId == _appUserId)
               .toList();
 
           if (userPosts.isEmpty) {
