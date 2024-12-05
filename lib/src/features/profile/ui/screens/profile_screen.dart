@@ -8,6 +8,7 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
+import 'package:lyxa_live/src/features/profile/ui/components/edit_profile_button_unit.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_image.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
@@ -118,6 +119,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           addSpacing(height: AppDimens.size12),
           _buildStoryLineSection(user.bio),
           addSpacing(height: AppDimens.size24),
+          _buildEditProfileSection(),
+          addSpacing(height: AppDimens.size24),
           _buildPostSection(context),
         ],
       ),
@@ -149,20 +152,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-      actions: [
-        isOwnProfile
-            ? IconButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => EditProfileScreen(currentUser: user),
-                  ),
-                ),
-                icon: const Icon(Icons.settings_suggest),
-                iconSize: AppDimens.iconSizeMD32,
-              )
-            : addSpacing(width: AppDimens.iconSizeLG48),
-      ],
     );
   }
 
@@ -278,6 +267,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildEditProfileSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size32),
+      child: EditProfileButtonUnit(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) =>
+                  EditProfileScreen(currentUser: _profileService.profileEntity),
+            ),
+          );
+        },
+      ),
     );
   }
 
