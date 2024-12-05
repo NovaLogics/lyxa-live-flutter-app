@@ -56,6 +56,12 @@ class _SearchScreenState extends State<SearchScreen> {
         width: AppDimens.containerSize400,
         child: _buildSearchBar(),
       ),
+      actions: [
+        IconButton(
+          onPressed: () => _onSearchChanged,
+          icon: const Icon(Icons.search_outlined),
+        ),
+      ],
     );
   }
 
