@@ -30,16 +30,8 @@ class LyxaBottomNavBar extends StatefulWidget {
 }
 
 class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
-  final platformUtil = getIt<PlatformUtil>();
-
+  final _platformUtil = getIt<PlatformUtil>();
   int _currentIndex = 0;
-
-  bool _isWebPlatform() {
-    final MediaQueryData data = MediaQueryData.fromView(
-      WidgetsBinding.instance.platformDispatcher.views.single,
-    );
-    return data.size.shortestSide > 600;
-  }
 
   setBottomBarIndex(int index) {
     setState(() {
@@ -80,11 +72,12 @@ class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
   }
 
   Widget _buildBar(BuildContext context) {
+    final isWebPlatform = _platformUtil.isWebPlatform();
     final selectedColor = Theme.of(context).colorScheme.onPrimary;
     final Size size = MediaQuery.of(context).size;
-    final sizeWidth =
-        _isWebPlatform() ? AppDimens.containerSize430 : size.width;
+    final sizeWidth = isWebPlatform ? AppDimens.containerSize430 : size.width;
     const sizeHeight = 56.0;
+
     return Row(
       children: [
         const Spacer(),
@@ -113,6 +106,7 @@ class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
                           selectedColor,
                           AppIcons.addPostOutlinedStyle3,
                           Icons.add_photo_alternate_outlined,
+                          isWebPlatform,
                           isHighlight: true,
                         ),
                       )),
@@ -130,6 +124,7 @@ class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
                             selectedColor,
                             AppIcons.homeOutlined,
                             Icons.home_rounded,
+                            isWebPlatform,
                           ),
                           onPressed: () {
                             setBottomBarIndex(0);
@@ -143,6 +138,7 @@ class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
                             selectedColor,
                             AppIcons.searchOutlined,
                             Icons.search_rounded,
+                            isWebPlatform,
                           ),
                           onPressed: () {
                             setBottomBarIndex(1);
@@ -159,6 +155,7 @@ class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
                             selectedColor,
                             AppIcons.settingsOutlinedStyle2,
                             Icons.settings_rounded,
+                            isWebPlatform,
                           ),
                           onPressed: () {
                             setBottomBarIndex(3);
@@ -172,6 +169,7 @@ class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
                             selectedColor,
                             AppIcons.profileOutlined,
                             Icons.person_rounded,
+                            isWebPlatform,
                           ),
                           onPressed: () {
                             setBottomBarIndex(4);
@@ -194,11 +192,12 @@ class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
     int index,
     Color color,
     String iconMobile,
-    IconData iconWeb, {
+    IconData iconWeb,
+    bool isWebPlatform, {
     bool isHighlight = false,
   }) {
     if (_currentIndex != index) color = AppColors.grayDark;
-    final isWeb = _isWebPlatform();
+
     double size = isHighlight ? AppDimens.size28 : AppDimens.size24;
     if (isHighlight) {
       if (_currentIndex == index) {
@@ -208,7 +207,7 @@ class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
       }
     }
 
-    return isWeb
+    return isWebPlatform
         ? Icon(
             iconWeb,
             color: color,
