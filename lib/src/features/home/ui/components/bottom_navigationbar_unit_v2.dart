@@ -4,8 +4,10 @@ import 'package:lyxa_live/src/core/assets/app_icons.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/features/home/ui/components/circular_fab.dart';
 import 'package:lyxa_live/src/features/home/ui/components/diamond_fab.dart';
 import 'package:lyxa_live/src/features/home/ui/components/nav_custom_painter.dart';
+import 'package:lyxa_live/src/features/home/ui/components/rounded_corners_fab.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
 class BottomNavigationBarUnitV2 extends StatefulWidget {
@@ -82,7 +84,7 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
     final Size size = MediaQuery.of(context).size;
     final sizeWidth =
         _isWebPlatform() ? AppDimens.containerSize430 : size.width;
-    const sizeHeight = 80.0;
+    const sizeHeight = 64.0;
     return Row(
       children: [
         const Spacer(),
@@ -101,8 +103,8 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
 
                   // ADD POST
                   Center(
-                      heightFactor: 0.7,
-                      child: DiamondFAB(
+                      heightFactor: 0.6,
+                      child: RoundedCornerFAB(
                         onPressed: () {
                           setBottomBarIndex(2);
                         },
