@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lyxa_live/src/core/assets/app_fonts.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
@@ -142,6 +143,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           AppStrings.profile,
           style: AppStyles.textAppBarStatic.copyWith(
             color: Theme.of(context).colorScheme.onPrimary,
+            letterSpacing: AppDimens.letterSpacingPT10,
+            fontWeight: FontWeight.w600,
+            fontFamily: AppFonts.elMessiri,
           ),
         ),
       ),
