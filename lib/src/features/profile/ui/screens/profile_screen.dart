@@ -71,12 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _initScreen() async {
     _profileService = getIt<ProfileService>();
     _profileCubit = getIt<ProfileCubit>();
-    // Ensure only the required profile is loaded
-    if (_profileCubit.state is! ProfileLoaded ||
-        (_profileCubit.state as ProfileLoaded).profileUser.uid !=
-            _displayUserId) {
-      _profileCubit.loadUserProfileById(userId: _displayUserId);
-    }
+     _profileCubit.loadUserProfileById(userId: _displayUserId);
   }
 
   void _handleFollowButtonPressed() {

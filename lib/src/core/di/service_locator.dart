@@ -13,6 +13,7 @@ import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/data/repositories/post_repository_impl.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
 import 'package:lyxa_live/src/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
@@ -88,6 +89,13 @@ void setupServiceLocator() {
 
   getIt.registerSingleton<ProfileCubit>(
     ProfileCubit(
+      profileRepository: getIt<ProfileRepository>(),
+      storageRepository: getIt<StorageRepository>(),
+    ),
+  );
+
+  getIt.registerSingleton<SelfProfileCubit>(
+    SelfProfileCubit(
       profileRepository: getIt<ProfileRepository>(),
       storageRepository: getIt<StorageRepository>(),
     ),

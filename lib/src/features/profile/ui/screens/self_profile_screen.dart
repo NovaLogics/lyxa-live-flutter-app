@@ -18,7 +18,6 @@ import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/story_line_unit.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_stats_unit.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/edit_profile_screen.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/follower_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
@@ -31,7 +30,7 @@ class SelfProfileScreen extends StatefulWidget {
 }
 
 class _SelfProfileScreenState extends State<SelfProfileScreen> {
-  late final ProfileCubit _profileCubit;
+  late final SelfProfileCubit _selfprofileCubit;
   late final ProfileService _profileService;
 
   get _appUserId => _profileService.getUserId();
@@ -64,8 +63,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
 
   void _initScreen() async {
     _profileService = getIt<ProfileService>();
-    _profileCubit = getIt<ProfileCubit>();
-    _profileCubit.loadSelfProfileById(userId: _appUserId);
+    _selfprofileCubit = getIt<SelfProfileCubit>();
   }
 
   Widget _buildProfileContent(BuildContext context, ProfileUserEntity user) {

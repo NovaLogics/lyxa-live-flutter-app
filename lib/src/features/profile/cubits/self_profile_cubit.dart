@@ -14,7 +14,6 @@ import 'package:lyxa_live/src/features/profile/cubits/self_profile_state.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/features/storage/domain/repositories/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
@@ -37,12 +36,12 @@ class SelfProfileCubit extends Cubit<SelfProfileState> {
   Future<void> loadSelfProfileById({
     required String userId,
   }) async {
-    _showLoading(AppStrings.loadingMessage);
+  //  _showLoading(AppStrings.loadingMessage);
 
     final getUserResult =
         await _profileRepository.getUserProfileById(userId: userId);
 
-    _hideLoading();
+  //  _hideLoading();
 
     switch (getUserResult.status) {
       case Status.success:

@@ -8,6 +8,7 @@ import 'package:lyxa_live/src/core/utils/platform_util.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
 import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
+import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/self_profile_screen.dart';
 import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
 import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
@@ -31,6 +32,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
   late final List<Widget> screens;
   final _platformUtil = getIt<PlatformUtil>();
   int _currentIndex = 0;
+  final SelfProfileCubit _selfprofileCubit = getIt<SelfProfileCubit>();
 
   AppUserEntity get _appUser => widget.appUser;
 
@@ -59,6 +61,10 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
       const SettingsScreen(),
       const SelfProfileScreen(),
     ];
+
+    _selfprofileCubit.loadSelfProfileById(
+      userId: widget.appUser.uid,
+    );
   }
 
   @override
@@ -192,6 +198,8 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
                             isWebPlatform,
                           ),
                           onPressed: () {
+                            _selfprofileCubit.loadSelfProfileById(
+                                userId: widget.appUser.uid);
                             setBottomBarIndex(4);
                           },
                         ),

@@ -7,6 +7,7 @@ import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/auth_screen.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
+import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/lyxa_navigation_screens.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
@@ -74,6 +75,11 @@ class LyxaApp extends StatelessWidget {
       // LOADING CUBIT
       BlocProvider<LoadingCubit>(
         create: (context) => getIt<LoadingCubit>(),
+      ),
+
+      // SELF PROFILE CUBIT
+      BlocProvider<SelfProfileCubit>(
+        create: (context) => getIt<SelfProfileCubit>(),
       ),
     ];
   }
