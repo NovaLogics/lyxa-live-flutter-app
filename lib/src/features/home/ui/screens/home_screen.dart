@@ -123,17 +123,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return CustomScrollView(
       slivers: [
         SliverAppBar(
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          backgroundColor:
+              Theme.of(context).colorScheme.surface.withOpacity(0.95),
           expandedHeight: AppDimens.size52,
-          floating: false,
+          floating: true,
           pinned: false,
           actions: [
             RefreshButtonUnit(
               onRefresh: _homeCubit.getAllPosts,
             ),
           ],
-          foregroundColor: Theme.of(context).colorScheme.onPrimary,
-          backgroundColor:
-              Theme.of(context).colorScheme.surface.withOpacity(0.3),
           flexibleSpace: FlexibleSpaceBar(
             titlePadding: const EdgeInsets.all(AppDimens.size12),
             title: Text(
