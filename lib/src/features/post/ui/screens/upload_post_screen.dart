@@ -70,7 +70,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       listener: (context, state) {
         if (state is PostUploaded) {
           _homeCubit.getAllPosts();
-          Navigator.pop(context);
+          widget.onPostUploaded();
         } else if (state is PostErrorToast) {
           _handleErrorToast(state.message);
         } else if (state is PostErrorException) {
@@ -136,10 +136,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
             color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
-      ),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () => Navigator.of(context).pop(),
       ),
       actions: [
         IconButton(
