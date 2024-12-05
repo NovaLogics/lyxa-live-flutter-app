@@ -10,6 +10,7 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
+import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
@@ -34,7 +35,7 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   static const String debugTag = 'EditProfileScreen';
   final TextEditingController bioTextController = TextEditingController();
-  late final ProfileCubit _profileCubit;
+late final SelfProfileCubit _selfprofileCubit;
   Uint8List? _selectedImage;
 
   ProfileUserEntity get _currentUser => widget.currentUser;
@@ -43,7 +44,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _profileCubit = getIt<ProfileCubit>();
+    _selfprofileCubit = getIt<SelfProfileCubit>();
   }
 
   @override
@@ -73,7 +74,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _handleImageSelection() async {
-    final selectedImage = await _profileCubit.getSelectedImage();
+    final selectedImage = await _selfprofileCubit.getSelectedImage();
     setState(() {
       _selectedImage = selectedImage;
     });
@@ -83,7 +84,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (_selectedImage != null || _bio.isNotEmpty) {
       _hideKeyboard();
 
-      _profileCubit.updateProfile(
+      _selfprofileCubit.updateProfile(
         userId: _currentUser.uid,
         updatedBio: _bio,
         imageBytes: _selectedImage,

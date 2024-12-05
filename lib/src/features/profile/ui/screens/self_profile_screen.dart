@@ -30,7 +30,7 @@ class SelfProfileScreen extends StatefulWidget {
 }
 
 class _SelfProfileScreenState extends State<SelfProfileScreen> {
-  late final SelfProfileCubit _selfprofileCubit;
+ // late final SelfProfileCubit _selfprofileCubit;
   late final ProfileService _profileService;
 
   get _appUserId => _profileService.getUserId();
@@ -63,7 +63,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
 
   void _initScreen() async {
     _profileService = getIt<ProfileService>();
-    _selfprofileCubit = getIt<SelfProfileCubit>();
+ //   _selfprofileCubit = getIt<SelfProfileCubit>();
   }
 
   Widget _buildProfileContent(BuildContext context, ProfileUserEntity user) {
