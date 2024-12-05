@@ -106,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _handleSignUp() {
     if (_registrationFormKey.currentState?.validate() != true) return;
-    
+
     _saveUserToLocalStorage();
 
     _authCubit.register(
@@ -220,16 +220,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             AppStrings.alreadyAMember,
-            style: AppStyles.subtitleSecondary,
+            style: AppStyles.subtitleSecondary.copyWith(
+              color: Theme.of(context).colorScheme.onTertiary,
+              fontWeight: FontWeight.w600,
+              letterSpacing: AppDimens.letterSpacingPT07,
+              shadows: AppStyles.shadowStyle2,
+            ),
           ),
           addSpacing(width: AppDimens.size8),
           GestureDetector(
             onTap: _handleLoginLinkClick,
-            child: const Text(
+            child: Text(
               AppStrings.loginNow,
-              style: AppStyles.subtitlePrimary,
+              style: AppStyles.subtitlePrimary.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+                shadows: AppStyles.shadowStyleEmpty,
+              ),
             ),
           ),
         ],
