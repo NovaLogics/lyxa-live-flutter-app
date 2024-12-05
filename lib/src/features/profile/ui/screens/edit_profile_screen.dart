@@ -11,13 +11,12 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/cubits/self_profile_state.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -35,7 +34,7 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   static const String debugTag = 'EditProfileScreen';
   final TextEditingController bioTextController = TextEditingController();
-late final SelfProfileCubit _selfprofileCubit;
+  late final SelfProfileCubit _selfprofileCubit;
   Uint8List? _selectedImage;
 
   ProfileUserEntity get _currentUser => widget.currentUser;
@@ -55,18 +54,18 @@ late final SelfProfileCubit _selfprofileCubit;
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileCubit, ProfileState>(
+    return BlocConsumer<SelfProfileCubit, SelfProfileState>(
       builder: (context, state) {
         return _buildEditScreen();
       },
       listener: (context, state) {
-        if (state is ProfileLoaded) {
+        if (state is SelfProfileLoaded) {
           Navigator.pop(context);
-        } else if (state is ProfileErrorToast) {
+        } else if (state is SelfProfileErrorToast) {
           _handleErrorToast(state.message);
-        } else if (state is ProfileErrorException) {
+        } else if (state is SelfProfileErrorException) {
           _handleExceptionMessage(error: state.error);
-        } else if (state is ProfileError) {
+        } else if (state is SelfProfileError) {
           _handleExceptionMessage(message: state.message);
         }
       },

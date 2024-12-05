@@ -36,12 +36,12 @@ class SelfProfileCubit extends Cubit<SelfProfileState> {
   Future<void> loadSelfProfileById({
     required String userId,
   }) async {
-  //  _showLoading(AppStrings.loadingMessage);
+    //  _showLoading(AppStrings.loadingMessage);
 
     final getUserResult =
         await _profileRepository.getUserProfileById(userId: userId);
 
-  //  _hideLoading();
+    //  _hideLoading();
 
     switch (getUserResult.status) {
       case Status.success:
@@ -115,6 +115,7 @@ class SelfProfileCubit extends Cubit<SelfProfileState> {
       return;
     }
 
+    _hideLoading();
     await loadSelfProfileById(userId: userId);
   }
 
