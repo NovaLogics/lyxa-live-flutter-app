@@ -40,7 +40,7 @@ class AuthCubit extends Cubit<AuthState> {
     final currentUserResult = await _authRepository.getCurrentUser();
 
     _hideLoading();
-    
+
     switch (currentUserResult.status) {
       case Status.success:
         _handleAuthStatus(userData: currentUserResult.data);
@@ -71,14 +71,13 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (loginResult.status) {
       case Status.success:
-        _profileService.assignEntity(loginResult.data!);
         _handleAuthStatus(userData: loginResult.data);
         break;
 
       case Status.error:
         _handleErrors(
           result: loginResult,
-          tag: 'login()',
+          tag: _getCurrentFunctionName(),
         );
         emit(Unauthenticated());
         break;
@@ -102,17 +101,17 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (registerResult.status) {
       case Status.success:
-        _showLoading();
         if (registerResult.isDataNotNull()) {
+          _showLoading();
+
           _currentUser = registerResult.data as AppUserEntity;
           await _uploadDeafultUserAvatar(_currentUser!.uid);
 
+          _hideLoading();
           checkAuth();
-          //  emit(Authenticated(_currentUser!));
         } else {
           emit(Unauthenticated());
         }
-        _hideLoading();
         break;
 
       case Status.error:
@@ -226,8 +225,9 @@ class AuthCubit extends Cubit<AuthState> {
 
   void _handleAuthStatus({required ProfileUserEntity? userData}) {
     if (userData != null) {
+      _profileService.syncProfile(userData);
+
       _currentUser = userData;
-      _profileService.assignEntity(userData);
       emit(Authenticated(_currentUser!));
     } else {
       emit(Unauthenticated());

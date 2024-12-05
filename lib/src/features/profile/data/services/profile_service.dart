@@ -28,7 +28,7 @@ class ProfileService {
     );
   }
 
-  void assignEntity(ProfileUserEntity entity) {
+  void syncProfile(ProfileUserEntity entity) {
     _profile = ProfileUserModel.fromEntity(entity);
   }
 }
