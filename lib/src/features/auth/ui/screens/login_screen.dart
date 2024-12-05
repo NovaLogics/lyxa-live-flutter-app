@@ -8,7 +8,7 @@ import 'package:lyxa_live/src/core/database/hive_storage.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/features/auth/data/models/app_user_model.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/email_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/ui/components/password_field_unit.dart';
@@ -91,6 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() {
     if (_loginCredentialsFormKey.currentState?.validate() != true) return;
+    
     _saveUserToLocalStorage();
 
     _authCubit.login(
@@ -107,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _saveUserToLocalStorage() {
     _authCubit.saveUserToLocalStorage(
       storageKey: HiveKeys.loginDataKey,
-      user: AppUser.createWith(email: _email),
+      user: AppUserModel.createWith(email: _email),
     );
   }
 
@@ -154,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
       onPressed: _handleLogin,
       icon: const Icon(
         Icons.arrow_forward_outlined,
-        color: AppColors.whitePure,
+        color: AppColors.whiteLight,
       ),
     );
   }
@@ -170,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
             AppStrings.notAMember,
             style: AppStyles.subtitleSecondary,
           ),
-          const SizedBox(width: AppDimens.size8),
+          addSpacing(width: AppDimens.size8),
           GestureDetector(
             onTap: _handleSignUpLinkClick,
             child: const Text(

@@ -2,15 +2,26 @@ import 'package:get_it/get_it.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
 import 'package:lyxa_live/src/core/database/hive_storage.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
-import 'package:lyxa_live/src/features/auth/data/firebase_auth_repository.dart';
+import 'package:lyxa_live/src/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
+import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
+import 'package:lyxa_live/src/features/home/data/repositories/home_repository_impl.dart';
+import 'package:lyxa_live/src/features/home/domain/repositories/home_repository.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
-import 'package:lyxa_live/src/features/post/data/firebase_post_repository.dart';
+import 'package:lyxa_live/src/features/post/data/repositories/post_repository_impl.dart';
+import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/data/firebase_profile_repository.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
+import 'package:lyxa_live/src/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
+import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
-import 'package:lyxa_live/src/features/search/data/firebase_search_repository.dart';
-import 'package:lyxa_live/src/features/storage/data/firebase_storage_repository.dart';
+import 'package:lyxa_live/src/features/search/data/repositories/search_repository_impl.dart';
+import 'package:lyxa_live/src/features/search/domain/repositories/search_repository.dart';
+import 'package:lyxa_live/src/features/search/domain/usecases/search_users.dart';
+import 'package:lyxa_live/src/features/storage/data/repositories/storage_repository_impl.dart';
+import 'package:lyxa_live/src/features/storage/domain/repositories/storage_repository.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
@@ -23,51 +34,72 @@ void setupServiceLocator() {
 
   getIt.registerFactory(() => HiveStorage());
 
+  getIt.registerSingleton<ProfileService>(
+    ProfileService(
+      ProfileUserModel.getGuestUser(),
+    ),
+  );
+
   // Register repositories as singletons
 
-  getIt.registerLazySingleton<FirebaseAuthRepository>(
-    () => FirebaseAuthRepository(),
+  getIt.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(),
   );
 
-  getIt.registerLazySingleton<FirebaseProfileRepository>(
-    () => FirebaseProfileRepository(),
+  getIt.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(),
   );
 
-  getIt.registerLazySingleton<FirebaseStorageRepository>(
-    () => FirebaseStorageRepository(),
+  getIt.registerLazySingleton<StorageRepository>(
+    () => StorageRepositoryImpl(),
   );
 
-  getIt.registerLazySingleton<FirebasePostRepository>(
-    () => FirebasePostRepository(),
+  getIt.registerLazySingleton<PostRepository>(
+    () => PostRepositoryImpl(),
   );
 
-  getIt.registerLazySingleton<FirebaseSearchRepository>(
-    () => FirebaseSearchRepository(),
+  getIt.registerLazySingleton<SearchRepository>(
+    () => SearchRepositoryImpl(),
   );
+
+  getIt.registerLazySingleton<HomeRepository>(
+    () => HomeRepositoryImpl(),
+  );
+
+  // Register Use Cases
+
+  getIt.registerLazySingleton(() => SearchUsers(getIt<SearchRepository>()));
 
   // Register Cubits
 
   getIt.registerSingleton<AuthCubit>(
     AuthCubit(
-        authRepository: getIt<FirebaseAuthRepository>(),
-        storageRepository: getIt<FirebaseStorageRepository>()),
+        authRepository: getIt<AuthRepository>(),
+        storageRepository: getIt<StorageRepository>()),
   );
 
   getIt.registerSingleton<SearchCubit>(
-    SearchCubit(searchRepository: getIt<FirebaseSearchRepository>()),
+    SearchCubit(searchUsers: getIt<SearchUsers>()),
   );
 
   getIt.registerSingleton<ProfileCubit>(
     ProfileCubit(
-      profileRepository: getIt<FirebaseProfileRepository>(),
-      storageRepository: getIt<FirebaseStorageRepository>(),
+      profileRepository: getIt<ProfileRepository>(),
+      storageRepository: getIt<StorageRepository>(),
     ),
   );
 
   getIt.registerSingleton<PostCubit>(
     PostCubit(
-      postRepository: getIt<FirebasePostRepository>(),
-      storageRepository: getIt<FirebaseStorageRepository>(),
+      postRepository: getIt<PostRepository>(),
+      storageRepository: getIt<StorageRepository>(),
+    ),
+  );
+
+  getIt.registerSingleton<HomeCubit>(
+    HomeCubit(
+      homeRepository: getIt<HomeRepository>(),
+      postCubit: getIt<PostCubit>(),
     ),
   );
 

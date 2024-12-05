@@ -1,25 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
+import 'package:lyxa_live/src/features/post/data/models/post_model.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
-class FirebasePostRepository implements PostRepository {
+class PostRepositoryImpl implements PostRepository {
   final CollectionReference _postsCollectionRef =
       FirebaseFirestore.instance.collection(firebasePostsCollectionPath);
 
   @override
-  Future<Result<List<Post>>> getAllPosts() async {
+  Future<Result<List<PostEntity>>> getAllPosts() async {
     try {
       final postSnapshot = await _postsCollectionRef
           .orderBy(PostFields.timestamp, descending: true)
           .get();
 
-      final List<Post>? allPosts = _mapSnapshotToPosts(postSnapshot);
+      final List<PostEntity>? allPosts = _mapSnapshotToPosts(postSnapshot);
 
       return Result.success(
         data: allPosts ?? List.empty(),
@@ -32,7 +33,7 @@ class FirebasePostRepository implements PostRepository {
   }
 
   @override
-  Future<Result<List<Post>>> getPostsForUser({
+  Future<Result<List<PostEntity>>> getPostsForUser({
     required String userId,
   }) async {
     try {
@@ -40,7 +41,7 @@ class FirebasePostRepository implements PostRepository {
           .where(PostFields.userId, isEqualTo: userId)
           .get();
 
-      final List<Post>? userPosts = _mapSnapshotToPosts(postSnapshot);
+      final List<PostEntity>? userPosts = _mapSnapshotToPosts(postSnapshot);
 
       return Result.success(
         data: userPosts ?? List.empty(),
@@ -54,10 +55,11 @@ class FirebasePostRepository implements PostRepository {
 
   @override
   Future<Result<void>> addPost({
-    required Post newPost,
+    required PostEntity newPost,
   }) async {
     try {
-      await _postsCollectionRef.doc(newPost.id).set(newPost.toJson());
+      final postModel = PostModel.fromEntity(newPost);
+      await _postsCollectionRef.doc(newPost.id).set(postModel.toJson());
 
       return Result.voidSuccess();
     } on FirebaseException catch (error) {
@@ -113,15 +115,14 @@ class FirebasePostRepository implements PostRepository {
   @override
   Future<Result<void>> addCommentToPost({
     required String postId,
-    required Comment comment,
+    required CommentEntity comment,
   }) async {
     try {
       final post = await _getPostById(postId);
 
       post.comments.add(comment);
 
-      final updatedComments =
-          post.comments.map((comment) => comment.toJson()).toList();
+      final updatedComments = post.comments.map((comment) => comment).toList();
 
       await _postsCollectionRef
           .doc(postId)
@@ -145,8 +146,7 @@ class FirebasePostRepository implements PostRepository {
 
       post.comments.removeWhere((comment) => comment.id == commentId);
 
-      final updatedComments =
-          post.comments.map((comment) => comment.toJson()).toList();
+      final updatedComments = post.comments.map((comment) => comment).toList();
 
       await _postsCollectionRef
           .doc(postId)
@@ -162,19 +162,25 @@ class FirebasePostRepository implements PostRepository {
 
   // HELPER FUNCTIONS ▼
 
-  Future<Post> _getPostById(String postId) async {
+  Future<PostEntity> _getPostById(String postId) async {
     final postDoc = await _postsCollectionRef.doc(postId).get();
 
     if (!postDoc.exists) {
       throw Exception(ErrorMsgs.cannotFetchPostError);
     }
-    return Post.fromJson(postDoc.data() as Map<String, dynamic>);
+
+    return _postEntityFromSnapshot(postDoc.data());
   }
 
-  List<Post>? _mapSnapshotToPosts(QuerySnapshot postSnapshot) {
+  List<PostEntity>? _mapSnapshotToPosts(QuerySnapshot postSnapshot) {
     return postSnapshot.docs
-        .map((document) =>
-            Post.fromJson(document.data() as Map<String, dynamic>))
+        .map((document) => _postEntityFromSnapshot(document.data()))
         .toList();
+  }
+
+  PostEntity _postEntityFromSnapshot(Object? jsonData) {
+    final postModel =
+        PostModel.fromJson(jsonData as Map<String, dynamic>);
+    return postModel.toEntity();
   }
 }

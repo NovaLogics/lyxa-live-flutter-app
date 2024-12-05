@@ -6,31 +6,33 @@ import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
-import 'package:lyxa_live/src/features/home/ui/components/drawer_unit.dart';
+import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
+import 'package:lyxa_live/src/features/home/cubits/home_state.dart';
 import 'package:lyxa_live/src/features/home/ui/components/refresh_button_unit.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
+import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
+import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
-import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
-import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
-import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
+import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    super.key,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final PostCubit _postCubit;
-  ProfileUser _currentUser = ProfileUser.getGuestUser();
+  static const String debugTag = 'HomeScreen';
+  late final HomeCubit _homeCubit;
+  late final ProfileService _profileService;
 
   @override
   void initState() {
     super.initState();
-    _postCubit = getIt<PostCubit>();
     _initScreen();
   }
 
@@ -38,50 +40,61 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return ConstrainedScaffold(
       appBar: _buildAppBar(context),
-      drawer: _buildAppDrawer(),
-      body: BlocBuilder<PostCubit, PostState>(
+      showPhotoSlider: true,
+      body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
-          if (state is PostLoaded) {
+          if (state is HomeLoaded) {
+            if (state.errorMessage != null) {
+              _handleErrorToast(state.errorMessage!);
+            }
             return _buildPostList(state.posts);
-          } else if (state is PostError) {
+          } else if (state is HomeError) {
+            _handleExceptionMessage(
+              error: state.error,
+              message: state.message,
+            );
             return _buildDisplayMsgScreen(message: state.message);
-          } else {
-            return _buildDisplayMsgScreen();
           }
+          return _buildDisplayMsgScreen();
         },
       ),
     );
   }
 
-  void _fetchAllPosts() {
-    _postCubit.getAllPosts();
-  }
-
-  void _deletePost(Post post) {
-    _postCubit.deletePost(post: post);
-    //_fetchAllPosts();
-  }
-
   void _initScreen() async {
-    final profileUser = await _postCubit.getCurrentUser();
+    _profileService = getIt<ProfileService>();
 
-    setState(() {
-      _currentUser = profileUser;
-    });
-    _fetchAllPosts();
+    _homeCubit = getIt<HomeCubit>();
+    _homeCubit.getAllPosts();
   }
 
-  void _navigateToUploadPostScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => UploadPostScreen(profileUser: _currentUser),
-      ),
+  void _deletePost(PostEntity post) {
+    _homeCubit.deletePost(post: post);
+  }
+
+  void _handleErrorToast(String message) {
+    _hideKeyboard();
+    ToastMessengerUnit.showErrorToast(
+      context: context,
+      message: message,
     );
   }
 
-  Widget _buildAppDrawer() {
-    return DrawerUnit(user: _currentUser);
+  void _handleExceptionMessage({Object? error, String? message}) {
+    _hideKeyboard();
+    ErrorHandler.handleError(
+      error,
+      tag: debugTag,
+      customMessage: message,
+      onRetry: () {},
+    );
+  }
+
+  void _hideKeyboard() => FocusScope.of(context).unfocus();
+
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 2));
+    _homeCubit.getAllPosts();
   }
 
   AppBar _buildAppBar(BuildContext context) {
@@ -105,35 +118,31 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       actions: [
         RefreshButtonUnit(
-          onRefresh: _fetchAllPosts,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: AppDimens.size2),
-          child: IconButton(
-            onPressed: _navigateToUploadPostScreen,
-            icon: const Icon(Icons.add_box_outlined),
-            tooltip: AppStrings.addNewPost,
-          ),
+          onRefresh: _homeCubit.getAllPosts,
         ),
       ],
     );
   }
 
-  Widget _buildPostList(List<Post> posts) {
-    return (posts.isEmpty)
+  Widget _buildPostList(List<PostEntity> postList) {
+    return (postList.isEmpty)
         ? _buildDisplayMsgScreen(
             message: AppStrings.noPostAvailableError,
           )
-        : ListView.builder(
-            itemCount: posts.length,
-            itemBuilder: (context, index) {
-              final post = posts[index];
-              return PostTileUnit(
-                post: post,
-                currentUser: _currentUser,
-                onDeletePressed: () => _deletePost(post),
-              );
-            },
+        : RefreshIndicator(
+            onRefresh: _refresh,
+            child: ListView.builder(
+              itemCount: postList.length,
+              itemBuilder: (context, index) {
+                final post = postList[index];
+
+                return PostTileUnit(
+                  post: post,
+                  currentUser: _profileService.profileEntity,
+                  onDeletePressed: () => _deletePost(post),
+                );
+              },
+            ),
           );
   }
 

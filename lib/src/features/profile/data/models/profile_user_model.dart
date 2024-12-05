@@ -1,4 +1,5 @@
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 
 class ProfileUserFields {
   static const String uid = 'uid';
@@ -12,14 +13,14 @@ class ProfileUserFields {
   static const String isPrivate = 'isPrivate';
 }
 
-class ProfileUser extends AppUser {
+class ProfileUserModel extends AppUserEntity {
   final String bio;
   final String profileImageUrl;
   final bool isPrivate;
   final List<String> followers;
   final List<String> following;
 
-  ProfileUser({
+  ProfileUserModel({
     required super.uid,
     required super.email,
     required super.name,
@@ -31,13 +32,13 @@ class ProfileUser extends AppUser {
     this.isPrivate = false,
   });
 
-  ProfileUser copyWith({
+  ProfileUserModel copyWith({
     String? newBio,
     String? newProfileImageUrl,
     List<String>? newFollowers,
     List<String>? newFollowing,
   }) {
-    return ProfileUser(
+    return ProfileUserModel(
       uid: uid,
       email: email,
       name: name,
@@ -49,7 +50,30 @@ class ProfileUser extends AppUser {
     );
   }
 
-  @override
+  ProfileUserEntity copyWithFull({
+    String? uid,
+    String? bio,
+    String? profileImageUrl,
+    bool? isPrivate,
+    List<String>? followers,
+    List<String>? following,
+    String? email,
+    String? name,
+    String? searchableName,
+  }) {
+    return ProfileUserEntity(
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      searchableName: searchableName ?? this.searchableName,
+      bio: bio ?? this.bio,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
+      isPrivate: isPrivate ?? this.isPrivate,
+      followers: followers ?? List.from(this.followers),
+      following: following ?? List.from(this.following),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       ProfileUserFields.uid: uid,
@@ -63,8 +87,8 @@ class ProfileUser extends AppUser {
     };
   }
 
-  factory ProfileUser.fromJson(Map<String, dynamic> json) {
-    return ProfileUser(
+  factory ProfileUserModel.fromJson(Map<String, dynamic> json) {
+    return ProfileUserModel(
       uid: json[ProfileUserFields.uid],
       email: json[ProfileUserFields.email],
       name: json[ProfileUserFields.name] ?? '',
@@ -76,8 +100,50 @@ class ProfileUser extends AppUser {
     );
   }
 
-  static ProfileUser getGuestUser() {
-    return ProfileUser(
+  // Method to map ProfileUserModel to a domain entity
+  ProfileUserEntity toEntity() {
+    return ProfileUserEntity(
+      uid: uid,
+      email: email,
+      name: name,
+      bio: bio,
+      searchableName: searchableName,
+      profileImageUrl: profileImageUrl,
+      followers: followers,
+      following: following,
+    );
+  }
+
+  // Method to create ProfileUserModel from a domain entity
+  factory ProfileUserModel.fromEntity(ProfileUserEntity entity) {
+    return ProfileUserModel(
+      uid: entity.uid,
+      email: entity.email,
+      name: entity.name,
+      bio: entity.bio,
+      searchableName: entity.searchableName,
+      profileImageUrl: entity.profileImageUrl,
+      followers: entity.followers,
+      following: entity.following,
+    );
+  }
+
+  static ProfileUserModel getGuestUser() {
+    return ProfileUserModel(
+      uid: '',
+      email: '',
+      name: '',
+      searchableName: '',
+      bio: '',
+      profileImageUrl: '',
+      followers: [],
+      following: [],
+      isPrivate: false,
+    );
+  }
+
+  static ProfileUserEntity getGuestUserAsEntity() {
+    return ProfileUserEntity(
       uid: '',
       email: '',
       name: '',

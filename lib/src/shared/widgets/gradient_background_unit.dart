@@ -30,11 +30,17 @@ class GradientBackgroundUnit extends StatelessWidget {
   }
 
   Widget _buildWebBackground(BuildContext context) {
-    return Stack(
-      children: [
-        _buildGradientBackground(context),
-        _buildBlurEffect(),
-      ],
+    return Opacity(
+      opacity: 0.8,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: _buildGradientColors(context),
+          ),
+        ),
+      ),
     );
   }
 
@@ -47,18 +53,6 @@ class GradientBackgroundUnit extends StatelessWidget {
             ..._buildGradientCircles(context),
             _buildBlurEffect(),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGradientBackground(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: _buildGradientColors(context),
         ),
       ),
     );
@@ -82,8 +76,10 @@ class GradientBackgroundUnit extends StatelessWidget {
     return [
       _buildCircle(const AlignmentDirectional(3, -0.3), colors[0]),
       _buildCircle(const AlignmentDirectional(-3, -0.3), colors[1]),
-      _buildCircle(const AlignmentDirectional(0, -0.9), colors[2], height: 400, width: 260),
-      _buildCircle(const AlignmentDirectional(-0.3, 1.5), colors[3], height: 250, width: 300),
+      _buildCircle(const AlignmentDirectional(0, -0.9), colors[2],
+          height: 400, width: 260),
+      _buildCircle(const AlignmentDirectional(-0.3, 1.5), colors[3],
+          height: 250, width: 300),
     ];
   }
 
@@ -134,4 +130,3 @@ class GradientBackgroundUnit extends StatelessWidget {
     }
   }
 }
-

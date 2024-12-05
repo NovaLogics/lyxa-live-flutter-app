@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 
 class CommentTileUnit extends StatefulWidget {
-  final AppUser currentAppUser;
-  final Comment comment;
-  final Function(Comment) onDeletePressed;
+  final AppUserEntity currentAppUser;
+  final CommentEntity comment;
+  final Function(CommentEntity) onDeletePressed;
 
   const CommentTileUnit({
     super.key,

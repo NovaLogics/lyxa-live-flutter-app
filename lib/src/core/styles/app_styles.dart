@@ -11,7 +11,7 @@ class AppStyles {
   // Headings
   // ->
   static const TextStyle textHeadingPrimary = TextStyle(
-    color: AppColors.whitePure,
+    color: AppColors.whiteLight,
     fontSize: AppDimens.fontSizeXXL42,
     fontWeight: FontWeight.w500,
     letterSpacing: AppDimens.letterSpacingPT01,
@@ -99,7 +99,7 @@ class AppStyles {
   );
 
   static const TextStyle textAppBarStatic = TextStyle(
-    color: AppColors.whitePure,
+    color: AppColors.whiteLight,
     letterSpacing: AppDimens.letterSpacingPT01,
     fontSize: AppDimens.fontSizeXXL24,
     fontWeight: FontWeight.normal,
@@ -107,7 +107,7 @@ class AppStyles {
   );
 
   static const TextStyle textMessageStatic = TextStyle(
-    color: AppColors.whitePure,
+    color: AppColors.whiteLight,
     letterSpacing: AppDimens.letterSpacingPT03,
     fontSize: AppDimens.fontSizeXXL24,
     fontWeight: FontWeight.normal,
@@ -147,7 +147,7 @@ class AppStyles {
   /// Button Text
   /// ->
   static const TextStyle buttonTextPrimary = TextStyle(
-    color: AppColors.whitePure,
+    color: AppColors.whiteLight,
     fontWeight: FontWeight.bold,
     fontSize: AppDimens.fontSizeMD16,
     fontFamily: AppFonts.raleway,

@@ -254,6 +254,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  curved_labeled_navigation_bar:
+    dependency: "direct main"
+    description:
+      name: curved_labeled_navigation_bar
+      sha256: d2e7be0aea0221b0b3f4b22bb84a5f5cbf78c54d085436a173d58cdb7b052c0f
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
   dart_style:
     dependency: transitive
     description:
@@ -262,6 +270,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.7"
+  equatable:
+    dependency: "direct main"
+    description:
+      name: equatable
+      sha256: "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.7"
   fake_async:
     dependency: transitive
     description:

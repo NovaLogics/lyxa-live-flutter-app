@@ -8,14 +8,14 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/home/ui/components/drawer_title_unit.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
 import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 
 class DrawerUnit extends StatelessWidget {
-  final ProfileUser user;
+  final ProfileUserEntity user;
 
   const DrawerUnit({
     super.key,

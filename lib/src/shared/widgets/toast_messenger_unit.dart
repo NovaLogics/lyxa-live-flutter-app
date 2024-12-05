@@ -4,6 +4,7 @@ import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/assets/app_fonts.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
 
 class ToastDuration {
   static const Duration second1 = Duration(seconds: 1);
@@ -31,6 +32,8 @@ class ToastMessengerUnit {
     required BuildContext context,
     required String message,
   }) {
+    Logger.logError(message);
+
     showToast(
       context: context,
       message: message,

@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
-import 'package:lyxa_live/src/features/search/domain/search_repository.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
+import 'package:lyxa_live/src/features/search/domain/repositories/search_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 
-class FirebaseSearchRepository implements SearchRepository {
+class SearchRepositoryImpl implements SearchRepository {
   final String searchableSuffix = '\uf8ff';
 
   @override
-  Future<Result<List<ProfileUser?>>> searchUsers(String query) async {
+  Future<Result<List<ProfileUserEntity?>>> searchUsers(String query) async {
     try {
       final searchResult = await FirebaseFirestore.instance
           .collection(firebaseUsersCollectionPath)
@@ -21,7 +22,7 @@ class FirebaseSearchRepository implements SearchRepository {
           .get();
 
       final userList = searchResult.docs
-          .map((document) => ProfileUser.fromJson(document.data()))
+          .map((document) => ProfileUserModel.fromJson(document.data()).toEntity())
           .toList();
 
       return Result.success(

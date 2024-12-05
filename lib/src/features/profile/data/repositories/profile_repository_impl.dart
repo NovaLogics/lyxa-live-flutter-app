@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
-class FirebaseProfileRepository implements ProfileRepository {
+class ProfileRepositoryImpl implements ProfileRepository {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
-  Future<Result<ProfileUser?>> getUserProfileById({
+  Future<Result<ProfileUserEntity?>> getUserProfileById({
     required String userId,
   }) async {
     try {
@@ -24,8 +25,8 @@ class FirebaseProfileRepository implements ProfileRepository {
         throw Exception(ErrorMsgs.cannotFetchProfileError);
       }
 
-      final profileUser =
-          ProfileUser.fromJson(userDocument.data() as Map<String, dynamic>);
+      final profileUser = ProfileUserModel.fromJson(
+          userDocument.data() as Map<String, dynamic>).toEntity();
 
       return Result.success(
         data: profileUser,
@@ -39,7 +40,7 @@ class FirebaseProfileRepository implements ProfileRepository {
 
   @override
   Future<Result<void>> updateProfile({
-    required ProfileUser updatedProfile,
+    required ProfileUserEntity updatedProfile,
   }) async {
     try {
       await firebaseFirestore

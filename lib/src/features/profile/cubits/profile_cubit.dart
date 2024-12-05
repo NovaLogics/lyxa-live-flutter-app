@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -10,12 +11,12 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
-import 'package:lyxa_live/src/features/storage/domain/storage_repository.dart';
+import 'package:lyxa_live/src/features/storage/domain/repositories/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
@@ -24,7 +25,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   static const String debugTag = 'ProfileCubit';
   final ProfileRepository _profileRepository;
   final StorageRepository _storageRepository;
-  ProfileUser? _currentAppProfileUser;
+  ProfileUserEntity? _currentAppProfileUser;
 
   ProfileCubit({
     required ProfileRepository profileRepository,
@@ -37,15 +38,15 @@ class ProfileCubit extends Cubit<ProfileState> {
     _currentAppProfileUser = null;
   }
 
-  Future<ProfileUser> getCurrentUser() async {
+  Future<ProfileUserEntity> getCurrentUser() async {
     if (_currentAppProfileUser != null) {
-      return _currentAppProfileUser as ProfileUser;
+      return _currentAppProfileUser as ProfileUserEntity;
     } else {
       return await _getCurrentUser();
     }
   }
 
-  Future<ProfileUser> _getCurrentUser() async {
+  Future<ProfileUserEntity> _getCurrentUser() async {
     _showLoading(AppStrings.loadingMessage);
     final currentUser = getIt<AuthCubit>().currentUser;
     if (currentUser == null) {
@@ -63,17 +64,17 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     _hideLoading();
 
-    return _currentAppProfileUser as ProfileUser;
+    return _currentAppProfileUser as ProfileUserEntity;
   }
 
-  Future<ProfileUser?> getUserProfileById({
+  Future<ProfileUserEntity?> getUserProfileById({
     required String userId,
   }) async {
     final getUserResult =
         await _profileRepository.getUserProfileById(userId: userId);
 
     if (getUserResult.isDataNotNull()) {
-      return getUserResult.data as ProfileUser;
+      return getUserResult.data as ProfileUserEntity;
     }
     return null;
   }
@@ -91,7 +92,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     switch (getUserResult.status) {
       case Status.success:
         if (getUserResult.data != null) {
-          emit(ProfileLoaded(getUserResult.data as ProfileUser));
+          emit(ProfileLoaded(getUserResult.data as ProfileUserEntity));
         } else {
           emit(ProfileError(AppStrings.userNotFoundError));
         }
@@ -114,6 +115,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     _showLoading(AppStrings.updating);
 
     final currentUser = await getCurrentUser();
+    final profileUser = ProfileUserModel.fromEntity(currentUser);
 
     String? imageDownloadUrl;
 
@@ -134,19 +136,19 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       imageDownloadUrl = imageUploadResult.data as String;
       //await DefaultCacheManager().emptyCache();
-      await CachedNetworkImage.evictFromCache(currentUser.profileImageUrl);
+      await CachedNetworkImage.evictFromCache(profileUser.profileImageUrl);
     }
 
-    final updatedProfile = currentUser.copyWith(
+    final updatedProfile = profileUser.copyWith(
       newBio: updatedBio ?? currentUser.bio,
       newProfileImageUrl: imageDownloadUrl ?? currentUser.profileImageUrl,
-    );
+    ).toEntity();
 
     final updateProfileResult = await _profileRepository.updateProfile(
       updatedProfile: updatedProfile,
     );
 
-    Logger.logDebug(updatedProfile.toJsonString(),
+    Logger.logDebug(updatedProfile.toString(),
         tag: '$debugTag: updateProfile() User');
 
     if (updateProfileResult.status == Status.error) {
@@ -178,30 +180,38 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<Uint8List?> getProcessedImage({
-    required FilePickerResult? pickedFile,
-    required bool isWebPlatform,
-  }) async {
-    if (pickedFile == null) return null;
-
-    if (isWebPlatform) {
-      // WEB
-      return pickedFile.files.single.bytes;
-    } else {
-      // MOBILE
-      final filePath = pickedFile.files.single.path!;
-      final croppedFile = await ImageCropper().cropImage(
-        sourcePath: filePath,
-        compressFormat: ImageCompressFormat.jpg,
-        uiSettings: _getImageCropperSettings(),
+  Future<Uint8List?> getSelectedImage() async {
+    try {
+      final pickedFile = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: kIsWeb,
       );
+      if (pickedFile == null) return null;
 
-      if (croppedFile == null) return null;
+      if (kIsWeb) {
+        // WEB
+        return pickedFile.files.single.bytes;
+      } else {
+        // MOBILE
+        final filePath = pickedFile.files.single.path!;
+        final croppedFile = await ImageCropper().cropImage(
+          sourcePath: filePath,
+          compressFormat: ImageCompressFormat.jpg,
+          uiSettings: _getImageCropperSettings(),
+        );
 
-      final compressedImage = await _compressImage(croppedFile.path);
+        if (croppedFile == null) return null;
 
-      return compressedImage;
+        final compressedImage = await _compressImage(croppedFile.path);
+
+        if (compressedImage == null) throw Exception(ErrorMsgs.imageFileEmpty);
+
+        return compressedImage;
+      }
+    } catch (error) {
+      emit(ProfileErrorException(error));
     }
+    return null;
   }
 
   // HELPER FUNCTIONS ▼
@@ -214,29 +224,18 @@ class ProfileCubit extends Cubit<ProfileState> {
     LoadingCubit.hideLoading();
   }
 
-  void _handleErrors(
-      {required Result result, String? prefixMessage, String? tag}) {
+  void _handleErrors({required Result result, String? tag}) {
     // FIREBASE ERROR
     if (result.isFirebaseError()) {
-      emit(ProfileError(result.getFirebaseAlert()));
+      emit(ProfileErrorToast(result.getFirebaseAlert()));
     }
     // GENERIC ERROR
     else if (result.isGenericError()) {
-      ErrorHandler.handleError(
-        result.getGenericErrorData(),
-        prefixMessage: prefixMessage,
-        tag: tag,
-        onRetry: () {},
-      );
+      emit(ProfileErrorException(result.getGenericErrorData()));
     }
     // KNOWN ERRORS
     else if (result.isMessageError()) {
-      ErrorHandler.handleError(
-        null,
-        tag: tag,
-        customMessage: result.getMessageErrorAlert(),
-        onRetry: () {},
-      );
+      emit(ProfileError(result.getMessageErrorAlert()));
     }
   }
 

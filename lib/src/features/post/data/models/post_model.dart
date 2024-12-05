@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/comment.dart';
+import 'package:lyxa_live/src/features/post/data/models/comment_model.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
+import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 
 class PostFields {
   static const String id = 'id';
@@ -13,7 +15,7 @@ class PostFields {
   static const String comments = 'comments';
 }
 
-class Post {
+class PostModel {
   final String id;
   final String userId;
   final String userName;
@@ -22,9 +24,9 @@ class Post {
   final String imageUrl;
   final DateTime timestamp;
   final List<String> likes;
-  final List<Comment> comments;
+  final List<CommentEntity> comments;
 
-  Post({
+  PostModel({
     required this.id,
     required this.userId,
     required this.userName,
@@ -41,7 +43,7 @@ class Post {
     return toJson().toString();
   }
 
-  Post copyWith({
+  PostModel copyWith({
     String? id,
     String? userId,
     String? userName,
@@ -50,9 +52,9 @@ class Post {
     String? imageUrl,
     DateTime? timestamp,
     List<String>? likes,
-    List<Comment>? comments,
+    List<CommentEntity>? comments,
   }) {
-    return Post(
+    return PostModel(
       id: id ?? this.id,
       userId: userId ?? this.userId,
       userName: userName ?? this.userName,
@@ -62,6 +64,36 @@ class Post {
       timestamp: timestamp ?? this.timestamp,
       likes: likes ?? this.likes,
       comments: comments ?? this.comments,
+    );
+  }
+
+  /// Converts `PostModel` to domain entity.
+  PostEntity toEntity() {
+    return PostEntity(
+      id: id,
+      userId: userId,
+      userName: userName,
+      userProfileImageUrl: userProfileImageUrl,
+      captionText: captionText,
+      imageUrl: imageUrl,
+      timestamp: timestamp,
+      likes: likes,
+      comments: comments,
+    );
+  }
+
+  /// Creates a `PostModel` from domain entity.
+  factory PostModel.fromEntity(PostEntity entity) {
+    return PostModel(
+      id: entity.id,
+      userId: entity.userId,
+      userName: entity.userName,
+      userProfileImageUrl: entity.userProfileImageUrl,
+      captionText: entity.captionText,
+      imageUrl: entity.imageUrl,
+      timestamp: entity.timestamp,
+      likes: entity.likes,
+      comments: entity.comments,
     );
   }
 
@@ -75,17 +107,21 @@ class Post {
       PostFields.imageUrl: imageUrl,
       PostFields.timestamp: Timestamp.fromDate(timestamp),
       PostFields.likes: likes,
-      PostFields.comments: comments.map((comment) => comment.toJson()).toList(),
+      PostFields.comments: comments
+          .map((comment) => CommentModel.fromEntity(comment).toJson())
+          .toList(),
     };
   }
 
-  factory Post.fromJson(Map<String, dynamic> json) {
-    final List<Comment> comments = (json[PostFields.comments] as List<dynamic>?)
-            ?.map((commentJson) => Comment.fromJson(commentJson))
+  factory PostModel.fromJson(Map<String, dynamic> json) {
+    final List<CommentEntity> comments = (json[PostFields.comments]
+                as List<dynamic>?)
+            ?.map(
+                (commentJson) => CommentModel.fromJson(commentJson).toEntity())
             .toList() ??
         List.empty();
 
-    return Post(
+    return PostModel(
       id: json[PostFields.id] ?? '',
       userId: json[PostFields.userId] ?? '',
       userName: json[PostFields.userName] ?? '',
@@ -98,8 +134,8 @@ class Post {
     );
   }
 
-  static Post getDefault() {
-    return Post(
+  static PostModel getDefault() {
+    return PostModel(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       userId: '',
       userName: '',

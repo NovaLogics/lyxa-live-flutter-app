@@ -5,22 +5,24 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/database/hive_storage.dart';
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/features/auth/data/models/app_user_model.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/firebase_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/errors/generic_error.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 
-class FirebaseAuthRepository implements AuthRepository {
+class AuthRepositoryImpl implements AuthRepository {
   final HiveStorage _hiveStorage = getIt<HiveStorage>();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final CollectionReference _userCollectionRef =
       FirebaseFirestore.instance.collection(firebaseUsersCollectionPath);
 
   @override
-  Future<Result<AppUser>> loginWithEmailAndPassword({
+  Future<Result<ProfileUserEntity>> loginWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -36,12 +38,12 @@ class FirebaseAuthRepository implements AuthRepository {
         return Result.error(ErrorMsgs.failedToRetrieveUserId);
       }
 
-      final appUser = await _getUserById(userId);
+      final user = await _getUserById(userId);
 
       _hiveStorage.deleteLoginData();
 
       return Result.success(
-        data: appUser,
+        data: user.toEntity(),
       );
     } on FirebaseAuthException catch (authError) {
       return Result.error(FirebaseError(authError));
@@ -51,7 +53,7 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Result<AppUser>> registerWithEmailAndPassword({
+  Future<Result<AppUserEntity>> registerWithEmailAndPassword({
     required String name,
     required String email,
     required String password,
@@ -66,7 +68,7 @@ class FirebaseAuthRepository implements AuthRepository {
         return Result.error(ErrorMsgs.failedToRetrieveUserId);
       }
 
-      AppUser user = AppUser(
+      AppUserModel user = AppUserModel(
         uid: userId,
         email: email,
         name: name,
@@ -78,7 +80,7 @@ class FirebaseAuthRepository implements AuthRepository {
       _hiveStorage.deleteLoginData();
 
       return Result.success(
-        data: user,
+        data: user.toEntity(),
       );
     } on FirebaseAuthException catch (authError) {
       return Result.error(FirebaseError(authError));
@@ -107,17 +109,17 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Result<AppUser?>> getCurrentUser() async {
+  Future<Result<ProfileUserEntity?>> getCurrentUser() async {
     try {
       final firebaseUser = _firebaseAuth.currentUser;
 
       // No user logged in
       if (firebaseUser == null) return Result.success(data: null);
 
-      final appUser = await _getUserById(firebaseUser.uid);
+      final user = await _getUserById(firebaseUser.uid);
 
       return Result.success(
-        data: appUser,
+        data: user.toEntity(),
       );
     } on FirebaseAuthException catch (authError) {
       return Result.error(FirebaseError(authError));
@@ -132,7 +134,7 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Result<AppUser>> getSavedUser({
+  Future<Result<AppUserEntity>> getSavedUser({
     required String storageKey,
   }) async {
     try {
@@ -142,8 +144,10 @@ class FirebaseAuthRepository implements AuthRepository {
         return Result.error(ErrorMsgs.userDataNotFound);
       }
 
+      final appUserModel = AppUserModel.fromJsonString(userData);
+
       return Result.success(
-        data: AppUser.fromJsonString(userData),
+        data: appUserModel.toEntity(),
       );
     } catch (error) {
       return Result.error(GenericError(error: error));
@@ -152,20 +156,21 @@ class FirebaseAuthRepository implements AuthRepository {
 
   @override
   Future<void> saveUserToLocalStorage({
-    required AppUser user,
+    required AppUserEntity user,
     required String storageKey,
   }) async {
-    await _hiveStorage.save(storageKey, user.toJsonString());
+    final userJson = AppUserModel.fromEntity(user).toJsonString();
+    await _hiveStorage.save(storageKey, userJson);
   }
 
   // HELPER FUNCTIONS ▼
 
-  Future<AppUser> _getUserById(String userId) async {
+  Future<ProfileUserModel> _getUserById(String userId) async {
     final userDocument = await _userCollectionRef.doc(userId).get();
 
     if (!userDocument.exists) {
       throw Exception(ErrorMsgs.userDataNotFound);
     }
-    return AppUser.fromJson(userDocument.data() as Map<String, dynamic>);
+    return ProfileUserModel.fromJson(userDocument.data() as Map<String, dynamic>);
   }
 }

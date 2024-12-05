@@ -35,13 +35,13 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
   // Error color (used for error states)
   error: Colors.red,
   // Text/Icon color on error
-  onError: AppColors.blackPure,
+  onError: AppColors.blackDark,
 
   // --- Surface and Background Colors ---
   // Background color for surfaces like cards, dialogs, etc.
   surface: Color(0xFF121212),
   // Text/Icon color on surface
-  onSurface: AppColors.whitePure,
+  onSurface: AppColors.whiteLight,
   // Borders and outlines color (used for borders or subtle divisions)
   outline: Color(0xFF616161),
   // Shadows color for cards, modals, etc.
@@ -72,7 +72,7 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
   surfaceContainerLow: AppColors.bluePurple900L3,
 
   // High level container surface
-  surfaceContainerHigh: AppColors.blueGrey900L2,
+  surfaceContainerHigh: AppColors.blackShade, //AppColors.blueGrey900L2,
 
   // Highest level container surface
   surfaceContainerHighest: AppColors.blueGrey900L1,

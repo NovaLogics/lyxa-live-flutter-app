@@ -1,37 +1,27 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
-
 import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
+import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
-import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
-import 'package:lyxa_live/src/features/post/domain/entities/post.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class UploadPostScreen extends StatefulWidget {
-  final ProfileUser profileUser;
-
   const UploadPostScreen({
     super.key,
-    required this.profileUser,
   });
 
   @override
@@ -41,25 +31,15 @@ class UploadPostScreen extends StatefulWidget {
 class _UploadPostScreenState extends State<UploadPostScreen> {
   static const String debugTag = 'UploadPostScreen';
   final TextEditingController _captionController = TextEditingController();
+  late final ProfileService _profileService;
   late final PostCubit _postCubit;
+  late final HomeCubit _homeCubit;
   Uint8List? _selectedImage;
-
-  ProfileUser get profileUser => widget.profileUser;
 
   @override
   void initState() {
     super.initState();
-    _postCubit = getIt<PostCubit>();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _buildUploadPostScreen(),
-        _buildLoadingScreen(),
-      ],
-    );
+    _initScreen();
   }
 
   @override
@@ -68,59 +48,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     super.dispose();
   }
 
-  Future<void> _handleImageSelection() async {
-    try {
-      final pickedFile = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        withData: kIsWeb,
-      );
-
-      final processedImage = await _postCubit.getProcessedImage(
-        pickedFile: pickedFile,
-        isWebPlatform: kIsWeb,
-      );
-
-      if (processedImage == null) throw Exception(ErrorMsgs.imageFileEmpty);
-
-      setState(() {
-        _selectedImage = processedImage;
-      });
-    } catch (error) {
-      ErrorHandler.handleError(
-        error,
-        tag: debugTag,
-        onRetry: () {},
-      );
-    }
-  }
-
-  void _createAndUploadPost() {
-    final captionText = _captionController.text.trim();
-
-    if (_selectedImage == null || captionText.isEmpty) {
-      ToastMessengerUnit.showErrorToast(
-        context: context,
-        message: AppStrings.errorImageAndCaptionRequired,
-      );
-      return;
-    }
-
-    FocusScope.of(context).unfocus();
-
-    final newPost = Post.getDefault().copyWith(
-      userId: profileUser.uid,
-      userName: profileUser.name,
-      userProfileImageUrl: profileUser.profileImageUrl,
-      captionText: captionText,
-    );
-
-    _postCubit.addPost(
-      post: newPost,
-      imageBytes: _selectedImage,
-    );
-  }
-
-  Widget _buildUploadPostScreen() {
+  @override
+  Widget build(BuildContext context) {
     return BlocConsumer<PostCubit, PostState>(
       builder: (context, state) {
         return ScrollableScaffold(
@@ -137,26 +66,61 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         );
       },
       listener: (context, state) {
-        if (state is PostLoaded) {
+        if (state is PostUploaded) {
+          _homeCubit.getAllPosts();
           Navigator.pop(context);
+        } else if (state is PostErrorToast) {
+          _handleErrorToast(state.message);
+        } else if (state is PostErrorException) {
+          _handleExceptionMessage(error: state.error);
+        } else if (state is PostError) {
+          _handleExceptionMessage(message: state.message);
         }
       },
     );
   }
 
-  Widget _buildLoadingScreen() {
-    return BlocConsumer<LoadingCubit, LoadingState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Visibility(
-          visible: state.isVisible,
-          child: LoadingUnit(
-            message: state.message,
-          ),
-        );
-      },
+  void _initScreen() async {
+    _profileService = getIt<ProfileService>();
+    _postCubit = getIt<PostCubit>();
+    _homeCubit = getIt<HomeCubit>();
+  }
+
+  Future<void> _handleImageSelection() async {
+    final selectedImage = await _postCubit.getSelectedImage();
+    setState(() {
+      _selectedImage = selectedImage;
+    });
+  }
+
+  void _handleUploadPost() {
+    _hideKeyboard();
+    _postCubit.addPost(
+      captionText: _captionController.text,
+      imageBytes: _selectedImage,
+      currentUser: _profileService.profileEntity,
     );
   }
+
+  void _handleErrorToast(String message) {
+    _hideKeyboard();
+    ToastMessengerUnit.showErrorToast(
+      context: context,
+      message: message,
+    );
+  }
+
+  void _handleExceptionMessage({Object? error, String? message}) {
+    _hideKeyboard();
+    ErrorHandler.handleError(
+      error,
+      tag: debugTag,
+      customMessage: message,
+      onRetry: () {},
+    );
+  }
+
+  void _hideKeyboard() => FocusScope.of(context).unfocus();
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -176,7 +140,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       ),
       actions: [
         IconButton(
-          onPressed: _createAndUploadPost,
+          onPressed: _handleUploadPost,
           icon: const Icon(Icons.upload),
         ),
         addSpacing(width: AppDimens.size12),
@@ -204,11 +168,11 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   Widget _buildPickImageButton() {
     return Center(
       child: GradientButton(
-        text: AppStrings.pickImageButton.toUpperCase(),
+        text: AppStrings.pickImageButton,
         onPressed: _handleImageSelection,
         icon: const Icon(
           Icons.filter,
-          color: AppColors.whitePure,
+          color: AppColors.whiteLight,
         ),
       ),
     );

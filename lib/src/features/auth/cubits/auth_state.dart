@@ -1,4 +1,4 @@
-import 'package:lyxa_live/src/features/auth/domain/entities/app_user.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 
 /// AUTH STATE
 /// -> Represents the different states for authentication.
@@ -12,7 +12,7 @@ class AuthLoading extends AuthState {}
 class Unauthenticated extends AuthState {}
 
 class Authenticated extends AuthState {
-  final AppUser user;
+  final AppUserEntity user;
 
   Authenticated(this.user);
 }

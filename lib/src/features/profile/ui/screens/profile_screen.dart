@@ -5,11 +5,9 @@ import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_image.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_state.dart';
-import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
@@ -26,7 +24,10 @@ import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dar
 class ProfileScreen extends StatefulWidget {
   final String displayUserId;
 
-  const ProfileScreen({super.key, required this.displayUserId});
+  const ProfileScreen({
+    super.key,
+    required this.displayUserId,
+  });
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -34,44 +35,41 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late final ProfileCubit _profileCubit;
-  ProfileUser _currentAppUser = ProfileUser.getGuestUser();
+  late final ProfileService _profileService;
 
-  get _appUserId => _currentAppUser.uid;
+  get _appUserId => _profileService.getUserId();
   get _displayUserId => widget.displayUserId;
 
   @override
   void initState() {
     super.initState();
-    _profileCubit = getIt<ProfileCubit>();
-    _fetchUserProfile(_displayUserId);
+    _initScreen();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return Stack(
-          children: [
-            if (state is ProfileLoaded)
-              _buildProfileContent(
-                context,
-                state.profileUser,
-              ),
-            if (state is! ProfileLoaded)
-              _buildEmptyContent(
-                displayText: AppStrings.profileNotFoundError,
-              ),
-            _buildLoadingScreen(),
-          ],
-        );
+        if (state is ProfileLoaded) {
+          return _buildProfileContent(
+            context,
+            state.profileUser,
+          );
+        } else if (state is ProfileError) {
+          return _buildEmptyContent(
+            displayText: AppStrings.profileNotFoundError,
+          );
+        } else {
+          return _buildEmptyContent();
+        }
       },
     );
   }
 
-  void _fetchUserProfile(String profileUserId) async {
-    _currentAppUser = await _profileCubit.getCurrentUser();
-
-    _profileCubit.loadUserProfileById(userId: profileUserId);
+  void _initScreen() async {
+    _profileService = getIt<ProfileService>();
+    _profileCubit = getIt<ProfileCubit>();
+    _profileCubit.loadUserProfileById(userId: _displayUserId);
   }
 
   void _handleFollowButtonPressed() {
@@ -99,21 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  Widget _buildLoadingScreen() {
-    return BlocConsumer<LoadingCubit, LoadingState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Visibility(
-          visible: state.isVisible,
-          child: LoadingUnit(
-            message: state.message,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildProfileContent(BuildContext context, ProfileUser user) {
+  Widget _buildProfileContent(BuildContext context, ProfileUserEntity user) {
     final isOwnProfile = (_displayUserId == _appUserId);
     Logger.logDebug('$isOwnProfile  $_displayUserId = $_appUserId ');
 
@@ -149,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   AppBar _buildAppBar(
-      BuildContext context, ProfileUser user, bool isOwnProfile) {
+      BuildContext context, ProfileUserEntity user, bool isOwnProfile) {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
@@ -178,7 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildProfilePicture(ProfileUser user) {
+  Widget _buildProfilePicture(ProfileUserEntity user) {
     return SizedBox(
       height: AppDimens.size128,
       child: ProfileImage(
@@ -187,7 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildUserNameSection(ProfileUser user) {
+  Widget _buildUserNameSection(ProfileUserEntity user) {
     return Center(
       child: Text(
         user.name,
@@ -200,7 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildEmailSection(ProfileUser user) {
+  Widget _buildEmailSection(ProfileUserEntity user) {
     return Center(
       child: Text(
         user.email,
@@ -214,7 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildProfileStats(ProfileUser displayUser) {
+  Widget _buildProfileStats(ProfileUserEntity displayUser) {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
         int postCount = (state is PostLoaded)
@@ -242,7 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildFollowActionSection(ProfileUser user) {
+  Widget _buildFollowActionSection(ProfileUserEntity user) {
     return FollowButtonUnit(
       onPressed: _handleFollowButtonPressed,
       isFollowing: user.followers.contains(_appUserId),
@@ -326,7 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               final post = userPosts[index];
               return PostTileUnit(
                 post: post,
-                currentUser: _currentAppUser,
+                currentUser: _profileService.profileEntity,
                 onDeletePressed: () =>
                     getIt<PostCubit>().deletePost(post: post),
               );

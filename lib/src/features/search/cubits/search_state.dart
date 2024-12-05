@@ -1,4 +1,4 @@
-import 'package:lyxa_live/src/features/profile/domain/entities/profile_user.dart';
+import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 
 abstract class SearchState {}
 
@@ -7,7 +7,7 @@ class SearchInitial extends SearchState {}
 class SearchLoading extends SearchState {}
 
 class SearchLoaded extends SearchState {
-  final List<ProfileUser?> users;
+  final List<ProfileUserEntity?> users;
 
   SearchLoaded(this.users);
 }

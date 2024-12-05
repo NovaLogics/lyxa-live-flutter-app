@@ -20,6 +20,8 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   late final SearchCubit _searchCubit;
 
+  String get _searchQueryString => _searchController.text;
+
   @override
   void initState() {
     super.initState();
@@ -42,8 +44,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _onSearchChanged() {
-    final query = _searchController.text.trim().toLowerCase();
-    _searchCubit.searchUsers(query);
+    _searchCubit.searchUsers(_searchQueryString);
   }
 
   AppBar _buildAppBar() {
@@ -64,7 +65,7 @@ class _SearchScreenState extends State<SearchScreen> {
       height: AppDimens.size52,
       child: TextField(
         controller: _searchController,
-        autofocus: true,
+       // autofocus: true,
         style: AppStyles.textFieldStyleMain.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
