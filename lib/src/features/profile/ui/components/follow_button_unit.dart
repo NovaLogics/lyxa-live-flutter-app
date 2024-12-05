@@ -24,21 +24,32 @@ class FollowButtonUnit extends StatelessWidget {
           onTap: onPressed,
           child: Container(
             decoration: BoxDecoration(
-              gradient:_getLinearGradient(isFollowing),
+              gradient: _getLinearGradient(isFollowing),
               borderRadius: BorderRadius.circular(AppDimens.radiusLG16),
             ),
             padding: const EdgeInsets.all(AppDimens.size12),
-            child: Center(
-              child: Text(
-                isFollowing
-                    ? AppStrings.unfollowUpperCase
-                    : AppStrings.followUpperCase,
-                style: AppStyles.buttonTextPrimary.copyWith(
-                  color: AppColors.deepPurple50,
-                  fontSize: AppDimens.fontSizeRG14,
-                  letterSpacing: AppDimens.letterSpacingPT12,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  isFollowing
+                      ? AppStrings.unfollowUpperCase
+                      : AppStrings.followUpperCase,
+                  style: AppStyles.buttonTextPrimary.copyWith(
+                    color: AppColors.deepPurple50,
+                    fontSize: AppDimens.fontSizeRG14,
+                    letterSpacing: AppDimens.letterSpacingPT12,
+                  ),
                 ),
-              ),
+                const SizedBox(width: AppDimens.size12),
+                Icon(
+                  isFollowing
+                      ? Icons.group_remove_outlined
+                      : Icons.group_add_outlined,
+                  color: Colors.white,
+                  size: AppDimens.size20,
+                ),
+              ],
             ),
           ),
         ),

@@ -8,7 +8,6 @@ import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
-import 'package:lyxa_live/src/features/profile/ui/components/edit_profile_button_unit.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_image.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
@@ -19,7 +18,6 @@ import 'package:lyxa_live/src/features/profile/ui/components/follow_button_unit.
 import 'package:lyxa_live/src/features/profile/ui/components/profile_stats_unit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
-import 'package:lyxa_live/src/features/profile/ui/screens/edit_profile_screen.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/follower_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
@@ -71,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _initScreen() async {
     _profileService = getIt<ProfileService>();
     _profileCubit = getIt<ProfileCubit>();
-     _profileCubit.loadUserProfileById(userId: _displayUserId);
+    _profileCubit.loadUserProfileById(userId: _displayUserId);
   }
 
   void _handleFollowButtonPressed() {
@@ -100,11 +98,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileContent(BuildContext context, ProfileUserEntity user) {
-    final isOwnProfile = (_displayUserId == _appUserId);
-    Logger.logDebug('$isOwnProfile  $_displayUserId = $_appUserId ');
+    Logger.logDebug('$_displayUserId = $_appUserId ');
 
     return ConstrainedScaffold(
-      appBar: _buildAppBar(context, user, isOwnProfile),
+      appBar: _buildAppBar(context, user),
       body: ListView(
         children: [
           addSpacing(height: AppDimens.size8),
@@ -114,12 +111,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildEmailSection(user),
           addSpacing(height: AppDimens.size8),
           _buildProfileStats(user),
-          if (!isOwnProfile) addSpacing(height: AppDimens.size8),
-          if (!isOwnProfile) _buildFollowActionSection(user),
+          addSpacing(height: AppDimens.size8),
+          _buildFollowActionSection(user),
           addSpacing(height: AppDimens.size12),
           _buildStoryLineSection(user.bio),
-          if (isOwnProfile) addSpacing(height: AppDimens.size24),
-          if (isOwnProfile) _buildEditProfileSection(),
           addSpacing(height: AppDimens.size24),
           _buildPostSection(context),
         ],
@@ -136,19 +131,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  AppBar _buildAppBar(
-      BuildContext context, ProfileUserEntity user, bool isOwnProfile) {
+  AppBar _buildAppBar(BuildContext context, ProfileUserEntity user) {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
       title: Center(
-        child: Text(
-          AppStrings.profile,
-          style: AppStyles.textAppBarStatic.copyWith(
-            color: Theme.of(context).colorScheme.onPrimary,
-            letterSpacing: AppDimens.letterSpacingPT10,
-            fontWeight: FontWeight.w600,
-            fontFamily: AppFonts.elMessiri,
+        child: Padding(
+          padding: const EdgeInsets.only(right: AppDimens.size36),
+          child: Text(
+            AppStrings.profile,
+            style: AppStyles.textAppBarStatic.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+              letterSpacing: AppDimens.letterSpacingPT10,
+              fontWeight: FontWeight.w600,
+              fontFamily: AppFonts.elMessiri,
+            ),
           ),
         ),
       ),
@@ -267,23 +264,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildEditProfileSection() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size32),
-      child: EditProfileButtonUnit(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) =>
-                  EditProfileScreen(currentUser: _profileService.profileEntity),
-            ),
-          );
-        },
-      ),
     );
   }
 
