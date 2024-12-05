@@ -25,3 +25,13 @@ class ProfileErrorException extends ProfileState {
   final Object? error;
   ProfileErrorException(this.error);
 }
+
+class ProfileSelfLoaded extends ProfileState {
+  final ProfileUserEntity profileUser;
+  ProfileSelfLoaded(this.profileUser);
+}
+
+class ProfileSelfError extends ProfileState {
+  final String message;
+  ProfileSelfError(this.message);
+}

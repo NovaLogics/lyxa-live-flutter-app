@@ -28,8 +28,10 @@ class LyxaNavigationScreens extends StatefulWidget {
 }
 
 class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
+  late final List<Widget> screens;
   final _platformUtil = getIt<PlatformUtil>();
   int _currentIndex = 0;
+  String _appUserId = '';
 
   AppUserEntity get _appUser => widget.appUser;
 
@@ -43,20 +45,45 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
     setBottomBarIndex(0);
   }
 
+  void _handleProfileNavigation(String userId) {
+    setState(() {
+      screens[4] = ProfileScreen(displayUserId: userId);
+      _currentIndex = 4;
+      if (screens[4] is ProfileScreen) {
+        screens[4] = ProfileScreen(displayUserId: userId);
+      }
+    });
+  }
+
   @override
-  Widget build(BuildContext context) {
-    final screens = [
+  void initState() {
+    super.initState();
+
+    _appUserId = _appUser.uid;
+
+    screens = [
       const HomeScreen(),
       const SearchScreen(),
       UploadPostScreen(
-        onPostUploaded: _handlePostUploadedState,
+        onPostUploaded: () {
+          _handlePostUploadedState();
+        },
       ),
       const SettingsScreen(),
-        ProfileScreen(
-        displayUserId: _appUser.uid,
+      ProfileScreen(
+        displayUserId: _appUserId,
       ),
     ];
+  }
 
+  @override
+  void dispose() {
+    super.dispose();
+    screens.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       children: [
         getIt<GradientBackgroundUnit>(
@@ -180,7 +207,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
                             isWebPlatform,
                           ),
                           onPressed: () {
-                            setBottomBarIndex(4);
+                            _handleProfileNavigation(_appUser.uid);
                           },
                         ),
                       ],
