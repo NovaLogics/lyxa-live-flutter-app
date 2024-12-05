@@ -21,7 +21,9 @@ class AppIcons {
   static const String addPostOutlined = '$_iconPath/ic_add_border.svg';
   static const String addPostOutlinedStyle1 =
       '$_iconPath/ic_add_border_style_1.svg';
-        static const String addPostOutlinedStyle2 =
+  static const String addPostOutlinedStyle2 =
       '$_iconPath/ic_add_border_style_2.svg';
+  static const String addPostOutlinedStyle3 =
+      '$_iconPath/ic_add_border_style_3.svg';
   static const String addPostSolid = '$_iconPath/ic_add_filled.svg';
 }

@@ -62,7 +62,7 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
           param2: BackgroundStyle.main,
         ),
         Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           body: Stack(
             children: [
               IndexedStack(
@@ -82,7 +82,7 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
     final Size size = MediaQuery.of(context).size;
     final sizeWidth =
         _isWebPlatform() ? AppDimens.containerSize430 : size.width;
-    const sizeHeight = 64.0;
+    const sizeHeight = 56.0;
     return Row(
       children: [
         const Spacer(),
@@ -109,7 +109,7 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
                         child: _buildIcon(
                           2,
                           selectedColor,
-                          AppIcons.addPostOutlinedStyle2,
+                          AppIcons.addPostOutlinedStyle3,
                           Icons.add_photo_alternate_outlined,
                           isHighlight: true,
                         ),
@@ -202,7 +202,7 @@ class _BottomNavigationBarUnitV2State extends State<BottomNavigationBarUnitV2> {
       if (_currentIndex == index) {
         color = AppColors.whiteLight;
       } else {
-        color = AppColors.blackDark;
+        color = AppColors.deepPurple200;
       }
     }
 

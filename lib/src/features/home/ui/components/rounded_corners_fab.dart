@@ -60,10 +60,10 @@ class _RoundedCornerFABState extends State<RoundedCornerFAB>
         return Transform.scale(
           scale: _scaleAnimation.value,
           child: SizedBox(
-            width: 60, 
-            height: 60, 
+            width: 54,
+            height: 54,
             child: CustomPaint(
-              painter: _RoundedCornerPainter(),
+              painter: _RoundedCornerPainter(context),
               child: GestureDetector(
                 onTapDown: _onTapDown,
                 onTapUp: _onTapUp,
@@ -79,9 +79,19 @@ class _RoundedCornerFABState extends State<RoundedCornerFAB>
 }
 
 class _RoundedCornerPainter extends CustomPainter {
+  final BuildContext context;
+
+  _RoundedCornerPainter(this.context);
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
+    // Border paint
+    Paint borderPaint = Paint()
+      ..color = AppColors.bluePurple900L2
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0; // Border thickness
+
+    // Fill paint with gradient
+    Paint fillPaint = Paint()
       ..shader = const LinearGradient(
         colors: [AppColors.bluePurple900, AppColors.deepPurple400],
         begin: Alignment.topLeft,
@@ -92,11 +102,14 @@ class _RoundedCornerPainter extends CustomPainter {
     // Create a rounded rectangle (RRect)
     final rrect = RRect.fromRectAndRadius(
       Rect.fromLTWH(0, 0, size.width, size.height), // FAB size
-      const Radius.circular(24), // Corner radius
+      const Radius.circular(20), // Corner radius
     );
 
-    // Draw the rounded rectangle
-    canvas.drawRRect(rrect, paint);
+    // Draw the border
+    canvas.drawRRect(rrect, borderPaint);
+
+    // Draw the filled rounded rectangle
+    canvas.drawRRect(rrect, fillPaint);
   }
 
   @override
