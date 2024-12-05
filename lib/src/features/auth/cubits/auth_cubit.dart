@@ -20,11 +20,10 @@ import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart'
 /// Handles authentication state management
 /// ->
 class AuthCubit extends Cubit<AuthState> {
-  static const String debugTag = 'AuthCubit';
+  final ProfileService _profileService = getIt<ProfileService>();
   final AuthRepository _authRepository;
   final StorageRepository _storageRepository;
   AppUserEntity? _currentUser;
-  final ProfileService _profileService = getIt<ProfileService>();
 
   AuthCubit({
     required AuthRepository authRepository,
@@ -41,6 +40,7 @@ class AuthCubit extends Cubit<AuthState> {
     final currentUserResult = await _authRepository.getCurrentUser();
 
     _hideLoading();
+    
     switch (currentUserResult.status) {
       case Status.success:
         _handleAuthStatus(userData: currentUserResult.data);
@@ -49,7 +49,7 @@ class AuthCubit extends Cubit<AuthState> {
       case Status.error:
         _handleErrors(
           result: currentUserResult,
-          tag: '$debugTag: checkAuth()',
+          tag: _getCurrentFunctionName(),
         );
         emit(Unauthenticated());
         break;
@@ -78,7 +78,7 @@ class AuthCubit extends Cubit<AuthState> {
       case Status.error:
         _handleErrors(
           result: loginResult,
-          tag: '$debugTag: login()',
+          tag: 'login()',
         );
         emit(Unauthenticated());
         break;
@@ -118,7 +118,7 @@ class AuthCubit extends Cubit<AuthState> {
       case Status.error:
         _handleErrors(
           result: registerResult,
-          tag: '$debugTag: register()',
+          tag: _getCurrentFunctionName(),
         );
         emit(Unauthenticated());
         break;
@@ -193,7 +193,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (imageUploadResult.status == Status.error) {
       _handleErrors(
         result: imageUploadResult,
-        tag: '$debugTag: _uploadDeafultUserAvatar()::imageUploadResult',
+        tag: _getCurrentFunctionName(),
       );
       return false;
     } else if (imageUrl.isEmpty) {
@@ -207,7 +207,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (updateUrlResult.status == Status.error) {
       _handleErrors(
         result: imageUploadResult,
-        tag: '$debugTag: _uploadDeafultUserAvatar()::updateUrlResult',
+        tag: _getCurrentFunctionName(),
       );
       return false;
     }
@@ -234,8 +234,14 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void _handleErrors(
-      {required Result result, String? prefixMessage, String? tag}) {
+  void _handleErrors({
+    required Result result,
+    String? prefixMessage,
+    String? tag = '',
+  }) {
+    final String debugTag = '${(AuthCubit).toString()} :: $tag';
+    Logger.logError(debugTag);
+
     // FIREBASE ERROR
     if (result.isFirebaseError()) {
       emit(AuthError(result.getFirebaseAlert()));
@@ -245,7 +251,7 @@ class AuthCubit extends Cubit<AuthState> {
       ErrorHandler.handleError(
         result.getGenericErrorData(),
         prefixMessage: prefixMessage,
-        tag: tag ?? debugTag,
+        tag: debugTag,
         onRetry: () {},
       );
     }
@@ -253,10 +259,21 @@ class AuthCubit extends Cubit<AuthState> {
     else if (result.isMessageError()) {
       ErrorHandler.handleError(
         null,
-        tag: tag ?? debugTag,
+        tag: debugTag,
         customMessage: result.getMessageErrorAlert(),
         onRetry: () {},
       );
+    }
+  }
+
+  String _getCurrentFunctionName() {
+    try {
+      final stackTrace = StackTrace.current.toString();
+      final functionName = stackTrace.split('\n')[1].trim().split(' ')[1];
+      return functionName;
+    } catch (e) {
+      Logger.logError('Error extracting function name from stack trace: $e');
+      return 'UnknownFunction';
     }
   }
 }
