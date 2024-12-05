@@ -8,7 +8,7 @@ import 'package:lyxa_live/src/core/utils/platform_util.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
 import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
-import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
+import 'package:lyxa_live/src/features/profile/ui/screens/self_profile_screen.dart';
 import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
 import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/nav_custom_painter.dart';
@@ -31,7 +31,6 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
   late final List<Widget> screens;
   final _platformUtil = getIt<PlatformUtil>();
   int _currentIndex = 0;
-  String _appUserId = '';
 
   AppUserEntity get _appUser => widget.appUser;
 
@@ -45,21 +44,9 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
     setBottomBarIndex(0);
   }
 
-  void _handleProfileNavigation(String userId) {
-    setState(() {
-      screens[4] = ProfileScreen(displayUserId: userId);
-      _currentIndex = 4;
-      if (screens[4] is ProfileScreen) {
-        screens[4] = ProfileScreen(displayUserId: userId);
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-
-    _appUserId = _appUser.uid;
 
     screens = [
       const HomeScreen(),
@@ -70,9 +57,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
         },
       ),
       const SettingsScreen(),
-      ProfileScreen(
-        displayUserId: _appUserId,
-      ),
+      const SelfProfileScreen(),
     ];
   }
 
@@ -207,7 +192,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
                             isWebPlatform,
                           ),
                           onPressed: () {
-                            _handleProfileNavigation(_appUser.uid);
+                            setBottomBarIndex(4);
                           },
                         ),
                       ],

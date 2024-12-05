@@ -6,6 +6,8 @@ import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
+import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/cubits/self_profile_state.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/edit_profile_button_unit.dart';
@@ -17,7 +19,6 @@ import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/story_line_unit.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_stats_unit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/edit_profile_screen.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/follower_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
@@ -26,10 +27,10 @@ class SelfProfileScreen extends StatefulWidget {
   const SelfProfileScreen({super.key});
 
   @override
-  State<SelfProfileScreen> createState() => _ProfileScreenState();
+  State<SelfProfileScreen> createState() => _SelfProfileScreenState();
 }
 
-class _ProfileScreenState extends State<SelfProfileScreen> {
+class _SelfProfileScreenState extends State<SelfProfileScreen> {
   late final ProfileCubit _profileCubit;
   late final ProfileService _profileService;
 
@@ -43,14 +44,14 @@ class _ProfileScreenState extends State<SelfProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileCubit, ProfileState>(
+    return BlocBuilder<SelfProfileCubit, SelfProfileState>(
       builder: (context, state) {
-        if (state is ProfileSelfLoaded) {
+        if (state is SelfProfileLoaded) {
           return _buildProfileContent(
             context,
             state.profileUser,
           );
-        } else if (state is ProfileSelfError) {
+        } else if (state is SelfProfileError) {
           return _buildEmptyContent(
             displayText: AppStrings.profileNotFoundError,
           );
@@ -67,11 +68,9 @@ class _ProfileScreenState extends State<SelfProfileScreen> {
     _profileCubit.loadSelfProfileById(userId: _appUserId);
   }
 
-  
-
   Widget _buildProfileContent(BuildContext context, ProfileUserEntity user) {
-
     Logger.logDebug('$_appUserId ');
+    _profileService.syncProfile(user);
 
     return ConstrainedScaffold(
       appBar: _buildAppBar(context, user),
@@ -104,8 +103,7 @@ class _ProfileScreenState extends State<SelfProfileScreen> {
     );
   }
 
-  AppBar _buildAppBar(
-      BuildContext context, ProfileUserEntity user) {
+  AppBar _buildAppBar(BuildContext context, ProfileUserEntity user) {
     return AppBar(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
@@ -187,8 +185,6 @@ class _ProfileScreenState extends State<SelfProfileScreen> {
     );
   }
 
-
-
   Widget _buildStoryLineSection(String bio) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,9 +250,8 @@ class _ProfileScreenState extends State<SelfProfileScreen> {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
         if (state is PostLoaded) {
-          final userPosts = state.posts
-              .where((post) => post.userId == _appUserId)
-              .toList();
+          final userPosts =
+              state.posts.where((post) => post.userId == _appUserId).toList();
 
           if (userPosts.isEmpty) {
             return Padding(
