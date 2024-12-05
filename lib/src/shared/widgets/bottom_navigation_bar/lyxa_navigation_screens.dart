@@ -5,33 +5,33 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/utils/platform_util.dart';
+import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
+import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
+import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
+import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
+import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
+import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/nav_custom_painter.dart';
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/rounded_corners_fab.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
-class LyxaBottomNavBar extends StatefulWidget {
-  final Widget homeScreen;
-  final Widget profileScreen;
-  final Widget searchScreen;
-  final Widget settingsScreen;
-  final Widget newPostScreen;
+class LyxaNavigationScreens extends StatefulWidget {
+  final AppUserEntity appUser;
 
-  const LyxaBottomNavBar({
+  const LyxaNavigationScreens({
     super.key,
-    required this.homeScreen,
-    required this.profileScreen,
-    required this.searchScreen,
-    required this.settingsScreen,
-    required this.newPostScreen,
+    required this.appUser,
   });
 
   @override
-  State<LyxaBottomNavBar> createState() => _LyxaBottomNavBarState();
+  State<LyxaNavigationScreens> createState() => _LyxaNavigationScreensState();
 }
 
-class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
+class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
   final _platformUtil = getIt<PlatformUtil>();
   int _currentIndex = 0;
+
+  AppUserEntity get _appUser => widget.appUser;
 
   setBottomBarIndex(int index) {
     setState(() {
@@ -39,14 +39,22 @@ class _LyxaBottomNavBarState extends State<LyxaBottomNavBar> {
     });
   }
 
+  void _handlePostUploadedState() {
+    setBottomBarIndex(0);
+  }
+
   @override
   Widget build(BuildContext context) {
     final screens = [
-      widget.homeScreen,
-      widget.searchScreen,
-      widget.newPostScreen,
-      widget.settingsScreen,
-      widget.profileScreen,
+      const HomeScreen(),
+      const SearchScreen(),
+      UploadPostScreen(
+        onPostUploaded: _handlePostUploadedState,
+      ),
+      const SettingsScreen(),
+        ProfileScreen(
+        displayUserId: _appUser.uid,
+      ),
     ];
 
     return Stack(
