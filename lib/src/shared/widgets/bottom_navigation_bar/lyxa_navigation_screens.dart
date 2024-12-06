@@ -15,6 +15,14 @@ import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart'
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/nav_bar_custom_painter.dart';
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/rounded_corners_fab.dart';
 
+class ScreenIndex {
+  static const int home = 0;
+  static const int search = 1;
+  static const int uploadPost = 2;
+  static const int settings = 3;
+  static const int selfProfile = 4;
+}
+
 class LyxaNavigationScreens extends StatefulWidget {
   final AppUserEntity appUser;
 
@@ -37,7 +45,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
   final GlobalKey<UploadPostScreenState> _postScreenKey =
       GlobalKey<UploadPostScreenState>();
 
-  int _currentIndex = 0;
+  int _currentIndex = ScreenIndex.home;
 
   @override
   void initState() {
@@ -66,7 +74,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
   }
 
   void _onPostUploaded() {
-    _setBottomBarIndex(0);
+    _setBottomBarIndex(ScreenIndex.home);
   }
 
   void _setBottomBarIndex(int index) {
@@ -90,11 +98,12 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
   }
 
   Widget _buildBottomNavigationBar(BuildContext context) {
-    final bool isWeb = _platformUtil.isWebPlatform();
+    final bool isWebPlatform = _platformUtil.isWebPlatform();
     final Color selectedColor = Theme.of(context).colorScheme.onPrimary;
-    final double width =
-        isWeb ? AppDimens.containerSize430 : MediaQuery.of(context).size.width;
-    const double height = 56.0;
+    final double width = isWebPlatform
+        ? AppDimens.containerSize430
+        : MediaQuery.of(context).size.width;
+    const double height = AppDimens.size56;
 
     return Row(
       children: [
@@ -109,11 +118,12 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
                 size: Size(width, height),
                 painter: NavBarCustomPainter(
                   context,
-                  isWeb ? 0.5 : AppDimens.size16,
+                  isWebPlatform ? 0.5 : AppDimens.size16,
                 ),
               ),
-              _buildFAB(),
-              _buildNavigationBarIcons(width, height, selectedColor, isWeb),
+              _buildFAB(isWebPlatform),
+              _buildNavigationBarIcons(
+                  width, height, selectedColor, isWebPlatform),
             ],
           ),
         ),
@@ -128,32 +138,55 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _buildNavigationBarIcon(
-            0, selectedColor, AppIcons.homeOutlined, Icons.home_rounded, isWeb),
-        _buildNavigationBarIcon(1, selectedColor, AppIcons.searchOutlined,
-            Icons.search_rounded, isWeb),
+          ScreenIndex.home,
+          selectedColor,
+          AppIcons.homeOutlined,
+          Icons.home_rounded,
+          isWeb,
+        ),
+        _buildNavigationBarIcon(
+          ScreenIndex.search,
+          selectedColor,
+          AppIcons.searchOutlined,
+          Icons.search_rounded,
+          isWeb,
+        ),
         Container(width: width * 0.20),
-        _buildNavigationBarIcon(3, selectedColor,
-            AppIcons.settingsOutlinedStyle2, Icons.settings_rounded, isWeb),
-        _buildNavigationBarIcon(4, selectedColor, AppIcons.profileOutlined,
-            Icons.person_rounded, isWeb, onTap: () {
-          _selfProfileCubit.loadSelfProfileById(userId: widget.appUser.uid);
-          _setBottomBarIndex(4);
-        }),
+        _buildNavigationBarIcon(
+          ScreenIndex.settings,
+          selectedColor,
+          AppIcons.settingsOutlinedStyle2,
+          Icons.settings_rounded,
+          isWeb,
+        ),
+        _buildNavigationBarIcon(
+          ScreenIndex.selfProfile,
+          selectedColor,
+          AppIcons.profileOutlined,
+          Icons.person_rounded,
+          isWeb,
+          onTap: () {
+            _selfProfileCubit.loadSelfProfileById(
+              userId: widget.appUser.uid,
+            );
+            _setBottomBarIndex(ScreenIndex.selfProfile);
+          },
+        ),
       ],
     );
   }
 
-  Widget _buildFAB() {
+  Widget _buildFAB(bool isWebPlatform) {
     return Center(
       heightFactor: 0.6,
       child: RoundedCornerFAB(
-        onPressed: () => _setBottomBarIndex(2),
+        onPressed: () => _setBottomBarIndex(ScreenIndex.uploadPost),
         child: _buildIcon(
-          2,
+          ScreenIndex.uploadPost,
           AppColors.deepPurple200,
           AppIcons.addPostOutlinedStyle3,
           Icons.add_photo_alternate_outlined,
-          true,
+          isWebPlatform,
           isHighlight: true,
         ),
       ),
