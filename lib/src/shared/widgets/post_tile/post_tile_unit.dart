@@ -20,6 +20,7 @@ import 'package:lyxa_live/src/shared/widgets/post_tile/comment_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
+import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class PostTileUnit extends StatefulWidget {
@@ -638,44 +639,83 @@ class _PostTileUnitState extends State<PostTileUnit> {
           ? const EdgeInsets.symmetric(horizontal: AppDimens.size8)
           : const EdgeInsets.only(right: 200, left: AppDimens.size8),
       child: Divider(
-        height: 1,
-        color: Theme.of(context).colorScheme.inversePrimary.withOpacity(0.1),
+        height: 4,
+        color: Theme.of(context)
+            .colorScheme
+            .inversePrimary
+            .withOpacity(isLongDivider ? 0.3 : 0.2),
       ),
     );
   }
 
   Widget _buildCommentSection() {
-    return BlocBuilder<PostCubit, PostState>(
-      builder: (context, state) {
-        if (state is PostLoaded) {
-          final post = state.posts.firstWhere((p) => p.id == widget.post.id);
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppDimens.size4),
-            child: ListView.builder(
-              itemCount: post.comments.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) => CommentTileUnit(
-                comment: post.comments[index],
-                currentAppUser: widget.currentUser,
-                onDeletePressed: (comment) {
-                  _deleteSelectedComment(comment);
-                },
-              ),
-            ),
+    final post = widget.post;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppDimens.size4),
+      child: Column(
+        children: post.comments.map((comment) {
+          return CommentTileUnit(
+            comment: comment,
+            currentAppUser: widget.currentUser,
+            onDeletePressed: (comment) {
+              _deleteSelectedComment(comment);
+            },
           );
-        }
-
-        if (state is PostLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (state is PostError) {
-          return Center(child: Text(state.message));
-        }
-
-        return const SizedBox();
-      },
+        }).toList(),
+      ),
     );
+
+    // return SizedBox(
+    //   width: 300,
+    //   child: Padding(
+    //     padding: const EdgeInsets.symmetric(vertical: AppDimens.size4),
+    //     child: ListView.builder(
+    //       itemCount: post.comments.length,
+    //       shrinkWrap: true,
+    //       physics: const NeverScrollableScrollPhysics(),
+    //       itemBuilder: (context, index) => CommentTileUnit(
+    //         comment: post.comments[index],
+    //         currentAppUser: widget.currentUser,
+    //         onDeletePressed: (comment) {
+    //           _deleteSelectedComment(comment);
+    //         },
+    //       ),
+    //     ),
+    //   ),
+    // );
+
+    // return BlocBuilder<PostCubit, PostState>(
+    //   builder: (context, state) {
+    //     if (state is PostLoaded) {
+    //       final post = state.posts.firstWhere((post) => post.id == widget.post.id);
+    //       return Padding(
+    //         padding: const EdgeInsets.symmetric(vertical: AppDimens.size4),
+    //         child: ListView.builder(
+    //           itemCount: post.comments.length,
+    //           shrinkWrap: true,
+    //           physics: const NeverScrollableScrollPhysics(),
+    //           itemBuilder: (context, index) => CommentTileUnit(
+    //             comment: post.comments[index],
+    //             currentAppUser: widget.currentUser,
+    //             onDeletePressed: (comment) {
+    //               _deleteSelectedComment(comment);
+    //             },
+    //           ),
+    //         ),
+    //       );
+    //     }
+
+    //     if (state is PostLoading) {
+    //       return const Center(child: CircularProgressIndicator());
+    //     }
+
+    //     if (state is PostError) {
+    //       return Center(child: Text(state.message));
+    //     }
+
+    //     return const SizedBox();
+    //   },
+    // );
   }
 }
