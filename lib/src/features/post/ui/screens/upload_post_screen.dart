@@ -8,7 +8,6 @@ import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
-import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
@@ -248,10 +247,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         children: [
           OutlinedButton(
             onPressed: () {
-              setState(() {
-                _captionController.text = '';
-                _selectedImage = null;
-              });
+              _openLogoutDialog();
             },
             style: OutlinedButton.styleFrom(
               side: BorderSide(
@@ -317,6 +313,47 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
                   ),
                 ],
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _openLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+        title: Text(
+          AppStrings.clearButtonMsg,
+          style:
+              TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+        ),
+        actions: [
+          // CANCEL BUTTON
+          TextButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
+            },
+            child: Text(
+              AppStrings.cancel,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onInverseSurface),
+            ),
+          ),
+          // SAVE/SUBMIT BUTTON
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _captionController.text = '';
+                _selectedImage = null;
+              });
+              Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
+            },
+            child: Text(
+              AppStrings.yesSure,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
         ],

@@ -129,6 +129,9 @@ class AppStrings {
   static const String logoutDialogMsg = 'Are you sure to logout?';
   static const String yesLogout = 'Yes, logout';
 
+  static const String clearButtonMsg = 'Are you sure you want to clear all?';
+  static const String yesSure = 'Yes, Sure';
+
   static const String refreshPosts = 'Refresh Posts';
   static const String addNewPost = 'Add New Post';
   static const String refreshCooldownMessage =
