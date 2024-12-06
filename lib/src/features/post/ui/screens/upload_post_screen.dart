@@ -157,7 +157,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
               child: Image.memory(
                 _selectedImage!,
                 width: double.infinity,
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.contain,
               ),
             ),
           )
