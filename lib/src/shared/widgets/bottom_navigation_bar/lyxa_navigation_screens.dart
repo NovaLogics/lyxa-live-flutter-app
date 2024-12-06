@@ -29,200 +29,165 @@ class LyxaNavigationScreens extends StatefulWidget {
 }
 
 class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
-  late final List<Widget> screens;
-  final _platformUtil = getIt<PlatformUtil>();
-  int _currentIndex = 0;
-  final SelfProfileCubit _selfprofileCubit = getIt<SelfProfileCubit>();
-
+  late final List<Widget> _screens;
+  final PlatformUtil _platformUtil = getIt<PlatformUtil>();
+  final SelfProfileCubit _selfProfileCubit = getIt<SelfProfileCubit>();
   final GlobalKey<SearchScreenState> _searchScreenKey =
       GlobalKey<SearchScreenState>();
-
   final GlobalKey<UploadPostScreenState> _postScreenKey =
       GlobalKey<UploadPostScreenState>();
 
-  setBottomBarIndex(int index) {
-    setState(() {
-      _currentIndex = index;
-      _searchScreenKey.currentState!.updateFocusState();
-      _postScreenKey.currentState!.updateFocusState();
-    });
-  }
-
-  void _handlePostUploadedState() {
-    setBottomBarIndex(0);
-  }
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-
-    screens = [
-      const HomeScreen(),
-      SearchScreen(key: _searchScreenKey),
-      UploadPostScreen(
-        onPostUploaded: () {
-          _handlePostUploadedState();
-        },
-        key: _postScreenKey,
-      ),
-      const SettingsScreen(),
-      const SelfProfileScreen(),
-    ];
-
-    _selfprofileCubit.loadSelfProfileById(
-      userId: widget.appUser.uid,
-    );
+    _initializeScreens();
+    _selfProfileCubit.loadSelfProfileById(userId: widget.appUser.uid);
   }
 
   @override
   void dispose() {
+    _screens.clear();
     super.dispose();
-    screens.clear();
+  }
+
+  void _initializeScreens() {
+    _screens = [
+      const HomeScreen(),
+      SearchScreen(key: _searchScreenKey),
+      UploadPostScreen(
+        key: _postScreenKey,
+        onPostUploaded: _onPostUploaded,
+      ),
+      const SettingsScreen(),
+      const SelfProfileScreen(),
+    ];
+  }
+
+  void _onPostUploaded() {
+    _setBottomBarIndex(0);
+  }
+
+  void _setBottomBarIndex(int index) {
+    setState(() {
+      _currentIndex = index;
+      _searchScreenKey.currentState?.updateFocusState();
+      _postScreenKey.currentState?.updateFocusState();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        getIt<GradientBackgroundUnit>(
-          param1: AppDimens.containerSize430,
-          param2: BackgroundStyle.main,
-        ),
-        Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          body: Stack(
-            children: [
-              IndexedStack(
-                index: _currentIndex,
-                children: screens,
-              ),
-            ],
-          ),
-          bottomNavigationBar: _buildBar(context),
-        ),
+       // _buildBackground(),
+        _buildScaffold(context),
       ],
     );
   }
 
-  Widget _buildBar(BuildContext context) {
-    final isWebPlatform = _platformUtil.isWebPlatform();
-    final selectedColor = Theme.of(context).colorScheme.onPrimary;
-    final Size size = MediaQuery.of(context).size;
-    final sizeWidth = isWebPlatform ? AppDimens.containerSize430 : size.width;
-    const sizeHeight = 56.0;
+  Widget _buildBackground() {
+    return getIt<GradientBackgroundUnit>(
+      param1: AppDimens.containerSize430,
+      param2: BackgroundStyle.main,
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _screens,
+      ),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
+    );
+  }
+
+  Widget _buildBottomNavigationBar(BuildContext context) {
+    final bool isWeb = _platformUtil.isWebPlatform();
+    final Color selectedColor = Theme.of(context).colorScheme.onPrimary;
+    final double width =
+        isWeb ? AppDimens.containerSize430 : MediaQuery.of(context).size.width;
+    const double height = 56.0;
 
     return Row(
       children: [
         const Spacer(),
-        Stack(
-          children: [
-            SizedBox(
-              width: sizeWidth,
-              height: sizeHeight,
-              child: Stack(
-                clipBehavior: Clip.hardEdge,
-                children: [
-                  CustomPaint(
-                    size: Size(sizeWidth, sizeHeight),
-                    painter: NavBarCustomPainter(
-                      context,
-                      isWebPlatform ? 0.5 : AppDimens.size16,
-                    ),
-                  ),
-
-                  // ADD POST
-                  Center(
-                      heightFactor: 0.6,
-                      child: RoundedCornerFAB(
-                        onPressed: () {
-                          setBottomBarIndex(2);
-                        },
-                        child: _buildIcon(
-                          2,
-                          selectedColor,
-                          AppIcons.addPostOutlinedStyle3,
-                          Icons.add_photo_alternate_outlined,
-                          isWebPlatform,
-                          isHighlight: true,
-                        ),
-                      )),
-
-                  // HOME
-                  SizedBox(
-                    width: sizeWidth,
-                    height: sizeHeight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                          icon: _buildIcon(
-                            0,
-                            selectedColor,
-                            AppIcons.homeOutlined,
-                            Icons.home_rounded,
-                            isWebPlatform,
-                          ),
-                          onPressed: () {
-                            setBottomBarIndex(0);
-                          },
-                        ),
-
-                        // SEARCH
-                        IconButton(
-                          icon: _buildIcon(
-                            1,
-                            selectedColor,
-                            AppIcons.searchOutlined,
-                            Icons.search_rounded,
-                            isWebPlatform,
-                          ),
-                          onPressed: () {
-                            setBottomBarIndex(1);
-                          },
-                        ),
-
-                        // Spacer for FAB
-                        Container(width: sizeWidth * 0.20),
-
-                        // SETTINGS
-                        IconButton(
-                          icon: _buildIcon(
-                            3,
-                            selectedColor,
-                            AppIcons.settingsOutlinedStyle2,
-                            Icons.settings_rounded,
-                            isWebPlatform,
-                          ),
-                          onPressed: () {
-                            setBottomBarIndex(3);
-                          },
-                        ),
-
-                        // PROFILE
-                        IconButton(
-                          icon: _buildIcon(
-                            4,
-                            selectedColor,
-                            AppIcons.profileOutlined,
-                            Icons.person_rounded,
-                            isWebPlatform,
-                          ),
-                          onPressed: () {
-                            _selfprofileCubit.loadSelfProfileById(
-                                userId: widget.appUser.uid);
-                            setBottomBarIndex(4);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+        SizedBox(
+          width: width,
+          height: height,
+          child: Stack(
+            clipBehavior: Clip.hardEdge,
+            children: [
+              CustomPaint(
+                size: Size(width, height),
+                painter: NavBarCustomPainter(
+                  context,
+                  isWeb ? 0.5 : AppDimens.size16,
+                ),
               ),
-            ),
-          ],
+              _buildNavigationBarIcons(width, height, selectedColor, isWeb),
+            ],
+          ),
         ),
         const Spacer(),
       ],
+    );
+  }
+
+  Widget _buildNavigationBarIcons(
+      double width, double height, Color selectedColor, bool isWeb) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildNavigationBarIcon(
+            0, selectedColor, AppIcons.homeOutlined, Icons.home_rounded, isWeb),
+        _buildNavigationBarIcon(1, selectedColor, AppIcons.searchOutlined,
+            Icons.search_rounded, isWeb),
+        _buildFAB(),
+        _buildNavigationBarIcon(3, selectedColor,
+            AppIcons.settingsOutlinedStyle2, Icons.settings_rounded, isWeb),
+        _buildNavigationBarIcon(4, selectedColor, AppIcons.profileOutlined,
+            Icons.person_rounded, isWeb, onTap: () {
+          _selfProfileCubit.loadSelfProfileById(userId: widget.appUser.uid);
+        }),
+      ],
+    );
+  }
+
+  Widget _buildFAB() {
+    return RoundedCornerFAB(
+      onPressed: () => _setBottomBarIndex(2),
+      child: _buildIcon(
+        2,
+        AppColors.deepPurple200,
+        AppIcons.addPostOutlinedStyle3,
+        Icons.add_photo_alternate_outlined,
+        true,
+        isHighlight: true,
+      ),
+    );
+  }
+
+  Widget _buildNavigationBarIcon(
+    int index,
+    Color color,
+    String iconMobile,
+    IconData iconWeb,
+    bool isWebPlatform, {
+    VoidCallback? onTap,
+  }) {
+    return IconButton(
+      icon: _buildIcon(
+        index,
+        color,
+        iconMobile,
+        iconWeb,
+        isWebPlatform,
+      ),
+      onPressed: onTap ?? () => _setBottomBarIndex(index),
     );
   }
 
@@ -234,23 +199,13 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
     bool isWebPlatform, {
     bool isHighlight = false,
   }) {
-    if (_currentIndex != index) color = AppColors.grayDark;
+    final double size = isHighlight ? AppDimens.size28 : AppDimens.size24;
+    final isSelected = _currentIndex == index;
 
-    double size = isHighlight ? AppDimens.size28 : AppDimens.size24;
-    if (isHighlight) {
-      if (_currentIndex == index) {
-        color = AppColors.whiteLight;
-      } else {
-        color = AppColors.deepPurple200;
-      }
-    }
+    color = isSelected ? AppColors.whiteLight : color;
 
     return isWebPlatform
-        ? Icon(
-            iconWeb,
-            color: color,
-            size: size,
-          )
+        ? Icon(iconWeb, color: color, size: size)
         : SvgPicture.asset(
             iconMobile,
             colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
