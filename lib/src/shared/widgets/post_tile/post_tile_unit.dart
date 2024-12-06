@@ -343,6 +343,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
                 // ),
                 const SizedBox(width: AppDimens.size8),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Username
                     Text(
@@ -352,10 +353,11 @@ class _PostTileUnitState extends State<PostTileUnit> {
                       ),
                     ),
                     // Time Ago text
+
                     Padding(
-                      padding: const EdgeInsets.only(left: 1),
+                      padding: const EdgeInsets.only(left: AppDimens.size2),
                       child: Text(
-                        DateTimeUtil.datetimeAgo(widget.post.timestamp),
+                        DateTimeUtil.datetimeAgo(widget.post.timestamp).trim(),
                         style: AppStyles.textNumberStyle2.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                           fontSize: AppDimens.fontSizeSM12,
