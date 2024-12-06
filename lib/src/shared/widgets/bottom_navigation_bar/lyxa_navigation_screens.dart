@@ -12,7 +12,7 @@ import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/self_profile_screen.dart';
 import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
 import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
-import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/nav_custom_painter.dart';
+import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/nav_bar_custom_painter.dart';
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/rounded_corners_fab.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
@@ -124,7 +124,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
                 children: [
                   CustomPaint(
                     size: Size(sizeWidth, sizeHeight),
-                    painter: NavCustomPainter(
+                    painter: NavBarCustomPainter(
                       context,
                       isWebPlatform ? 0.5 : AppDimens.size16,
                     ),

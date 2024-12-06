@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class NavCustomPainter extends CustomPainter {
+class NavBarCustomPainter extends CustomPainter {
   final BuildContext context;
   final double elevation;
 
-  NavCustomPainter(this.context, this.elevation);
+  NavBarCustomPainter(this.context, this.elevation);
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
