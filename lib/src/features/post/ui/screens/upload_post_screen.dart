@@ -231,7 +231,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         children: [
           CustomOutlinedButton(
             onPressed: () {
-              _openLogoutDialog();
+              _openClearDataDialog();
             },
             text: AppStrings.clearButton,
             icon: Icon(
@@ -260,7 +260,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     );
   }
 
-  void _openLogoutDialog() {
+  void _openClearDataDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

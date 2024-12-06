@@ -13,6 +13,8 @@ import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/self_profile_state.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
+import 'package:lyxa_live/src/shared/widgets/custom_outlined_button.dart';
+import 'package:lyxa_live/src/shared/widgets/gradient_button.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
@@ -230,4 +232,44 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
+
+    Widget _buildActionButtonsRow() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CustomOutlinedButton(
+            onPressed: () {
+              _openLogoutDialog();
+            },
+            text: AppStrings.clearButton,
+            icon: Icon(
+              Icons.clear_all_rounded,
+              color: Theme.of(context).colorScheme.onSecondary,
+              size: AppDimens.iconSizeSM22,
+            ),
+            borderColor: Theme.of(context).colorScheme.onPrimary,
+            textStyle: AppStyles.buttonTextPrimary.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(width: AppDimens.size16),
+          GradientButtonV1(
+            onTap: _handleUploadPost,
+            text: AppStrings.uploadPostButton,
+            icon: const Icon(
+              Icons.arrow_circle_up_outlined,
+              color: AppColors.whiteLight,
+              size: AppDimens.actionIconSize26,
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }
+
+
+
