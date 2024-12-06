@@ -98,11 +98,14 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverAppBar(
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
             backgroundColor: Theme.of(context).colorScheme.surface,
-            expandedHeight: AppDimens.size52,
+            toolbarHeight: AppDimens.size48,
             floating: true,
             pinned: false,
             flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.all(AppDimens.size12),
+              titlePadding: const EdgeInsets.only(
+                left: AppDimens.size12,
+                bottom: AppDimens.size8,
+              ),
               title: Text(
                 AppStrings.homeTitle,
                 style: AppStyles.textAppBarStatic.copyWith(
