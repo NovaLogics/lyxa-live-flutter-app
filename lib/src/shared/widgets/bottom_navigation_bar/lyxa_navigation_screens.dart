@@ -98,9 +98,8 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
 
   Widget _buildBottomNavigationBar(BuildContext context) {
     final Color color = Theme.of(context).colorScheme.onTertiaryFixedVariant;
-    final double width = kIsWeb
-        ? AppDimens.containerSize430
-        : MediaQuery.of(context).size.width;
+    final double width =
+        kIsWeb ? AppDimens.containerSize430 : MediaQuery.of(context).size.width;
     const double height = AppDimens.size56;
 
     return Row(
@@ -120,8 +119,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
                 ),
               ),
               _buildFAB(kIsWeb),
-              _buildNavigationBarIcons(
-                  width, height, color, kIsWeb),
+              _buildNavigationBarIcons(width, height, color, kIsWeb),
             ],
           ),
         ),
