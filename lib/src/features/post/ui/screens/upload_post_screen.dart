@@ -151,10 +151,15 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     return _selectedImage != null
         ? Padding(
             padding: const EdgeInsets.all(AppDimens.paddingRG8),
-            child: Image.memory(
-              _selectedImage!,
-              width: double.infinity,
-              fit: BoxFit.contain,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 240,
+              ),
+              child: Image.memory(
+                _selectedImage!,
+                width: double.infinity,
+                fit: BoxFit.fitHeight,
+              ),
             ),
           )
         : const Icon(

@@ -670,7 +670,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           return Center(child: Text(state.message));
         }
 
-        return const Center(child: SizedBox());
+        return const SizedBox();
       },
     );
   }
