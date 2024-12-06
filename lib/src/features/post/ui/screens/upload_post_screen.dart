@@ -8,10 +8,10 @@ import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
-import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
+import 'package:lyxa_live/src/shared/widgets/custom_outlined_button.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_button.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
@@ -170,41 +170,20 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
   Widget _buildPickImageButton() {
     return Center(
-      child: OutlinedButton(
+      child: CustomOutlinedButton(
         onPressed: () {
           _handleImageSelection();
         },
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
-              color: Theme.of(context).colorScheme.onSecondary, width: 2),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimens.radiusLG20),
-          ),
-          elevation: 4,
-          backgroundColor: Colors.transparent,
+        text: AppStrings.pickImageButton,
+        icon: Icon(
+          Icons.filter,
+          color: Theme.of(context).colorScheme.onSecondary,
+          size: AppDimens.iconSizeSM24,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimens.size12),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Customizable Text
-              Text(
-                AppStrings.pickImageButton,
-                style: AppStyles.buttonTextPrimary.copyWith(
-                  color: Theme.of(context).colorScheme.onSecondary,
-                ),
-              ),
-              const SizedBox(width: AppDimens.size8),
-              // Customizable Icon
-
-              Icon(
-                Icons.filter,
-                color: Theme.of(context).colorScheme.onSecondary,
-                size: AppDimens.iconSizeSM24,
-              ),
-            ],
-          ),
+        borderColor: Theme.of(context).colorScheme.onSecondary,
+        textStyle: AppStyles.buttonTextPrimary.copyWith(
+          color: Theme.of(context).colorScheme.onSecondary,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -244,39 +223,20 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          OutlinedButton(
+          CustomOutlinedButton(
             onPressed: () {
               _openLogoutDialog();
             },
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(
-                  color: Theme.of(context).colorScheme.onPrimary, width: 2),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppDimens.radiusLG20),
-              ),
-              elevation: 4,
-              backgroundColor: Colors.transparent,
+            text: AppStrings.clearButton,
+            icon: Icon(
+              Icons.clear_all_rounded,
+              color: Theme.of(context).colorScheme.onSecondary,
+              size: AppDimens.iconSizeSM22,
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    AppStrings.clearButton,
-                    style: AppStyles.buttonTextPrimary.copyWith(
-                      color: Theme.of(context).colorScheme.onSecondary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(width: AppDimens.size8),
-                  Icon(
-                    Icons.clear_all_rounded,
-                    color: Theme.of(context).colorScheme.onSecondary,
-                    size: AppDimens.iconSizeSM22,
-                  ),
-                ],
-              ),
+            borderColor: Theme.of(context).colorScheme.onPrimary,
+            textStyle: AppStyles.buttonTextPrimary.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(width: AppDimens.size16),
