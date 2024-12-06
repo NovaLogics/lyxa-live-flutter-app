@@ -32,6 +32,7 @@ class UploadPostScreen extends StatefulWidget {
 
 class _UploadPostScreenState extends State<UploadPostScreen> {
   final TextEditingController _captionController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   late final ProfileService _profileService;
   late final PostCubit _postCubit;
   late final HomeCubit _homeCubit;
@@ -46,6 +47,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   @override
   void dispose() {
     _captionController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -139,13 +141,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           ),
         ),
       ),
-      actions: [
-        IconButton(
-          onPressed: _handleUploadPost,
-          icon: const Icon(Icons.upload),
-        ),
-        addSpacing(width: AppDimens.size12),
-      ],
     );
   }
 
@@ -222,8 +217,9 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           Text(
             AppStrings.caption,
             style: AppStyles.subtitleSecondary.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.onSecondary,
               fontWeight: FontWeight.bold,
+              letterSpacing: AppDimens.letterSpacingPT05,
               shadows: AppStyles.shadowStyleEmpty,
             ),
           ),
@@ -231,6 +227,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           MultilineTextFieldUnit(
             controller: _captionController,
             // labelText: AppStrings.captionLabel,
+            focusNode: _focusNode,
             hintText: AppStrings.captionHint,
             maxLength: TextFieldLimits.postField,
           ),
@@ -335,6 +332,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           TextButton(
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
+              _focusNode.unfocus();
             },
             child: Text(
               AppStrings.cancel,
@@ -350,6 +348,9 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
                 _selectedImage = null;
               });
               Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
+              setState(() {
+                _focusNode.unfocus();
+              });
             },
             child: Text(
               AppStrings.yesSure,
