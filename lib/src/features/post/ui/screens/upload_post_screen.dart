@@ -29,12 +29,12 @@ class UploadPostScreen extends StatefulWidget {
   });
 
   @override
-  State<UploadPostScreen> createState() => _UploadPostScreenState();
+  State<UploadPostScreen> createState() => UploadPostScreenState();
 }
 
-class _UploadPostScreenState extends State<UploadPostScreen> {
+class UploadPostScreenState extends State<UploadPostScreen> {
   final TextEditingController _captionController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  final FocusNode _captionFocusNode = FocusNode();
   late final ProfileService _profileService;
   late final PostCubit _postCubit;
   late final HomeCubit _homeCubit;
@@ -49,7 +49,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   @override
   void dispose() {
     _captionController.dispose();
-    _focusNode.dispose();
+    _captionFocusNode.dispose();
     super.dispose();
   }
 
@@ -87,6 +87,10 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         }
       },
     );
+  }
+
+ void updateFocusState() {
+    _captionFocusNode.unfocus();
   }
 
   void _initScreen() async {
@@ -214,7 +218,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           MultilineTextFieldUnit(
             controller: _captionController,
             // labelText: AppStrings.captionLabel,
-            focusNode: _focusNode,
+            focusNode: _captionFocusNode,
             hintText: AppStrings.captionHint,
             maxLength: TextFieldLimits.postField,
           ),
@@ -275,7 +279,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           TextButton(
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
-              _focusNode.unfocus();
+              _captionFocusNode.unfocus();
             },
             child: Text(
               AppStrings.cancel,
@@ -291,7 +295,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
               });
               Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
               setState(() {
-                _focusNode.unfocus();
+                _captionFocusNode.unfocus();
               });
             },
             child: Text(

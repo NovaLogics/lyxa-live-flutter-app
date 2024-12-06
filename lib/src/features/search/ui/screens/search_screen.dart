@@ -13,11 +13,12 @@ class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchScreen> createState() => SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
   late final SearchCubit _searchCubit;
 
   String get _searchQueryString => _searchController.text;
@@ -32,6 +33,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -65,6 +67,10 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  void updateFocusState() {
+    _searchFocusNode.unfocus();
+  }
+
   Widget _buildSearchBar() {
     return SizedBox(
       width: AppDimens.size280,
@@ -75,6 +81,7 @@ class _SearchScreenState extends State<SearchScreen> {
         style: AppStyles.textFieldStyleMain.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
+        focusNode: _searchFocusNode,
         decoration: InputDecoration(
           hintText: AppStrings.searchUsers,
           hintStyle: AppStyles.textFieldStyleHint.copyWith(

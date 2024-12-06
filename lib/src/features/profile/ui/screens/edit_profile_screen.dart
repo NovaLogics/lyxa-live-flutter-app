@@ -139,19 +139,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
       title: Center(
-        child: Text(
-          AppStrings.editProfile,
-          style: AppStyles.textAppBarStatic.copyWith(
-            color: Theme.of(context).colorScheme.onPrimary,
+        child: Padding(
+          padding: const EdgeInsets.only(right: AppDimens.size32),
+          child: Text(
+            AppStrings.editProfile,
+            style: AppStyles.textAppBarStatic.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
           ),
         ),
       ),
-      actions: [
-        IconButton(
-          onPressed: _handleProfileUpdate,
-          icon: const Icon(Icons.upload),
-        ),
-      ],
     );
   }
 

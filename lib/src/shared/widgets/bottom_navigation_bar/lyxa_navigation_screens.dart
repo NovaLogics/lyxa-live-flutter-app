@@ -34,11 +34,17 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
   int _currentIndex = 0;
   final SelfProfileCubit _selfprofileCubit = getIt<SelfProfileCubit>();
 
-  AppUserEntity get _appUser => widget.appUser;
+  final GlobalKey<SearchScreenState> _searchScreenKey =
+      GlobalKey<SearchScreenState>();
+
+  final GlobalKey<UploadPostScreenState> _postScreenKey =
+      GlobalKey<UploadPostScreenState>();
 
   setBottomBarIndex(int index) {
     setState(() {
       _currentIndex = index;
+      _searchScreenKey.currentState!.updateFocusState();
+      _postScreenKey.currentState!.updateFocusState();
     });
   }
 
@@ -52,11 +58,12 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
 
     screens = [
       const HomeScreen(),
-      const SearchScreen(),
+      SearchScreen(key: _searchScreenKey),
       UploadPostScreen(
         onPostUploaded: () {
           _handlePostUploadedState();
         },
+        key: _postScreenKey,
       ),
       const SettingsScreen(),
       const SelfProfileScreen(),
