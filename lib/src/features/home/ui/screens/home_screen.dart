@@ -97,8 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
         slivers: [
           SliverAppBar(
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            backgroundColor:
-                Theme.of(context).colorScheme.surface.withOpacity(0.95),
+            backgroundColor: Theme.of(context).colorScheme.surface,
             expandedHeight: AppDimens.size52,
             floating: true,
             pinned: false,
@@ -158,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
       message = errorState.message;
     }
     Logger.logDebug(message.toString());
-    
+
     return Center(
       child: Text(
         message ?? '',
