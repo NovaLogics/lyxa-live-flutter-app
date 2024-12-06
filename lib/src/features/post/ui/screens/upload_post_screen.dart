@@ -59,9 +59,12 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           body: Column(
             children: [
               _buildImagePreview(),
+              addSpacing(height: AppDimens.size8),
               _buildPickImageButton(),
               addSpacing(height: AppDimens.size28),
               _buildCaptionInput(),
+              addSpacing(height: AppDimens.size28),
+              _buildActionButtonsRow(),
               addSpacing(height: AppDimens.size72),
             ],
           ),
@@ -171,12 +174,41 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
   Widget _buildPickImageButton() {
     return Center(
-      child: GradientButton(
-        text: AppStrings.pickImageButton,
-        onPressed: _handleImageSelection,
-        icon: const Icon(
-          Icons.filter,
-          color: AppColors.whiteLight,
+      child: OutlinedButton(
+        onPressed: () {
+          _handleImageSelection();
+        },
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(
+              color: Theme.of(context).colorScheme.onSecondary, width: 2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppDimens.radiusLG20),
+          ),
+          elevation: 4,
+          backgroundColor: Colors.transparent,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(AppDimens.size12),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Customizable Text
+              Text(
+                AppStrings.pickImageButton,
+                style: AppStyles.buttonTextPrimary.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
+              ),
+              const SizedBox(width: AppDimens.size8),
+              // Customizable Icon
+
+              Icon(
+                Icons.filter,
+                color: Theme.of(context).colorScheme.onSecondary,
+                size: AppDimens.iconSizeSM24,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -202,6 +234,90 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
             // labelText: AppStrings.captionLabel,
             hintText: AppStrings.captionHint,
             maxLength: TextFieldLimits.postField,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButtonsRow() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          OutlinedButton(
+            onPressed: () {
+              setState(() {
+                _captionController.text = '';
+                _selectedImage = null;
+              });
+            },
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(
+                  color: Theme.of(context).colorScheme.onPrimary, width: 2),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppDimens.radiusLG20),
+              ),
+              elevation: 4,
+              backgroundColor: Colors.transparent,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    AppStrings.clearButton,
+                    style: AppStyles.buttonTextPrimary.copyWith(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(width: AppDimens.size8),
+                  Icon(
+                    Icons.clear_all_rounded,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    size: AppDimens.iconSizeSM22,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: AppDimens.size16),
+          GestureDetector(
+            onTap: () {
+              _handleUploadPost();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Colors.blue, Colors.purple],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(AppDimens.radiusLG20),
+              ),
+              padding: const EdgeInsets.symmetric(
+                  vertical: AppDimens.size12, horizontal: AppDimens.size24),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    AppStrings.uploadPostButton,
+                    style: AppStyles.buttonTextPrimary.copyWith(
+                      color: AppColors.whiteLight,
+                    ),
+                  ),
+                  const SizedBox(width: AppDimens.size8),
+                  const Icon(
+                    Icons.arrow_circle_up_outlined,
+                    color: AppColors.whiteLight,
+                    size: AppDimens.actionIconSize26,
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
