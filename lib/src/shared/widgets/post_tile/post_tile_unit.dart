@@ -128,6 +128,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           hintText: AppStrings.typeComment,
           // labelText: AppStrings.addComment,
           maxLength: TextFieldLimits.commentsField,
+          autofocus: true,
         ),
         actions: [
           // CANCEL BUTTON
