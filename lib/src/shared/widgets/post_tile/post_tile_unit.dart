@@ -225,6 +225,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
           TextButton(
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
+              FocusScope.of(context).unfocus();
             },
             child: Text(
               AppStrings.cancel,
@@ -237,6 +238,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
             onPressed: () {
               widget.onDeletePressed!();
               Navigator.of(context).pop();
+              FocusScope.of(context).unfocus();
             },
             child: Text(
               AppStrings.delete,

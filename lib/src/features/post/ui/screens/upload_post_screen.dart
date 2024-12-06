@@ -76,6 +76,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       listener: (context, state) {
         if (state is PostUploaded) {
           _homeCubit.getAllPosts();
+          _clearAll();
           widget.onPostUploaded();
         } else if (state is PostErrorToast) {
           _handleErrorToast(state.message);
@@ -127,6 +128,11 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       customMessage: message,
       onRetry: () {},
     );
+  }
+
+  void _clearAll() {
+    _captionController.text = '';
+    _selectedImage = null;
   }
 
   void _hideKeyboard() => FocusScope.of(context).unfocus();
@@ -281,8 +287,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           TextButton(
             onPressed: () {
               setState(() {
-                _captionController.text = '';
-                _selectedImage = null;
+                _clearAll();
               });
               Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
               setState(() {
