@@ -7,14 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/post/data/models/post_model.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/repositories/post_repository.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/storage/domain/repositories/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
@@ -22,7 +21,6 @@ import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
 class PostCubit extends Cubit<PostState> {
-  static const String debugTag = 'PostCubit';
   final PostRepository _postRepository;
   final StorageRepository _storageRepository;
   List<PostEntity> _postList = List.empty();
@@ -36,19 +34,13 @@ class PostCubit extends Cubit<PostState> {
         _postRepository = postRepository,
         super(PostInitial());
 
-  Future<ProfileUserEntity> getCurrentUser() async {
-    _showLoading(AppStrings.loadingMessage);
-    final profileUser = await getIt<ProfileCubit>().getCurrentUser();
-    _hideLoading();
-    return profileUser;
-  }
-
   Future<bool> getAllPosts() async {
     _showLoading(AppStrings.loadingMessage);
 
     final getPostsResult = await _postRepository.getAllPosts();
 
     _hideLoading();
+
     switch (getPostsResult.status) {
       case Status.success:
         _postList = getPostsResult.data ?? List.empty();
@@ -58,7 +50,7 @@ class PostCubit extends Cubit<PostState> {
       case Status.error:
         _handleErrors(
           result: getPostsResult,
-          tag: '$debugTag: getAllPosts()',
+          tag: _getCurrentFunctionName(),
         );
         return false;
     }
@@ -88,7 +80,7 @@ class PostCubit extends Cubit<PostState> {
     if (imageUploadResult.status == Status.error) {
       _handleErrors(
         result: imageUploadResult,
-        tag: '$debugTag: addPost()::imageUploadResult',
+        tag: _getCurrentFunctionName(),
       );
       _hideLoading();
       return false;
@@ -117,7 +109,7 @@ class PostCubit extends Cubit<PostState> {
       case Status.error:
         _handleErrors(
           result: postUploadResult,
-          tag: '$debugTag: addPost()::postUploadResult',
+          tag: _getCurrentFunctionName(),
         );
         return false;
     }
@@ -141,7 +133,7 @@ class PostCubit extends Cubit<PostState> {
       case Status.error:
         _handleErrors(
           result: postDeleteResult,
-          tag: '$debugTag: deletePost()',
+          tag: _getCurrentFunctionName(),
         );
         return false;
     }
@@ -164,7 +156,7 @@ class PostCubit extends Cubit<PostState> {
         _handleErrors(
           result: result,
           prefixMessage: 'Failed to toggle like',
-          tag: '$debugTag: toggleLikePost()',
+          tag: _getCurrentFunctionName(),
         );
         break;
     }
@@ -187,7 +179,7 @@ class PostCubit extends Cubit<PostState> {
         _handleErrors(
           result: result,
           prefixMessage: 'Failed to add comment',
-          tag: '$debugTag: addComment()',
+          tag: _getCurrentFunctionName(),
         );
         break;
     }
@@ -210,7 +202,7 @@ class PostCubit extends Cubit<PostState> {
         _handleErrors(
           result: result,
           prefixMessage: 'Failed to delete the comment',
-          tag: '$debugTag: deleteComment()',
+          tag: _getCurrentFunctionName(),
         );
         break;
     }
@@ -268,8 +260,15 @@ class PostCubit extends Cubit<PostState> {
     LoadingCubit.hideLoading();
   }
 
-  void _handleErrors(
-      {required Result result, String? prefixMessage, String? tag}) {
+  void _handleErrors({
+    required Result result,
+    String? prefixMessage = '',
+    String? tag = '',
+  }) {
+    final String debugTag =
+        '${(PostCubit).toString()} :: $tag | $prefixMessage';
+    Logger.logError(debugTag);
+
     // FIREBASE ERROR
     if (result.isFirebaseError()) {
       emit(PostErrorToast(result.getFirebaseAlert()));
@@ -315,7 +314,18 @@ class PostCubit extends Cubit<PostState> {
       filePath,
       minWidth: 800,
       minHeight: 800,
-      quality: 90,
+      quality: 95,
     );
+  }
+
+  String _getCurrentFunctionName() {
+    try {
+      final stackTrace = StackTrace.current.toString();
+      final functionName = stackTrace.split('\n')[1].trim().split(' ')[1];
+      return functionName;
+    } catch (e) {
+      Logger.logError('${ErrorMsgs.functionExtractFailError} $e');
+      return ErrorMsgs.unknownFunction;
+    }
   }
 }

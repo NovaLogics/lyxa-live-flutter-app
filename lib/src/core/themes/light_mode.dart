@@ -32,7 +32,7 @@ const ColorScheme lightColorScheme = ColorScheme.light(
   // Text/Icon color on tertiary (for additional accent elements)
   onTertiary: AppColors.bluePurple900,
 
-  // --- Error Colors ---
+  onTertiaryFixedVariant: Color.fromARGB(255, 117, 94, 157) ,// --- Error Colors ---
   // Error color (used for error states)
   error: Colors.red,
   // Text/Icon color on error

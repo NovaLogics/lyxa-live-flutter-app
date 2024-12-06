@@ -30,6 +30,7 @@ const ColorScheme darkColorScheme = ColorScheme.dark(
   // Text/Icon color on tertiary
   onTertiary: AppColors.bluePurple50,
   onTertiaryContainer: AppColors.bluePurple50,
+  onTertiaryFixedVariant:Colors.blueAccent, // AppColors.deepPurple400, blueAccent
 
   // --- Error Colors ---
   // Error color (used for error states)

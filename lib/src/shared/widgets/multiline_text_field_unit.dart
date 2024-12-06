@@ -8,6 +8,8 @@ class MultilineTextFieldUnit extends StatelessWidget {
   final String hintText;
   // final String labelText;
   final int maxLength;
+  final FocusNode? focusNode;
+  final bool? autofocus;
 
   const MultilineTextFieldUnit({
     super.key,
@@ -15,6 +17,8 @@ class MultilineTextFieldUnit extends StatelessWidget {
     required this.hintText,
     // required this.labelText,
     this.maxLength = TextFieldLimits.defaultLimit,
+    this.focusNode,
+    this.autofocus,
   });
 
   @override
@@ -22,11 +26,13 @@ class MultilineTextFieldUnit extends StatelessWidget {
     return TextField(
       controller: controller,
       maxLines: 5,
+      focusNode: focusNode ?? FocusNode(),
       textCapitalization: TextCapitalization.sentences,
       maxLength: maxLength,
       style: AppStyles.textFieldStyleMain.copyWith(
         color: Theme.of(context).colorScheme.inversePrimary,
       ),
+      autofocus: autofocus ?? false,
       decoration: InputDecoration(
         // labelText: labelText,
         hintText: hintText,

@@ -17,16 +17,12 @@ import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dar
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({
-    super.key,
-  });
-
+  const HomeScreen({super.key});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  static const String debugTag = 'HomeScreen';
   late final HomeCubit _homeCubit;
   late final ProfileService _profileService;
 
@@ -39,23 +35,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedScaffold(
-      appBar: _buildAppBar(context),
       showPhotoSlider: true,
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           if (state is HomeLoaded) {
-            if (state.errorMessage != null) {
-              _handleErrorToast(state.errorMessage!);
-            }
-            return _buildPostList(state.posts);
+            return _buildHomeScreen(state);
           } else if (state is HomeError) {
-            _handleExceptionMessage(
-              error: state.error,
-              message: state.message,
-            );
-            return _buildDisplayMsgScreen(message: state.message);
+            return _buildMessageScreen(errorState: state);
           }
-          return _buildDisplayMsgScreen();
+          return _buildMessageScreen();
         },
       ),
     );
@@ -82,11 +70,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _handleExceptionMessage({Object? error, String? message}) {
     _hideKeyboard();
+    final String debugTag = (HomeScreen).toString();
     ErrorHandler.handleError(
       error,
       tag: debugTag,
       customMessage: message,
-      onRetry: () {},
+      onRetry: () => _refresh,
     );
   }
 
@@ -97,57 +86,81 @@ class _HomeScreenState extends State<HomeScreen> {
     _homeCubit.getAllPosts();
   }
 
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
-      title: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(left: AppDimens.size32),
-          child: Text(
-            AppStrings.homeTitle,
-            style: AppStyles.textAppBarStatic.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
-              letterSpacing: AppDimens.letterSpacingPT01,
-              fontSize: AppDimens.fontSizeXXL28,
-              fontWeight: FontWeight.w600,
-              fontFamily: AppFonts.elMessiri,
+  Widget _buildHomeScreen(HomeLoaded state) {
+    if (state.errorMessage != null) {
+      _handleErrorToast(state.errorMessage!);
+    }
+
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            toolbarHeight: AppDimens.size48,
+            floating: true,
+            pinned: false,
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding: const EdgeInsets.only(
+                left: AppDimens.size12,
+                bottom: AppDimens.size8,
+              ),
+              title: Text(
+                AppStrings.homeTitle,
+                style: AppStyles.textAppBarStatic.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  letterSpacing: AppDimens.letterSpacingPT01,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: AppFonts.elMessiri,
+                ),
+              ),
             ),
+            actions: [
+              RefreshButtonUnit(
+                onRefresh: _homeCubit.getAllPosts,
+              ),
+            ],
           ),
-        ),
+          state.posts.isEmpty
+              ? SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: _buildMessageScreen(
+                    message: AppStrings.noPostAvailableError,
+                  ),
+                )
+              : _buildPostList(context, state.posts),
+        ],
       ),
-      actions: [
-        RefreshButtonUnit(
-          onRefresh: _homeCubit.getAllPosts,
-        ),
-      ],
     );
   }
 
-  Widget _buildPostList(List<PostEntity> postList) {
-    return (postList.isEmpty)
-        ? _buildDisplayMsgScreen(
-            message: AppStrings.noPostAvailableError,
-          )
-        : RefreshIndicator(
-            onRefresh: _refresh,
-            child: ListView.builder(
-              itemCount: postList.length,
-              itemBuilder: (context, index) {
-                final post = postList[index];
-
-                return PostTileUnit(
-                  post: post,
-                  currentUser: _profileService.profileEntity,
-                  onDeletePressed: () => _deletePost(post),
-                );
-              },
-            ),
+  Widget _buildPostList(BuildContext context, List<PostEntity> postList) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final post = postList[index];
+          return PostTileUnit(
+            post: post,
+            currentUser: _profileService.profileEntity,
+            onDeletePressed: () => _deletePost(post),
           );
+        },
+        childCount: postList.length,
+      ),
+    );
   }
 
-  Widget _buildDisplayMsgScreen({String? message = ''}) {
+  Widget _buildMessageScreen({String? message = '', HomeError? errorState}) {
+    if (errorState != null) {
+      _handleExceptionMessage(
+        error: errorState.error,
+        message: errorState.message,
+      );
+      message = errorState.message;
+    }
     Logger.logDebug(message.toString());
+
     return Center(
       child: Text(
         message ?? '',

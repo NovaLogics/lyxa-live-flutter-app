@@ -1,5 +1,3 @@
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
@@ -9,19 +7,13 @@ import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_state.dart';
 import 'package:lyxa_live/src/features/auth/ui/screens/auth_screen.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
-import 'package:lyxa_live/src/features/home/ui/components/bottom_navigationbar_unit.dart';
-import 'package:lyxa_live/src/features/home/ui/components/bottom_navigationbar_unit_v2.dart';
-import 'package:lyxa_live/src/features/home/ui/components/bottom_navigationbar_unit_v3.dart';
-import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
+import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
+import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/lyxa_navigation_screens.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
-import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
-import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
-import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/widgets/loading_unit.dart';
@@ -84,6 +76,11 @@ class LyxaApp extends StatelessWidget {
       BlocProvider<LoadingCubit>(
         create: (context) => getIt<LoadingCubit>(),
       ),
+
+      // SELF PROFILE CUBIT
+      BlocProvider<SelfProfileCubit>(
+        create: (context) => getIt<SelfProfileCubit>(),
+      ),
     ];
   }
 
@@ -98,35 +95,9 @@ class LyxaApp extends StatelessWidget {
         }
         // SHOW MAIN/HOME SCREEN
         else if (state is Authenticated) {
-          //  return const HomeScreen();
-          // FocusScope.of(context).unfocus();
-          return BottomNavigationBarUnitV2(
-            homeScreen: const HomeScreen(),
-            searchScreen: const SearchScreen(),
-            profileScreen: ProfileScreen(
-              displayUserId: state.user.uid,
-            ),
-            newPostScreen: const UploadPostScreen(),
-            settingsScreen: const SettingsScreen(),
+          return LyxaNavigationScreens(
+            appUser: state.user,
           );
-
-          // return BottomNavigationBarUnit(
-          //   homeScreen: const HomeScreen(),
-          //   searchScreen: const SearchScreen(),
-          //   profileScreen: ProfileScreen(
-          //     displayUserId: state.user.uid,
-          //   ),
-          //   newPostScreen: const UploadPostScreen(),
-          //   settingsScreen: const SettingsScreen(),
-          //   homeWebIcon: Icons.home_outlined,
-          //   homeMobileIcon: Icons.home,
-          //   profileWebIcon: Icons.person_outline,
-          //   profileMobileIcon: Icons.person,
-          //   searchWebIcon: Icons.search_outlined,
-          //   searchMobileIcon: Icons.search,
-          //   settingsWebIcon: Icons.settings_outlined,
-          //   settingsMobileIcon: Icons.settings,
-          // );
         }
         // SHOW LOADING INDICATOR
         else {

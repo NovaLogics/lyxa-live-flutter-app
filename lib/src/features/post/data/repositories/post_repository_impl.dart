@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lyxa_live/src/core/constants/constants.dart';
+import 'package:lyxa_live/src/features/post/data/models/comment_model.dart';
 import 'package:lyxa_live/src/features/post/data/models/post_model.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
@@ -122,7 +123,9 @@ class PostRepositoryImpl implements PostRepository {
 
       post.comments.add(comment);
 
-      final updatedComments = post.comments.map((comment) => comment).toList();
+      final updatedComments = post.comments
+          .map((comment) => CommentModel.fromEntity(comment).toJson())
+          .toList();
 
       await _postsCollectionRef
           .doc(postId)
@@ -146,7 +149,9 @@ class PostRepositoryImpl implements PostRepository {
 
       post.comments.removeWhere((comment) => comment.id == commentId);
 
-      final updatedComments = post.comments.map((comment) => comment).toList();
+      final updatedComments = post.comments
+          .map((comment) => CommentModel.fromEntity(comment).toJson())
+          .toList();
 
       await _postsCollectionRef
           .doc(postId)
@@ -179,8 +184,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   PostEntity _postEntityFromSnapshot(Object? jsonData) {
-    final postModel =
-        PostModel.fromJson(jsonData as Map<String, dynamic>);
+    final postModel = PostModel.fromJson(jsonData as Map<String, dynamic>);
     return postModel.toEntity();
   }
 }

@@ -1,5 +1,4 @@
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lyxa_live/src/core/assets/app_icons.dart';
@@ -7,39 +6,46 @@ import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 
-class BottomNavigationBarUnitV3 extends StatefulWidget {
+class BottomNavigationBarUnit extends StatefulWidget {
   final Widget homeScreen;
   final Widget profileScreen;
   final Widget searchScreen;
   final Widget settingsScreen;
   final Widget newPostScreen;
+  final IconData homeWebIcon, homeMobileIcon;
+  final IconData profileWebIcon, profileMobileIcon;
+  final IconData searchWebIcon, searchMobileIcon;
+  final IconData settingsWebIcon, settingsMobileIcon;
 
-  const BottomNavigationBarUnitV3({
+  const BottomNavigationBarUnit({
     super.key,
     required this.homeScreen,
     required this.profileScreen,
     required this.searchScreen,
     required this.settingsScreen,
+    required this.homeWebIcon,
+    required this.homeMobileIcon,
+    required this.profileWebIcon,
+    required this.profileMobileIcon,
+    required this.searchWebIcon,
+    required this.searchMobileIcon,
+    required this.settingsWebIcon,
+    required this.settingsMobileIcon,
     required this.newPostScreen,
   });
 
   @override
-  State<BottomNavigationBarUnitV3> createState() =>
+  State<BottomNavigationBarUnit> createState() =>
       _BottomNavigationBarUnitState();
 }
 
-class _BottomNavigationBarUnitState extends State<BottomNavigationBarUnitV3> {
+class _BottomNavigationBarUnitState extends State<BottomNavigationBarUnit> {
   int _currentIndex = 0;
-
-  bool _isWebPlatform() {
-    return MediaQueryData.fromView(WidgetsBinding.instance.window).size.width >
-        600;
-  }
 
   @override
   Widget build(BuildContext context) {
     final selectedColor = Theme.of(context).colorScheme.onSecondary;
-    // FocusScope.of(context).unfocus();
+    FocusScope.of(context).unfocus();
 
     // Screen list to handle navigation.
     final screens = [
@@ -49,49 +55,6 @@ class _BottomNavigationBarUnitState extends State<BottomNavigationBarUnitV3> {
       widget.settingsScreen,
       widget.profileScreen,
     ];
-
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: screens,
-      ),
-      bottomNavigationBar: CurvedNavigationBar(
-        // backgroundColor: Theme.of(context).colorScheme.surface,
-        color: Theme.of(context).colorScheme.surface,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: [
-          CurvedNavigationBarItem(
-            child: _buildIcon(
-              0,
-              selectedColor,
-              AppIcons.homeOutlined,
-              Icons.home_rounded,
-            ),
-            label: AppStrings.titleHome,
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(Icons.search),
-            label: 'Search',
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(Icons.chat_bubble_outline),
-            label: 'Chat',
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(Icons.newspaper),
-            label: 'Feed',
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(Icons.perm_identity),
-            label: 'Personal',
-          ),
-        ],
-      ),
-    );
 
     return Scaffold(
       body: IndexedStack(
@@ -185,9 +148,9 @@ class _BottomNavigationBarUnitState extends State<BottomNavigationBarUnitV3> {
     bool isHighlight = false,
   }) {
     if (_currentIndex != index) color = AppColors.grayNeutral;
-    final isWeb = _isWebPlatform();
+
     double size = isHighlight ? AppDimens.size28 : AppDimens.size24;
-    return isWeb
+    return kIsWeb
         ? Icon(
             iconWeb,
             color: color,

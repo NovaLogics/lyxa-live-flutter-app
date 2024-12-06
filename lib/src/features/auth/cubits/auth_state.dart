@@ -1,8 +1,5 @@
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 
-/// AUTH STATE
-/// -> Represents the different states for authentication.
-
 abstract class AuthState {}
 
 class AuthInitial extends AuthState {}

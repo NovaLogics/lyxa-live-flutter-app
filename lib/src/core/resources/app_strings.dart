@@ -39,11 +39,11 @@ class AppStrings {
   static const String titleHome = 'HOME';
   static const String titleProfile = 'PROFILE';
   static const String titleSearch = 'SEARCH';
-   static const String titlePost = 'POST';
+  static const String titlePost = 'POST';
   static const String titleSettings = 'SETTINGS';
   static const String titleLogout = 'LOGOUT';
 
-    static const String logout = 'Logout';
+  static const String logout = 'Logout';
 
   // UI SECTION [5]-> PROFILE
   static const String userNotFoundError = 'User not found';
@@ -93,6 +93,9 @@ class AppStrings {
   static const String captionHint = 'Add post caption here..';
   static const String captionLabel = 'Caption Area...';
   static const String pickImageButton = 'PICK IMAGE';
+  static const String clearButton = 'CLEAR';
+  static const String uploadPostButton = 'UPLOAD POST';
+   static const String updateProfileButton = 'UPDATE PROFILE';
   static const String errorImageAndCaptionRequired =
       'Both image and caption are required.';
   static const String cropperTitle = 'Crop Image';
@@ -126,6 +129,9 @@ class AppStrings {
 
   static const String logoutDialogMsg = 'Are you sure to logout?';
   static const String yesLogout = 'Yes, logout';
+
+  static const String clearButtonMsg = 'Are you sure you want to clear all?';
+  static const String yesSure = 'Yes, Sure';
 
   static const String refreshPosts = 'Refresh Posts';
   static const String addNewPost = 'Add New Post';

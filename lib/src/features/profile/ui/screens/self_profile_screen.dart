@@ -6,39 +6,34 @@ import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
+import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/cubits/self_profile_state.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
+import 'package:lyxa_live/src/features/profile/ui/components/edit_profile_button_unit.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_image.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/story_line_unit.dart';
-import 'package:lyxa_live/src/features/profile/ui/components/follow_button_unit.dart';
 import 'package:lyxa_live/src/features/profile/ui/components/profile_stats_unit.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
+import 'package:lyxa_live/src/features/profile/ui/screens/edit_profile_screen.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/follower_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
-class ProfileScreen extends StatefulWidget {
-  final String displayUserId;
-
-  const ProfileScreen({
-    super.key,
-    required this.displayUserId,
-  });
+class SelfProfileScreen extends StatefulWidget {
+  const SelfProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<SelfProfileScreen> createState() => _SelfProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  late final ProfileCubit _profileCubit;
+class _SelfProfileScreenState extends State<SelfProfileScreen> {
+ // late final SelfProfileCubit _selfprofileCubit;
   late final ProfileService _profileService;
 
   get _appUserId => _profileService.getUserId();
-  get _displayUserId => widget.displayUserId;
 
   @override
   void initState() {
@@ -48,14 +43,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileCubit, ProfileState>(
+    return BlocBuilder<SelfProfileCubit, SelfProfileState>(
       builder: (context, state) {
-        if (state is ProfileLoaded) {
+        if (state is SelfProfileLoaded) {
           return _buildProfileContent(
             context,
             state.profileUser,
           );
-        } else if (state is ProfileError) {
+        } else if (state is SelfProfileError) {
           return _buildEmptyContent(
             displayText: AppStrings.profileNotFoundError,
           );
@@ -68,37 +63,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _initScreen() async {
     _profileService = getIt<ProfileService>();
-    _profileCubit = getIt<ProfileCubit>();
-    _profileCubit.loadUserProfileById(userId: _displayUserId);
-  }
-
-  void _handleFollowButtonPressed() {
-    final profileState = _profileCubit.state;
-
-    if (profileState is! ProfileLoaded) return;
-
-    final profileUser = profileState.profileUser;
-    final isAlreadyFollowing = profileUser.followers.contains(_appUserId);
-
-    setState(() {
-      isAlreadyFollowing
-          ? profileUser.followers.remove(_appUserId)
-          : profileUser.followers.add(_appUserId);
-    });
-
-    _profileCubit
-        .toggleFollow(appUserId: _appUserId, targetUserId: _displayUserId)
-        .catchError((_) {
-      setState(() {
-        isAlreadyFollowing
-            ? profileUser.followers.add(_appUserId)
-            : profileUser.followers.remove(_appUserId);
-      });
-    });
+ //   _selfprofileCubit = getIt<SelfProfileCubit>();
   }
 
   Widget _buildProfileContent(BuildContext context, ProfileUserEntity user) {
-    Logger.logDebug('$_displayUserId = $_appUserId ');
+    Logger.logDebug('$_appUserId ');
+    _profileService.syncProfile(user);
 
     return ConstrainedScaffold(
       appBar: _buildAppBar(context, user),
@@ -111,10 +81,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildEmailSection(user),
           addSpacing(height: AppDimens.size8),
           _buildProfileStats(user),
-          addSpacing(height: AppDimens.size8),
-          _buildFollowActionSection(user),
           addSpacing(height: AppDimens.size12),
           _buildStoryLineSection(user.bio),
+          addSpacing(height: AppDimens.size24),
+          _buildEditProfileSection(),
           addSpacing(height: AppDimens.size24),
           _buildPostSection(context),
         ],
@@ -136,16 +106,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
       title: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(right: AppDimens.size36),
-          child: Text(
-            AppStrings.profile,
-            style: AppStyles.textAppBarStatic.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
-              letterSpacing: AppDimens.letterSpacingPT10,
-              fontWeight: FontWeight.w600,
-              fontFamily: AppFonts.elMessiri,
-            ),
+        child: Text(
+          AppStrings.profile,
+          style: AppStyles.textAppBarStatic.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+            letterSpacing: AppDimens.letterSpacingPT10,
+            fontWeight: FontWeight.w600,
+            fontFamily: AppFonts.elMessiri,
           ),
         ),
       ),
@@ -192,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
         int postCount = (state is PostLoaded)
-            ? state.posts.where((post) => post.userId == _displayUserId).length
+            ? state.posts.where((post) => post.userId == _appUserId).length
             : 0;
 
         return Padding(
@@ -213,13 +180,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildFollowActionSection(ProfileUserEntity user) {
-    return FollowButtonUnit(
-      onPressed: _handleFollowButtonPressed,
-      isFollowing: user.followers.contains(_appUserId),
     );
   }
 
@@ -267,13 +227,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _buildEditProfileSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size32),
+      child: EditProfileButtonUnit(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) =>
+                  EditProfileScreen(currentUser: _profileService.profileEntity),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildPostSection(BuildContext context) {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
         if (state is PostLoaded) {
-          final userPosts = state.posts
-              .where((post) => post.userId == widget.displayUserId)
-              .toList();
+          final userPosts =
+              state.posts.where((post) => post.userId == _appUserId).toList();
 
           if (userPosts.isEmpty) {
             return Padding(

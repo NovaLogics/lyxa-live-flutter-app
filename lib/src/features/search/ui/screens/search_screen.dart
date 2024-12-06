@@ -13,11 +13,12 @@ class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchScreen> createState() => SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
   late final SearchCubit _searchCubit;
 
   String get _searchQueryString => _searchController.text;
@@ -32,6 +33,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -56,7 +58,17 @@ class _SearchScreenState extends State<SearchScreen> {
         width: AppDimens.containerSize400,
         child: _buildSearchBar(),
       ),
+      actions: [
+        IconButton(
+          onPressed: () => _onSearchChanged,
+          icon: const Icon(Icons.search_outlined),
+        ),
+      ],
     );
+  }
+
+  void updateFocusState() {
+    _searchFocusNode.unfocus();
   }
 
   Widget _buildSearchBar() {
@@ -65,10 +77,11 @@ class _SearchScreenState extends State<SearchScreen> {
       height: AppDimens.size52,
       child: TextField(
         controller: _searchController,
-       // autofocus: true,
+        // autofocus: true,
         style: AppStyles.textFieldStyleMain.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
+        focusNode: _searchFocusNode,
         decoration: InputDecoration(
           hintText: AppStrings.searchUsers,
           hintStyle: AppStyles.textFieldStyleHint.copyWith(
@@ -101,6 +114,7 @@ class _SearchScreenState extends State<SearchScreen> {
             AppStrings.defaultSearchMessage,
             style: AppStyles.textMessageStatic.copyWith(
               color: Theme.of(context).colorScheme.inversePrimary,
+              fontSize: AppDimens.fontSizeXL20,
             ),
           ),
         );

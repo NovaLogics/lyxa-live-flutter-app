@@ -1,5 +1,4 @@
 class ErrorMsgs {
-  // LOGIN -> Authentication Error Messages
   static const String loginFailedError = 'Login Failed: ';
   static const String loginErrorMessage =
       'Please enter both email and password';
@@ -26,8 +25,11 @@ class ErrorMsgs {
   static const String failToLoadPostError =
       'Failed to fetch posts. Please try again!';
 
-  static const String imageFileEmpty =
-      'Image file is missing or invalid!';
+  static const String imageFileEmpty = 'Image file is missing or invalid!';
+
+  static const String unknownFunction = 'UnknownFunction';
+  static const String functionExtractFailError =
+      'Error extracting function name from stack trace:';
 
   static const String unknownError = 'Something went wrong. Please try again.';
   static const String networkError =

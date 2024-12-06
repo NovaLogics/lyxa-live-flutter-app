@@ -33,7 +33,6 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  /// Toggles between the login and register pages
   void _toggleAuthScreen() {
     setState(() {
       _isLoginPage = !_isLoginPage;

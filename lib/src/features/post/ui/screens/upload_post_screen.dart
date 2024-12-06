@@ -8,10 +8,11 @@ import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
-import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
+import 'package:lyxa_live/src/shared/widgets/custom_outlined_button.dart';
+import 'package:lyxa_live/src/shared/widgets/gradient_button.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
@@ -20,17 +21,20 @@ import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 
 class UploadPostScreen extends StatefulWidget {
+  final VoidCallback onPostUploaded;
+
   const UploadPostScreen({
     super.key,
+    required this.onPostUploaded,
   });
 
   @override
-  State<UploadPostScreen> createState() => _UploadPostScreenState();
+  State<UploadPostScreen> createState() => UploadPostScreenState();
 }
 
-class _UploadPostScreenState extends State<UploadPostScreen> {
-  static const String debugTag = 'UploadPostScreen';
+class UploadPostScreenState extends State<UploadPostScreen> {
   final TextEditingController _captionController = TextEditingController();
+  final FocusNode _captionFocusNode = FocusNode();
   late final ProfileService _profileService;
   late final PostCubit _postCubit;
   late final HomeCubit _homeCubit;
@@ -45,6 +49,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   @override
   void dispose() {
     _captionController.dispose();
+    _captionFocusNode.dispose();
     super.dispose();
   }
 
@@ -57,9 +62,12 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           body: Column(
             children: [
               _buildImagePreview(),
+              addSpacing(height: AppDimens.size8),
               _buildPickImageButton(),
               addSpacing(height: AppDimens.size28),
               _buildCaptionInput(),
+              addSpacing(height: AppDimens.size28),
+              _buildActionButtonsRow(),
               addSpacing(height: AppDimens.size72),
             ],
           ),
@@ -68,7 +76,8 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       listener: (context, state) {
         if (state is PostUploaded) {
           _homeCubit.getAllPosts();
-          Navigator.pop(context);
+          _clearAll();
+          widget.onPostUploaded();
         } else if (state is PostErrorToast) {
           _handleErrorToast(state.message);
         } else if (state is PostErrorException) {
@@ -78,6 +87,10 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
         }
       },
     );
+  }
+
+ void updateFocusState() {
+    _captionFocusNode.unfocus();
   }
 
   void _initScreen() async {
@@ -111,6 +124,7 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
   }
 
   void _handleExceptionMessage({Object? error, String? message}) {
+    final String debugTag = (UploadPostScreen).toString();
     _hideKeyboard();
     ErrorHandler.handleError(
       error,
@@ -118,6 +132,11 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
       customMessage: message,
       onRetry: () {},
     );
+  }
+
+  void _clearAll() {
+    _captionController.text = '';
+    _selectedImage = null;
   }
 
   void _hideKeyboard() => FocusScope.of(context).unfocus();
@@ -134,17 +153,6 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           ),
         ),
       ),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-      actions: [
-        IconButton(
-          onPressed: _handleUploadPost,
-          icon: const Icon(Icons.upload),
-        ),
-        addSpacing(width: AppDimens.size12),
-      ],
     );
   }
 
@@ -152,10 +160,15 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
     return _selectedImage != null
         ? Padding(
             padding: const EdgeInsets.all(AppDimens.paddingRG8),
-            child: Image.memory(
-              _selectedImage!,
-              width: double.infinity,
-              fit: BoxFit.contain,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 210,
+              ),
+              child: Image.memory(
+                _selectedImage!,
+                width: double.infinity,
+                fit: BoxFit.contain,
+              ),
             ),
           )
         : const Icon(
@@ -167,12 +180,20 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
 
   Widget _buildPickImageButton() {
     return Center(
-      child: GradientButton(
+      child: CustomOutlinedButton(
+        onPressed: () {
+          _handleImageSelection();
+        },
         text: AppStrings.pickImageButton,
-        onPressed: _handleImageSelection,
-        icon: const Icon(
+        icon: Icon(
           Icons.filter,
-          color: AppColors.whiteLight,
+          color: Theme.of(context).colorScheme.onSecondary,
+          size: AppDimens.iconSizeSM24,
+        ),
+        borderColor: Theme.of(context).colorScheme.onSecondary,
+        textStyle: AppStyles.buttonTextPrimary.copyWith(
+          color: Theme.of(context).colorScheme.onSecondary,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -187,8 +208,9 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           Text(
             AppStrings.caption,
             style: AppStyles.subtitleSecondary.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.onSecondary,
               fontWeight: FontWeight.bold,
+              letterSpacing: AppDimens.letterSpacingPT05,
               shadows: AppStyles.shadowStyleEmpty,
             ),
           ),
@@ -196,8 +218,90 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
           MultilineTextFieldUnit(
             controller: _captionController,
             // labelText: AppStrings.captionLabel,
+            focusNode: _captionFocusNode,
             hintText: AppStrings.captionHint,
             maxLength: TextFieldLimits.postField,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButtonsRow() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CustomOutlinedButton(
+            onPressed: () {
+              _openClearDataDialog();
+            },
+            text: AppStrings.clearButton,
+            icon: Icon(
+              Icons.clear_all_rounded,
+              color: Theme.of(context).colorScheme.onSecondary,
+              size: AppDimens.iconSizeSM22,
+            ),
+            borderColor: Theme.of(context).colorScheme.onPrimary,
+            textStyle: AppStyles.buttonTextPrimary.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(width: AppDimens.size16),
+          GradientButtonV1(
+            onTap: _handleUploadPost,
+            text: AppStrings.uploadPostButton,
+            icon: const Icon(
+              Icons.arrow_circle_up_outlined,
+              color: AppColors.whiteLight,
+              size: AppDimens.actionIconSize26,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _openClearDataDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+        title: Text(
+          AppStrings.clearButtonMsg,
+          style:
+              TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+        ),
+        actions: [
+          // CANCEL BUTTON
+          TextButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
+              _captionFocusNode.unfocus();
+            },
+            child: Text(
+              AppStrings.cancel,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onInverseSurface),
+            ),
+          ),
+          // SAVE/SUBMIT BUTTON
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _clearAll();
+              });
+              Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
+              setState(() {
+                _captionFocusNode.unfocus();
+              });
+            },
+            child: Text(
+              AppStrings.yesSure,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
           ),
         ],
       ),

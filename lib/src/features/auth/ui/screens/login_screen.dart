@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() {
     if (_loginCredentialsFormKey.currentState?.validate() != true) return;
-    
+
     _saveUserToLocalStorage();
 
     _authCubit.login(
@@ -167,16 +167,24 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             AppStrings.notAMember,
-            style: AppStyles.subtitleSecondary,
+            style: AppStyles.subtitleSecondary.copyWith(
+              color: Theme.of(context).colorScheme.onTertiary,
+              fontWeight: FontWeight.w600,
+              letterSpacing: AppDimens.letterSpacingPT07,
+              shadows: AppStyles.shadowStyle2,
+            ),
           ),
           addSpacing(width: AppDimens.size8),
           GestureDetector(
             onTap: _handleSignUpLinkClick,
-            child: const Text(
+            child: Text(
               AppStrings.registerNow,
-              style: AppStyles.subtitlePrimary,
+              style: AppStyles.subtitlePrimary.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+                shadows: AppStyles.shadowStyleEmpty,
+              ),
             ),
           ),
         ],

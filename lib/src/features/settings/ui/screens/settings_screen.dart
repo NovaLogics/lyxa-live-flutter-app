@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:lyxa_live/src/core/assets/app_icons.dart';
+import 'package:lyxa_live/src/core/assets/app_fonts.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
@@ -25,19 +23,20 @@ class SettingsScreen extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
-        title: Center(
-          child: Text(
-            AppStrings.settings,
-            style: AppStyles.textAppBarStatic.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.3),
+      title: Center(
+        child: Text(
+          AppStrings.titleSettings,
+          style: AppStyles.textAppBarStatic.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+            letterSpacing: AppDimens.letterSpacingPT10,
+            fontWeight: FontWeight.w600,
+            fontFamily: AppFonts.elMessiri,
           ),
         ),
-        actions: [
-          addSpacing(width: AppDimens.iconSizeLG48),
-        ]);
+      ),
+    );
   }
 
   Widget _buildSettingsBody(BuildContext context) {
@@ -62,7 +61,13 @@ class SettingsScreen extends StatelessWidget {
         style: AppStyles.textSubtitlePost.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
           fontSize: AppDimens.fontSizeLG18,
+          letterSpacing: AppDimens.letterSpacingPT05,
         ),
+      ),
+      leading: Icon(
+        Icons.brightness_6_outlined,
+        color: Theme.of(context).colorScheme.onPrimary,
+        size: AppDimens.size28,
       ),
       trailing: CupertinoSwitch(
         value: isDarkModeEnabled,
@@ -80,12 +85,13 @@ class SettingsScreen extends StatelessWidget {
         style: AppStyles.textSubtitlePost.copyWith(
           color: Theme.of(context).colorScheme.inversePrimary,
           fontSize: AppDimens.fontSizeLG18,
+          letterSpacing: AppDimens.letterSpacingPT05,
         ),
       ),
-      trailing: _buildLeadingIcon(
-        Theme.of(context).colorScheme.inversePrimary,
-        AppIcons.logoutOutlined,
+      leading: Icon(
         Icons.power_settings_new_rounded,
+        color: Theme.of(context).colorScheme.onPrimary,
+        size: AppDimens.size28,
       ),
       onTap: () => _openLogoutDialog(context),
     );
@@ -109,7 +115,7 @@ class SettingsScreen extends StatelessWidget {
           // CANCEL BUTTON
           TextButton(
             onPressed: () {
-             Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
+              Navigator.of(context, rootNavigator: true).pop(AppStrings.dialog);
               // Navigator.of(context, rootNavigator: true).pop();
             },
             child: Text(
@@ -132,26 +138,5 @@ class SettingsScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget _buildLeadingIcon(
-    Color color,
-    String iconMobile,
-    IconData iconWeb,
-  ) {
-    return kIsWeb
-        ? Icon(
-            iconWeb,
-            color: color,
-          )
-        : SvgPicture.asset(
-            iconMobile,
-            colorFilter: ColorFilter.mode(
-              color,
-              BlendMode.srcIn,
-            ),
-            width: AppDimens.size24,
-            height: AppDimens.size24,
-          );
   }
 }
