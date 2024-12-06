@@ -14,7 +14,6 @@ import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
 import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/nav_bar_custom_painter.dart';
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/rounded_corners_fab.dart';
-import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 
 class LyxaNavigationScreens extends StatefulWidget {
   final AppUserEntity appUser;
@@ -32,6 +31,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
   late final List<Widget> _screens;
   final PlatformUtil _platformUtil = getIt<PlatformUtil>();
   final SelfProfileCubit _selfProfileCubit = getIt<SelfProfileCubit>();
+
   final GlobalKey<SearchScreenState> _searchScreenKey =
       GlobalKey<SearchScreenState>();
   final GlobalKey<UploadPostScreenState> _postScreenKey =
@@ -79,22 +79,6 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-       // _buildBackground(),
-        _buildScaffold(context),
-      ],
-    );
-  }
-
-  Widget _buildBackground() {
-    return getIt<GradientBackgroundUnit>(
-      param1: AppDimens.containerSize430,
-      param2: BackgroundStyle.main,
-    );
-  }
-
-  Widget _buildScaffold(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: IndexedStack(
@@ -128,6 +112,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
                   isWeb ? 0.5 : AppDimens.size16,
                 ),
               ),
+              _buildFAB(),
               _buildNavigationBarIcons(width, height, selectedColor, isWeb),
             ],
           ),
@@ -146,27 +131,31 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
             0, selectedColor, AppIcons.homeOutlined, Icons.home_rounded, isWeb),
         _buildNavigationBarIcon(1, selectedColor, AppIcons.searchOutlined,
             Icons.search_rounded, isWeb),
-        _buildFAB(),
+        Container(width: width * 0.20),
         _buildNavigationBarIcon(3, selectedColor,
             AppIcons.settingsOutlinedStyle2, Icons.settings_rounded, isWeb),
         _buildNavigationBarIcon(4, selectedColor, AppIcons.profileOutlined,
             Icons.person_rounded, isWeb, onTap: () {
           _selfProfileCubit.loadSelfProfileById(userId: widget.appUser.uid);
+          _setBottomBarIndex(4);
         }),
       ],
     );
   }
 
   Widget _buildFAB() {
-    return RoundedCornerFAB(
-      onPressed: () => _setBottomBarIndex(2),
-      child: _buildIcon(
-        2,
-        AppColors.deepPurple200,
-        AppIcons.addPostOutlinedStyle3,
-        Icons.add_photo_alternate_outlined,
-        true,
-        isHighlight: true,
+    return Center(
+      heightFactor: 0.6,
+      child: RoundedCornerFAB(
+        onPressed: () => _setBottomBarIndex(2),
+        child: _buildIcon(
+          2,
+          AppColors.deepPurple200,
+          AppIcons.addPostOutlinedStyle3,
+          Icons.add_photo_alternate_outlined,
+          true,
+          isHighlight: true,
+        ),
       ),
     );
   }
@@ -199,7 +188,8 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
     bool isWebPlatform, {
     bool isHighlight = false,
   }) {
-    final double size = isHighlight ? AppDimens.size28 : AppDimens.size24;
+    final double size =
+        isHighlight ? AppDimens.size32 : AppDimens.actionIconSize26;
     final isSelected = _currentIndex == index;
 
     color = isSelected ? AppColors.whiteLight : color;
