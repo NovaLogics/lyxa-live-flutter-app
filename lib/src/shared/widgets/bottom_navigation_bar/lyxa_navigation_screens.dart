@@ -1,10 +1,10 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lyxa_live/src/core/assets/app_icons.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/core/utils/platform_util.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
 import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
@@ -37,7 +37,6 @@ class LyxaNavigationScreens extends StatefulWidget {
 
 class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
   late final List<Widget> _screens;
-  final PlatformUtil _platformUtil = getIt<PlatformUtil>();
   final SelfProfileCubit _selfProfileCubit = getIt<SelfProfileCubit>();
 
   final GlobalKey<SearchScreenState> _searchScreenKey =
@@ -98,9 +97,8 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
   }
 
   Widget _buildBottomNavigationBar(BuildContext context) {
-    final bool isWebPlatform = _platformUtil.isWebPlatform();
-    final Color selectedColor = Theme.of(context).colorScheme.onPrimary;
-    final double width = isWebPlatform
+    final Color color = Theme.of(context).colorScheme.onTertiaryFixedVariant;
+    final double width = kIsWeb
         ? AppDimens.containerSize430
         : MediaQuery.of(context).size.width;
     const double height = AppDimens.size56;
@@ -118,12 +116,12 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
                 size: Size(width, height),
                 painter: NavBarCustomPainter(
                   context,
-                  isWebPlatform ? 0.5 : AppDimens.size16,
+                  kIsWeb ? 0.5 : AppDimens.size16,
                 ),
               ),
-              _buildFAB(isWebPlatform),
+              _buildFAB(kIsWeb),
               _buildNavigationBarIcons(
-                  width, height, selectedColor, isWebPlatform),
+                  width, height, color, kIsWeb),
             ],
           ),
         ),
@@ -141,14 +139,14 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
           ScreenIndex.home,
           selectedColor,
           AppIcons.homeOutlined,
-          Icons.home_rounded,
+          Icons.home_filled,
           isWeb,
         ),
         _buildNavigationBarIcon(
           ScreenIndex.search,
           selectedColor,
           AppIcons.searchOutlined,
-          Icons.search_rounded,
+          Icons.saved_search,
           isWeb,
         ),
         Container(width: width * 0.20),
@@ -156,7 +154,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
           ScreenIndex.settings,
           selectedColor,
           AppIcons.settingsOutlinedStyle2,
-          Icons.settings_rounded,
+          Icons.dashboard_sharp,
           isWeb,
         ),
         _buildNavigationBarIcon(
@@ -225,7 +223,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
         isHighlight ? AppDimens.size32 : AppDimens.actionIconSize26;
     final isSelected = _currentIndex == index;
 
-    color = isSelected ? AppColors.whiteLight : color;
+    color = isSelected ? Theme.of(context).colorScheme.inversePrimary : color;
 
     return isWebPlatform
         ? Icon(iconWeb, color: color, size: size)
