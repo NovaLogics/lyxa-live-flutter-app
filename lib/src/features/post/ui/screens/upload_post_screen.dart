@@ -8,9 +8,11 @@ import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
+import 'package:lyxa_live/src/features/auth/ui/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
+import 'package:lyxa_live/src/shared/widgets/gradient_button.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
@@ -278,40 +280,15 @@ class _UploadPostScreenState extends State<UploadPostScreen> {
             ),
           ),
           const SizedBox(width: AppDimens.size16),
-          GestureDetector(
-            onTap: () {
-              _handleUploadPost();
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Colors.blue, Colors.purple],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(AppDimens.radiusLG20),
-              ),
-              padding: const EdgeInsets.symmetric(
-                  vertical: AppDimens.size12, horizontal: AppDimens.size24),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    AppStrings.uploadPostButton,
-                    style: AppStyles.buttonTextPrimary.copyWith(
-                      color: AppColors.whiteLight,
-                    ),
-                  ),
-                  const SizedBox(width: AppDimens.size8),
-                  const Icon(
-                    Icons.arrow_circle_up_outlined,
-                    color: AppColors.whiteLight,
-                    size: AppDimens.actionIconSize26,
-                  ),
-                ],
-              ),
+          GradientButtonV1(
+            onTap: _handleUploadPost,
+            text: AppStrings.uploadPostButton,
+            icon: const Icon(
+              Icons.arrow_circle_up_outlined,
+              color: AppColors.whiteLight,
+              size: AppDimens.actionIconSize26,
             ),
-          ),
+          )
         ],
       ),
     );

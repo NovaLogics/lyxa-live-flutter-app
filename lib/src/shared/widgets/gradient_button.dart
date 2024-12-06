@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
 
-class GradientButton extends StatefulWidget {
+class GradientButtonV1 extends StatefulWidget {
   final VoidCallback onTap;
   final String text;
-  final IconData icon;
+  final Widget icon;
   final double borderRadius;
   final List<Color> gradientColors;
   final EdgeInsets padding;
 
-  const GradientButton({
+  const GradientButtonV1({
     super.key,
     required this.onTap,
     required this.text,
@@ -21,10 +21,10 @@ class GradientButton extends StatefulWidget {
   });
 
   @override
-  State<GradientButton> createState() => _GradientButtonState();
+  State<GradientButtonV1> createState() => _GradientButtonV1State();
 }
 
-class _GradientButtonState extends State<GradientButton>
+class _GradientButtonV1State extends State<GradientButtonV1>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
@@ -86,11 +86,7 @@ class _GradientButtonState extends State<GradientButton>
                 ),
               ),
               const SizedBox(width: 8),
-              Icon(
-                widget.icon,
-                color: Colors.white,
-                size: 26,
-              ),
+              widget.icon,
             ],
           ),
         ),
