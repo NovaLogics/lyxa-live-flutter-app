@@ -15,7 +15,7 @@ class GradientButtonV1 extends StatefulWidget {
     required this.onTap,
     required this.text,
     required this.icon,
-    this.borderRadius = 20.0,
+    this.borderRadius = 24.0,
     this.gradientColors = const [Colors.blue, Colors.purple],
     this.padding = const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
   });

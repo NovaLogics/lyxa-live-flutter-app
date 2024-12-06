@@ -127,6 +127,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           _buildPickImageButton(),
           addSpacing(height: AppDimens.size24),
           _buildBioSection(),
+          addSpacing(height: AppDimens.size24),
+          _buildUploadButton(),
           addSpacing(height: AppDimens.size72),
         ],
       ),
@@ -196,12 +198,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Widget _buildPickImageButton() {
     return Center(
-      child: GradientButton(
+      child: CustomOutlinedButton(
+        onPressed: () {
+          _handleImageSelection();
+        },
         text: AppStrings.pickImage,
-        onPressed: _handleImageSelection,
-        icon: const Icon(
+        icon: Icon(
           Icons.filter,
-          color: AppColors.whiteLight,
+          color: Theme.of(context).colorScheme.onSecondary,
+          size: AppDimens.iconSizeSM22,
+        ),
+        borderColor: Theme.of(context).colorScheme.onPrimary,
+        textStyle: AppStyles.buttonTextPrimary.copyWith(
+          color: Theme.of(context).colorScheme.onSecondary,
+          fontWeight: FontWeight.w600,
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: AppDimens.size12,
+          horizontal: AppDimens.size24,
         ),
       ),
     );
@@ -233,43 +247,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-    Widget _buildActionButtonsRow() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimens.size12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CustomOutlinedButton(
-            onPressed: () {
-              _openLogoutDialog();
-            },
-            text: AppStrings.clearButton,
-            icon: Icon(
-              Icons.clear_all_rounded,
-              color: Theme.of(context).colorScheme.onSecondary,
-              size: AppDimens.iconSizeSM22,
-            ),
-            borderColor: Theme.of(context).colorScheme.onPrimary,
-            textStyle: AppStyles.buttonTextPrimary.copyWith(
-              color: Theme.of(context).colorScheme.onSecondary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(width: AppDimens.size16),
-          GradientButtonV1(
-            onTap: _handleUploadPost,
-            text: AppStrings.uploadPostButton,
-            icon: const Icon(
-              Icons.arrow_circle_up_outlined,
-              color: AppColors.whiteLight,
-              size: AppDimens.actionIconSize26,
-            ),
-          )
-        ],
+  Widget _buildUploadButton() {
+    return GradientButtonV1(
+      onTap: _handleProfileUpdate,
+      text: AppStrings.updateProfileButton,
+      icon: const Icon(
+        Icons.arrow_circle_up_outlined,
+        color: AppColors.whiteLight,
+        size: AppDimens.actionIconSize26,
+      ),
+      padding: const EdgeInsets.symmetric(
+        vertical: AppDimens.size16,
+        horizontal: AppDimens.size52,
       ),
     );
   }
 }
-
-
-

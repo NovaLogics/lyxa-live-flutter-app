@@ -95,6 +95,7 @@ class AppStrings {
   static const String pickImageButton = 'PICK IMAGE';
   static const String clearButton = 'CLEAR';
   static const String uploadPostButton = 'UPLOAD POST';
+   static const String updateProfileButton = 'UPDATE PROFILE';
   static const String errorImageAndCaptionRequired =
       'Both image and caption are required.';
   static const String cropperTitle = 'Crop Image';
