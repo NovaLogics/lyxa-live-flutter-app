@@ -162,7 +162,7 @@ class UploadPostScreenState extends State<UploadPostScreen> {
             padding: const EdgeInsets.all(AppDimens.paddingRG8),
             child: ConstrainedBox(
               constraints: const BoxConstraints(
-                maxHeight: 240,
+                maxHeight: 210,
               ),
               child: Image.memory(
                 _selectedImage!,
