@@ -292,6 +292,7 @@ class _PostTileUnitState extends State<PostTileUnit> {
   }
 
   Widget _buildPostHeader() {
+    _fetchCurrentUser();
     return Row(
       children: [
         GestureDetector(
