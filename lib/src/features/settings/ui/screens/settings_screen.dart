@@ -65,7 +65,7 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
       leading: Icon(
-        Icons.invert_colors_on_rounded,
+        Icons.brightness_6_outlined,
         color: Theme.of(context).colorScheme.onPrimary,
         size: AppDimens.size28,
       ),
