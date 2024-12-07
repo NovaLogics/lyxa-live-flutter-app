@@ -225,11 +225,13 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 #
 ## ᴠ ⁃ ʙᴇʜɪɴᴅ ᴛʜᴇ ᴄᴏᴅᴇ: ᴅᴇᴠ ꜰᴇᴀᴛᴜʀᴇꜱ
 
+### ⭓ Project Documents
+
+1. **Flutter App Structures** &nbsp;| &nbsp;  [ Read -> ](./_archive/docs/flutter-app-structures.md)
+
+
+#
 ### ⭓ App Dependencies/Libraries Overview
-
-<br>
-
-## **Flutter Dependencies**
 
 * [cupertino_icons][0] : Provides iOS-style icons for Flutter apps.
 * [firebase_core][1] : Initializes Firebase services for Flutter applications.
