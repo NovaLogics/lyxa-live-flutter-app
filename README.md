@@ -116,6 +116,7 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 
 ![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
 ![ForTheBadge GIT](https://forthebadge.com/images/badges/uses-git.svg)
+
 ![forthebadge](https://forthebadge.com/images/featured/featured-contains-cat-gifs.svg)
 
   <br>
@@ -228,6 +229,7 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 ### ⭓ Project Documents
 
 1. **Flutter App Structures** &nbsp;| &nbsp;  [ Read -> ](./_archive/docs/flutter-app-structures.md)
+2. **Clean Architecture with BloC and Cubit in Flutter** &nbsp;| &nbsp;  [ Read -> ](./_archive/docs/clean-architecture-with-bloc-and-cubit.md)
 
 
 #
