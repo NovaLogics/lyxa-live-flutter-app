@@ -228,11 +228,11 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 
 ### ⭓ Project Architecture
 
-### > Flutter Clean Architecture with BLoC/Cubit
+### ☑ Flutter Clean Architecture with BLoC/Cubit
 
-## Project Structure
+> **PROJECT STRUCTURE** ▼
 
-```css
+```scss
 lib/
 ├──src/
 │   ├── core/

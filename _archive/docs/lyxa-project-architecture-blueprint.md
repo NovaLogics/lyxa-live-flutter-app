@@ -19,7 +19,7 @@ Cubit is a simpler version of BLoC. It reduces the amount of code needed by not 
 
 ## Project Structure
 
-```css
+```scss
 lib/
 ├──src/
 │   ├── core/
