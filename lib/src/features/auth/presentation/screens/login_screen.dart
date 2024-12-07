@@ -9,9 +9,9 @@ import 'package:lyxa_live/src/core/validations/validator.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/data/models/app_user_model.dart';
-import 'package:lyxa_live/src/features/auth/presentation/components/email_field_unit.dart';
-import 'package:lyxa_live/src/features/auth/presentation/components/gradient_button.dart';
-import 'package:lyxa_live/src/features/auth/presentation/components/password_field_unit.dart';
+import 'package:lyxa_live/src/features/auth/presentation/widgets/email_field_unit.dart';
+import 'package:lyxa_live/src/features/auth/presentation/widgets/gradient_button.dart';
+import 'package:lyxa_live/src/features/auth/presentation/widgets/password_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 
