@@ -11,7 +11,7 @@ import 'package:lyxa_live/src/features/home/presentation/widgets/drawer_title_un
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/presentation/screens/profile_screen.dart';
 import 'package:lyxa_live/src/features/search/presentation/screens/search_screen.dart';
-import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
+import 'package:lyxa_live/src/features/settings/presentation/screens/settings_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 
 class DrawerUnit extends StatelessWidget {
