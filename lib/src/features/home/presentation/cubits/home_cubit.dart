@@ -1,7 +1,7 @@
 // ignore_for_file: unused_field
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/features/home/cubits/home_state.dart';
+import 'package:lyxa_live/src/features/home/presentation/cubits/home_state.dart';
 import 'package:lyxa_live/src/features/home/domain/repositories/home_repository.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_state.dart';

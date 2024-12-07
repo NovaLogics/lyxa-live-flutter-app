@@ -5,7 +5,7 @@ import 'package:lyxa_live/src/core/utils/platform_util.dart';
 import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
-import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
+import 'package:lyxa_live/src/features/home/presentation/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:lyxa_live/src/features/home/domain/repositories/home_repository.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';

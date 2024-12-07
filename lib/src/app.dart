@@ -6,7 +6,7 @@ import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_state.dart';
 import 'package:lyxa_live/src/features/auth/presentation/screens/auth_screen.dart';
-import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
+import 'package:lyxa_live/src/features/home/presentation/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/lyxa_navigation_screens.dart';
 import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
