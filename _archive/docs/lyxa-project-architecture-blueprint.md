@@ -1,0 +1,1 @@
+# Lyxa Project Architecture Blueprint
