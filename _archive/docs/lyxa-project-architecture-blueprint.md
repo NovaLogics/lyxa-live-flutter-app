@@ -110,3 +110,101 @@ The `shared` directory includes reusable components that can be used across mult
 ## app.dart & main.dart
 - **app.dart**: The entry point of the app, responsible for initializing services and routes.
 - **main.dart**: The starting point for running the Flutter application.
+
+
+---
+<br>
+
+# Clean Architecture
+
+Clean Architecture is a design pattern that divides an application into distinct layers, each with well defined responsibilities. It ensures that dependencies always point **inwards**, protecting the core logic from being affected by external frameworks or changes to the UI.
+
+---
+
+## Layers in Clean Architecture
+
+### 1. **Data Layer**
+   - **Purpose**: Manages all data operations and interactions with external sources.
+   - **Responsibilities**:
+     - Fetching data from APIs, databases, or local storage.
+     - Converting raw data into usable models for the application.
+   - **Examples**:
+     - API services, database helpers, and repository implementations.
+
+### 2. **Domain Layer**
+   - **Purpose**: Contains the core business logic and rules of the application.
+   - **Responsibilities**:
+     - Defining **entities** that represent core data models.
+     - Implementing **use cases** to encapsulate specific business logic.
+     - Providing **abstract repository interfaces** for communication between the Data and Domain layers.
+   - **Examples**:
+     - `FetchUserData` use case, `UserEntity`, and `UserRepository` interface.
+
+### 3. **Presentation Layer**
+   - **Purpose**: Manages the UI and state of the application.
+   - **Responsibilities**:
+     - Communicating with the Domain Layer through **BLoC** or **Cubit**.
+     - Building visual representations of the application using screens and widgets.
+   - **Examples**:
+     - `UserCubit`, `UserScreen`, and reusable widgets like `CustomButton`.
+
+---
+
+## Communication Between Layers
+
+- **Data → Domain**: Implements repository interfaces from the Domain Layer to fetch or manipulate data.
+- **Domain → Presentation**: Provides use cases to the Presentation Layer for accessing business logic.
+- **Presentation → Domain**: Triggers use cases through state management mechanisms (e.g., Cubits, BLoC).
+
+Each layer interacts **only** with the one below it, maintaining a unidirectional flow of dependencies.
+
+---
+
+<br>
+
+# State Management: BLoC and Cubit
+
+## **BLoC (Business Logic Component)**
+
+### Overview
+BLoC separates **business logic** from the **UI** by using **streams** to manage state transitions. It provides a structured and reactive way to handle application behavior.
+
+### Components:
+1. **Events**: Represent user actions or system events (e.g., "Fetch Data").
+2. **States**: Represent the app's state at any given time (e.g., "Loading", "Success", "Error").
+3. **BLoC**: The mediator that listens for **events**, processes **logic**, and emits **new states**.
+
+### Usage in Lyxa:
+- Each feature has its dedicated BLoC.
+- The BLoC listens for user actions and emits updated states, enabling dynamic UI updates.
+
+---
+
+## **Cubit**
+
+### Overview
+Cubit simplifies state management compared to BLoC by **emitting states directly**, without requiring streams or events.
+
+### How It Works:
+- States are updated using methods.
+- Cubits reduce boilerplate, making them ideal for features with straightforward state management.
+
+### Usage in Lyxa:
+- Features that do not require event-based logic use Cubits.
+- **Example**: `ThemeCubit` for toggling between light and dark modes.
+
+---
+
+# Summary
+
+# Lyxa Project Architecture
+
+The Lyxa project uses **Clean Architecture**, along with **BLoC** and **Cubit**, to manage app states effectively. This approach ensures:
+
+- **Clear roles**: Each part of the app focuses on its specific job.
+- **Easy testing**: The app is designed so that its parts can be tested separately and reliably.
+- **Room to grow**: New features can be added or updated without breaking the rest of the app.
+- **Consistency**: A standard structure makes the code easier to work with and helps new developers get started faster.
+
+By following these principles, Lyxa is built to be flexible, reliable, and ready to grow in the future.
+
