@@ -5,7 +5,7 @@ import 'package:lyxa_live/src/core/constants/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/constants/assets/app_images.dart';
 import 'package:lyxa_live/src/core/constants/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/services/storage/hive_storage.dart';
-import 'package:lyxa_live/src/core/utils/validator.dart';
+import 'package:lyxa_live/src/core/validations/validator.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
 import 'package:lyxa_live/src/features/auth/data/models/app_user_model.dart';
