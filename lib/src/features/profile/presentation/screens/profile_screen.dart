@@ -8,17 +8,17 @@ import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
-import 'package:lyxa_live/src/features/profile/ui/components/profile_image.dart';
+import 'package:lyxa_live/src/features/profile/presentation/components/profile_image.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/post_tile_unit.dart';
 import 'package:lyxa_live/src/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/post/presentation/cubits/post_state.dart';
-import 'package:lyxa_live/src/features/profile/ui/components/story_line_unit.dart';
-import 'package:lyxa_live/src/features/profile/ui/components/follow_button_unit.dart';
-import 'package:lyxa_live/src/features/profile/ui/components/profile_stats_unit.dart';
+import 'package:lyxa_live/src/features/profile/presentation/components/story_line_unit.dart';
+import 'package:lyxa_live/src/features/profile/presentation/components/follow_button_unit.dart';
+import 'package:lyxa_live/src/features/profile/presentation/components/profile_stats_unit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
-import 'package:lyxa_live/src/features/profile/ui/screens/follower_screen.dart';
+import 'package:lyxa_live/src/features/profile/presentation/screens/follower_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {
