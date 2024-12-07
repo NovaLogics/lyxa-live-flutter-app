@@ -17,7 +17,7 @@ import 'package:lyxa_live/src/shared/widgets/multiline_text_field_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/comment_entity.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 import 'package:lyxa_live/src/shared/widgets/post_tile/comment_tile_unit.dart';
-import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
+import 'package:lyxa_live/src/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/toast_messenger_unit.dart';
 

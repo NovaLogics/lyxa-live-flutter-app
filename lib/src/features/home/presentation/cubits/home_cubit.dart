@@ -3,8 +3,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/features/home/presentation/cubits/home_state.dart';
 import 'package:lyxa_live/src/features/home/domain/repositories/home_repository.dart';
-import 'package:lyxa_live/src/features/post/cubits/post_cubit.dart';
-import 'package:lyxa_live/src/features/post/cubits/post_state.dart';
+import 'package:lyxa_live/src/features/post/presentation/cubits/post_cubit.dart';
+import 'package:lyxa_live/src/features/post/presentation/cubits/post_state.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 
