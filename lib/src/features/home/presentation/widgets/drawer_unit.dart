@@ -7,7 +7,7 @@ import 'package:lyxa_live/src/core/constants/assets/app_images.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/constants/styles/app_styles.dart';
 import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
-import 'package:lyxa_live/src/features/home/presentation/components/drawer_title_unit.dart';
+import 'package:lyxa_live/src/features/home/presentation/widgets/drawer_title_unit.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/profile_screen.dart';
 import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
