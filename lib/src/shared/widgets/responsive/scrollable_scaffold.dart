@@ -4,7 +4,7 @@ import 'package:lyxa_live/src/core/dependency_injection/service_locator.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_state.dart';
-import 'package:lyxa_live/src/features/photo_slider/ui/photo_slider.dart';
+import 'package:lyxa_live/src/features/photo_slider/screens/photo_slider.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_state.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/widgets/error_alert_unit.dart';
