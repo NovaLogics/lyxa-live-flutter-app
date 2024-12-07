@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lyxa_live/src/features/photo_slider/cubits/slider_state.dart';
+import 'package:lyxa_live/src/features/previewer/cubits/slider_state.dart';
 
 class SliderCubit extends Cubit<SliderState> {
   SliderCubit() : super(SliderInitial());
