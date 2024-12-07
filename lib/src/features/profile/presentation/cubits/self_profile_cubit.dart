@@ -10,91 +10,45 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:lyxa_live/src/core/dependency_injection/service_locator.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
-import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
-import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.dart';
+import 'package:lyxa_live/src/features/profile/presentation/cubits/self_profile_state.dart';
+import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/profile/domain/entities/profile_user_entity.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_state.dart';
 import 'package:lyxa_live/src/features/storage/domain/repositories/storage_repository.dart';
 import 'package:lyxa_live/src/shared/entities/result/result.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_messages.dart';
 import 'package:lyxa_live/src/shared/handlers/loading/cubits/loading_cubit.dart';
 
 // PROFILE STATE MANAGEMENT
-class ProfileCubit extends Cubit<ProfileState> {
-  static const String debugTag = 'ProfileCubit';
+class SelfProfileCubit extends Cubit<SelfProfileState> {
+  static const String debugTag = 'SelfProfileCubit';
   final ProfileRepository _profileRepository;
   final StorageRepository _storageRepository;
-  ProfileUserEntity? _currentAppProfileUser;
+  final ProfileService _profileService = getIt<ProfileService>();
 
-  ProfileCubit({
+  SelfProfileCubit({
     required ProfileRepository profileRepository,
     required StorageRepository storageRepository,
   })  : _storageRepository = storageRepository,
         _profileRepository = profileRepository,
-        super(ProfileInitial());
+        super(SelfProfileInitial());
 
-  void resetUser() {
-    _currentAppProfileUser = null;
-  }
-
-  Future<ProfileUserEntity> getCurrentUser() async {
-    if (_currentAppProfileUser != null) {
-      return _currentAppProfileUser as ProfileUserEntity;
-    } else {
-      return await _getCurrentUser();
-    }
-  }
-
-  Future<ProfileUserEntity> _getCurrentUser() async {
-    _showLoading(AppStrings.loadingMessage);
-    final currentUser = getIt<AuthCubit>().currentUser;
-    if (currentUser == null) {
-      _hideLoading();
-      throw Exception(ErrorMsgs.cannotFetchProfileError);
-    }
-    _currentAppProfileUser = await getUserProfileById(
-      userId: currentUser.uid,
-    );
-
-    if (_currentAppProfileUser == null) {
-      _hideLoading();
-      throw Exception(ErrorMsgs.cannotFetchProfileError);
-    }
-
-    _hideLoading();
-
-    return _currentAppProfileUser as ProfileUserEntity;
-  }
-
-  Future<ProfileUserEntity?> getUserProfileById({
+  Future<void> loadSelfProfileById({
     required String userId,
   }) async {
-    final getUserResult =
-        await _profileRepository.getUserProfileById(userId: userId);
-
-    if (getUserResult.isDataNotNull()) {
-      return getUserResult.data as ProfileUserEntity;
-    }
-    return null;
-  }
-
-  Future<void> loadUserProfileById({
-    required String userId,
-  }) async {
-    _showLoading(AppStrings.loadingMessage);
+    //  _showLoading(AppStrings.loadingMessage);
 
     final getUserResult =
         await _profileRepository.getUserProfileById(userId: userId);
 
-    _hideLoading();
+    //  _hideLoading();
 
     switch (getUserResult.status) {
       case Status.success:
         if (getUserResult.data != null) {
-          emit(ProfileLoaded(getUserResult.data as ProfileUserEntity));
+          emit(SelfProfileLoaded(getUserResult.data as ProfileUserEntity));
         } else {
-          emit(ProfileError(AppStrings.userNotFoundError));
+          emit(SelfProfileError(AppStrings.userNotFoundError));
         }
         break;
 
@@ -114,8 +68,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     _showLoading(AppStrings.updating);
 
-    final currentUser = await getCurrentUser();
-    final profileUser = ProfileUserModel.fromEntity(currentUser);
+    final profileUser = _profileService.profile;
 
     String? imageDownloadUrl;
 
@@ -141,8 +94,8 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     final updatedProfile = profileUser
         .copyWith(
-          newBio: updatedBio ?? currentUser.bio,
-          newProfileImageUrl: imageDownloadUrl ?? currentUser.profileImageUrl,
+          newBio: updatedBio ?? profileUser.bio,
+          newProfileImageUrl: imageDownloadUrl ?? profileUser.profileImageUrl,
         )
         .toEntity();
 
@@ -162,7 +115,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       return;
     }
 
-    await loadUserProfileById(userId: userId);
+    _hideLoading();
+    await loadSelfProfileById(userId: userId);
   }
 
   Future<void> toggleFollow({
@@ -211,7 +165,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         return compressedImage;
       }
     } catch (error) {
-      emit(ProfileErrorException(error));
+      emit(SelfProfileErrorException(error));
     }
     return null;
   }
@@ -229,15 +183,15 @@ class ProfileCubit extends Cubit<ProfileState> {
   void _handleErrors({required Result result, String? tag}) {
     // FIREBASE ERROR
     if (result.isFirebaseError()) {
-      emit(ProfileErrorToast(result.getFirebaseAlert()));
+      emit(SelfProfileErrorToast(result.getFirebaseAlert()));
     }
     // GENERIC ERROR
     else if (result.isGenericError()) {
-      emit(ProfileErrorException(result.getGenericErrorData()));
+      emit(SelfProfileErrorException(result.getGenericErrorData()));
     }
     // KNOWN ERRORS
     else if (result.isMessageError()) {
-      emit(ProfileError(result.getMessageErrorAlert()));
+      emit(SelfProfileError(result.getMessageErrorAlert()));
     }
   }
 

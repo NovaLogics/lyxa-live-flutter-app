@@ -5,7 +5,7 @@ import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/constants/styles/app_styles.dart';
 import 'package:lyxa_live/src/shared/widgets/user_tile_unit.dart';
-import 'package:lyxa_live/src/features/profile/cubits/profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 
 class FollowerScreen extends StatelessWidget {
