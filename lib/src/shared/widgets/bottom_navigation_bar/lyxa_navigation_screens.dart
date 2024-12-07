@@ -144,7 +144,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
           ScreenIndex.search,
           selectedColor,
           AppIcons.searchOutlined,
-          Icons.saved_search,
+          Icons.search_rounded,
           isWeb,
         ),
         Container(width: width * 0.20),
