@@ -15,9 +15,24 @@ BLoC is a design pattern used to manage state and handle business logic in a Flu
 ### 3. Cubit
 Cubit is a simpler version of BLoC. It reduces the amount of code needed by not using streams. Instead, Cubit focuses on managing state changes by calling methods that directly emit new states.
 
-<br >
+<br>
 
-## Project Structure
+#### CONCEPTUAL ARCHITECTURE DIAGRAM
+
+```bash
+📂lib/
+├──📂src/
+│   ├──📂core/     # Core components such as configurations, constants, services, and utilities
+│   ├──📂features/ # Individual feature modules (e.g., feature1, feature2)
+│   └──📂shared/   # Shared resources like widgets, data handlers, and common logic
+│   
+└──📄main.dart     # Entry point of the application
+```
+
+<br>
+
+#### PROJECT STRUCTURE | HIGH-LEVEL ▼
+
 
 ```plaintext
 📂lib/

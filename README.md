@@ -230,7 +230,23 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 
 ### ☑ Flutter Clean Architecture with BLoC/Cubit
 
-> **PROJECT STRUCTURE** ▼
+<br>
+
+> **CONCEPTUAL ARCHITECTURE DIAGRAM** ▼
+
+```bash
+📂lib/
+├──📂src/
+│   ├──📂core/     # Core components such as configurations, constants, services, and utilities
+│   ├──📂features/ # Individual feature modules (e.g., feature1, feature2)
+│   └──📂shared/   # Shared resources like widgets, data handlers, and common logic
+│   
+└──📄main.dart     # Entry point of the application
+```
+
+<br>
+
+> **PROJECT STRUCTURE | HIGH-LEVEL** ▼
 
 ```plaintext
 📂lib/
