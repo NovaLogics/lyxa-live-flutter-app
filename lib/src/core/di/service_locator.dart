@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:lyxa_live/src/core/themes/cubits/theme_cubit.dart';
+import 'package:lyxa_live/src/core/themes/theme_cubit.dart';
 import 'package:lyxa_live/src/core/services/storage/hive_storage.dart';
 import 'package:lyxa_live/src/core/utils/platform_util.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
