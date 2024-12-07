@@ -15,7 +15,7 @@ import 'package:lyxa_live/src/features/auth/presentation/components/gradient_but
 import 'package:lyxa_live/src/features/auth/presentation/components/password_field_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
-import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
+import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
 
 class RegisterScreen extends StatefulWidget {
   final VoidCallback? onToggleScreen;

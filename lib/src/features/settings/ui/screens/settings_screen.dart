@@ -5,7 +5,7 @@ import 'package:lyxa_live/src/core/dependency_injection/service_locator.dart';
 import 'package:lyxa_live/src/core/constants/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
-import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
+import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/constrained_scaffold.dart';
 import 'package:lyxa_live/src/core/themes/theme_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';

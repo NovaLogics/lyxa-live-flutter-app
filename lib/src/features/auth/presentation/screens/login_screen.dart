@@ -12,7 +12,7 @@ import 'package:lyxa_live/src/features/auth/data/models/app_user_model.dart';
 import 'package:lyxa_live/src/features/auth/presentation/components/email_field_unit.dart';
 import 'package:lyxa_live/src/features/auth/presentation/components/gradient_button.dart';
 import 'package:lyxa_live/src/features/auth/presentation/components/password_field_unit.dart';
-import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
+import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/shared/widgets/spacers_unit.dart';
 
 class LoginScreen extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:lyxa_live/src/core/themes/theme_cubit.dart';
 import 'package:lyxa_live/src/core/services/storage/hive_storage.dart';
 import 'package:lyxa_live/src/core/utils/platform_util.dart';
-import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
+import 'package:lyxa_live/src/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:lyxa_live/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
