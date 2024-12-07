@@ -116,6 +116,7 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 
 ![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
 ![ForTheBadge GIT](https://forthebadge.com/images/badges/uses-git.svg)
+
 ![forthebadge](https://forthebadge.com/images/featured/featured-contains-cat-gifs.svg)
 
   <br>
@@ -225,11 +226,88 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 #
 ## ᴠ ⁃ ʙᴇʜɪɴᴅ ᴛʜᴇ ᴄᴏᴅᴇ: ᴅᴇᴠ ꜰᴇᴀᴛᴜʀᴇꜱ
 
-### ⭓ App Dependencies/Libraries Overview
+### ⭓ Project Architecture
+
+### ☑ Flutter Clean Architecture with BLoC/Cubit
 
 <br>
 
-## **Flutter Dependencies**
+> **CONCEPTUAL ARCHITECTURE DIAGRAM** ▼
+
+```bash
+📂lib/
+├──📂src/
+│   ├──📂core/     # Core components such as configurations, constants, services, and utilities
+│   ├──📂features/ # Individual feature modules (e.g., feature1, feature2)
+│   └──📂shared/   # Shared resources like widgets, data handlers, and common logic
+│   
+└──📄main.dart     # Entry point of the application
+```
+
+<br>
+
+> **PROJECT STRUCTURE | HIGH-LEVEL** ▼
+
+```plaintext
+📂lib/
+├──📂src/
+│   ├──📂core/
+│   │   ├──📂configs/        
+│   │   ├──📂constants/
+│   │   ├──📂dependency_injection/  
+│   │   ├──📂services/  
+│   │   ├──📂themes/     
+│   │   ├──📂utils/          
+│   │   └──📂validations/       
+│   │  
+│   ├──📂features/
+│   │   ├──📂feature1/
+│   │   │   ├──📂data/
+│   │   │   │   ├──📂models/
+│   │   │   │   │   └──📄feature_model.dart
+│   │   │   │   └──📂repositories/
+│   │   │   │       └──📄feature_repository_impl.dart
+│   │   │   │       
+│   │   │   ├──📂domain/
+│   │   │   │   ├──📂entities/
+│   │   │   │   │   └──📄feature_entity.dart
+│   │   │   │   ├──📂repositories/
+│   │   │   │   │   └──📄feature_repository.dart
+│   │   │   │   └──📂usecases/
+│   │   │   │       └──📄get_data.dart
+│   │   │   │       
+│   │   │   └──📂presentation/
+│   │   │       ├──📂cubits/
+│   │   │       │   ├──📄feature_cubit.dart
+│   │   │       │   └──📄feature_state.dart
+│   │   │       ├──📂screens/
+│   │   │       │   └──📄feature_screen.dart
+│   │   │       └──📂widgets/
+│   │   │           └──📄feature_widget.dart
+│   │   │ 
+│   │   └──📂feature2.../
+│   │   
+│   ├──📂shared/
+│   │   ├──📂data/
+│   │   ├──📂handlers/
+│   │   └──📂widgets/
+│   │   
+│   └──📄app.dart   
+│     
+└──📄main.dart
+```
+*CHECK OUT MORE* :-> &nbsp; [ **Lyxa Project Architecture Blueprint** ](./_archive/docs/lyxa-project-architecture-blueprint.md)
+
+#
+### ⭓ Project Documents
+
+1. **Flutter App Structures** &nbsp;| &nbsp;  [ Read -> ](./_archive/docs/flutter-app-structures.md)
+2. **Clean Architecture with BloC and Cubit in Flutter** &nbsp;| &nbsp;  [ Read -> ](./_archive/docs/clean-architecture-with-bloc-and-cubit.md)
+3. **Lyxa Project Architecture Blueprint** &nbsp;| &nbsp;  [ Read -> ](./_archive/docs/lyxa-project-architecture-blueprint.md)
+
+
+#
+### ⭓ App Dependencies/Libraries Overview
 
 * [cupertino_icons][0] : Provides iOS-style icons for Flutter apps.
 * [firebase_core][1] : Initializes Firebase services for Flutter applications.

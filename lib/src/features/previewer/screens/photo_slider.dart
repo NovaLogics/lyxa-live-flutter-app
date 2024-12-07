@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
-import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
+import 'package:lyxa_live/src/features/previewer/cubits/slider_cubit.dart';
 
 class PhotoSlider extends StatefulWidget {
   final List<String> images;
