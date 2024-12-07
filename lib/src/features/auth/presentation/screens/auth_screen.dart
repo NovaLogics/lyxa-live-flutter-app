@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lyxa_live/src/shared/widgets/gradient_background_unit.dart';
 import 'package:lyxa_live/src/shared/widgets/responsive/scrollable_scaffold.dart';
-import 'package:lyxa_live/src/features/auth/ui/screens/login_screen.dart';
-import 'package:lyxa_live/src/features/auth/ui/screens/register_screen.dart';
+import 'package:lyxa_live/src/features/auth/presentation/screens/login_screen.dart';
+import 'package:lyxa_live/src/features/auth/presentation/screens/register_screen.dart';
 
 /// AuthScreen:
 /// -> Displays either the Login or Register page with the ability to toggle between them
