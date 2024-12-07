@@ -295,14 +295,15 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 │   └──📄app.dart   
 │     
 └──📄main.dart
-
 ```
+*CHECK OUT MORE* :-> &nbsp; [ **Lyxa Project Architecture Blueprint** ](./_archive/docs/lyxa-project-architecture-blueprint.md)
 
 #
 ### ⭓ Project Documents
 
 1. **Flutter App Structures** &nbsp;| &nbsp;  [ Read -> ](./_archive/docs/flutter-app-structures.md)
 2. **Clean Architecture with BloC and Cubit in Flutter** &nbsp;| &nbsp;  [ Read -> ](./_archive/docs/clean-architecture-with-bloc-and-cubit.md)
+3. **Lyxa Project Architecture Blueprint** &nbsp;| &nbsp;  [ Read -> ](./_archive/docs/lyxa-project-architecture-blueprint.md)
 
 
 #
