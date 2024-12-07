@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lyxa_live/src/core/constants/assets/app_icons.dart';
-import 'package:lyxa_live/src/core/resources/app_colors.dart';
-import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
 
 class BottomNavigationBarUnit extends StatefulWidget {
   final Widget homeScreen;

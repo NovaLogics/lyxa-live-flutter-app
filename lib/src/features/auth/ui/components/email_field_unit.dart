@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/validations/text_field_limits.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
-import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 
 class EmailFieldUnit extends StatelessWidget {

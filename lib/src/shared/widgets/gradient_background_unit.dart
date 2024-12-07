@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/resources/app_colors.dart';
-import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
 
 enum BackgroundStyle { main, auth }
 
