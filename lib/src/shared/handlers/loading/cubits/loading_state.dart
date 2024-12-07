@@ -1,4 +1,4 @@
-import 'package:lyxa_live/src/core/resources/app_strings.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
 
 class LoadingState {
   final bool isVisible;

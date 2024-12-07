@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/resources/app_colors.dart';
-import 'package:lyxa_live/src/core/styles/app_styles.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/constants/styles/app_styles.dart';
 
 class GradientButtonV1 extends StatefulWidget {
   final VoidCallback onTap;

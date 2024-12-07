@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
-import 'package:lyxa_live/src/core/styles/app_styles.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/validations/text_field_limits.dart';
+import 'package:lyxa_live/src/core/constants/styles/app_styles.dart';
 
 class TextFieldUnit extends StatefulWidget {
   final TextEditingController controller;

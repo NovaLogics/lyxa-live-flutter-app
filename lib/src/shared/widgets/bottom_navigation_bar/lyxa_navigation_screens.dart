@@ -1,17 +1,17 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lyxa_live/src/core/assets/app_icons.dart';
-import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/resources/app_colors.dart';
-import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
+import 'package:lyxa_live/src/core/constants/assets/app_icons.dart';
+import 'package:lyxa_live/src/core/dependency_injection/service_locator.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_colors.dart';
+import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
-import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
-import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
-import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
-import 'package:lyxa_live/src/features/profile/ui/screens/self_profile_screen.dart';
-import 'package:lyxa_live/src/features/search/ui/screens/search_screen.dart';
-import 'package:lyxa_live/src/features/settings/ui/screens/settings_screen.dart';
+import 'package:lyxa_live/src/features/home/presentation/screens/home_screen.dart';
+import 'package:lyxa_live/src/features/post/presentation/screens/upload_post_screen.dart';
+import 'package:lyxa_live/src/features/profile/presentation/cubits/self_profile_cubit.dart';
+import 'package:lyxa_live/src/features/profile/presentation/screens/self_profile_screen.dart';
+import 'package:lyxa_live/src/features/search/presentation/screens/search_screen.dart';
+import 'package:lyxa_live/src/features/settings/presentation/screens/settings_screen.dart';
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/nav_bar_custom_painter.dart';
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/rounded_corners_fab.dart';
 
@@ -144,7 +144,7 @@ class _LyxaNavigationScreensState extends State<LyxaNavigationScreens> {
           ScreenIndex.search,
           selectedColor,
           AppIcons.searchOutlined,
-          Icons.saved_search,
+          Icons.search_rounded,
           isWeb,
         ),
         Container(width: width * 0.20),
