@@ -7,7 +7,7 @@ import 'package:lyxa_live/src/core/constants/assets/app_fonts.dart';
 import 'package:lyxa_live/src/core/constants/assets/app_icons.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
-import 'package:lyxa_live/src/core/styles/app_styles.dart';
+import 'package:lyxa_live/src/core/constants/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/validations/text_field_limits.dart';
 import 'package:lyxa_live/src/core/utils/date_time_util.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';

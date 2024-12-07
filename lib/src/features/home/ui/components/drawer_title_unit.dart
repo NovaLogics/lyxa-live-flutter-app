@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:lyxa_live/src/core/constants/assets/app_fonts.dart';
-import 'package:lyxa_live/src/core/styles/app_styles.dart';
+import 'package:lyxa_live/src/core/constants/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
 
 class DrawerTitleUnit extends StatelessWidget {

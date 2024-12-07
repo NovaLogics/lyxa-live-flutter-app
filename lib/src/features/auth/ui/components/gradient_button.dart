@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lyxa_live/src/core/styles/app_styles.dart';
+import 'package:lyxa_live/src/core/constants/styles/app_styles.dart';
 
 const double _buttonVerticalPadding = 12.0;
 const double _buttonHorizontalPadding = 90.0;
