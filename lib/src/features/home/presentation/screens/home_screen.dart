@@ -8,7 +8,7 @@ import 'package:lyxa_live/src/core/constants/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_state.dart';
-import 'package:lyxa_live/src/features/home/ui/components/refresh_button_unit.dart';
+import 'package:lyxa_live/src/features/home/presentation/components/refresh_button_unit.dart';
 import 'package:lyxa_live/src/features/post/domain/entities/post_entity.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';

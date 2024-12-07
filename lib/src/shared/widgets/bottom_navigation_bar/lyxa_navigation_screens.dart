@@ -6,7 +6,7 @@ import 'package:lyxa_live/src/core/dependency_injection/service_locator.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
-import 'package:lyxa_live/src/features/home/ui/screens/home_screen.dart';
+import 'package:lyxa_live/src/features/home/presentation/screens/home_screen.dart';
 import 'package:lyxa_live/src/features/post/ui/screens/upload_post_screen.dart';
 import 'package:lyxa_live/src/features/profile/cubits/self_profile_cubit.dart';
 import 'package:lyxa_live/src/features/profile/ui/screens/self_profile_screen.dart';
