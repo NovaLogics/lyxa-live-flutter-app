@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lyxa_live/src/core/constants/assets/app_fonts.dart';
-import 'package:lyxa_live/src/core/di/service_locator.dart';
+import 'package:lyxa_live/src/core/dependency_injection/service_locator.dart';
 import 'package:lyxa_live/src/core/constants/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';

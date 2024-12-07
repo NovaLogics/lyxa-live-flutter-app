@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:lyxa_live/src/core/di/service_locator.dart';
+import 'package:lyxa_live/src/core/dependency_injection/service_locator.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
 import 'package:lyxa_live/src/core/utils/logger.dart';
 import 'package:lyxa_live/src/features/auth/cubits/auth_cubit.dart';
