@@ -14,3 +14,54 @@ BLoC is a design pattern used to manage state and handle business logic in a Flu
 
 ### 3. Cubit
 Cubit is a simpler version of BLoC. It reduces the amount of code needed by not using streams. Instead, Cubit focuses on managing state changes by calling methods that directly emit new states.
+
+<br >
+
+## Project Structure
+
+```css
+lib/
+├──src/
+│   ├── core/
+│   │   ├── configs/        
+│   │   ├── constants/
+│   │   ├── dependency_injection/  
+│   │   ├── services/  
+│   │   ├── themes/     
+│   │   ├── utils/          
+│   │   └── validations/       
+│   │  
+│   ├── features/
+│   │   ├── feature1/
+│   │   │   ├── data/
+│   │   │   │   ├── models/
+│   │   │   │   │   ├── feature_model.dart
+│   │   │   │   ├── repositories/
+│   │   │   │       ├── feature_repository_impl.dart
+│   │   │   ├── domain/
+│   │   │   │   ├── entities/
+│   │   │   │   │   ├── feature_entity.dart
+│   │   │   │   ├── repositories/
+│   │   │   │   │   ├── feature_repository.dart
+│   │   │   │   ├── usecases/
+│   │   │   │       ├── get_data.dart
+│   │   │   └── presentation/
+│   │   │       ├── cubits/
+│   │   │       │   ├── feature_cubit.dart
+│   │   │       │   │── feature_state.dart
+│   │   │       ├── screens/
+│   │   │       │   ├── feature_screen.dart
+│   │   │       └── widgets/
+│   │   │           ├── feature_widget.dart
+│   │   │ 
+│   │   ├── feature2.../
+│   │   
+│   ├── shared/
+│   │   ├──  data/
+│   │   ├──  handlers/
+│   │   └──  widgets/
+│   │   
+│   ├── app.dart   
+│   │  
+└── main.dart
+```
