@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lyxa_live/src/app.dart';
-import 'package:lyxa_live/src/config/firebase_options.dart';
+import 'package:lyxa_live/src/core/configs/firebase_options.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/database/hive_storage.dart';
 
