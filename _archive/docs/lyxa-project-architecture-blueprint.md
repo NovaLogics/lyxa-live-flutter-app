@@ -63,8 +63,8 @@ lib/
 │   │   ├──  handlers/
 │   │   └──  widgets/
 │   │   
-│   ├── app.dart   
-│   │  
+│   └── app.dart   
+│     
 └── main.dart
 ```
 ---

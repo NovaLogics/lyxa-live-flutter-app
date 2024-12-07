@@ -226,6 +226,62 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 #
 ## ᴠ ⁃ ʙᴇʜɪɴᴅ ᴛʜᴇ ᴄᴏᴅᴇ: ᴅᴇᴠ ꜰᴇᴀᴛᴜʀᴇꜱ
 
+### ⭓ Project Architecture
+
+### > Flutter Clean Architecture with BLoC/Cubit
+
+## Project Structure
+
+```css
+lib/
+├──src/
+│   ├── core/
+│   │   ├── configs/        
+│   │   ├── constants/
+│   │   ├── dependency_injection/  
+│   │   ├── services/  
+│   │   ├── themes/     
+│   │   ├── utils/          
+│   │   └── validations/       
+│   │  
+│   ├── features/
+│   │   ├── feature1/
+│   │   │   ├── data/
+│   │   │   │   ├── models/
+│   │   │   │   │   ├── feature_model.dart
+│   │   │   │   └── repositories/
+│   │   │   │       ├── feature_repository_impl.dart
+│   │   │   │       
+│   │   │   ├── domain/
+│   │   │   │   ├── entities/
+│   │   │   │   │   ├── feature_entity.dart
+│   │   │   │   ├── repositories/
+│   │   │   │   │   ├── feature_repository.dart
+│   │   │   │   └── usecases/
+│   │   │   │       ├── get_data.dart
+│   │   │   │       
+│   │   │   └── presentation/
+│   │   │       ├── cubits/
+│   │   │       │   ├── feature_cubit.dart
+│   │   │       │   │── feature_state.dart
+│   │   │       ├── screens/
+│   │   │       │   ├── feature_screen.dart
+│   │   │       └── widgets/
+│   │   │           ├── feature_widget.dart
+│   │   │ 
+│   │   ├── feature2.../
+│   │   
+│   ├── shared/
+│   │   ├──  data/
+│   │   ├──  handlers/
+│   │   └──  widgets/
+│   │   
+│   └── app.dart   
+│     
+└── main.dart
+```
+
+#
 ### ⭓ Project Documents
 
 1. **Flutter App Structures** &nbsp;| &nbsp;  [ Read -> ](./_archive/docs/flutter-app-structures.md)
