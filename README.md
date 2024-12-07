@@ -115,8 +115,8 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 
 
 ![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
-![forthebadge](https://forthebadge.com/images/featured/featured-contains-cat-gifs.svg)
 ![ForTheBadge GIT](https://forthebadge.com/images/badges/uses-git.svg)
+![forthebadge](https://forthebadge.com/images/featured/featured-contains-cat-gifs.svg)
 
   <br>
 
