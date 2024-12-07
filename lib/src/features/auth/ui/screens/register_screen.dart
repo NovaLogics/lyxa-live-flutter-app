@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:lyxa_live/src/core/di/service_locator.dart';
 import 'package:lyxa_live/src/core/constants/assets/app_images.dart';
 import 'package:lyxa_live/src/core/styles/app_styles.dart';
-import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
+import 'package:lyxa_live/src/core/validations/text_field_limits.dart';
 import 'package:lyxa_live/src/core/database/hive_storage.dart';
 import 'package:lyxa_live/src/core/utils/validator.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';

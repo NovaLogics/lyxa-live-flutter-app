@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
-import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
+import 'package:lyxa_live/src/core/validations/text_field_limits.dart';
 import 'package:lyxa_live/src/shared/widgets/text_field_unit.dart';
 
 class PasswordFieldUnit extends StatelessWidget {

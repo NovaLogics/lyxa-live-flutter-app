@@ -7,7 +7,7 @@ import 'package:lyxa_live/src/core/styles/app_styles.dart';
 import 'package:lyxa_live/src/core/resources/app_colors.dart';
 import 'package:lyxa_live/src/core/resources/app_dimensions.dart';
 import 'package:lyxa_live/src/core/resources/app_strings.dart';
-import 'package:lyxa_live/src/core/resources/text_field_limits.dart';
+import 'package:lyxa_live/src/core/validations/text_field_limits.dart';
 import 'package:lyxa_live/src/features/home/cubits/home_cubit.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/utils/error_handler.dart';
