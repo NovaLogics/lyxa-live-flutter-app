@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lyxa_live/src/app.dart';
 import 'package:lyxa_live/src/core/configs/firebase_options.dart';
 import 'package:lyxa_live/src/core/di/service_locator.dart';
-import 'package:lyxa_live/src/core/database/hive_storage.dart';
+import 'package:lyxa_live/src/core/services/storage/hive_storage.dart';
 
 /// Main Entry Point
 ///

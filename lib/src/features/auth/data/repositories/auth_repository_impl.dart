@@ -4,7 +4,7 @@ import 'package:lyxa_live/src/core/di/service_locator.dart';
 
 import 'package:lyxa_live/src/core/constants/constants.dart';
 import 'package:lyxa_live/src/core/constants/resources/app_strings.dart';
-import 'package:lyxa_live/src/core/database/hive_storage.dart';
+import 'package:lyxa_live/src/core/services/storage/hive_storage.dart';
 import 'package:lyxa_live/src/features/auth/data/models/app_user_model.dart';
 import 'package:lyxa_live/src/features/auth/domain/entities/app_user_entity.dart';
 import 'package:lyxa_live/src/features/auth/domain/repositories/auth_repository.dart';
