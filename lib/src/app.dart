@@ -11,7 +11,7 @@ import 'package:lyxa_live/src/features/profile/presentation/cubits/self_profile_
 import 'package:lyxa_live/src/shared/widgets/bottom_navigation_bar/lyxa_navigation_screens.dart';
 import 'package:lyxa_live/src/features/post/presentation/cubits/post_cubit.dart';
 import 'package:lyxa_live/src/features/profile/presentation/cubits/profile_cubit.dart';
-import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
+import 'package:lyxa_live/src/features/search/presentation/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/photo_slider/cubits/slider_cubit.dart';
 import 'package:lyxa_live/src/core/themes/theme_cubit.dart';
 import 'package:lyxa_live/src/shared/handlers/errors/cubits/error_cubit.dart';

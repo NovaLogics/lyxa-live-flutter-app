@@ -18,7 +18,7 @@ import 'package:lyxa_live/src/features/profile/data/models/profile_user_model.da
 import 'package:lyxa_live/src/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:lyxa_live/src/features/profile/data/services/profile_service.dart';
 import 'package:lyxa_live/src/features/profile/domain/repositories/profile_repository.dart';
-import 'package:lyxa_live/src/features/search/cubits/search_cubit.dart';
+import 'package:lyxa_live/src/features/search/presentation/cubits/search_cubit.dart';
 import 'package:lyxa_live/src/features/search/data/repositories/search_repository_impl.dart';
 import 'package:lyxa_live/src/features/search/domain/repositories/search_repository.dart';
 import 'package:lyxa_live/src/features/search/domain/usecases/search_users.dart';
