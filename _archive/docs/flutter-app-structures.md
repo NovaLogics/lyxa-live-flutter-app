@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
 }
 ```
 <br>
-<br>
+
+---
 
 ## What is Dart?
 
@@ -37,7 +38,7 @@ Dart is the programming language used to build Flutter apps. It is object-orient
 
 ---
 
-# Flutter Best Practices
+## Flutter Best Practices
 
 ### 1. Use StatelessWidgets and StatefulWidgets Wisely
 - **StatelessWidgets** should be used for static UI that does not change.
@@ -60,7 +61,7 @@ Dart is the programming language used to build Flutter apps. It is object-orient
 
 ---
 
-# Naming Conventions in Flutter
+## Naming Conventions in Flutter
 
 Adhering to proper naming conventions helps improve the readability and maintainability of code. Here are some key Flutter naming conventions:
 
@@ -84,3 +85,88 @@ Adhering to proper naming conventions helps improve the readability and maintain
   ├── models/
   ├── services/
   ├── utils/
+  ```
+
+---
+
+<br>
+
+## Best 3 Flutter Architectures
+
+### 1. MVC (Model-View-Controller)
+
+#### Overview:
+**Model-View-Controller (MVC)** is one of the most common architectural patterns, dividing an app into three components:
+- **Model**: Represents the data and business logic.
+- **View**: The UI elements that present the data to the user.
+- **Controller**: Handles user input and updates the Model and View.
+
+#### Advantages:
+- Simple and easy to understand.
+- Provides clear separation of concerns.
+
+#### Disadvantages:
+- Difficult to maintain as the app grows in complexity.
+- View and Controller are often tightly coupled.
+
+---
+
+### 2. MVVM (Model-View-ViewModel)
+
+#### Overview:
+**MVVM** is designed to make it easier to separate the UI code (View) from the business logic (ViewModel).
+- **Model**: Represents data or business logic.
+- **View**: Displays the UI and binds to the ViewModel.
+- **ViewModel**: Contains logic for transforming data to display in the View. It also handles user actions and communicates with the Model.
+
+#### Advantages:
+- More scalable compared to MVC.
+- Clear separation between UI and business logic.
+- Makes testing easier as business logic is in the ViewModel.
+
+#### Disadvantages:
+- Can be harder to understand and implement for beginners.
+- Boilerplate code can be more verbose.
+
+#### Example of MVVM:
+```dart
+class UserViewModel {
+  final UserService userService;
+
+  UserViewModel(this.userService);
+
+  Future<User> getUserData() async {
+    return await userService.fetchUser();
+  }
+}
+```
+---
+
+### 3. Clean Architecture
+
+#### Overview:
+**Clean Architecture** is an approach that separates concerns into layers:
+- **Presentation Layer**: Contains UI-related code and interacts with ViewModels.
+- **Domain Layer**: Contains business logic and use cases.
+- **Data Layer**: Handles data retrieval from APIs, databases, etc.
+
+Each layer is independent, and dependencies flow from outer layers (UI) to inner layers (Business Logic and Data).
+
+#### Advantages:
+- **Scalable**: Easy to modify or extend the app by changing specific layers without affecting the others.
+- **Testable**: Since business logic is isolated, it can be easily tested.
+- **Maintainable**: Clear separation between different concerns.
+
+#### Disadvantages:
+- More complex to implement.
+- Requires a deeper understanding of architecture principles.
+
+#### Example of Clean Architecture:
+```plaintext
+lib/
+├── data/
+│   └── repositories/user_repository.dart
+├── domain/
+│   └── use_cases/get_user.dart
+└── presentation/
+    └── cubit/user_cubit.dart
