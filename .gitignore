@@ -48,3 +48,4 @@ firebase.json
 /lib/src/core/configs/firebase_options.dart
 
 .firebase
+.firebaserc
