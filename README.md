@@ -37,8 +37,8 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 <br>
 <br>
 
-<img src="./_archive/screenshots/screen_home_1_dark.png" width="320" height="720" />
-<img src="./_archive/screenshots/screen_home_2_light.png" width="320" height="720" />
+<img src="./_archive/screenshots/screen_home_1_dark.png" width="285" height="640" />
+<img src="./_archive/screenshots/screen_home_2_light.png" width="285" height="640" />
 <br>
 
 </div>
@@ -68,15 +68,9 @@ Built using the *BLoC* pattern for state management, LYXA ensures smooth, respon
 - **iOS 11.0** and Above
 
 ### Web
-- **Supported Browsers**:
-  - Google Chrome (latest stable)
-  - Firefox (latest stable)
-  - Safari (latest stable)
-  - Edge (latest stable)
+- **Supported Browsers**: Latest stable versions of Chrome, Firefox, Safari, and Edge  
+- **Requirements**: Modern JavaScript, HTML5, and WebAssembly
 
-- **Required Features**:
-  - Modern JavaScript and HTML5 support
-  - WebAssembly (for performance)
 
 
 
